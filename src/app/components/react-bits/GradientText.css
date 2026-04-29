@@ -1,0 +1,52 @@
+.gradient-text-wrapper {
+  display: inline-block;
+  position: relative;
+  padding: 0;
+}
+
+.gradient-text-border {
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  background-image: linear-gradient(var(--gradient-colors));
+  background-size: 300% 100%;
+  animation: gradient-text-flow var(--animation-speed) linear infinite;
+  /* use the same gradient for the border, via a pseudo element */
+}
+
+.gradient-text-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--gradient-colors));
+  background-size: 300% 100%;
+  animation: gradient-text-flow var(--animation-speed) linear infinite;
+  z-index: -1;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  padding: 1px;
+}
+
+.gradient-text-inner {
+  background: linear-gradient(90deg, var(--gradient-colors));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-text-flow var(--animation-speed) linear infinite;
+}
+
+@keyframes gradient-text-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

@@ -1,0 +1,13 @@
+.scroll-reveal-container {
+  position: relative;
+}
+
+.scroll-reveal-text {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.scroll-reveal-word {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}

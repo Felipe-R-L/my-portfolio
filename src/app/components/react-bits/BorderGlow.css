@@ -1,0 +1,21 @@
+.border-glow-container {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.border-glow-effect {
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+.border-glow-inner {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+  background: rgba(3, 3, 5, 0.9);
+}
