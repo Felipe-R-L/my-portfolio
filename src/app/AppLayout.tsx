@@ -7,8 +7,10 @@ import { Experience } from "./components/Experience";
 import { Projects } from "./components/Projects";
 import FluidGlass from "./components/react-bits/FluidGlass";
 import GradientText from "./components/react-bits/GradientText";
+import { useSmoothScroll } from "./hooks/useSmoothScroll";
 
 export default function AppLayout() {
+  const lenisRef = useSmoothScroll();
   return (
     <div className="min-h-screen bg-[#030305] text-gray-100 selection:bg-blue-500/30 selection:text-white">
       <SpaceBackground />
@@ -33,8 +35,7 @@ export default function AppLayout() {
               transition={{ type: "spring", stiffness: 400, damping: 15 }}
               onClick={(e) => {
                 e.preventDefault();
-                const el = document.getElementById(item.toLowerCase());
-                if (el) el.scrollIntoView({ behavior: "smooth" });
+                lenisRef.current?.scrollTo(`#${item.toLowerCase()}`, { duration: 1.2 });
               }}
             >
               {item}
