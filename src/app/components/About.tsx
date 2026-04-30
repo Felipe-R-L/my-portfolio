@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { motion, Variants } from "motion/react";
 import SpotlightCard from "./react-bits/SpotlightCard";
 import BorderGlow from "./react-bits/BorderGlow";
 import TiltedCard from "./react-bits/TiltedCard";
@@ -9,7 +9,7 @@ import SplitText from "./react-bits/SplitText";
 import { Code2, Globe2, Layers, Cpu } from "lucide-react";
 
 export function About() {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -19,7 +19,7 @@ export function About() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
   };
