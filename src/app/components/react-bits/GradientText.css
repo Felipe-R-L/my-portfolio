@@ -31,12 +31,17 @@
 }
 
 .gradient-text-inner {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   background: linear-gradient(90deg, var(--gradient-colors));
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-text-flow var(--animation-speed) linear infinite;
+  transform: translateZ(0);
 }
 
 @keyframes gradient-text-flow {

@@ -150,13 +150,19 @@ export function About() {
                 >
                   <BorderGlow
                     glowColor={skill.glowColor}
-                    spread={250}
-                    borderWidth={1}
+                    edgeSensitivity={30}
+                    backgroundColor="#120F17"
+                    borderRadius={28}
+                    glowRadius={40}
+                    glowIntensity={1}
+                    coneSpread={25}
+                    animated={false}
+                    colors={['#c084fc', '#f472b6', '#38bdf8']}
                     className="h-full"
                   >
                     <SpotlightCard
                       spotlightColor={skill.spotlightColor}
-                      className="p-8 text-center space-y-5 flex flex-col items-center justify-center h-full"
+                      className="p-8 text-center flex flex-col items-center justify-center h-full"
                     >
                       <motion.div
                         whileHover={{ scale: 1.15, rotate: 5 }}
@@ -165,7 +171,7 @@ export function About() {
                       >
                         <Icon className={`w-8 h-8 ${skill.iconColor}`} />
                       </motion.div>
-                      <h3 className="text-white font-bold tracking-wide uppercase text-sm md:text-base">{skill.title}</h3>
+                      <h3 className="text-white font-bold pt-5 tracking-wide uppercase text-sm md:text-base">{skill.title}</h3>
                     </SpotlightCard>
                   </BorderGlow>
                 </TiltedCard>

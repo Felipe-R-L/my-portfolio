@@ -76,9 +76,9 @@ export function Hero() {
               <SplitText
                 text="LEONE"
                 className="inline"
-                delay={60}
-                animationFrom={{ opacity: 0, transform: "translate3d(0, 60px, 0) scale(0.5)" }}
-                animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" }}
+                delay={50}
+                animationFrom={{ opacity: 0, transform: "translate3d(0, 50px, 0) rotateX(-90deg)" }}
+                animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0) rotateX(0deg)" }}
               />
             </GradientText>
           </h1>

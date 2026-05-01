@@ -28,6 +28,7 @@ const SplitText: React.FC<SplitTextProps> = ({
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [completedIndexes, setCompletedIndexes] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,9 +53,18 @@ const SplitText: React.FC<SplitTextProps> = ({
   }, [text]);
 
   const handleTransitionEnd = useCallback(
-    (idx: number) => {
-      if (idx === letters.length - 1 && onLetterAnimationComplete) {
-        onLetterAnimationComplete();
+    (e: React.TransitionEvent<HTMLSpanElement>, idx: number) => {
+      // Only trigger once per element by checking a specific property
+      if (e.propertyName === "transform" || e.propertyName === "opacity") {
+        setCompletedIndexes((prev) => {
+          if (prev.has(idx)) return prev;
+          const next = new Set(prev);
+          next.add(idx);
+          return next;
+        });
+        if (idx === letters.length - 1 && onLetterAnimationComplete) {
+          onLetterAnimationComplete();
+        }
       }
     },
     [letters.length, onLetterAnimationComplete]
@@ -73,10 +83,11 @@ const SplitText: React.FC<SplitTextProps> = ({
           className="split-text-letter"
           style={{
             ...(isVisible ? animationTo : animationFrom),
-            transition: `all 0.6s ${easing} ${index * delay}ms`,
+            transform: completedIndexes.has(index) ? "none" : (isVisible ? (animationTo.transform as string) : (animationFrom.transform as string)),
+            transition: completedIndexes.has(index) ? "none" : `all 0.6s ${easing} ${index * delay}ms`,
             display: "inline-block",
           }}
-          onTransitionEnd={() => handleTransitionEnd(index)}
+          onTransitionEnd={(e) => handleTransitionEnd(e, index)}
           aria-hidden="true"
         >
           {char}
