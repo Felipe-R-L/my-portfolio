@@ -2,23 +2,6 @@ import React from "react";
 import { motion } from "motion/react";
 import SplitText from "./react-bits/SplitText";
 import GradientText from "./react-bits/GradientText";
-import LogoLoop from "./react-bits/LogoLoop";
-
-const techLogos = [
-  { src: "https://cdn.simpleicons.org/react/61DAFB", title: "React" },
-  { src: "https://cdn.simpleicons.org/nextdotjs/white", title: "Next.js" },
-  { src: "https://cdn.simpleicons.org/typescript/3178C6", title: "TypeScript" },
-  {
-    src: "https://cdn.simpleicons.org/tailwindcss/06B6D4",
-    title: "Tailwind CSS",
-  },
-  { src: "https://cdn.simpleicons.org/angular/DD0031", title: "Angular" },
-  { src: "https://cdn.simpleicons.org/nestjs/E0234E", title: "NestJS" },
-  { src: "https://cdn.simpleicons.org/java/007396", title: "Java" },
-  { src: "https://cdn.simpleicons.org/postgresql/4169E1", title: "PostgreSQL" },
-  { src: "https://cdn.simpleicons.org/docker/2496ED", title: "Docker" },
-];
-
 export function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-28 overflow-hidden px-6">
@@ -33,36 +16,6 @@ export function Hero() {
             y: [0, -20, 10, 0],
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-1/4 w-[28rem] h-[28rem] bg-indigo-600/40 rounded-full mix-blend-screen filter blur-[120px]"
-          animate={{
-            scale: [1, 1.15, 1],
-            opacity: [0.4, 0.55, 0.4],
-            x: [0, -25, 15, 0],
-            y: [0, 15, -25, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        />
-        <motion.div
-          className="absolute top-1/4 right-1/3 w-80 h-80 bg-purple-600/30 rounded-full mix-blend-screen filter blur-[100px]"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.3, 0.5, 0.3],
-            x: [0, 20, -30, 0],
-            y: [0, -30, 20, 0],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
         />
       </div>
 
@@ -164,32 +117,13 @@ export function Hero() {
           className="absolute bottom-0 left-4 md:left-10 z-30 max-w-[320px] text-left hidden lg:block"
         >
           <p className="text-gray-400 font-light text-sm md:text-base leading-relaxed backdrop-blur-md bg-black/20 p-5 rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
-            Hey there! I'm a full-stack developer working globally, building
-            scalable architectures and premium experiences.
+            Architecting high-performance SaaS platforms and scalable systems.
+            Transforming complex data into premium, seamless digital experiences
+            at OMDfarm.
           </p>
         </motion.div>
       </div>
 
-      {/* LogoLoop Bar anchored to the bottom */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 1.2, ease: "easeOut" }}
-        className="absolute bottom-0 left-0 w-full bg-[#030305]/80 backdrop-blur-xl border-t border-white/5 py-4 z-40"
-      >
-        <LogoLoop
-          logos={techLogos}
-          speed={80}
-          direction="left"
-          logoHeight={36}
-          gap={64}
-          hoverSpeed={20}
-          scaleOnHover
-          fadeOut
-          fadeOutColor="#030305"
-          ariaLabel="Technologies"
-        />
-      </motion.div>
     </section>
   );
 }

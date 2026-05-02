@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "motion/react";
 import Galaxy from "./components/react-bits/Galaxy";
 import { Hero } from "./components/Hero";
+import TechMarquee from "./components/TechMarquee";
 import { About } from "./components/About";
 import { Experience } from "./components/Experience";
 import { Projects } from "./components/Projects";
@@ -88,6 +89,7 @@ export default function AppLayout() {
 
       <main className="relative z-10 w-full overflow-x-hidden">
         <Hero />
+        <TechMarquee />
         <div id="about">
           <About />
         </div>

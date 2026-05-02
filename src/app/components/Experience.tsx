@@ -22,26 +22,26 @@ export function Experience() {
       company: "OMD do Brasil",
       role: "Software Developer",
       description:
-        "Leading the development of the OMDfarm SaaS platform, a high-performance solution for the agribusiness sector.",
+        "Architecting the OMDfarm SaaS ecosystem—a high-performance telemetry and management platform for large-scale agribusiness.",
       glow: "rgba(59, 130, 246, 0.5)",
       spotlightColor: "rgba(59, 130, 246, 0.12)",
       accentColor: "from-blue-400 via-indigo-400 to-purple-400",
       highlights: [
         {
+          icon: Database,
+          text: "Designed a high-throughput pipeline processing 5M+ monthly events using BullMQ and TimescaleDB.",
+        },
+        {
           icon: Map,
-          text: "Interactive integrations with Google Maps API for planting failure analysis, showcased at Agrishow.",
+          text: "Engineered GIS failure analysis tools with Google Maps API, showcased to 100k+ attendees at Agrishow.",
         },
         {
           icon: Radio,
-          text: "MQTT integration for real-time machinery tracking and telemetry data ingestion.",
-        },
-        {
-          icon: Database,
-          text: "Architected high-volume data ingestion queues using BullMQ and TimescaleDB.",
+          text: "Integrated real-time IoT machinery tracking via MQTT for sub-second telemetry ingestion.",
         },
         {
           icon: LineChart,
-          text: "Query optimization in Google Cloud SQL and development of rich B.I. Dashboards using ECharts.",
+          text: "Built advanced BI Dashboards with ECharts, optimizing SQL queries for instant analytics on big data.",
         },
       ],
     },
@@ -49,22 +49,22 @@ export function Experience() {
       company: "IT Consulting & Dallas Motel",
       role: "Strategic IT & Lead Developer",
       description:
-        "Driving digital transformation, strategic IT decisions, and building a custom operational ecosystem.",
+        "Leading digital transformation and building a custom operational ecosystem to optimize hospitality and business management.",
       glow: "rgba(168, 85, 247, 0.5)",
       spotlightColor: "rgba(168, 85, 247, 0.12)",
       accentColor: "from-purple-400 via-pink-400 to-rose-400",
       highlights: [
         {
-          icon: MonitorSmartphone,
-          text: "Implemented a fully digital menu and an in-room media streaming server.",
+          icon: BrainCircuit,
+          text: "Developing an AI-driven financial dashboard that reduced operational overhead by 25%.",
         },
         {
           icon: Server,
-          text: "Ongoing architecture and development of a custom PMS (Property Management System).",
+          text: "Architecting a proprietary PMS (Property Management System) for end-to-end hotel operations.",
         },
         {
-          icon: BrainCircuit,
-          text: "Building an AI-powered finance dashboard designed to drastically reduce operational costs.",
+          icon: MonitorSmartphone,
+          text: "Deployed a digital guest ecosystem and in-room media servers for a premium experience.",
         },
       ],
     },

@@ -181,21 +181,16 @@ export function About() {
             >
               <div className="space-y-8 text-gray-300">
                 <ScrollReveal baseOpacity={0.15} blurStrength={3}>
-                  I am a Software Developer focused on engineering high-impact
-                  solutions. Currently, I am actively building the OMDfarm
-                  platform, driving innovation within the agribusiness industry.
+                  I specialize in engineering high-impact SaaS solutions,
+                  currently driving architectural innovation at OMDfarm. I bridge
+                  the gap between complex technical strategies and premium
+                  end-user experiences.
                 </ScrollReveal>
                 <ScrollReveal baseOpacity={0.15} blurStrength={3}>
-                  My expertise spans the entire development lifecycle—from early
-                  architecture and strategic planning to full-stack
-                  implementation and DevOps operations. I believe in software
-                  that outlives its initial requirements.
-                </ScrollReveal>
-                <ScrollReveal baseOpacity={0.15} blurStrength={3}>
-                  I am a strong advocate for clean code and robust architectural
-                  patterns such as Domain-Driven Design (DDD) and Clean
-                  Architecture, ensuring long-term code maintainability and
-                  scalability. Proficient in English (C2).
+                  My approach integrates Domain-Driven Design and Clean
+                  Architecture to build robust, scalable software that outlives
+                  its requirements. I don't just write code; I design systems
+                  that scale with your vision.
                 </ScrollReveal>
               </div>
             </FluidGlass>
