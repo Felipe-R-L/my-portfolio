@@ -5,24 +5,13 @@ import { Hero } from "./components/Hero";
 import TechMarquee from "./components/TechMarquee";
 import { About } from "./components/About";
 import { Experience } from "./components/Experience";
+import { Services } from "./components/Services";
 import { Projects } from "./components/Projects";
 import { Contact } from "./components/Contact";
-import { Github, Linkedin } from "lucide-react";
 import GlassSurface from "./components/react-bits/GlassSurface";
 import FluidGlass from "./components/react-bits/FluidGlass";
 import GradientText from "./components/react-bits/GradientText";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
-
-const XIcon = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className={className}
-    aria-hidden="true"
-  >
-    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.292 19.49h2.039L6.486 3.24H4.298l13.311 17.403z" />
-  </svg>
-);
 
 export default function AppLayout() {
   const lenisRef = useSmoothScroll();
@@ -65,7 +54,7 @@ export default function AppLayout() {
           mixBlendMode="screen"
         >
           <div className="flex items-center gap-8">
-            {["About", "Experience", "Projects"].map((item, idx) => (
+            {["About", "Projects", "Experience", "Services"].map((item, idx) => (
               <motion.a
                 key={item}
                 href={`#${item.toLowerCase()}`}
@@ -93,11 +82,14 @@ export default function AppLayout() {
         <div id="about">
           <About />
         </div>
+        <div id="projects">
+          <Projects />
+        </div>
         <div id="experience">
           <Experience />
         </div>
-        <div id="projects">
-          <Projects />
+        <div id="services">
+          <Services />
         </div>
         <div id="contact">
           <Contact />
@@ -112,18 +104,18 @@ export default function AppLayout() {
               <div className="flex gap-6">
                 {[
                   {
-                    icon: Github,
+                    icon: "https://cdn.simpleicons.org/github/white",
                     href: "https://github.com/Felipe-R-L",
                     label: "GitHub",
                   },
                   {
-                    icon: Linkedin,
-                    href: "https://linkedin.com/in/felipeleone",
+                    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg",
+                    href: "https://linkedin.com/in/felipe-rodrigues-leone",
                     label: "LinkedIn",
                   },
                   {
-                    icon: XIcon,
-                    href: "https://x.com/felipeleone",
+                    icon: "https://cdn.simpleicons.org/x/white",
+                    href: "https://x.com/rfelipe_jpg",
                     label: "X",
                   },
                 ].map((social, idx) => (
@@ -135,7 +127,7 @@ export default function AppLayout() {
                     className="text-gray-500 hover:text-white transition-colors"
                     whileHover={{ scale: 1.2, y: -2 }}
                   >
-                    <social.icon className="w-6 h-6" />
+                    <img src={social.icon} alt={social.label} className="w-6 h-6" />
                   </motion.a>
                 ))}
               </div>
