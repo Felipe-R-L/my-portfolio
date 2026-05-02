@@ -1,4 +1,9 @@
-import React, { useRef, useState, type ReactNode, type CSSProperties } from "react";
+import React, {
+  useRef,
+  useState,
+  type ReactNode,
+  type CSSProperties,
+} from "react";
 import "./TiltedCard.css";
 
 interface TiltedCardProps {
@@ -47,7 +52,7 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
     const rotateYVal = (mouseX / (cardWidth / 2)) * rotateAmplitude;
 
     setTransformStyle(
-      `perspective(1000px) rotateX(${rotateXVal}deg) rotateY(${rotateYVal}deg) scale3d(${scaleOnHover}, ${scaleOnHover}, ${scaleOnHover})`
+      `perspective(1000px) rotateX(${rotateXVal}deg) rotateY(${rotateYVal}deg) scale3d(${scaleOnHover}, ${scaleOnHover}, ${scaleOnHover})`,
     );
 
     if (showTooltip) {
@@ -65,7 +70,7 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
   const handleMouseLeave = () => {
     setIsHovering(false);
     setTransformStyle(
-      `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`
+      `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`,
     );
   };
 

@@ -18,7 +18,7 @@ export function SpaceBackground() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
-    
+
     window.addEventListener("resize", resize);
     resize();
 
@@ -55,7 +55,7 @@ export function SpaceBackground() {
         // Draw star
         ctx.beginPath();
         ctx.arc(projectX, projectY, size, 0, Math.PI * 2);
-        
+
         // Slightly blueish/white stars
         const opacity = 1 - star.z / canvas.width;
         ctx.fillStyle = `rgba(220, 230, 255, ${opacity})`;
@@ -63,11 +63,18 @@ export function SpaceBackground() {
       });
 
       // Draw subtle "black hole" glow in the center
-      const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, canvas.height / 1.5);
+      const gradient = ctx.createRadialGradient(
+        centerX,
+        centerY,
+        0,
+        centerX,
+        centerY,
+        canvas.height / 1.5,
+      );
       gradient.addColorStop(0, "rgba(0, 0, 0, 0.8)");
       gradient.addColorStop(0.2, "rgba(20, 10, 40, 0.3)"); // Subtle purple/blue glow
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-      
+
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -85,18 +92,19 @@ export function SpaceBackground() {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none bg-[#030305] overflow-hidden">
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-      
+
       {/* Tesseract/Grid subtle overlay */}
-      <div 
+      <div
         className="absolute inset-0 opacity-10"
         style={{
           backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)`,
-          backgroundSize: '4rem 4rem',
-          transform: 'perspective(1000px) rotateX(60deg) translateY(-100px) translateZ(-200px)',
-          transformOrigin: 'top center'
+          backgroundSize: "4rem 4rem",
+          transform:
+            "perspective(1000px) rotateX(60deg) translateY(-100px) translateZ(-200px)",
+          transformOrigin: "top center",
         }}
       />
-      
+
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(3,3,5,1)_80%)]" />
     </div>
   );

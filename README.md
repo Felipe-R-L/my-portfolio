@@ -1,9 +1,7 @@
+# Welcome to my portolio source code!
 
-  # Welcome to my portolio source code!
+## To start the project
 
-  ## To start the project
+Run `pnpm i` to install the dependencies.
 
-  Run `pnpm i` to install the dependencies.
-
-  Run `pnpm run dev` to start the development server.
-  
+Run `pnpm run dev` to start the development server.

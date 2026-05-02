@@ -13,9 +13,9 @@ export function useSmoothScroll() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      lerp: 0.07,           // low lerp = more momentum glide
-      smoothWheel: true,     // smooth mouse-wheel scrolling
-      autoResize: true,      // recalculate on resize
+      lerp: 0.07, // low lerp = more momentum glide
+      smoothWheel: true, // smooth mouse-wheel scrolling
+      autoResize: true, // recalculate on resize
     });
 
     lenisRef.current = lenis;

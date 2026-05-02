@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useState, type ReactNode, type CSSProperties } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  type ReactNode,
+  type CSSProperties,
+} from "react";
 import "./ScrollReveal.css";
 
 interface ScrollRevealProps {
@@ -45,18 +51,21 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const words =
-    typeof children === "string"
-      ? children.split(" ")
-      : [children];
+  const words = typeof children === "string" ? children.split(" ") : [children];
 
   return (
-    <div ref={containerRef} className={`scroll-reveal-container ${containerClassName}`}>
+    <div
+      ref={containerRef}
+      className={`scroll-reveal-container ${containerClassName}`}
+    >
       <span className={`scroll-reveal-text ${className}`}>
         {words.map((word, i) => {
           const wordProgress = Math.max(
             0,
-            Math.min(1, (progress - i / (words.length * 1.5)) * (words.length * 1.2))
+            Math.min(
+              1,
+              (progress - i / (words.length * 1.5)) * (words.length * 1.2),
+            ),
           );
 
           const opacity = baseOpacity + wordProgress * (1 - baseOpacity);

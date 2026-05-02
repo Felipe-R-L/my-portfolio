@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useState, useMemo, useCallback } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import "./SplitText.css";
 
 interface SplitTextProps {
@@ -28,7 +34,9 @@ const SplitText: React.FC<SplitTextProps> = ({
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [completedIndexes, setCompletedIndexes] = useState<Set<number>>(new Set());
+  const [completedIndexes, setCompletedIndexes] = useState<Set<number>>(
+    new Set(),
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -38,7 +46,7 @@ const SplitText: React.FC<SplitTextProps> = ({
           observer.disconnect();
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -67,7 +75,7 @@ const SplitText: React.FC<SplitTextProps> = ({
         }
       }
     },
-    [letters.length, onLetterAnimationComplete]
+    [letters.length, onLetterAnimationComplete],
   );
 
   return (
@@ -83,8 +91,14 @@ const SplitText: React.FC<SplitTextProps> = ({
           className="split-text-letter"
           style={{
             ...(isVisible ? animationTo : animationFrom),
-            transform: completedIndexes.has(index) ? "none" : (isVisible ? (animationTo.transform as string) : (animationFrom.transform as string)),
-            transition: completedIndexes.has(index) ? "none" : `all 0.6s ${easing} ${index * delay}ms`,
+            transform: completedIndexes.has(index)
+              ? "none"
+              : isVisible
+                ? (animationTo.transform as string)
+                : (animationFrom.transform as string),
+            transition: completedIndexes.has(index)
+              ? "none"
+              : `all 0.6s ${easing} ${index * delay}ms`,
             display: "inline-block",
           }}
           onTransitionEnd={(e) => handleTransitionEnd(e, index)}
