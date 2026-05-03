@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion } from "motion/react";
 import { Mail, Send, MessageSquare } from "lucide-react";
 import SpotlightCard from "./react-bits/SpotlightCard";
@@ -17,6 +18,7 @@ const XIcon = ({ className }: { className?: string }) => (
 );
 
 export function Contact() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -69,7 +71,7 @@ export function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <div className="flex items-center mb-6">
+          <div className="flex items-center flex-wrap gap-y-4 mb-6">
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -79,14 +81,15 @@ export function Contact() {
             </motion.div>
 
             <SplitText
-              text="Get in Touch"
+              text={t("contact.title_part1")}
               delay={30}
               className="text-4xl md:text-5xl font-bold text-white tracking-tighter uppercase"
             />
 
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
               transition={{
                 type: "spring",
                 stiffness: 400,
@@ -98,7 +101,7 @@ export function Contact() {
 
             <span className="text-white/40">
               <SplitText
-                text="Collaborate."
+                text={t("contact.title_part2")}
                 delay={30}
                 className="text-4xl md:text-5xl font-bold tracking-tighter uppercase"
               />
@@ -119,11 +122,10 @@ export function Contact() {
           <div className="lg:col-span-2 space-y-12">
             <div>
               <h3 className="text-2xl font-bold text-white mb-6">
-                Let's build something amazing together.
+                {t("contact.cta_title")}
               </h3>
               <p className="text-gray-400 text-lg leading-relaxed mb-8">
-                I'm always open to discussing new projects, creative ideas or
-                opportunities to be part of your visions.
+                {t("contact.cta_desc")}
               </p>
 
               <div className="flex items-center space-x-4 text-gray-300 hover:text-white transition-colors group">
@@ -138,7 +140,7 @@ export function Contact() {
 
             <div className="space-y-6">
               <h4 className="text-sm font-bold text-white/40 uppercase tracking-[0.2em]">
-                Social Presence
+                {t("contact.social_title")}
               </h4>
               <div className="flex gap-4">
                 {socials.map((social, idx) => (
@@ -173,12 +175,12 @@ export function Contact() {
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
-                        Name
+                        {t("contact.form.name")}
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="John Doe"
+                        placeholder={t("contact.form.placeholder_name")}
                         className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 transition-colors"
                         value={formData.name}
                         onChange={(e) =>
@@ -188,12 +190,12 @@ export function Contact() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
-                        Email
+                        {t("contact.form.email")}
                       </label>
                       <input
                         type="email"
                         required
-                        placeholder="john@example.com"
+                        placeholder={t("contact.form.placeholder_email")}
                         className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 transition-colors"
                         value={formData.email}
                         onChange={(e) =>
@@ -205,12 +207,12 @@ export function Contact() {
 
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">
-                      Message
+                      {t("contact.form.message")}
                     </label>
                     <textarea
                       required
                       rows={5}
-                      placeholder="Tell me about your project..."
+                      placeholder={t("contact.form.placeholder_message")}
                       className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/10 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
                       value={formData.message}
                       onChange={(e) =>
@@ -229,14 +231,14 @@ export function Contact() {
                     {status === "sending" ? (
                       <span className="flex items-center gap-2">
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        Sending...
+                        {t("contact.form.sending")}
                       </span>
                     ) : status === "sent" ? (
-                      "Message Ready in your Mail App!"
+                      t("contact.form.sent")
                     ) : (
                       <>
                         <Send className="w-5 h-5" />
-                        Send Message
+                        {t("contact.form.send")}
                       </>
                     )}
                   </motion.button>

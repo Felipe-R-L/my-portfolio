@@ -11,10 +11,20 @@ import { Contact } from "./components/Contact";
 import GlassSurface from "./components/react-bits/GlassSurface";
 import FluidGlass from "./components/react-bits/FluidGlass";
 import GradientText from "./components/react-bits/GradientText";
+import { useTranslation } from "react-i18next";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 
 export default function AppLayout() {
   const lenisRef = useSmoothScroll();
+  const { t, i18n } = useTranslation();
+
+  const navItems = [
+    { id: "about", key: "nav.about" },
+    { id: "projects", key: "nav.projects" },
+    { id: "experience", key: "nav.experience" },
+    { id: "services", key: "nav.services" },
+  ];
+
   return (
     <div className="min-h-screen bg-[#030305] text-gray-100 selection:bg-blue-500/30 selection:text-white">
       <div className="fixed inset-0 z-0">
@@ -37,7 +47,7 @@ export default function AppLayout() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 1.5, ease: "easeOut" }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-[40px]"
+        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-[40px] w-[calc(100%-2rem)] md:w-max"
       >
         <GlassSurface
           width="max-content"
@@ -53,25 +63,43 @@ export default function AppLayout() {
           opacity={0.83}
           mixBlendMode="screen"
         >
-          <div className="flex items-center gap-8">
-            {["About", "Projects", "Experience", "Services"].map((item, idx) => (
-              <motion.a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-xs font-medium uppercase tracking-[0.2em] text-white/60 hover:text-white transition-colors relative group"
-                whileHover={{ y: -1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  lenisRef.current?.scrollTo(`#${item.toLowerCase()}`, {
-                    duration: 1.2,
-                  });
-                }}
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-blue-400 to-purple-400 group-hover:w-full transition-all duration-300" />
-              </motion.a>
-            ))}
+          <div className="flex items-center gap-4 md:gap-8">
+            <div className="flex items-center gap-4 md:gap-8">
+              {navItems.map((item) => (
+                <motion.a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className="text-[10px] md:text-xs font-medium uppercase tracking-[0.1em] md:tracking-[0.2em] text-white/60 hover:text-white transition-colors relative group"
+                  whileHover={{ y: -1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    lenisRef.current?.scrollTo(`#${item.id}`, {
+                      duration: 1.2,
+                    });
+                  }}
+                >
+                  {t(item.key)}
+                  <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-blue-400 to-purple-400 group-hover:w-full transition-all duration-300" />
+                </motion.a>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2 md:gap-3 pl-4 md:pl-6 border-l border-white/10 h-4">
+              {["en", "pt"].map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => i18n.changeLanguage(lang)}
+                  className={`text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
+                    i18n.language.startsWith(lang)
+                      ? "text-blue-400"
+                      : "text-white/30 hover:text-white/60"
+                  }`}
+                >
+                  {lang}
+                </button>
+              ))}
+            </div>
           </div>
         </GlassSurface>
       </motion.nav>
@@ -132,15 +160,16 @@ export default function AppLayout() {
                 ))}
               </div>
 
-              <p className="text-gray-500 font-medium text-sm tracking-widest uppercase flex flex-col md:flex-row items-center justify-center gap-2">
-                <span>© {new Date().getFullYear()}</span>
+              <p className="text-gray-500 font-medium text-sm tracking-wide md:tracking-widest uppercase flex flex-col lg:flex-row items-center justify-center gap-2 md:gap-4">
+                <span className="opacity-50">© {new Date().getFullYear()}</span>
                 <GradientText
                   colors={["#6b7280", "#60a5fa", "#8b5cf6", "#6b7280"]}
                   animationSpeed={10}
                 >
                   Felipe Rodrigues Leone
                 </GradientText>
-                <span>• Built for the future.</span>
+                <span className="hidden lg:inline opacity-30">•</span>
+                <span className="opacity-50">{t("footer.built_for_future")}</span>
               </p>
             </div>
           </FluidGlass>

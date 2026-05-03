@@ -2,7 +2,11 @@ import React from "react";
 import { motion } from "motion/react";
 import SplitText from "./react-bits/SplitText";
 import GradientText from "./react-bits/GradientText";
+import { useTranslation } from "react-i18next";
+
 export function Hero() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-28 overflow-hidden px-6">
       {/* Deep space Apple-style glowing orbs */}
@@ -30,13 +34,13 @@ export function Hero() {
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <h2 className="text-blue-100 font-medium tracking-widest text-xs md:text-sm uppercase text-left">
-              Open for <br className="hidden lg:block" /> Freelance Works.
+              {t("hero.badge")}
             </h2>
           </div>
         </motion.div>
 
         {/* Text and Image Container - Flex Row Layout */}
-        <div className="relative w-full flex flex-col lg:flex-row-reverse items-center justify-between min-h-[400px] md:min-h-[500px] gap-12 mt-4 lg:mt-0 lg:px-10">
+        <div className="relative w-full flex flex-col lg:flex-row-reverse lg:items-stretch justify-between min-h-[400px] md:min-h-[500px] gap-12 mt-4 lg:mt-0 lg:px-10">
           {/* Main Typography - Right Side */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -44,7 +48,7 @@ export function Hero() {
             transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
             className="z-10 relative flex-1 flex flex-col items-start justify-center space-y-4 text-left w-full lg:pl-10"
           >
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[8rem] font-bold text-white tracking-tighter leading-[0.9] filter drop-shadow-[0_0_40px_rgba(255,255,255,0.15)] uppercase">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[6rem] font-bold text-white tracking-tighter leading-[0.9] filter drop-shadow-[0_0_40px_rgba(255,255,255,0.15)] uppercase">
               <SplitText
                 text="FELIPE"
                 className="block"
@@ -60,7 +64,7 @@ export function Hero() {
               />
               <SplitText
                 text="RODRIGUES"
-                className="block text-gray-300"
+                className="block text-gray-300/40"
                 delay={30}
                 animationFrom={{
                   opacity: 0,
@@ -72,58 +76,96 @@ export function Hero() {
                 }}
               />
             </h1>
-            <div className="flex flex-wrap items-center gap-4 md:gap-6 w-full pt-4">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[4rem] font-light text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-200 tracking-widest uppercase">
-                SOFTWARE
-              </h2>
-              <GradientText
-                colors={["#60a5fa", "#818cf8", "#a78bfa", "#c084fc", "#60a5fa"]}
-                animationSpeed={6}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-[4rem] font-bold tracking-widest uppercase font-light drop-shadow-lg"
-              >
-                DEVELOPER
-              </GradientText>
+            <div className="flex flex-col items-start w-full pt-4">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 md:gap-6">
+                <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-[3.5rem] font-light text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-200 tracking-widest uppercase">
+                  {t("hero.title_part1")}
+                </h2>
+                <GradientText
+                  colors={[
+                    "#60a5fa",
+                    "#818cf8",
+                    "#a78bfa",
+                    "#c084fc",
+                    "#60a5fa",
+                  ]}
+                  animationSpeed={6}
+                  className="text-xl sm:text-3xl md:text-4xl lg:text-[3.5rem] font-bold tracking-widest uppercase font-light drop-shadow-lg"
+                >
+                  {t("hero.title_part2")}
+                </GradientText>
+              </div>
+              {t("hero.title_part3") && (
+                <motion.h2
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 1, delay: 1.2 }}
+                  className="text-xl sm:text-3xl md:text-4xl lg:text-[3.5rem] font-light text-white/40 tracking-widest uppercase"
+                >
+                  {t("hero.title_part3")}
+                </motion.h2>
+              )}
             </div>
+
+            {/* Mobile bio - shown only below lg */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+              className="mt-8 lg:hidden max-w-[400px]"
+            >
+              <p className="text-gray-400 font-light text-sm md:text-base leading-relaxed backdrop-blur-md bg-white/[0.03] p-6 rounded-3xl border border-white/5 shadow-xl">
+                {t("hero.description")}
+              </p>
+            </motion.div>
           </motion.div>
 
-          {/* Profile Image - Left Side */}
-          <motion.div
-            initial={{ opacity: 0, x: -50, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-            className="relative z-20 w-full max-w-[280px] md:max-w-[350px] lg:max-w-[400px] flex-shrink-0"
-          >
-            {/* Decorative background glow for the image */}
-            <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full" />
+          {/* Profile Image & Bio - Left Side */}
+          <div className="relative z-20 w-full max-w-[280px] md:max-w-[350px] lg:max-w-[420px] flex-shrink-0 flex flex-col justify-between">
+            <motion.div
+              initial={{ opacity: 0, x: -50, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
+              className="relative w-full"
+            >
+              {/* Decorative background glow for the image */}
+              <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full" />
 
-            {/* Premium rounded avatar card */}
-            <div className="relative aspect-square w-full rounded-[40px] md:rounded-[60px] overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group backdrop-blur-md bg-white/5">
-              <img
-                src="/assets/profile/profile.jpg"
-                alt="Felipe Rodrigues Leone"
-                className="w-full h-full object-cover transform group-hover:scale-105 pointer-events-auto cursor-pointer transition-transform duration-700"
-              />
-              {/* Subtle inner ring */}
-              <div className="absolute inset-0 border border-white/10 rounded-[40px] md:rounded-[60px] pointer-events-none" />
-            </div>
-          </motion.div>
+              {/* Premium rounded avatar card */}
+              <div className="relative w-full rounded-[40px] md:rounded-[60px] overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group backdrop-blur-md bg-white/5 aspect-square">
+                <img
+                  src="/assets/profile/profile.jpg"
+                  alt="Felipe Rodrigues Leone"
+                  className="w-full h-full object-cover transform group-hover:scale-105 pointer-events-auto cursor-pointer transition-transform duration-700"
+                />
+                {/* Subtle inner ring */}
+                <div className="absolute inset-0 border border-white/10 rounded-[40px] md:rounded-[60px] pointer-events-none" />
+
+                {/* Role Tag Floating inside image - TOP CENTER */}
+                <div className="absolute bottom-8 left-0 right-0 z-30 flex justify-center">
+                  <div className="bg-slate-950/80 backdrop-blur-xl border border-blue-500/30 px-8 py-3 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 duration-300">
+                    <span className="text-blue-100 text-xs md:text-sm font-bold uppercase tracking-[0.3em] whitespace-nowrap">
+                      {t("hero.role")}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bio - Now part of the flow for stable margin */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+              className="mt-8 lg:mt-auto max-w-[400px] lg:max-w-none"
+            >
+              <p className="text-gray-400 font-light text-sm md:text-base leading-relaxed backdrop-blur-md bg-white/[0.03] lg:bg-black/20 p-6 rounded-3xl border border-white/5 lg:border-white/10 shadow-xl">
+                {t("hero.description")}
+              </p>
+            </motion.div>
+          </div>
         </div>
-
-        {/* Small bio bottom left */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="absolute bottom-0 left-4 md:left-10 z-30 max-w-[320px] text-left hidden lg:block"
-        >
-          <p className="text-gray-400 font-light text-sm md:text-base leading-relaxed backdrop-blur-md bg-black/20 p-5 rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
-            Architecting high-performance SaaS platforms and scalable systems.
-            Transforming complex data into premium, seamless digital experiences
-            at OMDfarm.
-          </p>
-        </motion.div>
       </div>
-
     </section>
   );
 }

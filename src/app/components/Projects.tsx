@@ -6,15 +6,15 @@ import TiltedCard from "./react-bits/TiltedCard";
 import SplitText from "./react-bits/SplitText";
 import GradientText from "./react-bits/GradientText";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { useTranslation } from "react-i18next";
 import { ExternalLink, ShoppingBag, Layout, Rocket } from "lucide-react";
 
 export function Projects() {
+  const { t } = useTranslation();
+
   const projects = [
     {
-      title: "Secret Boutique",
-      category: "E-commerce Platform",
-      description:
-        "End-to-end development of a niche e-commerce focused on sensual and self-care products. A 100% finished platform with full, secure payment gateway integration, structured for high performance and conversion.",
+      id: "secret",
       image:
         "https://images.unsplash.com/photo-1667188225162-03bc16ca7d88?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGRhcmslMjBwcmVtaXVtJTIwc3BhY2V8ZW58MXx8fHwxNzc3NDQ3NjExfDA&ixlib=rb-4.1.0&q=80&w=1080",
       icon: ShoppingBag,
@@ -24,10 +24,7 @@ export function Projects() {
       gradientColors: ["#ec4899", "#f472b6", "#f9a8d4", "#ec4899"],
     },
     {
-      title: "Dallas Motel Landing Page",
-      category: "High-Performance Frontend",
-      description:
-        "Official digital presence of a hospitality business. A high-performance front-end designed for conversion, featuring a responsive design entirely focused on the user experience.",
+      id: "dallas",
       image:
         "https://images.unsplash.com/photo-1765211369986-22057b702ef4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBkYXJrJTIwbmVvbiUyMGFyY2hpdGVjdHVyZXxlbnwxfHx8fDE3Nzc0NDc2MTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       icon: Layout,
@@ -68,7 +65,7 @@ export function Projects() {
           </motion.div>
 
           <SplitText
-            text="Personal Archives"
+            text={t("projects.title_part1")}
             delay={30}
             animationFrom={{ opacity: 0, transform: "translate3d(0, 30px, 0)" }}
             animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
@@ -88,7 +85,7 @@ export function Projects() {
 
           <span className="text-white/40">
             <SplitText
-              text="Projects."
+              text={t("projects.title_part2")}
               delay={30}
               animationFrom={{
                 opacity: 0,
@@ -110,7 +107,7 @@ export function Projects() {
       <div className="grid md:grid-cols-2 gap-8 relative z-10">
         {projects.map((project, idx) => (
           <motion.div
-            key={idx}
+            key={project.id}
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -139,7 +136,7 @@ export function Projects() {
                     />
                     <ImageWithFallback
                       src={project.image}
-                      alt={project.title}
+                      alt={t(`projects.${project.id}.title`)}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#030305]/80 to-transparent z-10" />
@@ -148,7 +145,7 @@ export function Projects() {
                       <span
                         className={`text-xs font-bold uppercase tracking-wider ${project.tagColor}`}
                       >
-                        {project.category}
+                        {t(`projects.${project.id}.category`)}
                       </span>
                     </div>
                   </div>
@@ -160,7 +157,7 @@ export function Projects() {
                           colors={project.gradientColors}
                           animationSpeed={8}
                         >
-                          {project.title}
+                          {t(`projects.${project.id}.title`)}
                         </GradientText>
                       </h3>
                       <motion.button
@@ -177,7 +174,7 @@ export function Projects() {
                       </motion.button>
                     </div>
                     <p className="text-gray-400 leading-relaxed font-light">
-                      {project.description}
+                      {t(`projects.${project.id}.description`)}
                     </p>
                   </div>
                 </SpotlightCard>

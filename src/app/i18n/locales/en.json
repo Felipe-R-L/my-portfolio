@@ -1,0 +1,118 @@
+{
+  "nav": {
+    "about": "About",
+    "projects": "Projects",
+    "experience": "Experience",
+    "services": "Services"
+  },
+  "hero": {
+    "badge": "Available for new projects",
+    "title_part1": "Engineering",
+    "title_part2": "Possibilities",
+    "title_part3": "Into Reality",
+    "description": "Full-stack developer focused on building high-performance web applications, merging cutting-edge technology with a premium design aesthetic.",
+    "cta_projects": "View Projects",
+    "cta_contact": "Get in Touch",
+    "role": "Fullstack Developer"
+  },
+  "about": {
+    "title_part1": "Strategy",
+    "title_part2": "Identity.",
+    "bio_p1": "Specialized in high-impact SaaS engineering, currently driving technological evolution at OMDfarm. I bridge the gap between complex technical strategies and exceptional user experiences.",
+    "bio_p2": "My approach integrates Domain-Driven Design and Clean Architecture to build robust, scalable software. More than just writing code, I design systems that evolve with your vision.",
+    "revealed": {
+      "trustworthy": "TRUSTWORTHY",
+      "collaborative": "COLLABORATIVE",
+      "dedicated": "DEDICATED"
+    },
+    "skills": {
+      "clean_arch": "Clean Architecture",
+      "devops": "DevOps & Cloud",
+      "fullstack": "Fullstack Expert",
+      "english": "English (C2)"
+    }
+  },
+  "contact": {
+    "title_part1": "Connection",
+    "title_part2": "Let's Talk.",
+    "cta_title": "Let's turn your vision into reality.",
+    "cta_desc": "I'm always open to discussing new projects, creative ideas, or opportunities to integrate innovative visions.",
+    "social_title": "Social Presence",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "placeholder_name": "Your name here",
+      "placeholder_email": "your@email.com",
+      "placeholder_message": "Tell me a bit about your project...",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "sent": "Message Ready in your Mail App!"
+    }
+  },
+  "projects": {
+    "title_part1": "Innovation",
+    "title_part2": "Results.",
+    "secret": {
+      "title": "Secret Boutique",
+      "category": "Premium E-commerce",
+      "description": "End-to-end development of a niche e-commerce focused on wellness and self-care. A robust platform with secure checkout and total focus on conversion and performance."
+    },
+    "dallas": {
+      "title": "Dallas Motel",
+      "category": "Performance & Conversion",
+      "description": "Strategic digital presence for the hospitality sector. High-performance front-end designed to maximize conversion and elevate user experience."
+    }
+  },
+  "experience": {
+    "title_part1": "Evolution",
+    "title_part2": "Legacy.",
+    "omd": {
+      "company": "OMD do Brasil",
+      "role": "Software Developer",
+      "description": "Architecting the OMDfarm SaaS ecosystem—the leading telemetry and management platform for large-scale agribusiness.",
+      "h1": "High-throughput pipeline processing over 5 million monthly events using BullMQ and TimescaleDB.",
+      "h2": "GIS failure analysis tools with Google Maps API, presented to over 100,000 attendees at Agrishow.",
+      "h3": "Real-time IoT machinery tracking via MQTT for sub-second telemetry ingestion.",
+      "h4": "Advanced BI Dashboards with ECharts, optimizing SQL queries for instant big data analytics."
+    },
+    "consulting": {
+      "company": "IT Consulting & Dallas Motel",
+      "role": "Strategic Tech Lead",
+      "description": "Leading digital transformation and building custom operational ecosystems to optimize business management.",
+      "h1": "AI-driven financial dashboard that reduced operational overhead by 25%.",
+      "h2": "Proprietary PMS (Property Management System) for end-to-end hospitality operations.",
+      "h3": "Digital guest ecosystem and premium in-room media server infrastructure."
+    }
+  },
+  "services": {
+    "title_part1": "Expertise",
+    "title_part2": "Solutions.",
+    "description": "From initial concept to production-ready scale, I deliver high-end technical solutions tailored to your business goals.",
+    "items": {
+      "landing_pages": {
+        "title": "Landing Pages & Websites",
+        "description": "High-performance, visually stunning digital experiences designed to convert visitors into customers."
+      },
+      "ecommerce": {
+        "title": "Custom E-commerce",
+        "description": "Scalable online stores with a focus on checkout fluidity and conversion architecture."
+      },
+      "ai": {
+        "title": "AI & Chatbots",
+        "description": "Intelligent automation using custom AI agents and LLMs to streamline processes and scale support."
+      },
+      "api": {
+        "title": "Systems & APIs",
+        "description": "Complex integrations and scalable backend systems to automate workflows and connect your tools."
+      }
+    },
+    "learn_more": "Learn More"
+  },
+  "footer": {
+    "built_for_future": "Built for the future."
+  },
+  "common": {
+    "loading": "Loading..."
+  }
+}

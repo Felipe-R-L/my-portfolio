@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "motion/react";
 import SpotlightCard from "./react-bits/SpotlightCard";
 import BorderGlow from "./react-bits/BorderGlow";
-import FluidGlass from "./react-bits/FluidGlass";
 import SplitText from "./react-bits/SplitText";
 import {
   Database,
@@ -12,60 +11,35 @@ import {
   Server,
   MonitorSmartphone,
   BrainCircuit,
-  Orbit,
   Terminal,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function Experience() {
+  const { t } = useTranslation();
+
   const experiences = [
     {
-      company: "OMD do Brasil",
-      role: "Software Developer",
-      description:
-        "Architecting the OMDfarm SaaS ecosystem—a high-performance telemetry and management platform for large-scale agribusiness.",
+      id: "omd",
       glow: "rgba(59, 130, 246, 0.5)",
       spotlightColor: "rgba(59, 130, 246, 0.12)",
       accentColor: "from-blue-400 via-indigo-400 to-purple-400",
       highlights: [
-        {
-          icon: Database,
-          text: "Designed a high-throughput pipeline processing 5M+ monthly events using BullMQ and TimescaleDB.",
-        },
-        {
-          icon: Map,
-          text: "Engineered GIS failure analysis tools with Google Maps API, showcased to 100k+ attendees at Agrishow.",
-        },
-        {
-          icon: Radio,
-          text: "Integrated real-time IoT machinery tracking via MQTT for sub-second telemetry ingestion.",
-        },
-        {
-          icon: LineChart,
-          text: "Built advanced BI Dashboards with ECharts, optimizing SQL queries for instant analytics on big data.",
-        },
+        { icon: Database, key: "h1" },
+        { icon: Map, key: "h2" },
+        { icon: Radio, key: "h3" },
+        { icon: LineChart, key: "h4" },
       ],
     },
     {
-      company: "IT Consulting & Dallas Motel",
-      role: "Strategic IT & Lead Developer",
-      description:
-        "Leading digital transformation and building a custom operational ecosystem to optimize hospitality and business management.",
+      id: "consulting",
       glow: "rgba(168, 85, 247, 0.5)",
       spotlightColor: "rgba(168, 85, 247, 0.12)",
       accentColor: "from-purple-400 via-pink-400 to-rose-400",
       highlights: [
-        {
-          icon: BrainCircuit,
-          text: "Developing an AI-driven financial dashboard that reduced operational overhead by 25%.",
-        },
-        {
-          icon: Server,
-          text: "Architecting a proprietary PMS (Property Management System) for end-to-end hotel operations.",
-        },
-        {
-          icon: MonitorSmartphone,
-          text: "Deployed a digital guest ecosystem and in-room media servers for a premium experience.",
-        },
+        { icon: BrainCircuit, key: "h1" },
+        { icon: Server, key: "h2" },
+        { icon: MonitorSmartphone, key: "h3" },
       ],
     },
   ];
@@ -100,7 +74,7 @@ export function Experience() {
           </motion.div>
 
           <SplitText
-            text="Mission Log"
+            text={t("experience.title_part1")}
             delay={30}
             animationFrom={{ opacity: 0, transform: "translate3d(0, 30px, 0)" }}
             animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
@@ -108,7 +82,8 @@ export function Experience() {
 
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
             transition={{
               type: "spring",
               stiffness: 400,
@@ -120,7 +95,7 @@ export function Experience() {
 
           <span className="text-white/40">
             <SplitText
-              text="Experience."
+              text={t("experience.title_part2")}
               delay={30}
               animationFrom={{
                 opacity: 0,
@@ -142,7 +117,7 @@ export function Experience() {
       <div className="space-y-12 relative z-10">
         {experiences.map((exp, idx) => (
           <motion.div
-            key={idx}
+            key={exp.id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
@@ -162,7 +137,7 @@ export function Experience() {
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: 0.1 }}
                     >
-                      {exp.company}
+                      {t(`experience.${exp.id}.company`)}
                     </motion.h3>
                     <motion.p
                       className={`text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r ${exp.accentColor} font-bold uppercase tracking-wide`}
@@ -171,7 +146,7 @@ export function Experience() {
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                      {exp.role}
+                      {t(`experience.${exp.id}.role`)}
                     </motion.p>
                   </div>
                 </div>
@@ -183,7 +158,7 @@ export function Experience() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.3 }}
                 >
-                  {exp.description}
+                  {t(`experience.${exp.id}.description`)}
                 </motion.p>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -211,7 +186,7 @@ export function Experience() {
                           <Icon className="w-6 h-6 text-blue-300 group-hover:text-blue-200 transition-colors" />
                         </motion.div>
                         <p className="text-gray-400 leading-relaxed text-sm md:text-base font-light group-hover:text-gray-300 transition-colors">
-                          {highlight.text}
+                          {t(`experience.${exp.id}.${highlight.key}`)}
                         </p>
                       </motion.div>
                     );

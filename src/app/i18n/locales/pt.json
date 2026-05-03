@@ -1,0 +1,118 @@
+{
+  "nav": {
+    "about": "Sobre",
+    "projects": "Projetos",
+    "experience": "Experiência",
+    "services": "Serviços"
+  },
+  "hero": {
+    "badge": "Disponível para novos projetos",
+    "title_part1": "Materializando",
+    "title_part2": "Ideias",
+    "title_part3": "",
+    "description": "Desenvolvedor full-stack focado na criação de aplicações web de alto desempenho, unindo tecnologia de ponta a uma estética premium.",
+    "cta_projects": "Ver Projetos",
+    "cta_contact": "Entrar em Contato",
+    "role": "Desenvolvedor Fullstack"
+  },
+  "about": {
+    "title_part1": "Estratégia",
+    "title_part2": "Identidade.",
+    "bio_p1": "Especialista em engenharia de soluções SaaS de alto impacto, atualmente liderando a evolução tecnológica na OMDfarm. Conecto estratégias técnicas complexas a experiências de uso excepcionais.",
+    "bio_p2": "Minha abordagem une Domain-Driven Design e Clean Architecture para criar softwares robustos e escaláveis. Mais do que escrever código, projeto sistemas que acompanham o crescimento da sua visão.",
+    "revealed": {
+      "trustworthy": "CONFIÁVEL",
+      "collaborative": "COLABORATIVO",
+      "dedicated": "DEDICADO"
+    },
+    "skills": {
+      "clean_arch": "Arquitetura Limpa",
+      "devops": "DevOps & Cloud",
+      "fullstack": "Especialista Fullstack",
+      "english": "Inglês (C2)"
+    }
+  },
+  "contact": {
+    "title_part1": "Conexão",
+    "title_part2": "Vamos Conversar.",
+    "cta_title": "Vamos transformar sua ideia em realidade.",
+    "cta_desc": "Estou sempre aberto a novos projetos, ideias criativas ou oportunidades para integrar visões inovadoras.",
+    "social_title": "Redes Sociais",
+    "form": {
+      "name": "Nome",
+      "email": "E-mail",
+      "message": "Mensagem",
+      "placeholder_name": "Seu nome aqui",
+      "placeholder_email": "seu@email.com",
+      "placeholder_message": "Conte-me um pouco sobre o seu projeto...",
+      "send": "Enviar Mensagem",
+      "sending": "Enviando...",
+      "sent": "Mensagem pronta no seu app de e-mail!"
+    }
+  },
+  "projects": {
+    "title_part1": "Inovação",
+    "title_part2": "Resultados.",
+    "secret": {
+      "title": "Secret Boutique",
+      "category": "E-commerce Premium",
+      "description": "Desenvolvimento completo de um e-commerce de nicho focado em bem-estar e autocuidado. Plataforma robusta com checkout seguro e foco total em conversão e performance."
+    },
+    "dallas": {
+      "title": "Dallas Motel",
+      "category": "Performance & Conversão",
+      "description": "Presença digital estratégica para o setor de hospitalidade. Front-end de alta performance projetado para maximizar a conversão e elevar a experiência do usuário."
+    }
+  },
+  "experience": {
+    "title_part1": "Evolução",
+    "title_part2": "Legado.",
+    "omd": {
+      "company": "OMD do Brasil",
+      "role": "Software Developer",
+      "description": "Responsável pela arquitetura do ecossistema SaaS OMDfarm—plataforma líder em telemetria e gestão para o agronegócio de larga escala.",
+      "h1": "Pipeline de alta vazão processando mais de 5 milhões de eventos mensais com BullMQ e TimescaleDB.",
+      "h2": "Ferramentas de análise GIS com API do Google Maps, apresentadas para mais de 100 mil visitantes na Agrishow.",
+      "h3": "Monitoramento IoT em tempo real via MQTT para ingestão de telemetria com latência mínima.",
+      "h4": "Dashboards de BI avançados com ECharts, otimizando queries SQL para analytics instantâneo de Big Data."
+    },
+    "consulting": {
+      "company": "Consultoria TI & Dallas Motel",
+      "role": "Tech Lead & Consultor Estratégico",
+      "description": "Liderança técnica em projetos de transformação digital e criação de ecossistemas operacionais sob medida.",
+      "h1": "Dashboard financeiro inteligente que reduziu custos operacionais em 25%.",
+      "h2": "Arquitetura de PMS (Property Management System) proprietário para gestão hoteleira de ponta a ponta.",
+      "h3": "Ecossistema digital para hóspedes e infraestrutura de servidores de mídia em quartos premium."
+    }
+  },
+  "services": {
+    "title_part1": "Expertise",
+    "title_part2": "Soluções.",
+    "description": "Do conceito inicial à escala de produção, entrego soluções técnicas de alto nível adaptadas aos seus objetivos de negócio.",
+    "items": {
+      "landing_pages": {
+        "title": "Landing Pages & Sites",
+        "description": "Experiências digitais de alto desempenho e design impactante, projetadas para transformar visitantes em clientes."
+      },
+      "ecommerce": {
+        "title": "E-commerce Sob Medida",
+        "description": "Lojas online escaláveis com foco total na fluidez do checkout e na arquitetura de conversão."
+      },
+      "ai": {
+        "title": "IA & Chatbots",
+        "description": "Automação inteligente com agentes de IA e LLMs para otimizar processos e escalar o atendimento."
+      },
+      "api": {
+        "title": "Sistemas & APIs",
+        "description": "Integrações complexas e backends escaláveis para automatizar fluxos de trabalho e conectar suas ferramentas."
+      }
+    },
+    "learn_more": "Saiba Mais"
+  },
+  "footer": {
+    "built_for_future": "Projetado para o amanhã."
+  },
+  "common": {
+    "loading": "Carregando..."
+  }
+}

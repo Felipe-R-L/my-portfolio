@@ -7,8 +7,11 @@ import FluidGlass from "./react-bits/FluidGlass";
 import ScrollReveal from "./react-bits/ScrollReveal";
 import SplitText from "./react-bits/SplitText";
 import { Code2, Globe2, Layers, Cpu } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function About() {
+  const { t } = useTranslation();
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -31,7 +34,7 @@ export function About() {
   const skills = [
     {
       icon: Layers,
-      title: "Clean Architecture",
+      title: t("about.skills.clean_arch"),
       glowColor: "rgba(59, 130, 246, 0.5)",
       spotlightColor: "rgba(59, 130, 246, 0.15)",
       iconBg: "bg-blue-500/20",
@@ -41,7 +44,7 @@ export function About() {
     },
     {
       icon: Cpu,
-      title: "DevOps & Cloud",
+      title: t("about.skills.devops"),
       glowColor: "rgba(168, 85, 247, 0.5)",
       spotlightColor: "rgba(168, 85, 247, 0.15)",
       iconBg: "bg-purple-500/20",
@@ -51,7 +54,7 @@ export function About() {
     },
     {
       icon: Code2,
-      title: "Fullstack Expert",
+      title: t("about.skills.fullstack"),
       glowColor: "rgba(16, 185, 129, 0.5)",
       spotlightColor: "rgba(16, 185, 129, 0.15)",
       iconBg: "bg-emerald-500/20",
@@ -61,7 +64,7 @@ export function About() {
     },
     {
       icon: Globe2,
-      title: "English (C2)",
+      title: t("about.skills.english"),
       glowColor: "rgba(249, 115, 22, 0.5)",
       spotlightColor: "rgba(249, 115, 22, 0.15)",
       iconBg: "bg-orange-500/20",
@@ -107,7 +110,7 @@ export function About() {
             </motion.div>
 
             <SplitText
-              text="System Architecture"
+              text={t("about.title_part1")}
               delay={30}
               animationFrom={{
                 opacity: 0,
@@ -130,7 +133,7 @@ export function About() {
 
             <span className="text-white/40">
               <SplitText
-                text="Human Impact."
+                text={t("about.title_part2")}
                 delay={30}
                 animationFrom={{
                   opacity: 0,
@@ -163,17 +166,17 @@ export function About() {
                 <div className="space-y-8 flex flex-col justify-between h-full py-4">
                   <div className="h-1/3 flex items-center justify-center">
                     <span className="text-4xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
-                      TRUSTWORTHY
+                      {t("about.revealed.trustworthy")}
                     </span>
                   </div>
                   <div className="h-1/3 flex items-center justify-center">
                     <span className="text-4xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
-                      COLLABORATIVE
+                      {t("about.revealed.collaborative")}
                     </span>
                   </div>
                   <div className="h-1/3 flex items-center justify-center">
                     <span className="text-4xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
-                      DEDICATED
+                      {t("about.revealed.dedicated")}
                     </span>
                   </div>
                 </div>
@@ -181,16 +184,10 @@ export function About() {
             >
               <div className="space-y-8 text-gray-300">
                 <ScrollReveal baseOpacity={0.15} blurStrength={3}>
-                  I specialize in engineering high-impact SaaS solutions,
-                  currently driving architectural innovation at OMDfarm. I bridge
-                  the gap between complex technical strategies and premium
-                  end-user experiences.
+                  {t("about.bio_p1")}
                 </ScrollReveal>
                 <ScrollReveal baseOpacity={0.15} blurStrength={3}>
-                  My approach integrates Domain-Driven Design and Clean
-                  Architecture to build robust, scalable software that outlives
-                  its requirements. I don't just write code; I design systems
-                  that scale with your vision.
+                  {t("about.bio_p2")}
                 </ScrollReveal>
               </div>
             </FluidGlass>
