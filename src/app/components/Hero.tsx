@@ -86,15 +86,15 @@ export function Hero() {
               <h2 className="text-2xl md:text-5xl lg:text-[4rem] font-light text-white/50 tracking-tight uppercase leading-none">
                 {t("hero.title_part1")}
               </h2>
-              <div className="flex items-center justify-center lg:justify-start gap-4 py-4 md:py-6 overflow-visible">
-                <div className="w-full max-w-full md:max-w-[600px] lg:max-w-[800px] overflow-visible">
+              <div className="flex items-center justify-center lg:justify-start gap-4 py-2 md:py-4 overflow-visible">
+                <div className="w-full max-w-full md:max-w-[800px] lg:max-w-[1200px] overflow-visible">
                   <TextType
                     text={
                       Array.isArray(titleVariants)
                         ? titleVariants
                         : ["Solutions", "Experiences", "Ideas"]
                     }
-                    className="text-3xl md:text-7xl lg:text-[7rem] font-bold tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-400 drop-shadow-2xl whitespace-nowrap leading-relaxed"
+                    className="text-3xl md:text-7xl lg:text-[7rem] font-bold tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-400 drop-shadow-2xl leading-[1.3] py-2"
                     typingSpeed={60}
                     pauseDuration={2000}
                     showCursor={true}

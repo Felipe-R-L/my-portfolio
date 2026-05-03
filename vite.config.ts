@@ -18,8 +18,7 @@ function figmaAssetResolver() {
 export default defineConfig({
   plugins: [
     figmaAssetResolver(),
-    // The React and Tailwind plugins are both required for Make, even if
-    // Tailwind is not being actively used – do not remove them
+    // Use OXC plugin for better performance and Vite 8 compatibility
     react(),
     tailwindcss(),
   ],
