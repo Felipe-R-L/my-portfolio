@@ -64,8 +64,11 @@ export function Hero() {
             <div className="absolute inset-0 bg-blue-500/10 blur-3xl rounded-full" />
             <div className="relative aspect-square w-full rounded-[2.5rem] md:rounded-[4.5rem] overflow-hidden border border-white/10 shadow-2xl group">
               <img
-                src="/assets/profile/profile.jpg"
-                alt="Felipe Rodrigues Leone"
+                src="/assets/profile/profile.webp"
+                alt="Felipe Rodrigues Leone - Full-Stack Developer"
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
                 className="w-full h-full object-cover transition-all duration-1000"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
@@ -91,7 +94,7 @@ export function Hero() {
                         ? titleVariants
                         : ["Solutions", "Experiences", "Ideas"]
                     }
-                    className="text-3xl md:text-7xl lg:text-[7rem] font-black tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-400 drop-shadow-2xl whitespace-nowrap leading-relaxed"
+                    className="text-3xl md:text-7xl lg:text-[7rem] font-bold tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-400 drop-shadow-2xl whitespace-nowrap leading-relaxed"
                     typingSpeed={60}
                     pauseDuration={2000}
                     showCursor={true}

@@ -30,6 +30,19 @@ export default defineConfig({
     },
   },
 
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'motion': ['motion'],
+          'lucide-react': ['lucide-react'],
+          'vendor-ui': ['react', 'react-dom', 'react-i18next', 'i18next', 'react-router'],
+          'webgl-libs': ['ogl', 'three'],
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
+  },
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ["**/*.svg", "**/*.csv"],
 });

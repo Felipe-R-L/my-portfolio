@@ -38,8 +38,10 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
   const [tooltipStyle, setTooltipStyle] = useState<CSSProperties>({});
   const [isHovering, setIsHovering] = useState(false);
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
+    if (isMobile || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const cardWidth = rect.width;
     const cardHeight = rect.height;
@@ -64,10 +66,12 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
   };
 
   const handleMouseEnter = () => {
+    if (isMobile) return;
     setIsHovering(true);
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return;
     setIsHovering(false);
     setTransformStyle(
       `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`,
@@ -83,7 +87,7 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{
-          transform: transformStyle,
+          transform: !isMobile ? transformStyle : undefined,
           ...style,
         }}
       >
@@ -91,13 +95,13 @@ const TiltedCard: React.FC<TiltedCardProps> = ({
         {displayOverlayContent && overlayContent && (
           <div
             className="tilted-card-overlay"
-            style={{ opacity: isHovering ? 1 : 0 }}
+            style={{ opacity: !isMobile && isHovering ? 1 : 0 }}
           >
             {overlayContent}
           </div>
         )}
       </div>
-      {showTooltip && isHovering && (
+      {showTooltip && isHovering && !isMobile && (
         <div className="tilted-card-tooltip" style={tooltipStyle}>
           {tooltipText}
         </div>

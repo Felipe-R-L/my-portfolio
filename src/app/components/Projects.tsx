@@ -15,7 +15,7 @@ export function Projects() {
   const projects = [
     {
       id: "secret",
-      image: "/assets/projects/secret.png",
+      image: "/assets/projects/secret.webp",
       icon: ShoppingBag,
       glowColor: "rgba(236, 72, 153, 0.5)",
       spotlightColor: "rgba(236, 72, 153, 0.12)",
@@ -26,7 +26,7 @@ export function Projects() {
     },
     {
       id: "dallas",
-      image: "/assets/projects/dallas.png",
+      image: "/assets/projects/dallas.webp",
       icon: Layout,
       glowColor: "rgba(16, 185, 129, 0.5)",
       spotlightColor: "rgba(16, 185, 129, 0.12)",
@@ -41,12 +41,12 @@ export function Projects() {
     <section className="relative py-32 px-6 max-w-6xl mx-auto z-10" id="projects">
       {/* Heavy ambient blurred orbs for Apple iOS style depth */}
       <motion.div
-        className="absolute top-40 -left-20 w-[40rem] h-[40rem] bg-pink-600/20 rounded-full mix-blend-screen filter blur-[140px] pointer-events-none"
+        className="absolute top-40 -left-20 w-[20rem] md:w-[40rem] h-[20rem] md:h-[40rem] bg-pink-600/10 rounded-full mix-blend-screen filter blur-[60px] md:blur-[140px] pointer-events-none"
         animate={{ x: [0, 15, -20, 0], y: [0, -20, 10, 0] }}
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-10 -right-20 w-[35rem] h-[35rem] bg-emerald-600/20 rounded-full mix-blend-screen filter blur-[140px] pointer-events-none"
+        className="absolute bottom-10 -right-20 w-[18rem] md:w-[35rem] h-[18rem] md:h-[35rem] bg-emerald-600/10 rounded-full mix-blend-screen filter blur-[60px] md:blur-[140px] pointer-events-none"
         animate={{ x: [0, -15, 25, 0], y: [0, 15, -20, 0] }}
         transition={{
           duration: 18,
@@ -134,6 +134,8 @@ export function Projects() {
                     <ImageWithFallback
                       src={project.image}
                       alt={t(`projects.${project.id}.title`)}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <motion.div 
@@ -178,6 +180,7 @@ export function Projects() {
                           className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10 shadow-xl backdrop-blur-md"
                           whileHover={{ scale: 1.15 }}
                           whileTap={{ scale: 0.95 }}
+                          aria-label={t(`projects.${project.id}.github_aria`)}
                         >
                           <Github className="w-5 h-5 text-white/70 hover:text-white transition-colors" />
                         </motion.a>
@@ -188,6 +191,7 @@ export function Projects() {
                           className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10 shadow-xl backdrop-blur-md"
                           whileHover={{ scale: 1.15 }}
                           whileTap={{ scale: 0.95 }}
+                          aria-label={t(`projects.${project.id}.live_aria`)}
                         >
                           <ExternalLink className="w-5 h-5 text-white/90" />
                         </motion.a>

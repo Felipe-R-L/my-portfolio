@@ -35,9 +35,10 @@ uniform float uMouseActiveFactor;
 uniform float uAutoCenterRepulsion;
 uniform bool uTransparent;
 
+uniform float uNumLayers;
+
 varying vec2 vUv;
 
-#define NUM_LAYER 4.0
 #define STAR_COLOR_CUTOFF 0.2
 #define MAT45 mat2(0.7071, -0.7071, 0.7071, 0.7071)
 #define PERIOD 3.0
@@ -151,8 +152,10 @@ void main() {
 
   vec3 col = vec3(0.0);
 
-  for (float i = 0.0; i < 1.0; i += 1.0 / NUM_LAYER) {
-    float depth = fract(i + uStarSpeed * uSpeed);
+  // Use a fixed loop limit for WebGL 1 compatibility, but multiply by uniform factor
+  for (float i = 0.0; i < 4.0; i += 1.0) {
+    if (i >= uNumLayers) break;
+    float depth = fract(i / 4.0 + uStarSpeed * uSpeed);
     float scale = mix(20.0 * uDensity, 0.5 * uDensity, depth);
     float fade = depth * smoothstep(1.0, 0.9, depth);
     col += StarLayer(uv * scale + i * 453.32) * fade;
@@ -186,6 +189,7 @@ interface GalaxyProps {
   repulsionStrength?: number;
   autoCenterRepulsion?: number;
   transparent?: boolean;
+  numLayers?: number;
 }
 
 export default function Galaxy({
@@ -205,6 +209,7 @@ export default function Galaxy({
   rotationSpeed = 0.1,
   autoCenterRepulsion = 0,
   transparent = true,
+  numLayers = 4,
   ...rest
 }: GalaxyProps) {
   const ctnDom = useRef<HTMLDivElement>(null);
@@ -219,6 +224,7 @@ export default function Galaxy({
     const renderer = new Renderer({
       alpha: transparent,
       premultipliedAlpha: false,
+      powerPreference: "high-performance",
     });
     const gl = renderer.gl;
 
@@ -233,8 +239,13 @@ export default function Galaxy({
     let program: Program;
 
     function resize() {
-      const scale = 1;
-      renderer.setSize(ctn.offsetWidth * scale, ctn.offsetHeight * scale);
+      // Use lower resolution on high-DPI mobile devices for performance
+      const isMobile = window.innerWidth <= 768;
+      const dpr = isMobile ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio;
+      renderer.setSize(ctn.offsetWidth * dpr, ctn.offsetHeight * dpr);
+      gl.canvas.style.width = '100%';
+      gl.canvas.style.height = '100%';
+      
       if (program) {
         program.uniforms.uResolution.value = new Color(
           gl.canvas.width,
@@ -280,6 +291,7 @@ export default function Galaxy({
         uMouseActiveFactor: { value: 0.0 },
         uAutoCenterRepulsion: { value: autoCenterRepulsion },
         uTransparent: { value: transparent },
+        uNumLayers: { value: numLayers },
       },
     });
 
@@ -331,12 +343,21 @@ export default function Galaxy({
     return () => {
       cancelAnimationFrame(animateId);
       window.removeEventListener("resize", resize);
+      cancelAnimationFrame(animateId);
+      
+      // Dispose WebGL resources
+      if (gl) {
+        geometry.remove();
+        program.remove();
+        // Clear references
+        gl.getExtension('WEBGL_lose_context')?.loseContext();
+      }
+      
       if (mouseInteraction) {
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseleave", handleMouseLeave);
       }
       ctn.removeChild(gl.canvas);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [
     focal,
@@ -352,9 +373,9 @@ export default function Galaxy({
     mouseRepulsion,
     twinkleIntensity,
     rotationSpeed,
-    repulsionStrength,
     autoCenterRepulsion,
     transparent,
+    numLayers,
   ]);
 
   return <div ref={ctnDom} className="w-full h-full relative" {...rest} />;

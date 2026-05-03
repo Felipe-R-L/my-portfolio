@@ -12,6 +12,9 @@ export function useSmoothScroll() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) return;
+
     const lenis = new Lenis({
       lerp: 0.07, // low lerp = more momentum glide
       smoothWheel: true, // smooth mouse-wheel scrolling

@@ -137,6 +137,8 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
   const [edgeProximity, setEdgeProximity] = useState(0);
   const [sweepActive, setSweepActive] = useState(false);
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+
   const getCenterOfElement = useCallback((el: HTMLElement) => {
     const { width, height } = el.getBoundingClientRect();
     return [width / 2, height / 2];
@@ -172,6 +174,7 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
+      if (isMobile) return;
       const card = cardRef.current;
       if (!card) return;
       const rect = card.getBoundingClientRect();
@@ -180,11 +183,11 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
       setEdgeProximity(getEdgeProximity(card, x, y));
       setCursorAngle(getCursorAngle(card, x, y));
     },
-    [getEdgeProximity, getCursorAngle],
+    [getEdgeProximity, getCursorAngle, isMobile],
   );
 
   useEffect(() => {
-    if (!animated) return;
+    if (isMobile || !animated) return;
     const angleStart = 110;
     const angleEnd = 465;
     setSweepActive(true);
@@ -218,7 +221,24 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
       onUpdate: (v) => setEdgeProximity(v / 100),
       onEnd: () => setSweepActive(false),
     });
-  }, [animated]);
+  }, [animated, isMobile]);
+
+  if (isMobile) {
+    return (
+      <div
+        ref={cardRef}
+        className={`relative grid isolate border border-white/10 ${className}`}
+        style={{
+          borderRadius: `${borderRadius}px`,
+          backgroundColor,
+        }}
+      >
+        <div className="flex flex-col relative overflow-auto z-[1]">
+          {children}
+        </div>
+      </div>
+    );
+  }
 
   const colorSensitivity = edgeSensitivity + 20;
   const isVisible = isHovered || sweepActive;

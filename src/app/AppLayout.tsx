@@ -1,6 +1,6 @@
-import React from "react";
-import { motion } from "motion/react";
-import Galaxy from "./components/react-bits/Galaxy";
+import React, { Suspense, lazy } from "react";
+import { motion, useReducedMotion } from "motion/react";
+const LazyGalaxy = lazy(() => import("./components/react-bits/Galaxy"));
 import { Hero } from "./components/Hero";
 import TechMarquee from "./components/TechMarquee";
 import { About } from "./components/About";
@@ -9,7 +9,7 @@ import { Services } from "./components/Services";
 import { Projects } from "./components/Projects";
 import { Contact } from "./components/Contact";
 import GlassSurface from "./components/react-bits/GlassSurface";
-import FluidGlass from "./components/react-bits/FluidGlass";
+const LazyFluidGlass = lazy(() => import("./components/react-bits/FluidGlass"));
 import GradientText from "./components/react-bits/GradientText";
 import { useTranslation } from "react-i18next";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
@@ -25,21 +25,29 @@ export default function AppLayout() {
     { id: "services", key: "nav.services" },
   ];
 
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isReducedMotion = useReducedMotion();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+  const showBackground = !isReducedMotion;
 
   return (
-    <div className="min-h-screen bg-[#030305] text-gray-100 selection:bg-blue-500/30 selection:text-white">
-      <div className="fixed inset-0 z-0">
-        <Galaxy
-          mouseRepulsion={true}
-          mouseInteraction={!isMobile}
-          density={isMobile ? 0.1 : 0.3}
-          glowIntensity={isMobile ? 0.1 : 0.2}
-          repulsionStrength={0.2}
-          saturation={0.2}
-          hueShift={240}
-        />
-      </div>
+    <div className="bg-[#030305] min-h-screen font-sans selection:bg-blue-500/30 selection:text-blue-200 overflow-x-hidden">
+      {/* 1. Global Performance Background (Lazy loaded) */}
+      {showBackground && (
+        <div className="fixed inset-0 z-0">
+          <Suspense fallback={<div className="fixed inset-0 bg-[#030305]" />}>
+            <LazyGalaxy
+              mouseRepulsion={true}
+              mouseInteraction={!isMobile}
+              density={isMobile ? 0.05 : 0.3}
+              glowIntensity={isMobile ? 0.05 : 0.2}
+              numLayers={isMobile ? 2 : 4}
+              repulsionStrength={0.2}
+              saturation={0.2}
+              hueShift={240}
+            />
+          </Suspense>
+        </div>
+      )}
 
       {/* Cinematic gradient overlay on top of background. Made subtle so the bright Apple-style glassmorphism pops */}
       <div className="fixed inset-0 pointer-events-none z-[1] bg-gradient-to-b from-[#030305]/10 via-[#030305]/30 to-[#030305]/80" />
@@ -92,6 +100,7 @@ export default function AppLayout() {
                 <button
                   key={lang}
                   onClick={() => i18n.changeLanguage(lang)}
+                  aria-label={`Switch language to ${lang === "en" ? "English" : "Portuguese"}`}
                   className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
                     i18n.language.startsWith(lang)
                       ? "text-blue-400"
@@ -126,55 +135,70 @@ export default function AppLayout() {
         </div>
 
         <footer className="relative z-10 mt-20 px-6 pb-20">
-          <FluidGlass
-            mode="lens"
-            containerClassName="bg-white/[0.03] border border-white/10 rounded-[3rem] py-16 px-4 text-center"
+          <Suspense
+            fallback={
+              <div className="bg-white/[0.03] border border-white/10 rounded-[3rem] py-16 px-4 text-center" />
+            }
           >
-            <div className="flex flex-col items-center gap-8">
-              <div className="flex gap-6">
-                {[
-                  {
-                    icon: "https://cdn.simpleicons.org/github/white",
-                    href: "https://github.com/Felipe-R-L",
-                    label: "GitHub",
-                  },
-                  {
-                    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg",
-                    href: "https://linkedin.com/in/felipe-rodrigues-leone",
-                    label: "LinkedIn",
-                  },
-                  {
-                    icon: "https://cdn.simpleicons.org/x/white",
-                    href: "https://x.com/rfelipe_jpg",
-                    label: "X",
-                  },
-                ].map((social, idx) => (
-                  <motion.a
-                    key={idx}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-white transition-colors"
-                    whileHover={{ scale: 1.2, y: -2 }}
-                  >
-                    <img src={social.icon} alt={social.label} className="w-6 h-6" />
-                  </motion.a>
-                ))}
-              </div>
+            <LazyFluidGlass
+              mode="lens"
+              containerClassName="bg-white/[0.03] border border-white/10 rounded-[3rem] py-16 px-4 text-center"
+            >
+              <div className="flex flex-col items-center gap-8">
+                <div className="flex gap-6">
+                  {[
+                    {
+                      icon: "https://cdn.simpleicons.org/github/white",
+                      href: "https://github.com/Felipe-R-L",
+                      label: "GitHub",
+                    },
+                    {
+                      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg",
+                      href: "https://linkedin.com/in/felipe-rodrigues-leone",
+                      label: "LinkedIn",
+                    },
+                    {
+                      icon: "https://cdn.simpleicons.org/x/white",
+                      href: "https://x.com/rfelipe_jpg",
+                      label: "X",
+                    },
+                  ].map((social, idx) => (
+                    <motion.a
+                      key={idx}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-500 hover:text-white transition-colors"
+                      whileHover={{ scale: 1.2, y: -2 }}
+                      aria-label={`Visit my ${social.label}`}
+                    >
+                      <img
+                        src={social.icon}
+                        alt={social.label}
+                        className="w-6 h-6"
+                      />
+                    </motion.a>
+                  ))}
+                </div>
 
-              <p className="text-gray-500 font-medium text-sm tracking-wide md:tracking-widest uppercase flex flex-col lg:flex-row items-center justify-center gap-2 md:gap-4">
-                <span className="opacity-50">© {new Date().getFullYear()}</span>
-                <GradientText
-                  colors={["#6b7280", "#60a5fa", "#8b5cf6", "#6b7280"]}
-                  animationSpeed={10}
-                >
-                  Felipe Rodrigues Leone
-                </GradientText>
-                <span className="hidden lg:inline opacity-30">•</span>
-                <span className="opacity-50">{t("footer.built_for_future")}</span>
-              </p>
-            </div>
-          </FluidGlass>
+                <p className="text-gray-500 font-medium text-sm tracking-wide md:tracking-widest uppercase flex flex-col lg:flex-row items-center justify-center gap-2 md:gap-4">
+                  <span className="opacity-50">
+                    © {new Date().getFullYear()}
+                  </span>
+                  <GradientText
+                    colors={["#6b7280", "#60a5fa", "#8b5cf6", "#6b7280"]}
+                    animationSpeed={10}
+                  >
+                    Felipe Rodrigues Leone
+                  </GradientText>
+                  <span className="hidden lg:inline opacity-30">•</span>
+                  <span className="opacity-50">
+                    {t("footer.built_for_future")}
+                  </span>
+                </p>
+              </div>
+            </LazyFluidGlass>
+          </Suspense>
         </footer>
       </main>
     </div>

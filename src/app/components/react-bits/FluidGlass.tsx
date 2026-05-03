@@ -22,7 +22,7 @@ interface FluidGlassProps {
   style?: CSSProperties;
 }
 
-const FluidGlass: React.FC<FluidGlassProps> = ({
+const FluidGlassComponent: React.FC<FluidGlassProps> = ({
   children,
   revealedChildren,
   className = "",
@@ -175,4 +175,4 @@ const FluidGlass: React.FC<FluidGlassProps> = ({
   );
 };
 
-export default FluidGlass;
+export default FluidGlassComponent;

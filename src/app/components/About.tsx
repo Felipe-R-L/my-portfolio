@@ -1,9 +1,9 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { motion, Variants } from "motion/react";
 import SpotlightCard from "./react-bits/SpotlightCard";
 import BorderGlow from "./react-bits/BorderGlow";
 import TiltedCard from "./react-bits/TiltedCard";
-import FluidGlass from "./react-bits/FluidGlass";
+const LazyFluidGlass = lazy(() => import("./react-bits/FluidGlass"));
 import ScrollReveal from "./react-bits/ScrollReveal";
 import SplitText from "./react-bits/SplitText";
 import { Code2, Globe2, Layers, Cpu } from "lucide-react";
@@ -74,16 +74,36 @@ export function About() {
     },
   ];
 
+  const lensContent = React.useMemo(() => (
+    <div className="space-y-6 md:space-y-8 flex flex-col justify-between h-full py-4">
+      <div className="h-1/3 flex items-center justify-center">
+        <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
+          {t("about.revealed.trustworthy")}
+        </span>
+      </div>
+      <div className="h-1/3 flex items-center justify-center">
+        <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
+          {t("about.revealed.collaborative")}
+        </span>
+      </div>
+      <div className="h-1/3 flex items-center justify-center">
+        <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
+          {t("about.revealed.dedicated")}
+        </span>
+      </div>
+    </div>
+  ), [t]);
+
   return (
     <section className="relative py-32 px-6 max-w-6xl mx-auto z-10">
       {/* Heavy colorful deep space ambient glows for Apple style glassmorphism */}
       <motion.div
-        className="absolute top-0 right-0 w-[45rem] h-[45rem] bg-orange-500/10 rounded-full mix-blend-screen filter blur-[150px] pointer-events-none"
+        className="absolute top-0 right-0 w-[20rem] md:w-[45rem] h-[20rem] md:h-[45rem] bg-orange-500/10 rounded-full mix-blend-screen filter blur-[60px] md:blur-[150px] pointer-events-none"
         animate={{ x: [0, 20, -10, 0], y: [0, -15, 10, 0] }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[150px] pointer-events-none"
+        className="absolute bottom-0 left-0 w-[18rem] md:w-[40rem] h-[18rem] md:h-[40rem] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[60px] md:blur-[150px] pointer-events-none"
         animate={{ x: [0, -20, 15, 0], y: [0, 10, -15, 0] }}
         transition={{
           duration: 18,
@@ -154,43 +174,27 @@ export function About() {
 
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
           <motion.div variants={itemVariants}>
-            <FluidGlass
-              mode="lens"
-              blurAmount={2}
-              tintColor="rgba(100, 130, 255, 0.08)"
-              tintOpacity={0.5}
-              borderRadius="1.5rem"
-              className="space-y-8 text-lg md:text-xl leading-relaxed font-light p-8 md:p-10"
-              containerClassName="rounded-3xl border border-white/5 bg-white/[0.02]"
-              revealedChildren={
-                <div className="space-y-6 md:space-y-8 flex flex-col justify-between h-full py-4">
-                  <div className="h-1/3 flex items-center justify-center">
-                    <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
-                      {t("about.revealed.trustworthy")}
-                    </span>
-                  </div>
-                  <div className="h-1/3 flex items-center justify-center">
-                    <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
-                      {t("about.revealed.collaborative")}
-                    </span>
-                  </div>
-                  <div className="h-1/3 flex items-center justify-center">
-                    <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
-                      {t("about.revealed.dedicated")}
-                    </span>
-                  </div>
+            <Suspense fallback={<div className="rounded-3xl border border-white/5 bg-white/[0.02] h-64 md:h-80" />}>
+              <LazyFluidGlass
+                mode="lens"
+                blurAmount={2}
+                tintColor="rgba(100, 130, 255, 0.08)"
+                tintOpacity={0.5}
+                borderRadius="1.5rem"
+                className="space-y-8 text-lg md:text-xl leading-relaxed font-light p-8 md:p-10"
+                containerClassName="rounded-3xl border border-white/5 bg-white/[0.02]"
+                revealedChildren={lensContent}
+              >
+                <div className="space-y-8 text-gray-300">
+                  <ScrollReveal baseOpacity={0.15} blurStrength={3}>
+                    {t("about.bio_p1")}
+                  </ScrollReveal>
+                  <ScrollReveal baseOpacity={0.15} blurStrength={3}>
+                    {t("about.bio_p2")}
+                  </ScrollReveal>
                 </div>
-              }
-            >
-              <div className="space-y-8 text-gray-300">
-                <ScrollReveal baseOpacity={0.15} blurStrength={3}>
-                  {t("about.bio_p1")}
-                </ScrollReveal>
-                <ScrollReveal baseOpacity={0.15} blurStrength={3}>
-                  {t("about.bio_p2")}
-                </ScrollReveal>
-              </div>
-            </FluidGlass>
+              </LazyFluidGlass>
+            </Suspense>
           </motion.div>
 
           <motion.div
@@ -232,7 +236,10 @@ export function About() {
                         }}
                         className={`w-16 h-16 rounded-2xl ${skill.iconBg} flex items-center justify-center border ${skill.iconBorder} ${skill.iconShadow}`}
                       >
-                        <Icon className={`w-8 h-8 ${skill.iconColor}`} />
+                        <Icon 
+                          className={`w-8 h-8 ${skill.iconColor}`} 
+                          aria-hidden="true"
+                        />
                       </motion.div>
                       <h3 className="text-white font-bold pt-5 tracking-wide uppercase text-sm md:text-base">
                         {skill.title}

@@ -55,12 +55,16 @@
     "secret": {
       "title": "Secret Boutique",
       "category": "E-commerce Premium",
-      "description": "Desenvolvimento completo de um e-commerce de nicho focado em bem-estar e autocuidado. Plataforma robusta com checkout seguro e foco total em conversão e performance."
+      "description": "Desenvolvimento completo de um e-commerce de nicho focado em bem-estar e autocuidado. Plataforma robusta com checkout seguro e foco total em conversão e performance.",
+      "github_aria": "Ver código fonte da Secret Boutique no GitHub",
+      "live_aria": "Visitar site oficial da Secret Boutique"
     },
     "dallas": {
       "title": "Dallas Motel",
       "category": "Performance & Conversão",
-      "description": "Presença digital estratégica para o setor de hospitalidade. Front-end de alta performance projetado para maximizar a conversão e elevar a experiência do usuário."
+      "description": "Presença digital estratégica para o setor de hospitalidade. Front-end de alta performance projetado para maximizar a conversão e elevar a experiência do usuário.",
+      "github_aria": "Ver código fonte do Dallas Motel no GitHub",
+      "live_aria": "Visitar site oficial do Dallas Motel"
     }
   },
   "experience": {

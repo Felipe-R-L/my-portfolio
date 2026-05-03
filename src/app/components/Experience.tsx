@@ -186,7 +186,7 @@ export function Experience() {
   );
 }
 
-function ExperienceHighlight({ highlight, hIdx, expId, t }: { highlight: any, hIdx: number, expId: string, t: any }) {
+const ExperienceHighlight = React.memo(({ highlight, hIdx, expId, t }: { highlight: any, hIdx: number, expId: string, t: any }) => {
   const Icon = highlight.icon;
   return (
     <motion.div
@@ -213,4 +213,4 @@ function ExperienceHighlight({ highlight, hIdx, expId, t }: { highlight: any, hI
       </p>
     </motion.div>
   );
-}
+});
