@@ -8,9 +8,8 @@
   "hero": {
     "badge": "Available for new projects",
     "title_part1": "Engineering",
-    "title_part2": "Possibilities",
-    "title_part3": "Into Reality",
-    "description": "Full-stack developer focused on building high-performance web applications, merging cutting-edge technology with a premium design aesthetic.",
+    "title_part2_variants": ["Solutions", "Experiences", "Ideas"],
+    "description": "Building scalable, high-performance web applications with a premium aesthetic.",
     "cta_projects": "View Projects",
     "cta_contact": "Get in Touch",
     "role": "Fullstack Developer"
@@ -72,7 +71,7 @@
       "role": "Software Developer",
       "description": "Architecting the OMDfarm SaaS ecosystem—the leading telemetry and management platform for large-scale agribusiness.",
       "h1": "High-throughput pipeline processing over 5 million monthly events using BullMQ and TimescaleDB.",
-      "h2": "GIS failure analysis tools with Google Maps API, presented to over 100,000 attendees at Agrishow.",
+      "h2": "GIS failure analysis tools with Google Maps API, presented to attendees at the largest fair of technology for agribusiness in LATAM, Agrishow.",
       "h3": "Real-time IoT machinery tracking via MQTT for sub-second telemetry ingestion.",
       "h4": "Advanced BI Dashboards with ECharts, optimizing SQL queries for instant big data analytics."
     },
@@ -86,8 +85,8 @@
     }
   },
   "services": {
-    "title_part1": "Expertise",
-    "title_part2": "Solutions.",
+    "title_part1": "How I can",
+    "title_part2": "Help you.",
     "description": "From initial concept to production-ready scale, I deliver high-end technical solutions tailored to your business goals.",
     "items": {
       "landing_pages": {

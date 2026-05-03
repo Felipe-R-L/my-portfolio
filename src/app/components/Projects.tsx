@@ -7,7 +7,7 @@ import SplitText from "./react-bits/SplitText";
 import GradientText from "./react-bits/GradientText";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
-import { ExternalLink, ShoppingBag, Layout, Rocket } from "lucide-react";
+import { ExternalLink, ShoppingBag, Layout, Rocket, Github } from "lucide-react";
 
 export function Projects() {
   const { t } = useTranslation();
@@ -15,28 +15,30 @@ export function Projects() {
   const projects = [
     {
       id: "secret",
-      image:
-        "https://images.unsplash.com/photo-1667188225162-03bc16ca7d88?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGRhcmslMjBwcmVtaXVtJTIwc3BhY2V8ZW58MXx8fHwxNzc3NDQ3NjExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      image: "/assets/projects/secret.png",
       icon: ShoppingBag,
       glowColor: "rgba(236, 72, 153, 0.5)",
       spotlightColor: "rgba(236, 72, 153, 0.12)",
       tagColor: "text-pink-400",
       gradientColors: ["#ec4899", "#f472b6", "#f9a8d4", "#ec4899"],
+      url: "https://secret-boutique.com.br",
+      github: "https://github.com/Felipe-R-L/secret-boutique-pwa",
     },
     {
       id: "dallas",
-      image:
-        "https://images.unsplash.com/photo-1765211369986-22057b702ef4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBkYXJrJTIwbmVvbiUyMGFyY2hpdGVjdHVyZXxlbnwxfHx8fDE3Nzc0NDc2MTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      image: "/assets/projects/dallas.png",
       icon: Layout,
       glowColor: "rgba(16, 185, 129, 0.5)",
       spotlightColor: "rgba(16, 185, 129, 0.12)",
       tagColor: "text-emerald-400",
       gradientColors: ["#10b981", "#34d399", "#6ee7b7", "#10b981"],
+      url: "https://jrdallasmotel.com.br",
+      github: "https://github.com/Felipe-R-L/dallas-motel-landing-page",
     },
   ];
 
   return (
-    <section className="relative py-32 px-6 max-w-6xl mx-auto z-10">
+    <section className="relative py-32 px-6 max-w-6xl mx-auto z-10" id="projects">
       {/* Heavy ambient blurred orbs for Apple iOS style depth */}
       <motion.div
         className="absolute top-40 -left-20 w-[40rem] h-[40rem] bg-pink-600/20 rounded-full mix-blend-screen filter blur-[140px] pointer-events-none"
@@ -129,18 +131,26 @@ export function Projects() {
                   className="p-0 overflow-hidden h-full flex flex-col group"
                 >
                   <div className="relative h-64 overflow-hidden rounded-t-3xl">
-                    <motion.div
-                      className="absolute inset-0 bg-black/40 z-10"
-                      whileHover={{ opacity: 0 }}
-                      transition={{ duration: 0.5 }}
-                    />
                     <ImageWithFallback
                       src={project.image}
                       alt={t(`projects.${project.id}.title`)}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#030305]/80 to-transparent z-10" />
-                    <div className="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-black/60 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10 shadow-lg">
+                    <motion.div 
+                      className="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-black/60 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10 shadow-lg"
+                      variants={{
+                        initial: { opacity: 1, y: 0 },
+                        hover: { opacity: 0, y: -10 }
+                      }}
+                      initial="initial"
+                      whileHover="hover"
+                      animate={undefined} // Controlled by group hover if we use group-hover classes, but let's use variants
+                    >
+                      {/* Note: TiltedCard/SpotlightCard might swallow hover, so let's use group-hover on the parent */}
+                    </motion.div>
+                    
+                    {/* Re-implementing chip with group-hover logic */}
+                    <div className="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-black/60 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10 shadow-lg transition-all duration-500 group-hover:opacity-0 group-hover:-translate-y-2">
                       <project.icon className={`w-4 h-4 ${project.tagColor}`} />
                       <span
                         className={`text-xs font-bold uppercase tracking-wider ${project.tagColor}`}
@@ -160,18 +170,28 @@ export function Projects() {
                           {t(`projects.${project.id}.title`)}
                         </GradientText>
                       </h3>
-                      <motion.button
-                        className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10 shadow-xl backdrop-blur-md"
-                        whileHover={{ scale: 1.15, rotate: -15 }}
-                        whileTap={{ scale: 0.95 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 15,
-                        }}
-                      >
-                        <ExternalLink className="w-5 h-5 text-white/90" />
-                      </motion.button>
+                      <div className="flex items-center gap-3">
+                        <motion.a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10 shadow-xl backdrop-blur-md"
+                          whileHover={{ scale: 1.15 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Github className="w-5 h-5 text-white/70 hover:text-white transition-colors" />
+                        </motion.a>
+                        <motion.a
+                          href={project.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10 shadow-xl backdrop-blur-md"
+                          whileHover={{ scale: 1.15 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <ExternalLink className="w-5 h-5 text-white/90" />
+                        </motion.a>
+                      </div>
                     </div>
                     <p className="text-gray-400 leading-relaxed font-light">
                       {t(`projects.${project.id}.description`)}

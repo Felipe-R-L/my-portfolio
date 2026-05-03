@@ -1,6 +1,13 @@
 import React from "react";
 import { motion } from "motion/react";
-import { Globe, ShoppingCart, Zap, ArrowRight, Bot, Layers } from "lucide-react";
+import {
+  Globe,
+  ShoppingCart,
+  Zap,
+  ArrowRight,
+  Bot,
+  Layers,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SpotlightCard from "./react-bits/SpotlightCard";
 import BorderGlow from "./react-bits/BorderGlow";
@@ -54,41 +61,22 @@ export function Services() {
             </motion.div>
 
             <SplitText
-              text={t("services.title_part1")}
+              text={`${t("services.title_part1")} ${t("services.title_part2")}`}
               delay={30}
-              animationFrom={{ opacity: 0, transform: "translate3d(0, 30px, 0)" }}
+              animationFrom={{
+                opacity: 0,
+                transform: "translate3d(0, 30px, 0)",
+              }}
               animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
             />
-
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 25,
-                delay: 0.1,
-              }}
-              className="mx-4 md:mx-8 w-2.5 h-2.5 rounded-full bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.8)]"
-            />
-
-            <span className="text-white/40">
-              <SplitText
-                text={t("services.title_part2")}
-                delay={30}
-                animationFrom={{ opacity: 0, transform: "translate3d(0, 30px, 0)" }}
-                animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
-              />
-            </span>
           </h2>
-          
+
           <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
             {t("services.description")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 auto-rows-fr gap-8 max-w-5xl mx-auto">
           {serviceData.map((service, idx) => (
             <motion.div
               key={service.id}
@@ -96,25 +84,32 @@ export function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: idx * 0.1 }}
+              className="flex"
             >
-              <BorderGlow glowColor="rgba(59, 130, 246, 0.2)" glowRadius={200}>
-                <SpotlightCard className="h-full p-8 flex flex-col items-start text-left" spotlightColor="rgba(59, 130, 246, 0.05)">
-                  <div className={`p-3 rounded-xl bg-gradient-to-br ${service.color} border border-white/5 mb-6`}>
+              <BorderGlow
+                glowColor="rgba(59, 130, 246, 0.2)"
+                glowRadius={200}
+                className="w-full"
+              >
+                <SpotlightCard
+                  className="h-full p-8 flex flex-col items-start text-left"
+                  spotlightColor="rgba(59, 130, 246, 0.05)"
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className={`p-3 rounded-xl bg-gradient-to-br ${service.color} border border-white/5 mb-6`}
+                  >
                     <service.icon className="w-6 h-6 text-white" />
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
+                  </motion.div>
+
+                  <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">
                     {t(`services.items.${service.id}.title`)}
                   </h3>
-                  
-                  <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-1">
+
+                  <p className="text-gray-400 text-base leading-relaxed flex-1">
                     {t(`services.items.${service.id}.description`)}
                   </p>
-
-                  <div className="flex items-center gap-2 text-sm font-bold text-blue-400 uppercase tracking-widest group cursor-pointer hover:text-blue-300 transition-colors">
-                    {t("services.learn_more")}
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </div>
                 </SpotlightCard>
               </BorderGlow>
             </motion.div>

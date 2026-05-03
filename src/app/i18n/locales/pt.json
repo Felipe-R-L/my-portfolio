@@ -8,9 +8,8 @@
   "hero": {
     "badge": "Disponível para novos projetos",
     "title_part1": "Materializando",
-    "title_part2": "Ideias",
-    "title_part3": "",
-    "description": "Desenvolvedor full-stack focado na criação de aplicações web de alto desempenho, unindo tecnologia de ponta a uma estética premium.",
+    "title_part2_variants": ["Soluções", "Experiências", "Ideias"],
+    "description": "Desenvolvendo aplicações web escaláveis e de alta performance com estética premium.",
     "cta_projects": "Ver Projetos",
     "cta_contact": "Entrar em Contato",
     "role": "Desenvolvedor Fullstack"
@@ -72,7 +71,7 @@
       "role": "Software Developer",
       "description": "Responsável pela arquitetura do ecossistema SaaS OMDfarm—plataforma líder em telemetria e gestão para o agronegócio de larga escala.",
       "h1": "Pipeline de alta vazão processando mais de 5 milhões de eventos mensais com BullMQ e TimescaleDB.",
-      "h2": "Ferramentas de análise GIS com API do Google Maps, apresentadas para mais de 100 mil visitantes na Agrishow.",
+      "h2": "Ferramentas de análise GIS com API do Google Maps, apresentadas na maior feira de tecnologia para o agronegócio da América Latina, a Agrishow.",
       "h3": "Monitoramento IoT em tempo real via MQTT para ingestão de telemetria com latência mínima.",
       "h4": "Dashboards de BI avançados com ECharts, otimizando queries SQL para analytics instantâneo de Big Data."
     },
@@ -86,8 +85,8 @@
     }
   },
   "services": {
-    "title_part1": "Expertise",
-    "title_part2": "Soluções.",
+    "title_part1": "Como posso",
+    "title_part2": "Te ajudar.",
     "description": "Do conceito inicial à escala de produção, entrego soluções técnicas de alto nível adaptadas aos seus objetivos de negócio.",
     "items": {
       "landing_pages": {
