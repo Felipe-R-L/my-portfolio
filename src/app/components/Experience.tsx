@@ -14,6 +14,7 @@ import {
   Terminal,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import MobileCarousel from "./ui/MobileCarousel";
 
 export function Experience() {
   const { t } = useTranslation();
@@ -161,36 +162,20 @@ export function Experience() {
                   {t(`experience.${exp.id}.description`)}
                 </motion.p>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  {exp.highlights.map((highlight, hIdx) => {
-                    const Icon = highlight.icon;
-                    return (
-                      <motion.div
-                        key={hIdx}
-                        className="flex items-start space-x-5 p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] hover:border-white/10 transition-all duration-300 shadow-inner group"
-                        initial={{ opacity: 0, y: 15 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-20px" }}
-                        transition={{ duration: 0.4, delay: 0.4 + hIdx * 0.05 }}
-                        whileHover={{ scale: 1.02, y: -2 }}
-                      >
-                        <motion.div
-                          className="mt-1 p-3 rounded-xl bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                          whileHover={{ rotate: 10, scale: 1.1 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 400,
-                            damping: 25,
-                          }}
-                        >
-                          <Icon className="w-6 h-6 text-blue-300 group-hover:text-blue-200 transition-colors" />
-                        </motion.div>
-                        <p className="text-gray-400 leading-relaxed text-sm md:text-base font-light group-hover:text-gray-300 transition-colors">
-                          {t(`experience.${exp.id}.${highlight.key}`)}
-                        </p>
-                      </motion.div>
-                    );
-                  })}
+                {/* Desktop Highlights Grid */}
+                <div className="hidden md:grid md:grid-cols-2 gap-6">
+                  {exp.highlights.map((highlight, hIdx) => (
+                    <ExperienceHighlight key={hIdx} highlight={highlight} hIdx={hIdx} expId={exp.id} t={t} />
+                  ))}
+                </div>
+
+                {/* Mobile Highlights Carousel */}
+                <div className="md:hidden -mx-8">
+                  <MobileCarousel showDots={true} itemClassName="w-[80vw]">
+                    {exp.highlights.map((highlight, hIdx) => (
+                      <ExperienceHighlight key={hIdx} highlight={highlight} hIdx={hIdx} expId={exp.id} t={t} />
+                    ))}
+                  </MobileCarousel>
                 </div>
               </SpotlightCard>
             </BorderGlow>
@@ -198,5 +183,34 @@ export function Experience() {
         ))}
       </div>
     </section>
+  );
+}
+
+function ExperienceHighlight({ highlight, hIdx, expId, t }: { highlight: any, hIdx: number, expId: string, t: any }) {
+  const Icon = highlight.icon;
+  return (
+    <motion.div
+      className="flex items-start space-x-5 p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] hover:border-white/10 transition-all duration-300 shadow-inner group h-full"
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-20px" }}
+      transition={{ duration: 0.4, delay: 0.4 + hIdx * 0.05 }}
+      whileHover={{ scale: 1.02, y: -2 }}
+    >
+      <motion.div
+        className="mt-1 p-3 rounded-xl bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+        whileHover={{ rotate: 10, scale: 1.1 }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 25,
+        }}
+      >
+        <Icon className="w-6 h-6 text-blue-300 group-hover:text-blue-200 transition-colors" />
+      </motion.div>
+      <p className="text-gray-400 leading-relaxed text-sm md:text-base font-light group-hover:text-gray-300 transition-colors">
+        {t(`experience.${expId}.${highlight.key}`)}
+      </p>
+    </motion.div>
   );
 }

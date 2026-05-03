@@ -106,7 +106,7 @@ export function About() {
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               className="mr-4 text-blue-500"
             >
-              <Cpu className="w-17 h-17" />
+              <Cpu className="w-12 h-12 md:w-16 md:h-16" />
             </motion.div>
 
             <SplitText
@@ -163,19 +163,19 @@ export function About() {
               className="space-y-8 text-lg md:text-xl leading-relaxed font-light p-8 md:p-10"
               containerClassName="rounded-3xl border border-white/5 bg-white/[0.02]"
               revealedChildren={
-                <div className="space-y-8 flex flex-col justify-between h-full py-4">
+                <div className="space-y-6 md:space-y-8 flex flex-col justify-between h-full py-4">
                   <div className="h-1/3 flex items-center justify-center">
-                    <span className="text-4xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
+                    <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
                       {t("about.revealed.trustworthy")}
                     </span>
                   </div>
                   <div className="h-1/3 flex items-center justify-center">
-                    <span className="text-4xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
+                    <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
                       {t("about.revealed.collaborative")}
                     </span>
                   </div>
                   <div className="h-1/3 flex items-center justify-center">
-                    <span className="text-4xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
+                    <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
                       {t("about.revealed.dedicated")}
                     </span>
                   </div>
@@ -195,7 +195,7 @@ export function About() {
 
           <motion.div
             variants={itemVariants}
-            className="grid grid-cols-2 gap-6 relative z-10"
+            className="grid grid-cols-2 gap-4 md:gap-6 relative z-10"
           >
             {skills.map((skill, idx) => {
               const Icon = skill.icon;

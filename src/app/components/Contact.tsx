@@ -132,7 +132,7 @@ export function Contact() {
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:border-blue-500/50 transition-colors">
                   <Mail className="w-6 h-6" />
                 </div>
-                <span className="text-xl font-light">
+                <span className="text-lg md:text-xl font-light break-all">
                   leone.feliper@gmail.com
                 </span>
               </div>

@@ -13,7 +13,7 @@ import FluidGlass from "./components/react-bits/FluidGlass";
 import GradientText from "./components/react-bits/GradientText";
 import { useTranslation } from "react-i18next";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
-
+import { useMediaQuery } from "./hooks/useMediaQuery";
 export default function AppLayout() {
   const lenisRef = useSmoothScroll();
   const { t, i18n } = useTranslation();
@@ -25,14 +25,16 @@ export default function AppLayout() {
     { id: "services", key: "nav.services" },
   ];
 
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   return (
     <div className="min-h-screen bg-[#030305] text-gray-100 selection:bg-blue-500/30 selection:text-white">
       <div className="fixed inset-0 z-0">
         <Galaxy
           mouseRepulsion={true}
-          mouseInteraction={true}
-          density={0.3}
-          glowIntensity={0.2}
+          mouseInteraction={!isMobile}
+          density={isMobile ? 0.1 : 0.3}
+          glowIntensity={isMobile ? 0.1 : 0.2}
           repulsionStrength={0.2}
           saturation={0.2}
           hueShift={240}
@@ -47,13 +49,13 @@ export default function AppLayout() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 1.5, ease: "easeOut" }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-[40px] w-[calc(100%-2rem)] md:w-max"
+        className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-[40px] w-[calc(100%-1.5rem)] md:w-max"
       >
         <GlassSurface
           width="max-content"
           height="auto"
           borderRadius={40}
-          className="px-8 py-3"
+          className="px-4 md:px-8 py-2.5 md:py-3"
           displace={0.1}
           distortionScale={-180}
           redOffset={0}
@@ -63,13 +65,13 @@ export default function AppLayout() {
           opacity={0.83}
           mixBlendMode="screen"
         >
-          <div className="flex items-center gap-4 md:gap-8">
-            <div className="flex items-center gap-4 md:gap-8">
+          <div className="flex items-center gap-3 md:gap-8">
+            <div className="flex items-center gap-3 md:gap-8">
               {navItems.map((item) => (
                 <motion.a
                   key={item.id}
                   href={`#${item.id}`}
-                  className="text-[10px] md:text-xs font-medium uppercase tracking-[0.1em] md:tracking-[0.2em] text-white/60 hover:text-white transition-colors relative group"
+                  className="text-[9px] md:text-xs font-medium uppercase tracking-[0.05em] md:tracking-[0.2em] text-white/60 hover:text-white transition-colors relative group whitespace-nowrap"
                   whileHover={{ y: -1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   onClick={(e) => {
@@ -85,12 +87,12 @@ export default function AppLayout() {
               ))}
             </div>
 
-            <div className="flex items-center gap-2 md:gap-3 pl-4 md:pl-6 border-l border-white/10 h-4">
+            <div className="flex items-center gap-1.5 md:gap-3 pl-3 md:pl-6 border-l border-white/10 h-4">
               {["en", "pt"].map((lang) => (
                 <button
                   key={lang}
                   onClick={() => i18n.changeLanguage(lang)}
-                  className={`text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
+                  className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
                     i18n.language.startsWith(lang)
                       ? "text-blue-400"
                       : "text-white/30 hover:text-white/60"

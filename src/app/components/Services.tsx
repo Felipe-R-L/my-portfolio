@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import SpotlightCard from "./react-bits/SpotlightCard";
 import BorderGlow from "./react-bits/BorderGlow";
 import SplitText from "./react-bits/SplitText";
+import MobileCarousel from "./ui/MobileCarousel";
 
 const serviceData = [
   {
@@ -76,7 +77,8 @@ export function Services() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 auto-rows-fr gap-8 max-w-5xl mx-auto">
+        {/* Desktop Grid */}
+        <div className="hidden md:grid grid-cols-2 auto-rows-fr gap-8 max-w-5xl mx-auto">
           {serviceData.map((service, idx) => (
             <motion.div
               key={service.id}
@@ -86,36 +88,51 @@ export function Services() {
               transition={{ duration: 0.8, delay: idx * 0.1 }}
               className="flex"
             >
-              <BorderGlow
-                glowColor="rgba(59, 130, 246, 0.2)"
-                glowRadius={200}
-                className="w-full"
-              >
-                <SpotlightCard
-                  className="h-full p-8 flex flex-col items-start text-left"
-                  spotlightColor="rgba(59, 130, 246, 0.05)"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    className={`p-3 rounded-xl bg-gradient-to-br ${service.color} border border-white/5 mb-6`}
-                  >
-                    <service.icon className="w-6 h-6 text-white" />
-                  </motion.div>
-
-                  <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">
-                    {t(`services.items.${service.id}.title`)}
-                  </h3>
-
-                  <p className="text-gray-400 text-base leading-relaxed flex-1">
-                    {t(`services.items.${service.id}.description`)}
-                  </p>
-                </SpotlightCard>
-              </BorderGlow>
+              <ServiceCard service={service} t={t} />
             </motion.div>
           ))}
         </div>
+
+        {/* Mobile Carousel */}
+        <div className="md:hidden -mx-6">
+          <MobileCarousel>
+            {serviceData.map((service) => (
+              <ServiceCard key={service.id} service={service} t={t} />
+            ))}
+          </MobileCarousel>
+        </div>
       </div>
     </section>
+  );
+}
+
+function ServiceCard({ service, t }: { service: typeof serviceData[0]; t: any }) {
+  return (
+    <BorderGlow
+      glowColor="rgba(59, 130, 246, 0.2)"
+      glowRadius={200}
+      className="w-full h-full"
+    >
+      <SpotlightCard
+        className="h-full p-8 flex flex-col items-start text-left"
+        spotlightColor="rgba(59, 130, 246, 0.05)"
+      >
+        <motion.div
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          className={`p-3 rounded-xl bg-gradient-to-br ${service.color} border border-white/5 mb-6`}
+        >
+          <service.icon className="w-6 h-6 text-white" />
+        </motion.div>
+
+        <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">
+          {t(`services.items.${service.id}.title`)}
+        </h3>
+
+        <p className="text-gray-400 text-base leading-relaxed flex-1">
+          {t(`services.items.${service.id}.description`)}
+        </p>
+      </SpotlightCard>
+    </BorderGlow>
   );
 }

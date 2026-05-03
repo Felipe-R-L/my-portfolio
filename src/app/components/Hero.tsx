@@ -13,11 +13,11 @@ export function Hero() {
   }) as string[];
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center pt-40 pb-28 overflow-hidden px-6">
+    <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 md:pt-40 pb-20 md:pb-28 overflow-hidden px-6">
       {/* Deep space Apple-style glowing orbs */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1000px] h-[500px] opacity-60 pointer-events-none">
         <motion.div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/40 rounded-full mix-blend-screen filter blur-[120px]"
+          className="absolute top-0 left-1/4 w-72 md:w-96 h-72 md:h-96 bg-blue-600/40 rounded-full mix-blend-screen filter blur-[80px] md:blur-[120px]"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.4, 0.6, 0.4],
@@ -34,18 +34,18 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full mb-12 lg:mb-24"
+          className="w-full mb-12 lg:mb-20"
         >
-          <div className="flex flex-col items-center lg:items-start">
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="text-blue-400 text-xs md:text-sm font-bold uppercase tracking-[0.8em] mb-4"
+              className="text-blue-400 text-[10px] md:text-xs lg:text-sm font-bold uppercase tracking-[0.5em] md:tracking-[0.8em] mb-4"
             >
               {t("hero.role")}
             </motion.span>
-            <h1 className="text-[12vw] lg:text-[10rem] font-bold text-white tracking-tighter leading-none uppercase flex flex-wrap justify-center lg:justify-start gap-x-8">
+            <h1 className="text-[14vw] md:text-[12vw] lg:text-[10rem] font-bold text-white tracking-tighter leading-[0.9] uppercase flex flex-col md:flex-row items-center lg:items-start md:gap-x-8">
               <span className="text-white">FELIPE</span>
               <span className="text-white">RODRIGUES</span>
             </h1>
@@ -53,16 +53,16 @@ export function Hero() {
         </motion.div>
 
         {/* 2. The Unified Hero Content (Photo + Pitch) */}
-        <div className="relative w-full flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 lg:gap-20">
+        <div className="relative w-full flex flex-col lg:flex-row items-center lg:items-start justify-between gap-10 lg:gap-20">
           {/* Profile Image - Left Side */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, delay: 0.4 }}
-            className="relative z-20 w-full max-w-[300px] md:max-w-[400px] lg:max-w-[450px] flex-shrink-0"
+            className="relative z-20 w-full max-w-[240px] md:max-w-[400px] lg:max-w-[450px] flex-shrink-0"
           >
             <div className="absolute inset-0 bg-blue-500/10 blur-3xl rounded-full" />
-            <div className="relative aspect-square w-full rounded-[3.5rem] md:rounded-[4.5rem] overflow-hidden border border-white/10 shadow-2xl group">
+            <div className="relative aspect-square w-full rounded-[2.5rem] md:rounded-[4.5rem] overflow-hidden border border-white/10 shadow-2xl group">
               <img
                 src="/assets/profile/profile.jpg"
                 alt="Felipe Rodrigues Leone"
@@ -77,21 +77,21 @@ export function Hero() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.2, delay: 0.8 }}
-            className="flex-1 flex flex-col items-start text-left"
+            className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left"
           >
-            <div className="flex flex-col gap-0">
-              <h2 className="text-3xl md:text-5xl lg:text-[4rem] font-light text-white/50 tracking-tight uppercase leading-none">
+            <div className="flex flex-col gap-0 w-full">
+              <h2 className="text-2xl md:text-5xl lg:text-[4rem] font-light text-white/50 tracking-tight uppercase leading-none">
                 {t("hero.title_part1")}
               </h2>
-              <div className="flex items-center gap-4 py-6 overflow-visible">
-                <div className="w-full max-w-[350px] md:max-w-[600px] lg:max-w-[800px] overflow-visible">
+              <div className="flex items-center justify-center lg:justify-start gap-4 py-4 md:py-6 overflow-visible">
+                <div className="w-full max-w-full md:max-w-[600px] lg:max-w-[800px] overflow-visible">
                   <TextType
                     text={
                       Array.isArray(titleVariants)
                         ? titleVariants
                         : ["Solutions", "Experiences", "Ideas"]
                     }
-                    className="text-4xl md:text-7xl lg:text-[7rem] font-black tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-400 drop-shadow-2xl whitespace-nowrap leading-relaxed"
+                    className="text-3xl md:text-7xl lg:text-[7rem] font-black tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-400 drop-shadow-2xl whitespace-nowrap leading-relaxed"
                     typingSpeed={60}
                     pauseDuration={2000}
                     showCursor={true}
