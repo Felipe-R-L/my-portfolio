@@ -33,11 +33,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'motion': ['motion'],
-          'lucide-react': ['lucide-react'],
-          'vendor-ui': ['react', 'react-dom', 'react-i18next', 'i18next', 'react-router'],
-          'webgl-libs': ['ogl', 'three'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('motion')) return 'motion';
+            if (id.includes('lucide-react')) return 'lucide-react';
+            if (id.includes('react') || id.includes('react-dom') || id.includes('i18next') || id.includes('react-router')) return 'vendor-ui';
+            if (id.includes('ogl') || id.includes('three')) return 'webgl-libs';
+          }
         }
       }
     },
