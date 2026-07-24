@@ -1,7 +1,7 @@
 'use client';
 
 import { ElementType, useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
-import { gsap } from 'gsap';
+import './TextType.css';
 
 interface TextTypeProps {
   className?: string;
@@ -85,19 +85,6 @@ const TextType = ({
   }, [startOnVisible]);
 
   useEffect(() => {
-    if (showCursor && cursorRef.current) {
-      gsap.set(cursorRef.current, { opacity: 1 });
-      gsap.to(cursorRef.current, {
-        opacity: 0,
-        duration: cursorBlinkDuration,
-        repeat: -1,
-        yoyo: true,
-        ease: 'power2.inOut'
-      });
-    }
-  }, [showCursor, cursorBlinkDuration]);
-
-  useEffect(() => {
     if (!isVisible) return;
 
     let timeout: ReturnType<typeof setTimeout>;
@@ -177,13 +164,29 @@ const TextType = ({
       className: `inline-block whitespace-nowrap tracking-tight overflow-visible ${className}`,
       ...props
     },
-    <span className="inline-block py-2" style={{ color: getCurrentTextColor() || 'inherit' }}>
-      {displayedText}
+    // `displayedText` is empty for a beat between words, and an empty
+    // inline-block collapses to zero content height — the whole line shrank and
+    // everything below the hero jumped ~16px on every cycle. The zero-width
+    // space keeps a line box alive without rendering anything visible.
+    <span
+      className="inline-block py-2"
+      style={{ color: getCurrentTextColor() || 'inherit' }}
+    >
+      {displayedText || '​'}
     </span>,
     showCursor && (
       <span
         ref={cursorRef}
-        className={`ml-1 inline-block w-[2px] h-[1em] bg-blue-500 align-text-bottom opacity-100 ${shouldHideCursor ? 'hidden' : ''} ${cursorClassName}`}
+        aria-hidden="true"
+        style={{ ['--text-type-blink-duration' as string]: `${cursorBlinkDuration}s` }}
+        /*
+         * `hidden` (display:none) pulled the caret out of flow, so the line box
+         * lost its height every time the caret hid between words — a 14px
+         * vertical jump that pushed everything below the hero around.
+         * `invisible` keeps the box, and `align-middle` stops the caret from
+         * inflating the line box beyond the font's own.
+         */
+        className={`text-type-cursor ml-1 inline-block w-[2px] h-[1em] bg-blue-500 align-middle ${shouldHideCursor ? 'invisible' : ''} ${cursorClassName}`}
       />
     )
   );

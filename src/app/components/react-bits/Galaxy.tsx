@@ -218,6 +218,13 @@ export default function Galaxy({
   const targetMouseActive = useRef(0.0);
   const smoothMouseActive = useRef(0.0);
 
+  // `focal` and `rotation` default to fresh array literals on every render, so
+  // including them directly in the dependency list tore down and rebuilt the
+  // entire WebGL context on each re-render of the parent. Depending on their
+  // scalar contents keeps the renderer alive across renders.
+  const [focalX, focalY] = focal;
+  const [rotationX, rotationY] = rotation;
+
   useEffect(() => {
     if (!ctnDom.current) return;
     const ctn = ctnDom.current;
@@ -239,9 +246,11 @@ export default function Galaxy({
     let program: Program;
 
     function resize() {
-      // Use lower resolution on high-DPI mobile devices for performance
-      const isMobile = window.innerWidth <= 768;
-      const dpr = isMobile ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio;
+      // This is a full-screen procedural shader: cost scales linearly with the
+      // pixel count, and each pixel evaluates 4 layers x 9 cells of star maths.
+      // Rendering a soft starfield at native 2-3x DPI is invisible to the eye
+      // but multiplies GPU work several times over, so cap the ratio.
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       renderer.setSize(ctn.offsetWidth * dpr, ctn.offsetHeight * dpr);
       gl.canvas.style.width = '100%';
       gl.canvas.style.height = '100%';
@@ -270,8 +279,8 @@ export default function Galaxy({
             gl.canvas.width / gl.canvas.height,
           ),
         },
-        uFocal: { value: new Float32Array(focal) },
-        uRotation: { value: new Float32Array(rotation) },
+        uFocal: { value: new Float32Array([focalX, focalY]) },
+        uRotation: { value: new Float32Array([rotationX, rotationY]) },
         uStarSpeed: { value: starSpeed },
         uDensity: { value: density },
         uHueShift: { value: hueShift },
@@ -297,9 +306,27 @@ export default function Galaxy({
 
     const mesh = new Mesh(gl, { geometry, program });
     let animateId: number;
+    // Skip the whole render loop while the tab is backgrounded or the canvas
+    // is scrolled out of view — the shader is the single most expensive thing
+    // on the page and nobody is looking at it.
+    let isPaused = document.hidden;
+
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        isPaused = document.hidden || !entry.isIntersecting;
+      },
+      { threshold: 0 },
+    );
+    visibilityObserver.observe(ctn);
+
+    function handleVisibilityChange() {
+      isPaused = document.hidden;
+    }
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     function update(t: number) {
       animateId = requestAnimationFrame(update);
+      if (isPaused) return;
       if (!disableAnimation) {
         program.uniforms.uTime.value = t * 0.001;
         program.uniforms.uStarSpeed.value = (t * 0.001 * starSpeed) / 10.0;
@@ -343,8 +370,9 @@ export default function Galaxy({
     return () => {
       cancelAnimationFrame(animateId);
       window.removeEventListener("resize", resize);
-      cancelAnimationFrame(animateId);
-      
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      visibilityObserver.disconnect();
+
       // Dispose WebGL resources
       if (gl) {
         geometry.remove();
@@ -360,8 +388,10 @@ export default function Galaxy({
       ctn.removeChild(gl.canvas);
     };
   }, [
-    focal,
-    rotation,
+    focalX,
+    focalY,
+    rotationX,
+    rotationY,
     starSpeed,
     density,
     hueShift,

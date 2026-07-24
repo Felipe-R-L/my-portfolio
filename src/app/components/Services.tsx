@@ -1,85 +1,58 @@
-import React from "react";
 import { motion } from "motion/react";
-import {
-  Globe,
-  ShoppingCart,
-  Zap,
-  ArrowRight,
-  Bot,
-  Layers,
-} from "lucide-react";
 import { useTranslation } from "react-i18next";
-import SpotlightCard from "./react-bits/SpotlightCard";
-import BorderGlow from "./react-bits/BorderGlow";
-import SplitText from "./react-bits/SplitText";
-import MobileCarousel from "./ui/MobileCarousel";
+import type { TFunction } from "i18next";
+import { Globe, ShoppingCart, Zap, Bot, Layers } from "lucide-react";
 
-const serviceData = [
-  {
-    id: "landing_pages",
-    icon: Globe,
-    color: "from-blue-500/20 to-cyan-500/20",
-    accent: "bg-blue-500",
-  },
-  {
-    id: "ecommerce",
-    icon: ShoppingCart,
-    color: "from-purple-500/20 to-pink-500/20",
-    accent: "bg-purple-500",
-  },
-  {
-    id: "ai",
-    icon: Bot,
-    color: "from-green-500/20 to-emerald-500/20",
-    accent: "bg-green-500",
-  },
-  {
-    id: "api",
-    icon: Zap,
-    color: "from-amber-500/20 to-orange-500/20",
-    accent: "bg-amber-500",
-  },
-];
+import MobileCarousel from "./shared/MobileCarousel";
+import { Section } from "./shared/Section";
+import { SectionHeading } from "./shared/SectionHeading";
+import { GlowCard } from "./shared/GlowCard";
+
+/**
+ * The four icon tints used to be four unrelated hues (cyan, pink, emerald,
+ * orange). They now step along the warm zone's own ramp, so the row reads as
+ * one set rather than four competing badges.
+ */
+const SERVICES = [
+  { id: "landing_pages", icon: Globe, tint: "var(--zone-b-1)" },
+  { id: "ecommerce", icon: ShoppingCart, tint: "var(--zone-b-2)" },
+  { id: "ai", icon: Bot, tint: "var(--zone-b-1)" },
+  { id: "api", icon: Zap, tint: "var(--zone-b-2)" },
+] as const;
+
+type Service = (typeof SERVICES)[number];
 
 export function Services() {
   const { t } = useTranslation();
 
   return (
-    <section className="py-32 px-6 relative overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 right-0 w-[50rem] h-[50rem] bg-blue-600/5 rounded-full filter blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-purple-600/5 rounded-full filter blur-[120px] pointer-events-none" />
+    <Section id="services" className="overflow-hidden">
+      {/* Static decorative glows — no animation, so no per-frame repaint of a 120px blur */}
+      <div
+        aria-hidden="true"
+        className="absolute top-0 right-0 w-[50rem] h-[50rem] bg-[color-mix(in_oklab,var(--zone-b-1)_5%,transparent)] rounded-full filter blur-[120px] pointer-events-none"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-[color-mix(in_oklab,var(--zone-b-2)_5%,transparent)] rounded-full filter blur-[120px] pointer-events-none"
+      />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tighter uppercase flex items-center justify-center flex-wrap gap-y-4">
-            <motion.div
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="mr-4 text-blue-500"
-            >
-              <Layers className="w-16 h-16" />
-            </motion.div>
-
-            <SplitText
-              text={`${t("services.title_part1")} ${t("services.title_part2")}`}
-              delay={30}
-              animationFrom={{
-                opacity: 0,
-                transform: "translate3d(0, 30px, 0)",
-              }}
-              animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
-            />
-          </h2>
-
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
+      <div className="relative z-10">
+        <SectionHeading
+          icon={Layers}
+          accent="warm"
+          align="center"
+          showBar={false}
+          title={`${t("services.title_part1")} ${t("services.title_part2")}`}
+        >
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mt-4">
             {t("services.description")}
           </p>
-        </div>
+        </SectionHeading>
 
         {/* Desktop Grid */}
         <div className="hidden md:grid grid-cols-2 auto-rows-fr gap-8 max-w-5xl mx-auto">
-          {serviceData.map((service, idx) => (
+          {SERVICES.map((service, idx) => (
             <motion.div
               key={service.id}
               initial={{ opacity: 0, y: 30 }}
@@ -94,45 +67,44 @@ export function Services() {
         </div>
 
         {/* Mobile Carousel */}
-        <div className="md:hidden -mx-6">
+        <div className="md:hidden -mx-[var(--gutter)]">
           <MobileCarousel>
-            {serviceData.map((service) => (
+            {SERVICES.map((service) => (
               <ServiceCard key={service.id} service={service} t={t} />
             ))}
           </MobileCarousel>
         </div>
       </div>
-    </section>
+    </Section>
   );
 }
 
-function ServiceCard({ service, t }: { service: typeof serviceData[0]; t: any }) {
+function ServiceCard({ service, t }: { service: Service; t: TFunction }) {
+  const Icon = service.icon;
   return (
-    <BorderGlow
-      glowColor="rgba(59, 130, 246, 0.2)"
+    <GlowCard
+      glowColor="color-mix(in oklab, var(--zone-b-1) 20%, transparent)"
+      spotlightColor="color-mix(in oklab, var(--zone-b-1) 5%, transparent)"
       glowRadius={200}
       className="w-full h-full"
+      contentClassName="h-full p-8 flex flex-col items-start text-left"
     >
-      <SpotlightCard
-        className="h-full p-8 flex flex-col items-start text-left"
-        spotlightColor="rgba(59, 130, 246, 0.05)"
+      <motion.div
+        whileHover={{ scale: 1.1, rotate: 5 }}
+        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        style={{ background: `color-mix(in oklab, ${service.tint} 18%, transparent)` }}
+        className="p-3 rounded-xl border border-white/5 mb-6"
       >
-        <motion.div
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          className={`p-3 rounded-xl bg-gradient-to-br ${service.color} border border-white/5 mb-6`}
-        >
-          <service.icon className="w-6 h-6 text-white" />
-        </motion.div>
+        <Icon className="w-6 h-6 text-white" aria-hidden="true" />
+      </motion.div>
 
-        <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">
-          {t(`services.items.${service.id}.title`)}
-        </h3>
+      <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">
+        {t(`services.items.${service.id}.title`)}
+      </h3>
 
-        <p className="text-gray-400 text-base leading-relaxed flex-1">
-          {t(`services.items.${service.id}.description`)}
-        </p>
-      </SpotlightCard>
-    </BorderGlow>
+      <p className="text-gray-400 text-base leading-relaxed flex-1">
+        {t(`services.items.${service.id}.description`)}
+      </p>
+    </GlowCard>
   );
 }

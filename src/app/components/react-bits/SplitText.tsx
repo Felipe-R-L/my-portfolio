@@ -83,8 +83,14 @@ const SplitText: React.FC<SplitTextProps> = ({
       ref={ref}
       className={`split-text ${className}`}
       style={{ textAlign, display: "inline-block" }}
-      aria-label={text}
     >
+      {/*
+        `aria-label` on a plain <span> is ignored by the accessibility tree and
+        flagged by axe (aria-prohibited-attr). Exposing the real string in a
+        visually-hidden node and hiding the per-letter spans gives assistive
+        tech the whole word instead of a stream of single characters.
+      */}
+      <span className="sr-only">{text}</span>
       {letters.map(({ char, index }) => (
         <span
           key={index}

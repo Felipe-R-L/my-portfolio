@@ -1,212 +1,181 @@
-import React from "react";
 import { motion } from "motion/react";
-import SpotlightCard from "./react-bits/SpotlightCard";
-import BorderGlow from "./react-bits/BorderGlow";
-import TiltedCard from "./react-bits/TiltedCard";
-import SplitText from "./react-bits/SplitText";
-import GradientText from "./react-bits/GradientText";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
-import { ExternalLink, ShoppingBag, Layout, Rocket, Github } from "lucide-react";
+import { Rocket } from "lucide-react";
 
-export function Projects() {
+import { PROJECTS, type Project } from "../data/projects";
+import { Section } from "./shared/Section";
+import { SectionHeading } from "./shared/SectionHeading";
+import { AmbientOrbs, type Orb } from "./shared/AmbientOrbs";
+import { ProjectVisual } from "./shared/ProjectVisual";
+import { StackTags } from "./shared/StackTags";
+import { CardLink, CardNote } from "./shared/CardLink";
+import {
+  bodyCompact,
+  bodyLead,
+  cardTitle,
+  compactBox,
+  eyebrow,
+  leadBox,
+} from "./shared/cardType";
+
+const ORBS: Orb[] = [
+  {
+    className:
+      "top-40 -left-20 w-[20rem] md:w-[40rem] h-[20rem] md:h-[40rem] bg-[color-mix(in_oklab,var(--zone-b-2)_10%,transparent)] mix-blend-screen filter blur-[60px] md:blur-[140px]",
+    x: [0, 15, -20, 0],
+    y: [0, -20, 10, 0],
+    duration: 16,
+  },
+  {
+    className:
+      "bottom-10 -right-20 w-[18rem] md:w-[35rem] h-[18rem] md:h-[35rem] bg-[color-mix(in_oklab,var(--zone-b-1)_9%,transparent)] mix-blend-screen filter blur-[60px] md:blur-[140px]",
+    x: [0, -15, 25, 0],
+    y: [0, 15, -20, 0],
+    duration: 18,
+    delay: 3,
+  },
+];
+
+function Meta({ project }: { project: Project }) {
   const { t } = useTranslation();
+  return (
+    <div className={`flex flex-wrap items-center gap-2.5 ${eyebrow}`}>
+      <span>{t(`projects.${project.id}.category`)}</span>
+      <span aria-hidden="true" className="w-[3px] h-[3px] rounded-full bg-gray-600" />
+      <span className="text-[var(--zone-b-1)]">{t(`projects.${project.id}.status`)}</span>
+    </div>
+  );
+}
 
-  const projects = [
-    {
-      id: "secret",
-      image: "/assets/projects/secret.webp",
-      icon: ShoppingBag,
-      glowColor: "rgba(236, 72, 153, 0.5)",
-      spotlightColor: "rgba(236, 72, 153, 0.12)",
-      tagColor: "text-pink-400",
-      gradientColors: ["#ec4899", "#f472b6", "#f9a8d4", "#ec4899"],
-      url: "https://secret-boutique.com.br",
-      github: "https://github.com/Felipe-R-L/secret-boutique-pwa",
-    },
-    {
-      id: "dallas",
-      image: "/assets/projects/dallas.webp",
-      icon: Layout,
-      glowColor: "rgba(16, 185, 129, 0.5)",
-      spotlightColor: "rgba(16, 185, 129, 0.12)",
-      tagColor: "text-emerald-400",
-      gradientColors: ["#10b981", "#34d399", "#6ee7b7", "#10b981"],
-      url: "https://jrdallasmotel.com.br",
-      github: "https://github.com/Felipe-R-L/dallas-motel-landing-page",
-    },
-  ];
+function Links({ project }: { project: Project }) {
+  const { t } = useTranslation();
+  const name = t(`projects.${project.id}.title`);
+
+  if (!project.url && !project.repo) {
+    return <CardNote>{t("projects.labels.private_no_deploy")}</CardNote>;
+  }
 
   return (
-    <section className="relative py-32 px-6 max-w-6xl mx-auto z-10" id="projects">
-      {/* Heavy ambient blurred orbs for Apple iOS style depth */}
-      <motion.div
-        className="absolute top-40 -left-20 w-[20rem] md:w-[40rem] h-[20rem] md:h-[40rem] bg-pink-600/10 rounded-full mix-blend-screen filter blur-[60px] md:blur-[140px] pointer-events-none"
-        animate={{ x: [0, 15, -20, 0], y: [0, -20, 10, 0] }}
-        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-10 -right-20 w-[18rem] md:w-[35rem] h-[18rem] md:h-[35rem] bg-emerald-600/10 rounded-full mix-blend-screen filter blur-[60px] md:blur-[140px] pointer-events-none"
-        animate={{ x: [0, -15, 25, 0], y: [0, 15, -20, 0] }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 3,
-        }}
-      />
+    <>
+      {project.url && (
+        <CardLink
+          tone="warm"
+          href={project.url}
+          label={t("projects.labels.live")}
+          ariaLabel={t("projects.labels.live_aria", { name })}
+        />
+      )}
+      {project.repo && (
+        <CardLink
+          href={project.repo}
+          label={t("projects.labels.code")}
+          ariaLabel={t("projects.labels.code_aria", { name })}
+        />
+      )}
+    </>
+  );
+}
 
-      <div className="mb-20 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tighter uppercase flex items-center flex-wrap gap-y-4">
-          <motion.div
-            animate={{ opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="mr-4 text-pink-500"
-          >
-            <Rocket className="w-16 h-16" />
-          </motion.div>
-
-          <SplitText
-            text={t("projects.title_part1")}
-            delay={30}
-            animationFrom={{ opacity: 0, transform: "translate3d(0, 30px, 0)" }}
-            animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
-          />
-
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{
-              type: "spring",
-              stiffness: 400,
-              damping: 25,
-              delay: 0.1,
-            }}
-            className="mx-4 md:mx-8 w-2.5 h-2.5 rounded-full bg-pink-400 shadow-[0_0_15px_rgba(236,72,153,0.8)]"
-          />
-
-          <span className="text-white/40">
-            <SplitText
-              text={t("projects.title_part2")}
-              delay={30}
-              animationFrom={{
-                opacity: 0,
-                transform: "translate3d(0, 30px, 0)",
-              }}
-              animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
-            />
-          </span>
-        </h2>
-        <motion.div
-          className="w-24 h-1 bg-pink-500/50 rounded-full shadow-[0_0_15px_rgba(236,72,153,0.6)]"
-          initial={{ width: 0 }}
-          whileInView={{ width: 96 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+/**
+ * The lead project gets the full width. With three projects, an even grid says
+ * "three interchangeable things"; the asymmetry says which one to look at.
+ */
+function FeaturedProject({ project }: { project: Project }) {
+  const { t } = useTranslation();
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      className="grid md:grid-cols-[1.2fr_1fr] rounded-3xl border border-white/10 bg-white/[0.02] overflow-hidden"
+    >
+      <div className="relative bg-[#07070c] min-h-[240px] md:min-h-[300px]">
+        <ProjectVisual
+          visual={project.visual}
+          alt={t(`projects.${project.id}.title`)}
+          sizes="(max-width: 767px) 100vw, 55vw"
+          tKey={`projects.${project.id}`}
         />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 relative z-10">
-        {projects.map((project, idx) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: idx * 0.2 }}
-          >
-            <TiltedCard
-              rotateAmplitude={8}
-              scaleOnHover={1.02}
-              containerClassName="h-full"
-              className="h-full"
-            >
-              <BorderGlow
-                glowColor={project.glowColor}
-                glowRadius={300}
-                className="h-full"
-              >
-                <SpotlightCard
-                  spotlightColor={project.spotlightColor}
-                  className="p-0 overflow-hidden h-full flex flex-col group"
-                >
-                  <div className="relative h-64 overflow-hidden rounded-t-3xl">
-                    <ImageWithFallback
-                      src={project.image}
-                      alt={t(`projects.${project.id}.title`)}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <motion.div 
-                      className="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-black/60 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10 shadow-lg"
-                      variants={{
-                        initial: { opacity: 1, y: 0 },
-                        hover: { opacity: 0, y: -10 }
-                      }}
-                      initial="initial"
-                      whileHover="hover"
-                      animate={undefined} // Controlled by group hover if we use group-hover classes, but let's use variants
-                    >
-                      {/* Note: TiltedCard/SpotlightCard might swallow hover, so let's use group-hover on the parent */}
-                    </motion.div>
-                    
-                    {/* Re-implementing chip with group-hover logic */}
-                    <div className="absolute top-4 left-4 z-20 flex items-center space-x-2 bg-black/60 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10 shadow-lg transition-all duration-500 group-hover:opacity-0 group-hover:-translate-y-2">
-                      <project.icon className={`w-4 h-4 ${project.tagColor}`} />
-                      <span
-                        className={`text-xs font-bold uppercase tracking-wider ${project.tagColor}`}
-                      >
-                        {t(`projects.${project.id}.category`)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-8 flex-1 flex flex-col bg-gradient-to-b from-[#030305]/60 to-transparent backdrop-blur-xl">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-2xl font-bold text-white tracking-tight">
-                        <GradientText
-                          colors={project.gradientColors}
-                          animationSpeed={8}
-                        >
-                          {t(`projects.${project.id}.title`)}
-                        </GradientText>
-                      </h3>
-                      <div className="flex items-center gap-3">
-                        <motion.a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10 shadow-xl backdrop-blur-md"
-                          whileHover={{ scale: 1.15 }}
-                          whileTap={{ scale: 0.95 }}
-                          aria-label={t(`projects.${project.id}.github_aria`)}
-                        >
-                          <Github className="w-5 h-5 text-white/70 hover:text-white transition-colors" />
-                        </motion.a>
-                        <motion.a
-                          href={project.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors border border-white/10 shadow-xl backdrop-blur-md"
-                          whileHover={{ scale: 1.15 }}
-                          whileTap={{ scale: 0.95 }}
-                          aria-label={t(`projects.${project.id}.live_aria`)}
-                        >
-                          <ExternalLink className="w-5 h-5 text-white/90" />
-                        </motion.a>
-                      </div>
-                    </div>
-                    <p className="text-gray-400 leading-relaxed font-light">
-                      {t(`projects.${project.id}.description`)}
-                    </p>
-                  </div>
-                </SpotlightCard>
-              </BorderGlow>
-            </TiltedCard>
-          </motion.div>
-        ))}
+      <div className={`${leadBox} border-t md:border-t-0 md:border-l border-white/10`}>
+        <Meta project={project} />
+        <h3 className={cardTitle}>{t(`projects.${project.id}.title`)}</h3>
+        <p className={bodyLead}>{t(`projects.${project.id}.description`)}</p>
+        <StackTags items={project.stack} more={project.stackMore} />
+        <div className="flex flex-wrap gap-2.5 pt-1">
+          <Links project={project} />
+        </div>
       </div>
-    </section>
+    </motion.article>
+  );
+}
+
+function CompactProject({ project, index }: { project: Project; index: number }) {
+  const { t } = useTranslation();
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-col rounded-3xl border border-white/10 bg-white/[0.02] overflow-hidden"
+    >
+      {/*
+        A 160px side strip showed a vertical sliver of a 720px-wide capture —
+        unreadable, which was the exact problem the old cards had. Full width on
+        top gives the captured site's hero enough room to be recognisable.
+      */}
+      <div className="relative bg-[#07070c] h-44 md:h-48 shrink-0">
+        <ProjectVisual
+          visual={project.visual}
+          alt={t(`projects.${project.id}.title`)}
+          sizes="(max-width: 767px) 100vw, 45vw"
+          tKey={`projects.${project.id}`}
+        />
+      </div>
+
+      <div className={`${compactBox} border-t border-white/10`}>
+        <Meta project={project} />
+        <h3 className={cardTitle}>{t(`projects.${project.id}.title`)}</h3>
+        <p className={bodyCompact}>{t(`projects.${project.id}.description`)}</p>
+        <StackTags items={project.stack} more={project.stackMore} className="pt-1 mt-auto" />
+        <div className="flex flex-wrap gap-2.5 pt-1">
+          <Links project={project} />
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+export function Projects() {
+  const { t } = useTranslation();
+  const featured = PROJECTS.find((p) => p.featured);
+  const rest = PROJECTS.filter((p) => !p.featured);
+
+  return (
+    <Section id="projects">
+      <AmbientOrbs orbs={ORBS} />
+
+      <SectionHeading
+        icon={Rocket}
+        iconClassName="w-12 h-12 md:w-14 md:h-14"
+        accent="warm"
+        title={t("projects.title_part1")}
+        subtitle={t("projects.title_part2")}
+      >
+        <p className="mt-4 text-gray-400 max-w-2xl leading-relaxed">{t("projects.lead")}</p>
+      </SectionHeading>
+
+      <div className="flex flex-col gap-5 relative z-10">
+        {featured && <FeaturedProject project={featured} />}
+        <div className="grid md:grid-cols-2 gap-5">
+          {rest.map((project, idx) => (
+            <CompactProject key={project.id} project={project} index={idx} />
+          ))}
+        </div>
+      </div>
+    </Section>
   );
 }

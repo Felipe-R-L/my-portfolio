@@ -1,117 +1,69 @@
-import React, { Suspense, lazy } from "react";
+import { Suspense, lazy, useMemo } from "react";
 import { motion, Variants } from "motion/react";
-import SpotlightCard from "./react-bits/SpotlightCard";
-import BorderGlow from "./react-bits/BorderGlow";
-import TiltedCard from "./react-bits/TiltedCard";
-const LazyFluidGlass = lazy(() => import("./react-bits/FluidGlass"));
-import ScrollReveal from "./react-bits/ScrollReveal";
-import SplitText from "./react-bits/SplitText";
-import { Code2, Globe2, Layers, Cpu } from "lucide-react";
+import { Cpu } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
+import ScrollReveal from "./react-bits/ScrollReveal";
+import { Section } from "./shared/Section";
+import { SectionHeading } from "./shared/SectionHeading";
+import { AmbientOrbs, type Orb } from "./shared/AmbientOrbs";
+
+const LazyFluidGlass = lazy(() => import("./react-bits/FluidGlass"));
+
+const ORBS: Orb[] = [
+  {
+    className:
+      "top-0 right-0 w-[20rem] md:w-[45rem] h-[20rem] md:h-[45rem] bg-[color-mix(in_oklab,var(--zone-a-2)_10%,transparent)] mix-blend-screen filter blur-[60px] md:blur-[150px]",
+    duration: 15,
+  },
+  {
+    className:
+      "bottom-0 left-0 w-[18rem] md:w-[40rem] h-[18rem] md:h-[40rem] bg-[color-mix(in_oklab,var(--zone-a-1)_10%,transparent)] mix-blend-screen filter blur-[60px] md:blur-[150px]",
+    x: [0, -20, 15, 0],
+    y: [0, 10, -15, 0],
+    duration: 18,
+    delay: 3,
+  },
+];
+
+/**
+ * Four identical icon-plus-label squares took half the viewport and said
+ * nothing the label did not already say. A typographic list carries the same
+ * four claims plus the evidence for each, in less space.
+ */
+const SKILLS = ["clean_arch", "devops", "fullstack", "english"] as const;
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+};
 
 export function About() {
   const { t } = useTranslation();
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
-
-  const skills = [
-    {
-      icon: Layers,
-      title: t("about.skills.clean_arch"),
-      glowColor: "rgba(59, 130, 246, 0.5)",
-      spotlightColor: "rgba(59, 130, 246, 0.15)",
-      iconBg: "bg-blue-500/20",
-      iconBorder: "border-blue-400/30",
-      iconShadow: "shadow-[0_0_20px_rgba(59,130,246,0.3)]",
-      iconColor: "text-blue-300",
-    },
-    {
-      icon: Cpu,
-      title: t("about.skills.devops"),
-      glowColor: "rgba(168, 85, 247, 0.5)",
-      spotlightColor: "rgba(168, 85, 247, 0.15)",
-      iconBg: "bg-purple-500/20",
-      iconBorder: "border-purple-400/30",
-      iconShadow: "shadow-[0_0_20px_rgba(168,85,247,0.3)]",
-      iconColor: "text-purple-300",
-    },
-    {
-      icon: Code2,
-      title: t("about.skills.fullstack"),
-      glowColor: "rgba(16, 185, 129, 0.5)",
-      spotlightColor: "rgba(16, 185, 129, 0.15)",
-      iconBg: "bg-emerald-500/20",
-      iconBorder: "border-emerald-400/30",
-      iconShadow: "shadow-[0_0_20px_rgba(16,185,129,0.3)]",
-      iconColor: "text-emerald-300",
-    },
-    {
-      icon: Globe2,
-      title: t("about.skills.english"),
-      glowColor: "rgba(249, 115, 22, 0.5)",
-      spotlightColor: "rgba(249, 115, 22, 0.15)",
-      iconBg: "bg-orange-500/20",
-      iconBorder: "border-orange-400/30",
-      iconShadow: "shadow-[0_0_20px_rgba(249,115,22,0.3)]",
-      iconColor: "text-orange-300",
-    },
-  ];
-
-  const lensContent = React.useMemo(() => (
-    <div className="space-y-6 md:space-y-8 flex flex-col justify-between h-full py-4">
-      <div className="h-1/3 flex items-center justify-center">
-        <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
-          {t("about.revealed.trustworthy")}
-        </span>
+  const lensContent = useMemo(
+    () => (
+      <div className="space-y-6 md:space-y-8 flex flex-col justify-between h-full py-4">
+        {["trustworthy", "collaborative", "dedicated"].map((key) => (
+          <div key={key} className="h-1/3 flex items-center justify-center">
+            <span className="text-2xl md:text-5xl font-black tracking-widest text-[var(--zone-a-1)] drop-shadow-[0_0_15px_color-mix(in_oklab,var(--zone-a-1)_50%,transparent)]">
+              {t(`about.revealed.${key}`)}
+            </span>
+          </div>
+        ))}
       </div>
-      <div className="h-1/3 flex items-center justify-center">
-        <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
-          {t("about.revealed.collaborative")}
-        </span>
-      </div>
-      <div className="h-1/3 flex items-center justify-center">
-        <span className="text-2xl md:text-5xl font-black tracking-widest text-blue-400 drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">
-          {t("about.revealed.dedicated")}
-        </span>
-      </div>
-    </div>
-  ), [t]);
+    ),
+    [t],
+  );
 
   return (
-    <section className="relative py-32 px-6 max-w-6xl mx-auto z-10">
-      {/* Heavy colorful deep space ambient glows for Apple style glassmorphism */}
-      <motion.div
-        className="absolute top-0 right-0 w-[20rem] md:w-[45rem] h-[20rem] md:h-[45rem] bg-orange-500/10 rounded-full mix-blend-screen filter blur-[60px] md:blur-[150px] pointer-events-none"
-        animate={{ x: [0, 20, -10, 0], y: [0, -15, 10, 0] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-0 left-0 w-[18rem] md:w-[40rem] h-[18rem] md:h-[40rem] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[60px] md:blur-[150px] pointer-events-none"
-        animate={{ x: [0, -20, 15, 0], y: [0, 10, -15, 0] }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 3,
-        }}
-      />
+    <Section id="about">
+      <AmbientOrbs orbs={ORBS} />
 
       <motion.div
         variants={containerVariants}
@@ -119,77 +71,42 @@ export function About() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
       >
-        <motion.div variants={itemVariants} className="mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tighter uppercase flex items-center flex-wrap gap-y-4">
-            <motion.div
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="mr-4 text-blue-500"
-            >
-              <Cpu className="w-12 h-12 md:w-16 md:h-16" />
-            </motion.div>
-
-            <SplitText
-              text={t("about.title_part1")}
-              delay={30}
-              animationFrom={{
-                opacity: 0,
-                transform: "translate3d(0, 30px, 0)",
-              }}
-              animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
-            />
-
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 25,
-                delay: 0.1,
-              }}
-              className="mx-4 md:mx-8 w-2.5 h-2.5 rounded-full bg-blue-400 shadow-[0_0_15px_rgba(96,165,250,0.8)]"
-            />
-
-            <span className="text-white/40">
-              <SplitText
-                text={t("about.title_part2")}
-                delay={30}
-                animationFrom={{
-                  opacity: 0,
-                  transform: "translate3d(0, 30px, 0)",
-                }}
-                animationTo={{ opacity: 1, transform: "translate3d(0, 0, 0)" }}
-              />
-            </span>
-          </h2>
-          <motion.div
-            className="w-24 h-1 bg-blue-500/50 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.6)]"
-            initial={{ width: 0 }}
-            whileInView={{ width: 96 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+        <motion.div variants={itemVariants}>
+          <SectionHeading
+            icon={Cpu}
+            accent="cold"
+            title={t("about.title_part1")}
+            subtitle={t("about.title_part2")}
           />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-14 items-center">
           <motion.div variants={itemVariants}>
-            <Suspense fallback={<div className="rounded-3xl border border-white/5 bg-white/[0.02] h-64 md:h-80" />}>
+            <Suspense
+              fallback={
+                <div className="rounded-3xl border border-white/5 bg-white/[0.02] h-64 md:h-80" />
+              }
+            >
               <LazyFluidGlass
                 mode="lens"
                 blurAmount={2}
                 tintColor="rgba(100, 130, 255, 0.08)"
                 tintOpacity={0.5}
                 borderRadius="1.5rem"
-                className="space-y-8 text-lg md:text-xl leading-relaxed font-light p-8 md:p-10"
+                className="space-y-6 text-lg md:text-xl leading-relaxed font-light p-7 md:p-9"
                 containerClassName="rounded-3xl border border-white/5 bg-white/[0.02]"
                 revealedChildren={lensContent}
               >
-                <div className="space-y-8 text-gray-300">
-                  <ScrollReveal baseOpacity={0.15} blurStrength={3}>
+                <div className="space-y-6 text-gray-300">
+                  {/*
+                    baseOpacity was 0.15 with a 3px blur, which left the most
+                    important copy on the page unreadable for most of the scroll.
+                    The reveal survives; the floor is now legible on its own.
+                  */}
+                  <ScrollReveal baseOpacity={0.45} blurStrength={1.5}>
                     {t("about.bio_p1")}
                   </ScrollReveal>
-                  <ScrollReveal baseOpacity={0.15} blurStrength={3}>
+                  <ScrollReveal baseOpacity={0.45} blurStrength={1.5}>
                     {t("about.bio_p2")}
                   </ScrollReveal>
                 </div>
@@ -197,61 +114,28 @@ export function About() {
             </Suspense>
           </motion.div>
 
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-2 gap-4 md:gap-6 relative z-10"
-          >
-            {skills.map((skill, idx) => {
-              const Icon = skill.icon;
-              return (
-                <TiltedCard
-                  key={idx}
-                  rotateAmplitude={12}
-                  scaleOnHover={1.04}
-                  containerClassName="h-full"
-                  className="h-full"
+          <motion.div variants={itemVariants} className="relative z-10">
+            <h3 className="text-[11px] font-medium uppercase tracking-[0.22em] text-gray-400 mb-5">
+              {t("about.skills_title")}
+            </h3>
+            <dl className="flex flex-col">
+              {SKILLS.map((skill) => (
+                <div
+                  key={skill}
+                  className="py-4 border-t border-white/10 first:border-t-0 first:pt-0"
                 >
-                  <BorderGlow
-                    glowColor={skill.glowColor}
-                    edgeSensitivity={30}
-                    backgroundColor="#120F17"
-                    borderRadius={28}
-                    glowRadius={40}
-                    glowIntensity={1}
-                    coneSpread={25}
-                    animated={false}
-                    colors={["#c084fc", "#f472b6", "#38bdf8"]}
-                    className="h-full"
-                  >
-                    <SpotlightCard
-                      spotlightColor={skill.spotlightColor}
-                      className="p-8 text-center flex flex-col items-center justify-center h-full"
-                    >
-                      <motion.div
-                        whileHover={{ scale: 1.15, rotate: 5 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 15,
-                        }}
-                        className={`w-16 h-16 rounded-2xl ${skill.iconBg} flex items-center justify-center border ${skill.iconBorder} ${skill.iconShadow}`}
-                      >
-                        <Icon 
-                          className={`w-8 h-8 ${skill.iconColor}`} 
-                          aria-hidden="true"
-                        />
-                      </motion.div>
-                      <h3 className="text-white font-bold pt-5 tracking-wide uppercase text-sm md:text-base">
-                        {skill.title}
-                      </h3>
-                    </SpotlightCard>
-                  </BorderGlow>
-                </TiltedCard>
-              );
-            })}
+                  <dt className="text-lg md:text-xl font-bold text-white tracking-tight">
+                    {t(`about.skills.${skill}.title`)}
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-400 leading-relaxed font-light">
+                    {t(`about.skills.${skill}.proof`)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </motion.div>
         </div>
       </motion.div>
-    </section>
+    </Section>
   );
 }

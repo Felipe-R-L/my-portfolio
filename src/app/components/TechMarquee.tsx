@@ -1,96 +1,86 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 
-const frontendLogos = [
-  { src: "https://cdn.simpleicons.org/react/61DAFB", title: "React" },
-  { src: "https://cdn.simpleicons.org/nextdotjs/white", title: "Next.js" },
-  { src: "https://cdn.simpleicons.org/angular/DD0031", title: "Angular" },
-  {
-    src: "https://cdn.simpleicons.org/tailwindcss/06B6D4",
-    title: "Tailwind CSS",
-  },
-  { src: "https://cdn.simpleicons.org/sass/CC6699", title: "Sass" },
-];
+import { frontendLogos, backendLogos, type TechLogo } from "../data/techStack";
+import { useIsMobile } from "../hooks/useIsMobile";
 
-const backendLogos = [
-  {
-    src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
-    title: "Java",
-  },
-  { src: "https://cdn.simpleicons.org/typescript/3178C6", title: "TypeScript" },
-  { src: "https://cdn.simpleicons.org/nestjs/E0234E", title: "NestJS" },
-  { src: "https://cdn.simpleicons.org/nx/white", title: "NX" },
-  { src: "https://cdn.simpleicons.org/prisma/white", title: "Prisma ORM" },
-  {
-    src: "https://assets.tigerdata.com/timescale-web/brand/tiger-data/flat-logos/logo-badge-yellow.svg",
-    title: "TimescaleDB",
-  },
-  { src: "https://cdn.simpleicons.org/postgresql/4169E1", title: "PostgreSQL" },
-  { src: "https://cdn.simpleicons.org/hivemq/FFEE00", title: "HiveMQ" },
-  {
-    src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg",
-    title: "GCP",
-  },
-  { src: "https://cdn.simpleicons.org/docker/2496ED", title: "Docker" },
-];
+/** Rendered logo box: h-16 on mobile, h-20 from md up. */
+const LOGO_SIZE = 80;
+
+function LogoRow({
+  logos,
+  repetitions,
+  x,
+  className,
+}: {
+  logos: TechLogo[];
+  repetitions: number;
+  x: ReturnType<typeof useTransform<number, number>>;
+  className?: string;
+}) {
+  return (
+    <motion.div style={{ x }} className={`flex gap-16 whitespace-nowrap px-4 ${className ?? ""}`}>
+      {Array.from({ length: repetitions }, (_, rep) =>
+        logos.map((logo) => (
+          <div key={`${rep}-${logo.title}`} className="flex-shrink-0 group">
+            <img
+              src={logo.src}
+              alt={logo.title}
+              /* Explicit dimensions reserve layout space and keep CLS at zero. */
+              width={LOGO_SIZE}
+              height={LOGO_SIZE}
+              loading="lazy"
+              decoding="async"
+              /* The row is decorative repetition — only the first pass needs
+                 to be announced, the rest are duplicates for screen readers. */
+              aria-hidden={rep > 0 ? "true" : undefined}
+              /* Fifteen full-colour brand marks directly under his name were the
+                 loudest band on the page and pulled against the two-zone palette.
+                 They run desaturated and regain their own colours on hover. */
+              className="h-16 md:h-20 w-auto object-contain grayscale opacity-60 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 motion-reduce:transition-none"
+            />
+          </div>
+        )),
+      )}
+    </motion.div>
+  );
+}
 
 export default function TechMarquee() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   });
 
-  const x1 = useTransform(scrollYProgress, [0, 1], [0, -1000]);
-  const x2 = useTransform(scrollYProgress, [0, 1], [-1000, 0]);
+  // Rounded for the same reason as the ScrollReveal words: Lenis settles on
+  // fractional scroll positions, and a fractional translate leaves the logos
+  // shimmering between two device pixels as the scroll comes to rest.
+  const x1 = useTransform(scrollYProgress, (p) => Math.round(p * -1000));
+  const x2 = useTransform(scrollYProgress, (p) => Math.round(-1000 + p * 1000));
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-  
-  // Frontend has 5 logos, Backend has 10. 
-  // We need Frontend to repeat more to avoid gaps.
-  const frontendRepetitions = isMobile ? 4 : 8; 
+  // Each logo occupies ~144px (80px box + 64px gap). Enough repetitions to
+  // cover the widest viewport plus the 1000px scroll travel, and no more —
+  // the previous 8x/4x produced 80 DOM nodes of the same 15 images.
+  const frontendRepetitions = isMobile ? 3 : 5;
   const backendRepetitions = isMobile ? 2 : 4;
-
-  const frontendDisplay = Array(frontendRepetitions).fill(frontendLogos).flat();
-  const backendDisplay = Array(backendRepetitions).fill(backendLogos).flat();
 
   return (
     <section
       ref={containerRef}
-      className="py-24 overflow-hidden bg-transparent relative z-10"
+      className="py-16 md:py-20 overflow-hidden bg-transparent relative z-10"
+      aria-label="Technology stack"
     >
       <div className="flex flex-col gap-12">
-        {/* Frontend Row */}
-        <motion.div
-          style={{ x: x1 }}
-          className="flex gap-16 whitespace-nowrap px-4"
-        >
-          {frontendDisplay.map((logo, idx) => (
-            <div key={idx} className="flex-shrink-0 group">
-              <img
-                src={logo.src}
-                alt={logo.title}
-                className="h-16 md:h-20 w-auto object-contain transition-transform duration-500 group-hover:scale-110"
-              />
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Backend Row */}
-        <motion.div
-          style={{ x: x2 }}
-          className="flex gap-16 whitespace-nowrap px-4 ml-[-500px] md:ml-[-1000px]"
-        >
-          {backendDisplay.map((logo, idx) => (
-            <div key={idx} className="flex-shrink-0 group">
-              <img
-                src={logo.src}
-                alt={logo.title}
-                className="h-16 md:h-20 w-auto object-contain transition-transform duration-500 group-hover:scale-110"
-              />
-            </div>
-          ))}
-        </motion.div>
+        <LogoRow logos={frontendLogos} repetitions={frontendRepetitions} x={x1} />
+        <LogoRow
+          logos={backendLogos}
+          repetitions={backendRepetitions}
+          x={x2}
+          className="ml-[-500px] md:ml-[-1000px]"
+        />
       </div>
     </section>
   );
