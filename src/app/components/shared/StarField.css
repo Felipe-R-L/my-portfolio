@@ -1,0 +1,50 @@
+/*
+ * Static CSS starfield used in place of the WebGL Galaxy on mobile and under
+ * `prefers-reduced-motion`.
+ *
+ * Everything here is a single composited paint with no JS, no canvas and no
+ * animation frame — it costs essentially nothing after first paint, while
+ * keeping the deep-space depth the design relies on.
+ */
+.starfield {
+  position: absolute;
+  inset: 0;
+  background-color: #030305;
+  /* Nebula glows, matching the Galaxy's blue/violet hue shift. */
+  background-image:
+    radial-gradient(60% 45% at 50% 0%, rgba(60, 80, 200, 0.18), transparent 70%),
+    radial-gradient(45% 35% at 85% 55%, rgba(120, 60, 200, 0.14), transparent 70%),
+    radial-gradient(50% 40% at 10% 80%, rgba(40, 70, 180, 0.12), transparent 70%);
+}
+
+.starfield::before,
+.starfield::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+}
+
+/* Dense layer of small, dim stars. */
+.starfield::before {
+  background-image:
+    radial-gradient(1px 1px at 20px 32px, rgba(220, 230, 255, 0.85), transparent),
+    radial-gradient(1px 1px at 96px 140px, rgba(220, 230, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 158px 58px, rgba(200, 215, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 62px 190px, rgba(220, 230, 255, 0.75), transparent),
+    radial-gradient(1px 1px at 208px 108px, rgba(200, 215, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 132px 226px, rgba(220, 230, 255, 0.65), transparent);
+  background-size: 260px 260px;
+  opacity: 0.6;
+}
+
+/* Sparse layer of larger, brighter stars for depth. */
+.starfield::after {
+  background-image:
+    radial-gradient(1.6px 1.6px at 48px 76px, rgba(255, 255, 255, 0.95), transparent),
+    radial-gradient(1.6px 1.6px at 286px 198px, rgba(210, 225, 255, 0.85), transparent),
+    radial-gradient(2px 2px at 176px 312px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1.6px 1.6px at 342px 44px, rgba(200, 220, 255, 0.75), transparent);
+  background-size: 420px 420px;
+  opacity: 0.5;
+}

@@ -1,0 +1,25 @@
+/*
+ * The caret used to be blinked by GSAP (`gsap.to(..., { yoyo: true })`), which
+ * pulled the whole ~70 KB library into the bundle to animate one opacity value.
+ * A CSS keyframe does the same job, runs on the compositor, and costs nothing.
+ */
+@keyframes text-type-cursor-blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.text-type-cursor {
+  animation: text-type-cursor-blink var(--text-type-blink-duration, 0.5s)
+    ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-type-cursor {
+    animation: none;
+    opacity: 1;
+  }
+}

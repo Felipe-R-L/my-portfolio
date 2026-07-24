@@ -1,0 +1,40 @@
+/**
+ * One measure and one vertical rhythm for the whole page.
+ *
+ * Before this file every section picked its own container (`max-w-6xl` in About
+ * and Projects, `max-w-7xl` in Services, another in Contact), so the left edge
+ * of the content shifted as you scrolled. And every section used the same
+ * `py-32` with an `mb-20` heading, which put 336px of empty space in front of
+ * every section regardless of its importance.
+ */
+:root {
+  /* Zone A — who he is: Hero, stack, About, Experience. */
+  --zone-a-1: #4c8dff;
+  --zone-a-2: #8b5cf6;
+  /* Zone B — what he delivers: Projects, Services, Contact. */
+  --zone-b-1: #f0a63c;
+  --zone-b-2: #ec4899;
+
+  /* Three deliberate steps instead of one uniform gap. */
+  --rhythm-section: clamp(4.5rem, 8vw, 7rem);
+  --rhythm-block: clamp(2rem, 3.5vw, 3rem);
+
+  --measure: 72rem;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+}
+
+.section-shell {
+  padding-block: var(--rhythm-section);
+  padding-inline: var(--gutter);
+}
+
+.measure {
+  max-width: var(--measure);
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* Heading to content. Replaces the blanket `mb-20` on every SectionHeading. */
+.rhythm-block {
+  margin-bottom: var(--rhythm-block);
+}

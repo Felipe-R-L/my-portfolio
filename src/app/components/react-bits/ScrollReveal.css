@@ -7,7 +7,11 @@
   flex-wrap: wrap;
 }
 
+/*
+ * No permanent `will-change` here: it promoted every single word to its own
+ * compositor layer for the life of the page. Motion sets and clears it around
+ * the animation instead, which is what the hint is for.
+ */
 .scroll-reveal-word {
   display: inline-block;
-  will-change: transform, opacity, filter;
 }
