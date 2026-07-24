@@ -33,16 +33,27 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('motion')) return 'motion';
-            if (id.includes('lucide-react')) return 'lucide-react';
-            if (id.includes('react') || id.includes('react-dom') || id.includes('i18next') || id.includes('react-router')) return 'vendor-ui';
-            if (id.includes('ogl') || id.includes('three')) return 'webgl-libs';
-          }
-        }
-      }
+          if (!id.includes("node_modules")) return;
+
+          // Match on package directory boundaries. The previous version used
+          // bare `id.includes('react')`, which swallowed every package with
+          // "react" anywhere in its path (react-i18next, ogl's paths, ...)
+          // into `vendor-ui` before the later `ogl` branch could ever run.
+          const match = id.match(/node_modules\/(?:\.pnpm\/)?(?:([^@/]+)|(@[^/]+\/[^/]+))/);
+          const pkg = match?.[2] ?? match?.[1] ?? "";
+
+          if (pkg === "ogl") return "webgl-libs";
+          if (pkg === "motion" || pkg === "framer-motion" || pkg === "motion-dom" || pkg === "motion-utils")
+            return "motion";
+          if (pkg === "lucide-react") return "lucide-react";
+          if (pkg.startsWith("i18next") || pkg === "react-i18next") return "i18n";
+          if (pkg === "react" || pkg === "react-dom" || pkg === "scheduler") return "react";
+
+          return "vendor";
+        },
+      },
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 600,
   },
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ["**/*.svg", "**/*.csv"],
