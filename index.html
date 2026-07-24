@@ -9,25 +9,46 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://felipe-leone.com/" />
+    <meta property="og:url" content="https://feliperl.space/" />
     <meta property="og:title" content="Felipe Rodrigues Leone | Full-Stack Developer" />
     <meta property="og:description" content="Building high-performance, scalable web solutions with a focus on Clean Architecture and Modern Technologies." />
-    <meta property="og:image" content="/assets/profile/profile.webp" />
+    <meta property="og:image" content="https://feliperl.space/assets/profile/profile-640.webp" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://felipe-leone.com/" />
+    <meta property="twitter:url" content="https://feliperl.space/" />
     <meta property="twitter:title" content="Felipe Rodrigues Leone | Full-Stack Developer" />
     <meta property="twitter:description" content="Building high-performance, scalable web solutions with a focus on Clean Architecture and Modern Technologies." />
-    <meta property="twitter:image" content="/assets/profile/profile.webp" />
+    <meta property="twitter:image" content="https://feliperl.space/assets/profile/profile-640.webp" />
 
     <title>Felipe Rodrigues Leone | Full-Stack Developer Portfolio</title>
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
     
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Critical resources, discoverable in the initial document so the browser
+      can start fetching them before the JS bundle parses.
+
+      The font and the hero portrait were previously only discovered after
+      React mounted (LCP "requestDiscoverable: false"), and the font sat behind
+      a chain of two third-party requests to Google. Both are now same-origin.
+    -->
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/profile/profile-448.webp"
+      imagesrcset="/assets/profile/profile-320.webp 320w, /assets/profile/profile-448.webp 448w, /assets/profile/profile-640.webp 640w"
+      imagesizes="(max-width: 767px) 240px, (max-width: 1023px) 400px, 448px"
+      fetchpriority="high"
+    />
     <style>
       html,
       body {
