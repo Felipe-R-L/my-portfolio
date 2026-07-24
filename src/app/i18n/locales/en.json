@@ -8,7 +8,11 @@
   "hero": {
     "badge": "Available for new projects",
     "title_part1": "Engineering",
-    "title_part2_variants": ["Solutions", "Experiences", "Ideas"],
+    "title_part2_variants": [
+      "Solutions",
+      "Experiences",
+      "Ideas"
+    ],
     "description": "Building scalable, high-performance web applications with a premium aesthetic.",
     "cta_projects": "View Projects",
     "cta_contact": "Get in Touch",
@@ -17,18 +21,31 @@
   "about": {
     "title_part1": "Strategy",
     "title_part2": "Identity.",
-    "bio_p1": "Specialized in high-impact SaaS engineering, currently driving technological evolution at OMDfarm. I bridge the gap between complex technical strategies and exceptional user experiences.",
+    "bio_p1": "Specialized in high-impact SaaS engineering, currently driving technological evolution at OMD do Brasil. I bridge the gap between complex technical strategies and exceptional user experiences.",
     "bio_p2": "My approach integrates Domain-Driven Design and Clean Architecture to build robust, scalable software. More than just writing code, I design systems that evolve with your vision.",
     "revealed": {
       "trustworthy": "TRUSTWORTHY",
       "collaborative": "COLLABORATIVE",
       "dedicated": "DEDICATED"
     },
+    "skills_title": "Capabilities",
     "skills": {
-      "clean_arch": "Clean Architecture",
-      "devops": "DevOps & Cloud",
-      "fullstack": "Fullstack Expert",
-      "english": "English (C2)"
+      "clean_arch": {
+        "title": "Clean Architecture",
+        "proof": "Domain-Driven Design and Clean Architecture across Nx and Turborepo monorepos."
+      },
+      "devops": {
+        "title": "DevOps & Cloud",
+        "proof": "Infrastructure as code with Terraform, containers and CI/CD in production."
+      },
+      "fullstack": {
+        "title": "Fullstack, end to end",
+        "proof": "Java, TypeScript, NestJS, Angular, React, Prisma, Drizzle and PostgreSQL."
+      },
+      "english": {
+        "title": "English (C2)",
+        "proof": "I read, write and present in English without a middleman."
+      }
     }
   },
   "contact": {
@@ -50,42 +67,81 @@
     }
   },
   "projects": {
-    "title_part1": "Innovation",
-    "title_part2": "Results.",
+    "title_part1": "Personal",
+    "title_part2": "And Freelance.",
+    "lead": "Projects where I built everything — from the database schema to the checkout.",
+    "labels": {
+      "live": "Visit site",
+      "code": "Code",
+      "private_no_deploy": "Private repo · no deploy",
+      "live_aria": "Visit the {{name}} website, opens in a new tab",
+      "code_aria": "View the {{name}} source code on GitHub, opens in a new tab"
+    },
+    "dallas_sync": {
+      "title": "Dallas Sync",
+      "category": "PMS / ERP",
+      "status": "In progress, with a real client",
+      "description": "A motel ERP that keeps running when the internet drops. Multi-tenant, co-developed with a real client, with FIFO inventory costing, a rate engine that handles public holidays, and row-level security across every table.",
+      "arch": {
+        "offline": "Connection lost",
+        "caption": "The front desk keeps working",
+        "step1_title": "Check-in → tab → payment → checkout",
+        "step1_note": "written locally, no network",
+        "link1": "Dexie · IndexedDB",
+        "step2_title": "Outbox, causal ordering",
+        "step2_note": "operations queued",
+        "link2": "network returns",
+        "step3_title": "Server reconciles",
+        "step3_note": "idempotent, dead-letter with retry"
+      }
+    },
     "secret": {
       "title": "Secret Boutique",
-      "category": "Premium E-commerce",
-      "description": "End-to-end development of a niche e-commerce focused on wellness and self-care. A robust platform with secure checkout and total focus on conversion and performance.",
-      "github_aria": "View Secret Boutique source code on GitHub",
-      "live_aria": "Visit Secret Boutique live website"
+      "category": "E-commerce",
+      "status": "Personal project",
+      "description": "A store built entirely around discretion: age verification at the door, anonymous reviews, a panic button, and orders traceable by room without identifying the guest."
     },
-    "dallas": {
+    "dallas_motel": {
       "title": "Dallas Motel",
-      "category": "Performance & Conversion",
-      "description": "Strategic digital presence for the hospitality sector. High-performance front-end designed to maximize conversion and elevate user experience.",
-      "github_aria": "View Dallas Motel source code on GitHub",
-      "live_aria": "Visit Dallas Motel live website"
+      "category": "Landing + menu",
+      "status": "Freelance",
+      "description": "Institutional site with a digital menu and an admin panel so management can edit suites, prices and holidays without a developer."
     }
   },
   "experience": {
     "title_part1": "Evolution",
     "title_part2": "Legacy.",
+    "lead": "Products I build with a team.",
     "omd": {
       "company": "OMD do Brasil",
-      "role": "Software Developer",
-      "description": "Architecting the OMDfarm SaaS ecosystem—the leading telemetry and management platform for large-scale agribusiness.",
-      "h1": "High-throughput pipeline processing over 5 million monthly events using BullMQ and TimescaleDB.",
-      "h2": "GIS failure analysis tools with Google Maps API, presented to attendees at the largest fair of technology for agribusiness in LATAM, Agrishow.",
-      "h3": "Real-time IoT machinery tracking via MQTT for sub-second telemetry ingestion.",
-      "h4": "Advanced BI Dashboards with ECharts, optimizing SQL queries for instant big data analytics."
-    },
-    "consulting": {
-      "company": "IT Consulting & Dallas Motel",
-      "role": "Strategic Tech Lead",
-      "description": "Leading digital transformation and building custom operational ecosystems to optimize business management.",
-      "h1": "AI-driven financial dashboard that reduced operational overhead by 25%.",
-      "h2": "Proprietary PMS (Property Management System) for end-to-end hospitality operations.",
-      "h3": "Digital guest ecosystem and premium in-room media server infrastructure."
+      "role": "Fullstack developer",
+      "role_detail": "Architecture, infrastructure and technical leadership",
+      "period": "Aug 2024 — present",
+      "omdfarm": {
+        "name": "OMDfarm",
+        "category": "Precision agriculture",
+        "contribution": "Project author",
+        "description": "Real-time telemetry for agricultural machinery: operational map, field logs, productivity BI and an external API for third-party integration. I wrote the initial project and defined the architecture — Nx, clean architecture on the server, standalone Angular on the front — plus the Terraform infrastructure. Presented at Agrishow.",
+        "metrics": {
+          "points": "telemetry points",
+          "machines": "machines served",
+          "days": "days of telemetry"
+        },
+        "metrics_source": "Figures published on the OMDfarm landing page.",
+        "visit": "View the platform",
+        "visit_aria": "Visit the OMDfarm landing page, opens in a new tab",
+        "private": "Private repository"
+      },
+      "eco360": {
+        "name": "Gestão Eco 360",
+        "category": "Fleet management",
+        "contribution": "Infrastructure architect",
+        "description": "Multi-tenant platform for waste collection fleet management: live tracking, onboard video telemetry and route coverage by district. I built the entire infrastructure and deployment layer from scratch and delivered the highest-risk subsystems — cross-tenant asset sharing, row-level isolation and snap-to-road telemetry.",
+        "no_public_page": "Internal platform · no public page",
+        "visit": "Open · login required",
+        "visit_aria": "Open Gestão Eco 360, login required, opens in a new tab",
+        "private": "Private repository"
+      }
     }
   },
   "services": {

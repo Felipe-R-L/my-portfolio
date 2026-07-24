@@ -8,7 +8,11 @@
   "hero": {
     "badge": "Disponível para novos projetos",
     "title_part1": "Materializando",
-    "title_part2_variants": ["Soluções", "Experiências", "Ideias"],
+    "title_part2_variants": [
+      "Soluções",
+      "Experiências",
+      "Ideias"
+    ],
     "description": "Desenvolvendo aplicações web escaláveis e de alta performance com estética premium.",
     "cta_projects": "Ver Projetos",
     "cta_contact": "Entrar em Contato",
@@ -17,18 +21,31 @@
   "about": {
     "title_part1": "Estratégia",
     "title_part2": "Identidade.",
-    "bio_p1": "Especialista em engenharia de soluções SaaS de alto impacto, atualmente liderando a evolução tecnológica na OMDfarm. Conecto estratégias técnicas complexas a experiências de uso excepcionais.",
+    "bio_p1": "Especialista em engenharia de soluções SaaS de alto impacto, atualmente liderando a evolução tecnológica na OMD do Brasil. Conecto estratégias técnicas complexas a experiências de uso excepcionais.",
     "bio_p2": "Minha abordagem une Domain-Driven Design e Clean Architecture para criar softwares robustos e escaláveis. Mais do que escrever código, projeto sistemas que acompanham o crescimento da sua visão.",
     "revealed": {
       "trustworthy": "CONFIÁVEL",
       "collaborative": "COLABORATIVO",
       "dedicated": "DEDICADO"
     },
+    "skills_title": "Capacidades",
     "skills": {
-      "clean_arch": "Arquitetura Limpa",
-      "devops": "DevOps & Cloud",
-      "fullstack": "Especialista Fullstack",
-      "english": "Inglês (C2)"
+      "clean_arch": {
+        "title": "Arquitetura Limpa",
+        "proof": "Domain-Driven Design e Clean Architecture em monorepos Nx e Turborepo."
+      },
+      "devops": {
+        "title": "DevOps & Cloud",
+        "proof": "Infraestrutura como código com Terraform, containers e CI/CD em produção."
+      },
+      "fullstack": {
+        "title": "Fullstack de ponta a ponta",
+        "proof": "Java, TypeScript, NestJS, Angular, React, Prisma, Drizzle e PostgreSQL."
+      },
+      "english": {
+        "title": "Inglês (C2)",
+        "proof": "Leio, escrevo e apresento em inglês sem intermediário."
+      }
     }
   },
   "contact": {
@@ -50,42 +67,81 @@
     }
   },
   "projects": {
-    "title_part1": "Inovação",
-    "title_part2": "Resultados.",
+    "title_part1": "Autoral",
+    "title_part2": "E Freela.",
+    "lead": "Projetos em que fiz tudo — do schema do banco ao checkout.",
+    "labels": {
+      "live": "Ver o site",
+      "code": "Código",
+      "private_no_deploy": "Repositório privado · sem deploy",
+      "live_aria": "Visitar o site de {{name}}, abre em nova aba",
+      "code_aria": "Ver o código de {{name}} no GitHub, abre em nova aba"
+    },
+    "dallas_sync": {
+      "title": "Dallas Sync",
+      "category": "PMS / ERP",
+      "status": "Em construção, com cliente real",
+      "description": "ERP de motel que não para quando a internet cai. Multi-tenant, co-desenvolvido com um cliente real, com custeio FIFO de estoque, motor de tarifas com feriados e isolamento por RLS em todas as tabelas.",
+      "arch": {
+        "offline": "Internet caiu",
+        "caption": "A recepção continua operando",
+        "step1_title": "Check-in → comanda → pagamento → checkout",
+        "step1_note": "grava local, sem rede",
+        "link1": "Dexie · IndexedDB",
+        "step2_title": "Outbox, ordem causal",
+        "step2_note": "operações na fila",
+        "link2": "rede volta",
+        "step3_title": "Servidor reconcilia",
+        "step3_note": "idempotente, dead-letter com retry"
+      }
+    },
     "secret": {
       "title": "Secret Boutique",
-      "category": "E-commerce Premium",
-      "description": "Desenvolvimento completo de um e-commerce de nicho focado em bem-estar e autocuidado. Plataforma robusta com checkout seguro e foco total em conversão e performance.",
-      "github_aria": "Ver código fonte da Secret Boutique no GitHub",
-      "live_aria": "Visitar site oficial da Secret Boutique"
+      "category": "E-commerce",
+      "status": "Projeto autoral",
+      "description": "Loja construída inteira em torno de discrição: verificação de idade na entrada, avaliações anônimas, botão de pânico e pedidos rastreáveis por quarto sem identificar o hóspede."
     },
-    "dallas": {
+    "dallas_motel": {
       "title": "Dallas Motel",
-      "category": "Performance & Conversão",
-      "description": "Presença digital estratégica para o setor de hospitalidade. Front-end de alta performance projetado para maximizar a conversão e elevar a experiência do usuário.",
-      "github_aria": "Ver código fonte do Dallas Motel no GitHub",
-      "live_aria": "Visitar site oficial do Dallas Motel"
+      "category": "Landing + cardápio",
+      "status": "Freela",
+      "description": "Site institucional com cardápio digital e painel para a gerência editar suítes, preços e feriados sem depender de dev."
     }
   },
   "experience": {
     "title_part1": "Evolução",
     "title_part2": "Legado.",
+    "lead": "Produtos que construo em time.",
     "omd": {
       "company": "OMD do Brasil",
-      "role": "Software Developer",
-      "description": "Responsável pela arquitetura do ecossistema SaaS OMDfarm—plataforma líder em telemetria e gestão para o agronegócio de larga escala.",
-      "h1": "Pipeline de alta vazão processando mais de 5 milhões de eventos mensais com BullMQ e TimescaleDB.",
-      "h2": "Ferramentas de análise GIS com API do Google Maps, apresentadas na maior feira de tecnologia para o agronegócio da América Latina, a Agrishow.",
-      "h3": "Monitoramento IoT em tempo real via MQTT para ingestão de telemetria com latência mínima.",
-      "h4": "Dashboards de BI avançados com ECharts, otimizando queries SQL para analytics instantâneo de Big Data."
-    },
-    "consulting": {
-      "company": "Consultoria TI & Dallas Motel",
-      "role": "Tech Lead & Consultor Estratégico",
-      "description": "Liderança técnica em projetos de transformação digital e criação de ecossistemas operacionais sob medida.",
-      "h1": "Dashboard financeiro inteligente que reduziu custos operacionais em 25%.",
-      "h2": "Arquitetura de PMS (Property Management System) proprietário para gestão hoteleira de ponta a ponta.",
-      "h3": "Ecossistema digital para hóspedes e infraestrutura de servidores de mídia em quartos premium."
+      "role": "Desenvolvedor fullstack",
+      "role_detail": "Arquitetura, infraestrutura e liderança técnica",
+      "period": "ago/2024 — hoje",
+      "omdfarm": {
+        "name": "OMDfarm",
+        "category": "Agricultura de precisão",
+        "contribution": "Autor do projeto",
+        "description": "Telemetria de máquinas agrícolas em tempo real: mapa operacional, apontamentos, BI de produtividade e API externa para integração de terceiros. Escrevi o projeto inicial e defini a arquitetura — Nx, clean architecture no server, Angular standalone no front — além da infraestrutura em Terraform. Apresentado na Agrishow.",
+        "metrics": {
+          "points": "pontos de telemetria",
+          "machines": "máquinas atendidas",
+          "days": "dias de telemetria"
+        },
+        "metrics_source": "Números publicados na landing page da OMDfarm.",
+        "visit": "Ver a plataforma",
+        "visit_aria": "Visitar a landing page da OMDfarm, abre em nova aba",
+        "private": "Repositório privado"
+      },
+      "eco360": {
+        "name": "Gestão Eco 360",
+        "category": "Gestão de frota",
+        "contribution": "Arquiteto de infraestrutura",
+        "description": "Plataforma multi-tenant para gestão de frota de coleta de resíduos: rastreamento ao vivo, telemetria de vídeo embarcado e cobertura de rota por bairro. Construí toda a camada de infraestrutura e deploy do zero e entreguei os subsistemas de maior risco — compartilhamento de ativos entre tenants, isolamento por RLS e telemetria com snap-to-road.",
+        "no_public_page": "Plataforma interna · sem página pública",
+        "visit": "Abrir · requer login",
+        "visit_aria": "Abrir o Gestão Eco 360, requer login, abre em nova aba",
+        "private": "Repositório privado"
+      }
     }
   },
   "services": {
