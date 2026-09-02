@@ -171,6 +171,16 @@
     },
     "learn_more": "Learn More"
   },
+  "home": {
+    "writing": {
+      "title_part1": "From the",
+      "title_part2": "Blog.",
+      "lead": "A recent, technical look at a real problem — the clearest evidence of how I think.",
+      "read_more": "Continue reading",
+      "card_aria": "Read the full article: {{title}}",
+      "see_all": "See all articles"
+    }
+  },
   "footer": {
     "built_for_future": "Built for the future."
   },

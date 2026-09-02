@@ -9,6 +9,7 @@ import { About } from "./components/About";
 import { Experience } from "./components/Experience";
 import { Services } from "./components/Services";
 import { Projects } from "./components/Projects";
+import { LatestWriting } from "./components/LatestWriting";
 import { Contact } from "./components/Contact";
 import { StarField } from "./components/shared/StarField";
 import { SocialLinks } from "./components/shared/SocialLinks";
@@ -102,6 +103,7 @@ export default function AppLayout() {
         <Projects />
         <Experience />
         <Services />
+        <LatestWriting />
         <Contact />
 
         <footer className="relative z-10 mt-16 px-[var(--gutter)] pb-20">

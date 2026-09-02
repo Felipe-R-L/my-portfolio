@@ -171,6 +171,16 @@
     },
     "learn_more": "Saiba Mais"
   },
+  "home": {
+    "writing": {
+      "title_part1": "Direto do",
+      "title_part2": "Blog.",
+      "lead": "Um olhar técnico recente sobre um problema real — a evidência mais clara de como eu penso.",
+      "read_more": "Continuar lendo",
+      "card_aria": "Ler o artigo completo: {{title}}",
+      "see_all": "Ver todos os artigos"
+    }
+  },
   "footer": {
     "built_for_future": "Projetado para o amanhã."
   },
