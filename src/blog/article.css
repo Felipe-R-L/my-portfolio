@@ -1,0 +1,194 @@
+/**
+ * The article is the largest frosted object on the site: a lit document
+ * suspended over the same galaxy as everything else.
+ *
+ * The nav pill can be `bg-white/[0.06]` because it holds six words. A reading
+ * surface cannot — stars moving behind body text is the one thing that makes
+ * a nine-minute article unreadable. So the slab is a dense #080810 at 80%,
+ * and the galaxy stays visible at the margins and through the blur instead.
+ */
+.article {
+  --article-measure: 62ch;
+  --article-wide: var(--measure);
+  --article-ink: rgba(255, 255, 255, 0.9);
+  --article-dim: rgba(255, 255, 255, 0.6);
+  --article-faint: rgba(255, 255, 255, 0.4);
+  --article-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  padding-inline: var(--gutter);
+  padding-block: calc(var(--rhythm-section) * 1.5) var(--rhythm-section);
+}
+
+.article__slab {
+  max-width: var(--article-wide);
+  margin-inline: auto;
+  background: rgb(8 8 16 / 0.8);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 2rem;
+  box-shadow:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.08),
+    0 24px 80px rgb(0 0 0 / 0.5);
+  padding: clamp(1.75rem, 5vw, 4rem) 0;
+}
+
+/* Two tracks: prose locks to the measure, figures and code break out wider. */
+.article__body {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter), 1fr)
+    [wide-start] minmax(0, calc((var(--article-wide) - var(--article-measure)) / 2))
+    [text-start] min(var(--article-measure), 100%) [text-end]
+    minmax(0, calc((var(--article-wide) - var(--article-measure)) / 2)) [wide-end]
+    minmax(var(--gutter), 1fr) [full-end];
+
+  font-size: 18px;
+  line-height: 1.8;
+  font-weight: 400;
+  color: var(--article-ink);
+}
+
+.article__body > * { grid-column: text; }
+.article__body > figure,
+.article__body > pre,
+.article__body > .table-scroll,
+.article__body > .callout { grid-column: wide; }
+
+.article__body > p { margin: 0 0 1.4em; }
+
+/* Headings echo SectionHeading: uppercase, tight tracking, bold. */
+.article__body h2 {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 2.5em 0 0.6em;
+  position: relative;
+}
+
+.article__body h3 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin: 2em 0 0.5em;
+}
+
+/* Section numerals sit in the margin as slate marks. */
+.article__body h2[data-numeral]::before {
+  content: attr(data-numeral);
+  position: absolute;
+  left: -2.75rem;
+  top: 0.35em;
+  font-family: var(--article-mono);
+  font-size: 0.8rem;
+  color: var(--article-faint);
+}
+
+@media (max-width: 1200px) {
+  .article__body h2[data-numeral]::before {
+    position: static;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+}
+
+.article__body a {
+  color: var(--article-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--zone-a-1);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: color 0.3s;
+}
+.article__body a:hover { color: var(--zone-a-1); }
+
+.article__body strong { font-weight: 700; color: #fff; }
+.article__body ul, .article__body ol { margin: 0 0 1.4em; padding-left: 1.4em; }
+.article__body li { margin-bottom: 0.5em; }
+
+.article__body code {
+  font-family: var(--article-mono);
+  font-size: 0.9em;
+  background: rgb(255 255 255 / 0.07);
+  border-radius: 4px;
+  padding: 0.12em 0.4em;
+}
+
+.article__body pre {
+  background: rgb(0 0 0 / 0.4);
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 2em 0;
+}
+.article__body pre code {
+  background: none;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Wide content scrolls inside its own box; the page body never scrolls sideways. */
+.table-scroll { overflow-x: auto; margin: 2em 0; }
+.article__body table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.article__body th, .article__body td {
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  padding: 0.65rem 0.9rem;
+  text-align: left;
+}
+.article__body th {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--article-faint);
+}
+
+/* Callouts are operator notes, not decoration. */
+.callout {
+  background: rgb(255 255 255 / 0.04);
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-left: 2px solid var(--zone-a-1);
+  border-radius: 0 1rem 1rem 0;
+  padding: 1.25rem 1.5rem;
+  margin: 2em 0;
+}
+.callout__label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--article-dim);
+  margin: 0 0 0.6rem;
+}
+.callout > p:last-child { margin-bottom: 0; }
+
+.figure { margin: 2.5em 0; }
+.figure img, .figure__svg { width: 100%; height: auto; display: block; border-radius: 1rem; }
+.figure figcaption {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--article-faint);
+  margin-top: 0.75rem;
+}
+
+.heading-anchor {
+  opacity: 0;
+  margin-left: 0.4em;
+  color: var(--zone-a-1);
+  text-decoration: none;
+  font-size: 0.6em;
+  vertical-align: middle;
+}
+h2:hover .heading-anchor, h3:hover .heading-anchor, .heading-anchor:focus { opacity: 1; }
+
+.article__body .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5em 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .article *, .article *::before { animation: none !important; transition: none !important; }
+}
