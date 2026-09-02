@@ -46,6 +46,11 @@ export interface GlassNavProps {
 // it always fell back to this same backdrop blur while adding an SVG filter
 // whose height would now be animating, which is exactly what produced a
 // rendering glitch.
+//
+// This is the *desktop* recipe and it stays as it is. The pill floats over
+// the galaxy up there, so there is real light behind it to blur. The mobile
+// dock sits over the article slab instead, where a blur of near-black returns
+// near-black — see `.glass-dark` in styles/layout.css for what that needs.
 const GLASS =
   "border border-white/[0.14] bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16)]";
 
@@ -211,8 +216,8 @@ export function GlassNav({
       <nav
         ref={rootRef}
         aria-label="Primary"
-        className="md:hidden fixed inset-x-3 bottom-4 z-50"
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        className="md:hidden fixed inset-x-3 z-50"
+        style={{ bottom: "var(--dock-bottom)" }}
       >
         <motion.div
           initial={{ y: 100, opacity: 0 }}
@@ -223,7 +228,7 @@ export function GlassNav({
           <motion.div
             animate={{ height: open ? openHeight : CLOSED_HEIGHT, borderRadius: open ? OPEN_RADIUS : CLOSED_RADIUS }}
             transition={panelTransition}
-            className={cn("flex flex-col justify-end overflow-hidden", GLASS)}
+            className="glass-dark flex flex-col justify-end overflow-hidden"
           >
             <div
               id={panelId}

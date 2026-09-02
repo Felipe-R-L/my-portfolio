@@ -16,6 +16,7 @@ import { SocialLinks } from "./components/shared/SocialLinks";
 import { GlassNav, type GlassNavItem } from "./components/shared/GlassNav";
 import GradientText from "./components/react-bits/GradientText";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
+import { useHashScroll } from "./hooks/useHashScroll";
 import { useIsMobile } from "./hooks/useIsMobile";
 
 const LazyGalaxy = lazy(() => import("./components/react-bits/Galaxy"));
@@ -30,6 +31,9 @@ const LANGUAGES = [
 
 export default function AppLayout() {
   const lenisRef = useSmoothScroll();
+  // Honours `/#projects` and friends on arrival — links into the homepage from
+  // the blog are cross-document, so nothing else would act on the fragment.
+  useHashScroll(lenisRef);
   const { t, i18n } = useTranslation();
   const isReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();

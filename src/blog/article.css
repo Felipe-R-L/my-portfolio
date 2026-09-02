@@ -14,6 +14,9 @@
   --article-dim: rgba(255, 255, 255, 0.6);
   --article-faint: rgba(255, 255, 255, 0.4);
   --article-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* The inset between the slab's edge and the prose. Tightens on a phone,
+     where the slab goes full-bleed and every pixel is measure. */
+  --article-gutter: var(--gutter);
 
   padding-inline: var(--gutter);
   padding-block: calc(var(--rhythm-section) * 1.5) var(--rhythm-section);
@@ -34,14 +37,46 @@
   max-width: var(--article-wide);
   margin-inline: auto;
   background: rgb(8 8 16 / 0.8);
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  /* Through a custom property so the optimizer keeps the unprefixed
+     property — see the note on .glass-dark in styles/layout.css. */
+  --glass-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
   border: 1px solid rgb(255 255 255 / 0.1);
   border-radius: 2rem;
   box-shadow:
     inset 0 1px 0 0 rgb(255 255 255 / 0.08),
     0 24px 80px rgb(0 0 0 / 0.5);
   padding: clamp(1.75rem, 5vw, 4rem) 0;
+}
+
+/*
+ * On a phone the floating card was costing the article twice: the page gutter
+ * outside the slab and the prose gutter inside it, ~40px of a 375px screen
+ * spent on framing a frame. Below 48rem the slab goes full-bleed instead, so
+ * the whole width is measure and the reading surface is simply the page.
+ *
+ * The card stays on desktop, where there is width to spare and the galaxy at
+ * the margins is the point.
+ */
+@media (max-width: 48rem) {
+  .article {
+    --article-gutter: 1.25rem;
+    padding-inline: 0;
+    /* The slab now carries the bottom clearance itself (below). */
+    padding-block: var(--rhythm-section) 0;
+  }
+
+  .article__slab {
+    border-inline: none;
+    border-radius: 0;
+    /* A full-bleed slab has no side shadow to cast, only depth below. */
+    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.08);
+    /* The docked nav and contents pills sit over the article's last lines.
+       The slab carries the clearance so the glass reaches under them and
+       they never float over the bare galaxy. */
+    padding-bottom: calc(var(--dock-stacked) + var(--dock-height));
+  }
 }
 
 /*
@@ -53,7 +88,7 @@
 .article__masthead {
   max-width: var(--article-measure);
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  padding-inline: var(--article-gutter);
   padding-block: 0.5rem 2.5rem;
 }
 
@@ -111,12 +146,20 @@
 /* Two tracks: prose locks to the measure, figures and code break out wider. */
 .article__body {
   display: grid;
+  /*
+   * `100%` in a grid track resolves against the container's width, not against
+   * the space left over once the gutter tracks have taken theirs. Written as
+   * plain `min(measure, 100%)` the text track claimed the slab's full width on
+   * a phone, the two gutters were then added on top of it, and the row
+   * overflowed its own slab to the right by exactly one gutter. Subtracting
+   * both gutters here is what keeps the prose inside the glass.
+   */
   grid-template-columns:
-    [full-start] minmax(var(--gutter), 1fr)
+    [full-start] minmax(var(--article-gutter), 1fr)
     [wide-start] minmax(0, calc((var(--article-wide) - var(--article-measure)) / 2))
-    [text-start] min(var(--article-measure), 100%) [text-end]
+    [text-start] min(var(--article-measure), 100% - var(--article-gutter) * 2) [text-end]
     minmax(0, calc((var(--article-wide) - var(--article-measure)) / 2)) [wide-end]
-    minmax(var(--gutter), 1fr) [full-end];
+    minmax(var(--article-gutter), 1fr) [full-end];
 
   font-size: 18px;
   line-height: 1.8;

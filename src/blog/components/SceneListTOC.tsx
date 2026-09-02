@@ -3,7 +3,14 @@ import { useTranslation } from 'react-i18next'
 import type { TocEntry } from 'virtual:posts'
 import { cn } from '../../app/utils/cn'
 
-const GLASS =
+/*
+ * The desktop rail floats over the galaxy at the page margin, where there is
+ * already light behind it to blur — the same situation as the desktop nav
+ * pill, and the same recipe. It deliberately does NOT use `.glass-dark`: that
+ * surface brightens its own backdrop to survive sitting on the near-black
+ * article slab, and applied over the galaxy it blows the rail out to white.
+ */
+const RAIL_GLASS =
   'border border-white/[0.14] bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 ' +
   'shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16)]'
 
@@ -62,7 +69,7 @@ export function SceneListTOC({ toc }: { toc: TocEntry[] }) {
         aria-label={t('blog.contents')}
         className={cn(
           'hidden xl:block fixed left-6 top-1/2 -translate-y-1/2 z-40 w-56 max-h-[70vh] overflow-y-auto rounded-[24px] px-5 py-6',
-          GLASS,
+          RAIL_GLASS,
         )}
       >
         <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.25em] text-white/30">
@@ -76,8 +83,9 @@ export function SceneListTOC({ toc }: { toc: TocEntry[] }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         className={cn(
-          'xl:hidden fixed bottom-6 right-6 z-50 rounded-[40px] px-5 py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-white',
-          GLASS,
+          'glass-dark xl:hidden fixed right-3 z-[45] rounded-[40px] px-5 py-3',
+          'bottom-[var(--dock-stacked)] md:bottom-[var(--dock-bottom)]',
+          'text-[10px] font-medium uppercase tracking-[0.2em] text-white',
         )}
       >
         {open ? t('blog.close') : t('blog.contents')}
@@ -86,7 +94,10 @@ export function SceneListTOC({ toc }: { toc: TocEntry[] }) {
       {open && (
         <nav
           aria-label={t('blog.contents')}
-          className="xl:hidden fixed inset-0 z-40 overflow-y-auto bg-[#030305]/95 backdrop-blur-2xl px-8 pb-28 pt-24"
+          className={cn(
+            'glass-sheet xl:hidden fixed inset-0 z-40 overflow-y-auto px-8 pt-24',
+            'pb-[calc(var(--dock-stacked)+var(--dock-height))]',
+          )}
         >
           {list}
         </nav>
