@@ -13,6 +13,7 @@ import { visit } from 'unist-util-visit'
 import sectionNumeral from './remark/section-numeral.mjs'
 import obsidianCallout from './remark/obsidian-callout.mjs'
 import obsidianEmbed from './remark/obsidian-embed.mjs'
+import inlineSvg from './rehype/inline-svg.mjs'
 
 function toText(node) {
   if (node.type === 'text') return node.value
@@ -64,7 +65,7 @@ export async function renderMarkdown(body, { slug, readAsset } = {}) {
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
     .use(rehypeSlug)
-    // Task 5 inserts inlineSvg here.
+    .use(inlineSvg, { readAsset: readAsset ?? (() => null) })
     .use(collectToc(toc))
     .use(wrapTables)
     .use(rehypeKatex)
