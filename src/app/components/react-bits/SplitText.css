@@ -7,5 +7,11 @@
 .split-text-letter {
   display: inline-block;
   padding-right: 0.05em;
-  will-change: transform, opacity;
+  /*
+    No `will-change` here. It is a standing instruction to keep every letter on
+    its own compositor layer for the life of the page, and with 95 letters on
+    screen that was ~74% of the page's layer count — held permanently for a
+    one-shot 0.6s entrance that the component itself finishes and then sets
+    `transition: none` on. Same reasoning as ScrollReveal.css.
+  */
 }

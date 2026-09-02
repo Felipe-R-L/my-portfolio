@@ -23,14 +23,17 @@ export function useSmoothScroll() {
 
     lenisRef.current = lenis;
 
-    function raf(time: number) {
+    // The frame id has to be captured: `lenis.destroy()` only cancels Lenis's
+    // own loop, and it never starts one here because `autoRaf` defaults to
+    // false. Without this the loop outlives the effect and keeps calling
+    // `raf()` on a destroyed instance — one leaked loop per hot reload.
+    let frameId = requestAnimationFrame(function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
+      frameId = requestAnimationFrame(raf);
+    });
 
     return () => {
+      cancelAnimationFrame(frameId);
       lenis.destroy();
       lenisRef.current = null;
     };
