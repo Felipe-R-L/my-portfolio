@@ -3,6 +3,7 @@ import { useReducedMotion } from 'motion/react'
 import { StarField } from '../app/components/shared/StarField'
 import { useIsMobile } from '../app/hooks/useIsMobile'
 import { useSmoothScroll } from '../app/hooks/useSmoothScroll'
+import { BlogIndex } from './components/BlogIndex'
 import { BlogNav } from './components/BlogNav'
 import { ReadingProgress } from './components/ReadingProgress'
 import { SceneListTOC } from './components/SceneListTOC'
@@ -51,6 +52,7 @@ export function BlogChrome({ data }: { data: BlogData }) {
           <SceneListTOC toc={data.post.toc} />
         </>
       )}
+      {data.kind === 'index' && <BlogIndex posts={data.posts} />}
     </>
   )
 }
