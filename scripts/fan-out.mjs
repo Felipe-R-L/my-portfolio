@@ -2,7 +2,7 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs'
 import { join, dirname, resolve, sep } from 'node:path'
 
-export const SITE = 'https://felipeleone.dev'
+export const SITE = 'https://feliperl.space'
 
 const escapeAttr = (v) =>
   String(v).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')

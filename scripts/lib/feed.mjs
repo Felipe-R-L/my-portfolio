@@ -1,7 +1,7 @@
 import { writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-const SITE = 'https://felipeleone.dev'
+const SITE = 'https://feliperl.space'
 
 const esc = (v) =>
   String(v).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')

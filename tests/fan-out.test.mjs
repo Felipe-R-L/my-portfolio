@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { renderRoute } from '../scripts/fan-out.mjs'
+import { renderRoute, SITE } from '../scripts/fan-out.mjs'
 
 const TEMPLATE = `<!doctype html><html lang="en"><head><!--blog-head--></head>` +
   `<body><div id="blog-chrome"></div><div id="blog-content"><!--blog-content--></div>` +
@@ -23,7 +23,7 @@ describe('renderRoute', () => {
   it('emits per-article og and twitter tags', () => {
     const html = renderRoute({ template: TEMPLATE, kind: 'article', post: POST, posts: [POST] })
     expect(html).toContain('property="og:type" content="article"')
-    expect(html).toContain('og:url" content="https://felipeleone.dev/blog/arc"')
+    expect(html).toContain(`og:url" content="${SITE}/blog/arc"`)
     expect(html).toContain('name="twitter:card"')
   })
 
