@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import postsPlugin from "./plugins/vite-plugin-posts.mjs";
 
 function figmaAssetResolver() {
   return {
@@ -18,6 +19,7 @@ function figmaAssetResolver() {
 export default defineConfig({
   plugins: [
     figmaAssetResolver(),
+    postsPlugin({ repoRoot: __dirname }),
     // Use OXC plugin for better performance and Vite 8 compatibility
     react(),
     tailwindcss(),
@@ -31,6 +33,10 @@ export default defineConfig({
 
   build: {
     rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        blog: path.resolve(__dirname, "blog.html"),
+      },
       output: {
         manualChunks(id) {
           if (!id.includes("node_modules")) return;

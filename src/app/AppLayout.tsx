@@ -23,6 +23,7 @@ const NAV_ITEMS = [
   { id: "projects", key: "nav.projects" },
   { id: "experience", key: "nav.experience" },
   { id: "services", key: "nav.services" },
+  { href: "/blog", key: "nav.blog" },
 ] as const;
 
 const LANGUAGES = [
@@ -86,22 +87,41 @@ export default function AppLayout() {
         <div className="rounded-[40px] border border-white/[0.14] bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 px-4 md:px-8 py-2.5 md:py-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16)]">
           <div className="flex items-center gap-3 md:gap-8">
             <div className="flex items-center gap-3 md:gap-8">
-              {NAV_ITEMS.map((item) => (
-                <motion.a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  className="text-[9px] md:text-xs font-medium uppercase tracking-[0.05em] md:tracking-[0.2em] text-white/60 hover:text-white transition-colors relative group whitespace-nowrap"
-                  whileHover={{ y: -1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    lenisRef.current?.scrollTo(`#${item.id}`, { duration: 1.2 });
-                  }}
-                >
-                  {t(item.key)}
+              {NAV_ITEMS.map((item) => {
+                const linkClassName =
+                  "text-[9px] md:text-xs font-medium uppercase tracking-[0.05em] md:tracking-[0.2em] text-white/60 hover:text-white transition-colors relative group whitespace-nowrap";
+                const underline = (
                   <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-[var(--zone-a-1)] to-[var(--zone-a-2)] group-hover:w-full transition-all duration-300" />
-                </motion.a>
-              ))}
+                );
+
+                if ("href" in item) {
+                  return (
+                    <a key={item.key} href={item.href} className={linkClassName}>
+                      {t(item.key)}
+                      {underline}
+                    </a>
+                  );
+                }
+
+                return (
+                  <motion.a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    className={linkClassName}
+                    whileHover={{ y: -1 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                    onClick={(e) => {
+                      const lenis = lenisRef.current;
+                      if (!lenis) return; // no Lenis (e.g. mobile): let the browser scroll natively
+                      e.preventDefault();
+                      lenis.scrollTo(`#${item.id}`, { duration: 1.2 });
+                    }}
+                  >
+                    {t(item.key)}
+                    {underline}
+                  </motion.a>
+                );
+              })}
             </div>
 
             <div className="flex items-center gap-1.5 md:gap-3 pl-3 md:pl-6 border-l border-white/10 h-4">

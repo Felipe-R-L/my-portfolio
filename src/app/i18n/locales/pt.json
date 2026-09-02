@@ -3,7 +3,8 @@
     "about": "Sobre",
     "projects": "Projetos",
     "experience": "Experiência",
-    "services": "Serviços"
+    "services": "Serviços",
+    "blog": "Escrita"
   },
   "hero": {
     "badge": "Disponível para novos projetos",
@@ -173,5 +174,17 @@
   },
   "common": {
     "loading": "Carregando..."
+  },
+  "blog": {
+    "title": "Escrita",
+    "entries_one": "{{count}} artigo",
+    "entries_other": "{{count}} artigos",
+    "empty": "Nada publicado ainda.",
+    "published": "Publicado em",
+    "revised": "Revisado em",
+    "read_time": "{{count}} min de leitura",
+    "contents": "Conteúdo",
+    "close": "Fechar",
+    "back": "Voltar à escrita"
   }
 }

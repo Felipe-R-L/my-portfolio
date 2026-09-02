@@ -2,3 +2,5 @@ node_modules
 dist
 build
 guidelines/*
+.superpowers
+.blog.local.json
