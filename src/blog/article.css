@@ -19,6 +19,17 @@
   padding-block: calc(var(--rhythm-section) * 1.5) var(--rhythm-section);
 }
 
+/*
+ * BlogChrome renders a fixed full-screen gradient tint at z-[1] (same
+ * treatment as AppLayout's overlay). #blog-content in blog.html is otherwise
+ * unpositioned, so it paints in normal flow *underneath* that tint. AppLayout's
+ * <main> uses z-10 for exactly this reason — mirror it here.
+ */
+#blog-content {
+  position: relative;
+  z-index: 10;
+}
+
 .article__slab {
   max-width: var(--article-wide);
   margin-inline: auto;
@@ -31,6 +42,63 @@
     inset 0 1px 0 0 rgb(255 255 255 / 0.08),
     0 24px 80px rgb(0 0 0 / 0.5);
   padding: clamp(1.75rem, 5vw, 4rem) 0;
+}
+
+/*
+ * The masthead is emitted as plain HTML by scripts/fan-out.mjs's
+ * mastheadHtml() (never as a mounted React island — see
+ * src/blog/components/ArticleMasthead.tsx). Keep these classes in sync with
+ * that component's Tailwind classes; both express the same design.
+ */
+.article__masthead {
+  max-width: var(--article-measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-block: 0.5rem 2.5rem;
+}
+
+.article__kicker {
+  margin: 0 0 1.25rem;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--article-faint);
+}
+
+/* Title case, not shouted: article titles run long, unlike section headings. */
+.article__title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.article__rule {
+  margin-top: 1.5rem;
+  height: 0.25rem;
+  width: 6rem;
+  border-radius: 9999px;
+  background: linear-gradient(to right, var(--zone-a-1), var(--zone-a-2));
+}
+
+.article__lead {
+  margin-top: 1.5rem;
+  font-size: 21px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--article-dim);
+}
+
+.article__dateline {
+  margin-top: 1.75rem;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--article-faint);
 }
 
 /* Two tracks: prose locks to the measure, figures and code break out wider. */
@@ -191,4 +259,25 @@ h2:hover .heading-anchor, h3:hover .heading-anchor, .heading-anchor:focus { opac
 
 @media (prefers-reduced-motion: reduce) {
   .article *, .article *::before { animation: none !important; transition: none !important; }
+}
+
+/* Visually hidden until keyboard focus reaches it; sits above BlogNav (z-50). */
+.skip-link {
+  position: absolute;
+  top: -3rem;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  background: #030305;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
 }

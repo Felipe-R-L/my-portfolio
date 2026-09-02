@@ -3,6 +3,9 @@ import { useReducedMotion } from 'motion/react'
 import { StarField } from '../app/components/shared/StarField'
 import { useIsMobile } from '../app/hooks/useIsMobile'
 import { useSmoothScroll } from '../app/hooks/useSmoothScroll'
+import { BlogNav } from './components/BlogNav'
+import { ReadingProgress } from './components/ReadingProgress'
+import { SceneListTOC } from './components/SceneListTOC'
 import type { BlogData } from './main'
 
 const LazyGalaxy = lazy(() => import('../app/components/react-bits/Galaxy'))
@@ -41,7 +44,13 @@ export function BlogChrome({ data }: { data: BlogData }) {
         className="fixed inset-0 pointer-events-none z-[1] bg-gradient-to-b from-[#030305]/10 via-[#030305]/30 to-[#030305]/80"
       />
 
-      <span className="sr-only">{data.kind === 'article' ? data.post.title : 'Writing'}</span>
+      <BlogNav />
+      {data.kind === 'article' && (
+        <>
+          <ReadingProgress />
+          <SceneListTOC toc={data.post.toc} />
+        </>
+      )}
     </>
   )
 }

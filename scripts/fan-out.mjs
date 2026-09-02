@@ -77,9 +77,26 @@ const summarise = (p) => ({
   summary: p.summary, tags: p.tags, readingTimeMinutes: p.readingTimeMinutes,
 })
 
+const timecode = (iso) => iso.replaceAll('-', '.')
+
+function mastheadHtml(post) {
+  const revised = post.updated
+    ? ` · <span style="color:var(--zone-a-1)">REVISED <time datetime="${post.updated}">${timecode(post.updated)}</time></span>`
+    : ''
+  return `<header class="article__masthead">
+  ${post.tags[0] ? `<p class="article__kicker">${escapeAttr(post.tags[0])}</p>` : ''}
+  <h1 class="article__title">${escapeAttr(post.title)}</h1>
+  <div class="article__rule" aria-hidden="true"></div>
+  <p class="article__lead">${escapeAttr(post.summary)}</p>
+  <p class="article__dateline">PUBLISHED <time datetime="${post.date}">${timecode(post.date)}</time>${revised} · ${post.readingTimeMinutes} MIN</p>
+</header>`
+}
+
 export function renderRoute({ template, kind, post, posts }) {
   const head = kind === 'article' ? articleHead(post) : indexHead()
-  const content = kind === 'article' ? post.html : ''
+  const content = kind === 'article'
+    ? `<article class="article" lang="en"><div class="article__slab">${mastheadHtml(post)}<div class="article__body" id="article-body">${post.html}</div></div></article>`
+    : ''
   const data = kind === 'article'
     ? { kind, post: { ...summarise(post), toc: post.toc } }
     : { kind, posts: posts.map(summarise) }
