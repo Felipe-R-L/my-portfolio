@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import type { MouseEvent } from "react";
+import { useReducedMotion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
 import { Hero } from "./components/Hero";
@@ -11,6 +12,7 @@ import { Projects } from "./components/Projects";
 import { Contact } from "./components/Contact";
 import { StarField } from "./components/shared/StarField";
 import { SocialLinks } from "./components/shared/SocialLinks";
+import { GlassNav, type GlassNavItem } from "./components/shared/GlassNav";
 import GradientText from "./components/react-bits/GradientText";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 import { useIsMobile } from "./hooks/useIsMobile";
@@ -18,13 +20,7 @@ import { useIsMobile } from "./hooks/useIsMobile";
 const LazyGalaxy = lazy(() => import("./components/react-bits/Galaxy"));
 const LazyFluidGlass = lazy(() => import("./components/react-bits/FluidGlass"));
 
-const NAV_ITEMS = [
-  { id: "about", key: "nav.about" },
-  { id: "projects", key: "nav.projects" },
-  { id: "experience", key: "nav.experience" },
-  { id: "services", key: "nav.services" },
-  { href: "/blog", key: "nav.blog" },
-] as const;
+const SECTION_IDS = ["about", "projects", "experience", "services"] as const;
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -36,6 +32,21 @@ export default function AppLayout() {
   const { t, i18n } = useTranslation();
   const isReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
+
+  const navItems: GlassNavItem[] = [
+    ...SECTION_IDS.map((id) => ({
+      id,
+      href: `#${id}`,
+      label: t(`nav.${id}`),
+      onSelect: (event: MouseEvent<HTMLAnchorElement>) => {
+        const lenis = lenisRef.current;
+        if (!lenis) return; // no Lenis (e.g. mobile): let the browser scroll natively
+        event.preventDefault();
+        lenis.scrollTo(`#${id}`, { duration: 1.2 });
+      },
+    })),
+    { id: "blog", href: "/blog", label: t("nav.blog") },
+  ];
 
   // The WebGL starfield is the heaviest thing on the page and is barely
   // perceptible on a phone screen, so mobile and reduced-motion users get the
@@ -71,82 +82,16 @@ export default function AppLayout() {
         className="fixed inset-0 pointer-events-none z-[1] bg-gradient-to-b from-[#030305]/10 via-[#030305]/30 to-[#030305]/80"
       />
 
-      {/* Floating frosted navigation pill */}
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1.5, ease: "easeOut" }}
-        className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-[40px] w-[calc(100%-1.5rem)] md:w-max"
-      >
-        {/*
-          Was a GlassSurface, whose SVG displacement filter smeared a mirrored
-          copy of the page content through the pill — it read as a rendering
-          glitch rather than as glass. A backdrop blur is cheaper and actually
-          looks like frosted glass over a moving starfield.
-        */}
-        <div className="rounded-[40px] border border-white/[0.14] bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 px-4 md:px-8 py-2.5 md:py-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16)]">
-          <div className="flex items-center gap-3 md:gap-8">
-            <div className="flex items-center gap-3 md:gap-8">
-              {NAV_ITEMS.map((item) => {
-                const linkClassName =
-                  "text-[9px] md:text-xs font-medium uppercase tracking-[0.05em] md:tracking-[0.2em] text-white/60 hover:text-white transition-colors relative group whitespace-nowrap";
-                const underline = (
-                  <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-[var(--zone-a-1)] to-[var(--zone-a-2)] group-hover:w-full transition-all duration-300" />
-                );
-
-                if ("href" in item) {
-                  return (
-                    <a key={item.key} href={item.href} className={linkClassName}>
-                      {t(item.key)}
-                      {underline}
-                    </a>
-                  );
-                }
-
-                return (
-                  <motion.a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    className={linkClassName}
-                    whileHover={{ y: -1 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                    onClick={(e) => {
-                      const lenis = lenisRef.current;
-                      if (!lenis) return; // no Lenis (e.g. mobile): let the browser scroll natively
-                      e.preventDefault();
-                      lenis.scrollTo(`#${item.id}`, { duration: 1.2 });
-                    }}
-                  >
-                    {t(item.key)}
-                    {underline}
-                  </motion.a>
-                );
-              })}
-            </div>
-
-            <div className="flex items-center gap-1.5 md:gap-3 pl-3 md:pl-6 border-l border-white/10 h-4">
-              {LANGUAGES.map((lang) => {
-                const isActive = i18n.language.startsWith(lang.code);
-                return (
-                  <button
-                    key={lang.code}
-                    type="button"
-                    onClick={() => i18n.changeLanguage(lang.code)}
-                    lang={lang.code}
-                    title={lang.label}
-                    aria-pressed={isActive}
-                    className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
-                      isActive ? "text-[var(--zone-a-1)]" : "text-white/50 hover:text-white/80"
-                    }`}
-                  >
-                    {lang.code}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </motion.nav>
+      {/* Floating frosted navigation pill (desktop) / expanding bottom pill (mobile) */}
+      <GlassNav
+        items={navItems}
+        languages={LANGUAGES}
+        activeLanguage={i18n.language}
+        onLanguageChange={(code) => i18n.changeLanguage(code)}
+        openLabel={t("nav.menu_open")}
+        closeLabel={t("nav.menu_close")}
+        entrance={{ duration: 0.8, delay: 1.5 }}
+      />
 
       <main className="relative z-10 w-full overflow-x-hidden">
         {/* Each section now owns its own scroll target, so the wrapper divs that

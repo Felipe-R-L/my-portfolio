@@ -28,9 +28,15 @@ vi.mock('motion/react', () => ({
   motion: {
     nav: ({ children, initial, animate, transition, ...rest }: any) =>
       React.createElement('nav', rest, children),
+    div: ({ children, initial, animate, transition, ...rest }: any) =>
+      React.createElement('div', rest, children),
     a: ({ children, initial, animate, transition, whileHover, ...rest }: any) =>
       React.createElement('a', rest, children),
   },
+}))
+vi.mock('lucide-react', () => ({
+  Menu: () => React.createElement('svg', { 'data-icon': 'menu' }),
+  X: () => React.createElement('svg', { 'data-icon': 'x' }),
 }))
 
 const stub = (label: string) => () => React.createElement('div', { 'data-stub': label })

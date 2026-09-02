@@ -4,7 +4,9 @@
     "projects": "Projects",
     "experience": "Experience",
     "services": "Services",
-    "blog": "Writing"
+    "blog": "Writing",
+    "menu_open": "Menu",
+    "menu_close": "Close menu"
   },
   "hero": {
     "badge": "Available for new projects",
