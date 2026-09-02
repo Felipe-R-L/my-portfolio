@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { renderRoute, SITE } from '../scripts/fan-out.mjs'
+import { renderRoute, SITE, AUTHOR, AUTHOR_URL } from '../scripts/fan-out.mjs'
 import { OG_WIDTH, OG_HEIGHT } from '../scripts/lib/og-size.mjs'
 
 const TEMPLATE = `<!doctype html><html lang="en"><head><!--blog-head--></head>` +
@@ -33,6 +33,13 @@ describe('renderRoute', () => {
     expect(html).toContain(`property="og:image:width" content="${OG_WIDTH}"`)
     expect(html).toContain(`property="og:image:height" content="${OG_HEIGHT}"`)
     expect(html).toContain('property="og:image:type" content="image/png"')
+  })
+
+  it('names the author in meta tags, not only in json-ld', () => {
+    const html = renderRoute({ template: TEMPLATE, kind: 'article', post: POST, posts: [POST] })
+    expect(html).toContain(`name="author" content="${AUTHOR}"`)
+    expect(html).toContain(`property="article:author" content="${AUTHOR_URL}"`)
+    expect(html).toContain(`"name":"${AUTHOR}"`)
   })
 
   it('emits json-ld carrying both dates', () => {

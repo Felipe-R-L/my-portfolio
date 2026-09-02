@@ -4,6 +4,8 @@ import { join, dirname, resolve, sep } from 'node:path'
 import { OG_WIDTH, OG_HEIGHT } from './lib/og-size.mjs'
 
 export const SITE = 'https://feliperl.space'
+export const AUTHOR = 'Felipe Rodrigues Leone'
+export const AUTHOR_URL = 'https://linkedin.com/in/felipe-rodrigues-leone'
 
 const escapeAttr = (v) =>
   String(v).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
@@ -29,7 +31,7 @@ function articleHead(post) {
     description: post.summary,
     datePublished: post.date,
     dateModified: post.updated ?? post.date,
-    author: { '@type': 'Person', name: 'Felipe Rodrigues Leone' },
+    author: { '@type': 'Person', name: AUTHOR, url: AUTHOR_URL },
     keywords: post.tags.join(', '),
     inLanguage: 'en',
     image,
@@ -47,6 +49,8 @@ function articleHead(post) {
     `<meta property="og:image:width" content="${OG_WIDTH}" />`,
     `<meta property="og:image:height" content="${OG_HEIGHT}" />`,
     `<meta property="og:image:type" content="image/png" />`,
+    `<meta name="author" content="${escapeAttr(AUTHOR)}" />`,
+    `<meta property="article:author" content="${AUTHOR_URL}" />`,
     `<meta property="article:published_time" content="${post.date}" />`,
     post.updated ? `<meta property="article:modified_time" content="${post.updated}" />` : '',
     `<meta name="twitter:card" content="summary_large_image" />`,
