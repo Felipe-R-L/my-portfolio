@@ -1,0 +1,6 @@
+{
+  "postsFolder": "Blog",
+  "statusNote": "_Sync Status.md",
+  "requiredFrontmatter": ["title", "date", "summary"],
+  "assetExtensions": [".svg", ".png", ".jpg", ".jpeg", ".webp"]
+}
