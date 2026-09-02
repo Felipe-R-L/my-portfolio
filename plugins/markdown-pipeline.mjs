@@ -10,6 +10,9 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeStringify from 'rehype-stringify'
 import rehypeShiki from '@shikijs/rehype'
 import { visit } from 'unist-util-visit'
+import sectionNumeral from './remark/section-numeral.mjs'
+import obsidianCallout from './remark/obsidian-callout.mjs'
+import obsidianEmbed from './remark/obsidian-embed.mjs'
 
 function toText(node) {
   if (node.type === 'text') return node.value
@@ -55,7 +58,9 @@ export async function renderMarkdown(body, { slug, readAsset } = {}) {
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkMath)
-    // Task 4 inserts sectionNumeral, obsidianCallout and obsidianEmbed here.
+    .use(sectionNumeral)
+    .use(obsidianCallout)
+    .use(obsidianEmbed, { slug })
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
     .use(rehypeSlug)
