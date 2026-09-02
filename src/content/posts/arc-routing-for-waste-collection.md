@@ -7,9 +7,8 @@ tags:
   - vrp
   - carp
   - pyvrp
-draft: true
-status: draft
-synced_at: 2026-09-02T04:47:32.304Z
+status: synced
+synced_at: 2026-09-02T07:11:16.678Z
 synced_hash: c99dd48282ca4122485f2bcc2f3cb6845a58021a856aae62c4057d76f7733be3
 ---
 
