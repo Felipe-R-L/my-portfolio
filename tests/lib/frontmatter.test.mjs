@@ -19,6 +19,23 @@ describe('parsePost', () => {
     expect(data.title).toBe('Arc Routing for Waste Collection')
     expect(body.trim()).toBe('Body text here.')
   })
+
+  // Regression: YAML's core schema auto-parses an unquoted `date: 2026-09-02`
+  // into a JS Date at UTC midnight. Formatted back in a negative-UTC-offset
+  // timezone that reads as the day before the author typed. `date` (and
+  // `updated`) must stay exactly the string the author wrote.
+  it('keeps an unquoted date as a plain string, not a Date', () => {
+    const { data } = parsePost('---\ndate: 2026-09-02\n---\nx')
+    expect(typeof data.date).toBe('string')
+    expect(data.date).toBe('2026-09-02')
+  })
+
+  it('still parses draft as a boolean and tags as an array under the new schema', () => {
+    const { data } = parsePost('---\ndraft: true\ntags: [a, b]\n---\nx')
+    expect(data.draft).toBe(true)
+    expect(Array.isArray(data.tags)).toBe(true)
+    expect(data.tags).toEqual(['a', 'b'])
+  })
 })
 
 describe('hashBody', () => {
@@ -100,6 +117,24 @@ describe('serializePost', () => {
     const { data, body } = parsePost(RAW)
     const out = parsePost(serializePost({ ...data, synced_hash: 'x' }, body))
     expect(hashBody(out.body)).toBe(hashBody(body))
+  })
+
+  // Regression: a round-trip through serializePost -> parsePost must never
+  // drift the author's date, including across a second sync of an
+  // already-synced file (the exact scenario that mutated the real vault note).
+  it('round-trips date: 2026-09-02 unchanged, twice in a row', () => {
+    const { data, body } = parsePost(RAW)
+    expect(data.date).toBe('2026-09-02')
+
+    const once = parsePost(serializePost(data, body))
+    expect(once.data.date).toBe('2026-09-02')
+
+    const twice = parsePost(serializePost(once.data, once.body))
+    expect(twice.data.date).toBe('2026-09-02')
+
+    // Also confirm the raw serialized frontmatter is the plain, unquoted
+    // form the author typed -- not a quoted or timestamp-shaped string.
+    expect(serializePost(data, body)).toContain('date: 2026-09-02\n')
   })
 })
 

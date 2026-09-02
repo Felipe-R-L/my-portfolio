@@ -1,6 +1,6 @@
 ---
 title: Arc Routing for Waste Collection
-date: 2026-09-02T00:00:00.000Z
+date: 2026-09-02
 summary: Why the solvers you can install optimize a different problem than the one a truck actually has.
 tags:
   - optimization
@@ -9,7 +9,7 @@ tags:
   - pyvrp
 draft: true
 status: draft
-synced_at: '2026-09-02T04:42:04.659Z'
+synced_at: 2026-09-02T04:47:32.304Z
 synced_hash: c99dd48282ca4122485f2bcc2f3cb6845a58021a856aae62c4057d76f7733be3
 ---
 

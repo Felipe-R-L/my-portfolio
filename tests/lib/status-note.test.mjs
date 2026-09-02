@@ -43,6 +43,29 @@ describe('renderStatusNote', () => {
     expect(out.toLowerCase()).toContain('generated')
   })
 
+  // Regression: a `date`/`updated` that still arrives as a JS Date (e.g. a
+  // post read from an already-mangled file) must render as YYYY-MM-DD, never
+  // as `Date.toString()` output -- and the row must keep the header's column
+  // count regardless.
+  it('formats a Date value as YYYY-MM-DD, not a stringified Date', () => {
+    const withDateObject = [{
+      title: 'Arc Routing for Waste Collection', words: 2023, readingTimeMinutes: 9,
+      date: new Date('2026-09-02T00:00:00.000Z'), updated: null, status: 'draft', syncedAt: null,
+    }]
+    const rendered = renderStatusNote({
+      posts: withDateObject, assets: [], generatedAt: '2026-09-02T00:00:00Z',
+    })
+    expect(rendered).toContain('2026-09-02')
+    expect(rendered).not.toContain('GMT')
+    expect(rendered).not.toContain('Tue Sep')
+
+    const splitOnUnescapedPipes = (line) => line.split(/(?<!\\)\|/)
+    const lines = rendered.split('\n')
+    const header = lines.find((l) => l.startsWith('| | Article'))
+    const row = lines.find((l) => l.includes('Arc Routing'))
+    expect(splitOnUnescapedPipes(row).length).toBe(splitOnUnescapedPipes(header).length)
+  })
+
   it('finding 6: escapes a pipe in title/article/filename so the row keeps its column count', () => {
     // A pipe splits a naive Markdown table row into an extra column.
     // A row is well-formed only if it has the same number of *unescaped*

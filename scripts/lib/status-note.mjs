@@ -16,6 +16,15 @@ function cell(value) {
   return value === null || value === undefined || value === '' ? '—' : String(value)
 }
 
+// Defensive: `date`/`updated` must render as YYYY-MM-DD, never as a
+// stringified Date (`Tue Sep 01 2026 21:00:00 GMT-0300 ...`), which is both
+// unreadable and, in a negative-UTC-offset timezone, off by a day. Uses
+// `toISOString`, which is UTC -- never a local accessor.
+function dateCell(value) {
+  if (value instanceof Date) return value.toISOString().slice(0, 10)
+  return cell(value)
+}
+
 // A `|` in free text would otherwise be read as a table column separator,
 // silently splitting the row and corrupting every column after it.
 function esc(value) {
@@ -41,7 +50,7 @@ export function renderStatusNote({ posts, assets, generatedAt }) {
     for (const p of posts) {
       lines.push(
         `| ${GLYPH[p.status] ?? '?'} | ${esc(p.title)} | ${p.words} | ${p.readingTimeMinutes} min | ` +
-          `${cell(p.date)} | ${cell(p.updated)} | ${LABEL[p.status] ?? p.status} | ${cell(p.syncedAt)} |`,
+          `${dateCell(p.date)} | ${dateCell(p.updated)} | ${LABEL[p.status] ?? p.status} | ${cell(p.syncedAt)} |`,
       )
     }
   }

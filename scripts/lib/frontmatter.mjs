@@ -2,9 +2,31 @@ import { createHash } from 'node:crypto'
 import matter from 'gray-matter'
 import yaml from 'js-yaml'
 
+// gray-matter's default YAML engine resolves an unquoted `date: 2026-09-02`
+// under js-yaml's DEFAULT_SCHEMA, which includes a !!timestamp type -- so the
+// author's plain calendar date silently becomes a JS Date at UTC midnight.
+// Formatted back in a negative-UTC-offset timezone (this machine is UTC-3),
+// that reads as the day before the author typed. JSON_SCHEMA has no
+// timestamp type, so a plain date stays exactly the string it was written
+// as, and `draft: true` / `tags: [a, b]` keep parsing as boolean/array.
+const engines = { yaml: { parse: (s) => yaml.load(s, { schema: yaml.JSON_SCHEMA }) ?? {} } }
+
+// Defensive: normalizes a `Date` that reaches us some other way -- a file
+// that was mangled before this fix existed, or a caller constructing a Date
+// directly -- back to `YYYY-MM-DD`. Uses `toISOString`, which is UTC; never
+// `getFullYear`/`getMonth`/`getDate`, which are local-timezone and would
+// reintroduce the exact off-by-one this exists to prevent.
+export function toDateString(value) {
+  if (value instanceof Date) return value.toISOString().slice(0, 10)
+  return value
+}
+
 export function parsePost(raw) {
-  const parsed = matter(raw)
-  return { data: parsed.data ?? {}, body: parsed.content ?? '' }
+  const parsed = matter(raw, { engines })
+  const data = parsed.data ?? {}
+  if (data.date !== undefined) data.date = toDateString(data.date)
+  if (data.updated !== undefined) data.updated = toDateString(data.updated)
+  return { data, body: parsed.content ?? '' }
 }
 
 // Hashes the BODY ONLY. Frontmatter carries tool bookkeeping that this hash
@@ -55,7 +77,13 @@ export function serializePost(data, body) {
   for (const key of Object.keys(data)) {
     if (!(key in ordered)) ordered[key] = data[key]
   }
-  const front = yaml.dump(ordered, { lineWidth: 100, noRefs: true }).trimEnd()
+  if (ordered.date !== undefined) ordered.date = toDateString(ordered.date)
+  if (ordered.updated !== undefined) ordered.updated = toDateString(ordered.updated)
+  // Dumping under JSON_SCHEMA (matching the parse side) keeps a plain date
+  // like `2026-09-02` unquoted, exactly as the author typed it. Dumping
+  // under the default schema would quote it (`'2026-09-02'`) to disambiguate
+  // from its own timestamp type -- a needless, author-visible diff.
+  const front = yaml.dump(ordered, { schema: yaml.JSON_SCHEMA, lineWidth: 100, noRefs: true }).trimEnd()
   return `---\n${front}\n---\n\n${body.trim()}\n`
 }
 
