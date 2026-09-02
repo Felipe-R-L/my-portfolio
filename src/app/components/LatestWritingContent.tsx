@@ -1,27 +1,10 @@
 import { ArrowRight, PenLine } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import type { Post } from "virtual:posts";
-import posts from "virtual:posts";
+import { summaries } from "virtual:posts";
 import { Section } from "./shared/Section";
 import { SectionHeading } from "./shared/SectionHeading";
 import { GlowCard } from "./shared/GlowCard";
-
-/**
- * Only the fields the teaser renders. `virtual:posts` also carries the full
- * rendered article `html`, which is fine for the blog entry (it's injected
- * server-side, never bundled) but must never ride along into the homepage
- * chunk — see LatestWriting.tsx for how this module is kept out of it.
- */
-type WritingSummary = Pick<
-  Post,
-  "slug" | "title" | "date" | "summary" | "tags" | "readingTimeMinutes"
->;
-
-function toSummary(post: Post): WritingSummary {
-  const { slug, title, date, summary, tags, readingTimeMinutes } = post;
-  return { slug, title, date, summary, tags, readingTimeMinutes };
-}
 
 /**
  * The homepage teaser for the most recent post. A recent technical article is
@@ -35,7 +18,7 @@ function toSummary(post: Post): WritingSummary {
  */
 export default function LatestWritingContent() {
   const { t } = useTranslation();
-  const latest = posts.length > 0 ? toSummary(posts[0]) : null;
+  const latest = summaries.length > 0 ? summaries[0] : null;
 
   if (!latest) return null;
 

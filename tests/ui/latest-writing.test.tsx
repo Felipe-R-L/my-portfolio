@@ -17,10 +17,20 @@ const POST = {
   readingTimeMinutes: 9,
 }
 
+const SUMMARY = {
+  slug: POST.slug,
+  title: POST.title,
+  date: POST.date,
+  updated: POST.updated,
+  summary: POST.summary,
+  tags: POST.tags,
+  readingTimeMinutes: POST.readingTimeMinutes,
+}
+
 describe('LatestWritingContent', () => {
   it('renders nothing when there are no published posts', async () => {
     vi.resetModules()
-    vi.doMock('virtual:posts', () => ({ posts: [], default: [] }))
+    vi.doMock('virtual:posts', () => ({ posts: [], default: [], summaries: [] }))
     const { default: LatestWritingContent } = await import(
       '../../src/app/components/LatestWritingContent'
     )
@@ -30,7 +40,7 @@ describe('LatestWritingContent', () => {
 
   it('shows the most recent post as a real link to /blog/<slug>', async () => {
     vi.resetModules()
-    vi.doMock('virtual:posts', () => ({ posts: [POST], default: [POST] }))
+    vi.doMock('virtual:posts', () => ({ posts: [POST], default: [POST], summaries: [SUMMARY] }))
     const { default: LatestWritingContent } = await import(
       '../../src/app/components/LatestWritingContent'
     )
@@ -42,7 +52,7 @@ describe('LatestWritingContent', () => {
 
   it('never ships the article html field into the rendered markup', async () => {
     vi.resetModules()
-    vi.doMock('virtual:posts', () => ({ posts: [POST], default: [POST] }))
+    vi.doMock('virtual:posts', () => ({ posts: [POST], default: [POST], summaries: [SUMMARY] }))
     const { default: LatestWritingContent } = await import(
       '../../src/app/components/LatestWritingContent'
     )
