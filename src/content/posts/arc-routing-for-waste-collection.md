@@ -1,7 +1,7 @@
 ---
 title: Arc Routing for Waste Collection
 date: 2026-09-02
-summary: Why the solvers you can install optimize a different problem than the one a truck actually has.
+summary: Why the solvers you can install optimize a different problem than a collection truck has, and why the rules of the operation belong in the cost matrix.
 tags:
   - optimization
   - vrp
