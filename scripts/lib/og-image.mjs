@@ -3,8 +3,7 @@ import { join } from 'node:path'
 import satori from 'satori'
 import { Resvg } from '@resvg/resvg-js'
 
-const W = 1200
-const H = 630
+import { OG_WIDTH as W, OG_HEIGHT as H } from './og-size.mjs'
 
 function card({ title, meta, fontFamily }) {
   const row = (children, style) => ({ type: 'div', props: { style: { display: 'flex', ...style }, children } })

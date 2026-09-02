@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { renderRoute, SITE } from '../scripts/fan-out.mjs'
+import { OG_WIDTH, OG_HEIGHT } from '../scripts/lib/og-size.mjs'
 
 const TEMPLATE = `<!doctype html><html lang="en"><head><!--blog-head--></head>` +
   `<body><div id="blog-chrome"></div><div id="blog-content"><!--blog-content--></div>` +
@@ -25,6 +26,13 @@ describe('renderRoute', () => {
     expect(html).toContain('property="og:type" content="article"')
     expect(html).toContain(`og:url" content="${SITE}/blog/arc"`)
     expect(html).toContain('name="twitter:card"')
+  })
+
+  it('declares og image dimensions and type so scrapers never have to probe', () => {
+    const html = renderRoute({ template: TEMPLATE, kind: 'article', post: POST, posts: [POST] })
+    expect(html).toContain(`property="og:image:width" content="${OG_WIDTH}"`)
+    expect(html).toContain(`property="og:image:height" content="${OG_HEIGHT}"`)
+    expect(html).toContain('property="og:image:type" content="image/png"')
   })
 
   it('emits json-ld carrying both dates', () => {

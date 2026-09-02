@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs'
 import { join, dirname, resolve, sep } from 'node:path'
+import { OG_WIDTH, OG_HEIGHT } from './lib/og-size.mjs'
 
 export const SITE = 'https://feliperl.space'
 
@@ -43,6 +44,9 @@ function articleHead(post) {
     `<meta property="og:url" content="${url}" />`,
     `<meta property="og:type" content="article" />`,
     `<meta property="og:image" content="${image}" />`,
+    `<meta property="og:image:width" content="${OG_WIDTH}" />`,
+    `<meta property="og:image:height" content="${OG_HEIGHT}" />`,
+    `<meta property="og:image:type" content="image/png" />`,
     `<meta property="article:published_time" content="${post.date}" />`,
     post.updated ? `<meta property="article:modified_time" content="${post.updated}" />` : '',
     `<meta name="twitter:card" content="summary_large_image" />`,
