@@ -135,6 +135,14 @@ export function Hero() {
                     pauseDuration={2000}
                     showCursor={true}
                     cursorClassName="bg-[var(--zone-a-1)]"
+                    /*
+                      Defaults to false, which made the observer bail out and the
+                      loop run from mount to unload: a state update per character
+                      every 60ms, repainting gradient-clipped text with a
+                      drop-shadow ~16x a second while the hero sat several
+                      screens above the viewport.
+                    */
+                    startOnVisible
                   />
                 </div>
               </div>
