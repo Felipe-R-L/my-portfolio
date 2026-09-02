@@ -18,4 +18,5 @@ const data = JSON.parse(raw) as BlogData
 // The article body is already in the document and is never hydrated.
 // React mounts the chrome only.
 const container = document.getElementById('blog-chrome')
-if (container) createRoot(container).render(<BlogChrome data={data} />)
+if (!container) throw new Error('[blog] #blog-chrome is missing; the chrome cannot mount.')
+createRoot(container).render(<BlogChrome data={data} />)

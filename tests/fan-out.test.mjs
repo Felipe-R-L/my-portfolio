@@ -48,6 +48,19 @@ describe('renderRoute', () => {
     expect(html).toContain('<\\/script>')
   })
 
+  it('round-trips $-pattern sequences in the article body without corruption', () => {
+    // String.prototype.replace interprets $&, $`, $' and $$ in a *string*
+    // replacement argument. head/content/data are arbitrary author content
+    // (code fences, shell snippets) and must be inserted literally.
+    const dollarHtml = "<pre><code>echo $&; echo $`; echo $'; echo $$</code></pre>"
+    const post = { ...POST, html: dollarHtml }
+    const html = renderRoute({ template: TEMPLATE, kind: 'article', post, posts: [post] })
+    expect(html).toContain(dollarHtml)
+    expect(html).not.toContain('<!--blog-content-->')
+    expect(html).not.toContain('<!--blog-head-->')
+    expect(html).not.toContain('<!--blog-data-->')
+  })
+
   it('renders the index route with summaries but no bodies', () => {
     const html = renderRoute({ template: TEMPLATE, kind: 'index', posts: [POST] })
     expect(html).toContain('"kind":"index"')

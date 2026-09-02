@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs'
-import { join, dirname } from 'node:path'
+import { join, dirname, resolve, sep } from 'node:path'
 
 export const SITE = 'https://felipeleone.dev'
 
@@ -84,10 +84,14 @@ export function renderRoute({ template, kind, post, posts }) {
     ? { kind, post: { ...summarise(post), toc: post.toc } }
     : { kind, posts: posts.map(summarise) }
 
+  // Function replacements, not strings: a string replacement interprets
+  // `$&`, `$\``, `$'` and `$$` in the replacement text, and `head`,
+  // `content` and the JSON island are arbitrary author content (code
+  // fences, shell snippets) that can contain those sequences.
   return template
-    .replace('<!--blog-head-->', head)
-    .replace('<!--blog-content-->', content)
-    .replace('<!--blog-data-->', embedJson(data))
+    .replace('<!--blog-head-->', () => head)
+    .replace('<!--blog-content-->', () => content)
+    .replace('<!--blog-data-->', () => embedJson(data))
 }
 
 export async function renderRoutes({ repoRoot, dist }) {
@@ -109,6 +113,14 @@ export async function renderRoutes({ repoRoot, dist }) {
 
   write('blog/index.html', renderRoute({ template, kind: 'index', posts }))
   for (const post of posts) {
+    // The slug is slugified upstream so this should never fire, but the same
+    // bug class was fixed once already in scripts/lib/assets.mjs by
+    // containment-checking at the point of use, not by trusting the source.
+    const blogRoot = resolve(dist, 'blog') + sep
+    const target = resolve(dist, 'blog', post.slug, 'index.html')
+    if (!target.startsWith(blogRoot)) {
+      throw new Error(`[fan-out] post slug "${post.slug}" escapes dist/blog/ — refusing to write ${target}`)
+    }
     write(`blog/${post.slug}/index.html`, renderRoute({ template, kind: 'article', post, posts }))
   }
 
