@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="preload"
+      href="/assets/fonts/space-grotesk-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!--blog-head-->
+  </head>
+  <body>
+    <!-- Chrome islands mount here. The article body below is static and never hydrates. -->
+    <div id="blog-chrome"></div>
+    <div id="blog-content"><!--blog-content--></div>
+    <script type="application/json" id="blog-data"><!--blog-data--></script>
+    <script type="module" src="/src/blog/main.tsx"></script>
+  </body>
+</html>
