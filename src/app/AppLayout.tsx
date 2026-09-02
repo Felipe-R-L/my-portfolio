@@ -111,8 +111,10 @@ export default function AppLayout() {
                     whileHover={{ y: -1 }}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     onClick={(e) => {
+                      const lenis = lenisRef.current;
+                      if (!lenis) return; // no Lenis (e.g. mobile): let the browser scroll natively
                       e.preventDefault();
-                      lenisRef.current?.scrollTo(`#${item.id}`, { duration: 1.2 });
+                      lenis.scrollTo(`#${item.id}`, { duration: 1.2 });
                     }}
                   >
                     {t(item.key)}
