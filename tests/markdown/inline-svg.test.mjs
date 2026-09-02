@@ -44,10 +44,22 @@ describe('inline svg', () => {
     expect(html).toContain('transparent')
   })
 
-  it('keeps the viewBox and drops fixed width and height', async () => {
+  it('keeps the viewBox and drops fixed width and height on the root svg', async () => {
     const { html } = await render('![[d.svg]]')
-    expect(html).toContain('viewBox="0 0 400 200"')
-    expect(html).not.toContain('width="400"')
+    const rootTag = html.match(/<svg[^>]*>/)[0]
+    expect(rootTag).toContain('viewBox="0 0 400 200"')
+    expect(rootTag).not.toContain('width=')
+    expect(rootTag).not.toContain('height=')
+  })
+
+  it('keeps geometry attributes on child elements, e.g. a rect', async () => {
+    const geomSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">
+  <rect x="10" y="10" width="120" height="60" fill="#4c8dff"/>
+</svg>`
+    const { html } = await renderMarkdown('![[d.svg]]', { slug: 'arc', readAsset: () => geomSvg })
+    const rectTag = html.match(/<rect[^>]*>/)[0]
+    expect(rectTag).toContain('width="120"')
+    expect(rectTag).toContain('height="60"')
   })
 
   it('adds role and a title from the alt text', async () => {

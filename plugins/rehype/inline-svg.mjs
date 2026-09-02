@@ -36,9 +36,6 @@ function sanitize(node) {
     for (const key of Object.keys(child.properties ?? {})) {
       const lower = key.toLowerCase()
       if (lower.startsWith('on')) { delete child.properties[key]; continue }
-      // Fixed pixel dimensions are dropped tree-wide, not just on the svg root: the
-      // diagram must scale purely off the root viewBox, never pin a size anywhere else.
-      if (lower === 'width' || lower === 'height') { delete child.properties[key]; continue }
       if ((lower === 'href' || lower === 'xlinkhref') &&
           /^(https?:)?\/\//.test(String(child.properties[key]))) {
         delete child.properties[key]; continue
