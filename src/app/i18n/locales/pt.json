@@ -4,7 +4,7 @@
     "projects": "Projetos",
     "experience": "Experiência",
     "services": "Serviços",
-    "blog": "Escrita",
+    "blog": "Blog",
     "menu_open": "Menu",
     "menu_close": "Fechar menu"
   },
@@ -178,7 +178,7 @@
     "loading": "Carregando..."
   },
   "blog": {
-    "title": "Escrita",
+    "title": "Blog",
     "entries_one": "{{count}} artigo",
     "entries_other": "{{count}} artigos",
     "empty": "Nada publicado ainda.",
@@ -187,6 +187,6 @@
     "read_time": "{{count}} min de leitura",
     "contents": "Conteúdo",
     "close": "Fechar",
-    "back": "Voltar à escrita"
+    "back": "Voltar ao blog"
   }
 }
