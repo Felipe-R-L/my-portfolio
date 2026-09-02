@@ -63,7 +63,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: var(--article-faint);
+  color: var(--article-dim);
 }
 
 /* Title case, not shouted: article titles run long, unlike section headings. */
@@ -98,7 +98,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: var(--article-faint);
+  color: var(--article-dim);
 }
 
 /*
