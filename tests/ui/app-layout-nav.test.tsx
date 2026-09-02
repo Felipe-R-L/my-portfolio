@@ -28,9 +28,15 @@ vi.mock('motion/react', () => ({
   motion: {
     nav: ({ children, initial, animate, transition, ...rest }: any) =>
       React.createElement('nav', rest, children),
+    div: ({ children, initial, animate, transition, ...rest }: any) =>
+      React.createElement('div', rest, children),
     a: ({ children, initial, animate, transition, whileHover, ...rest }: any) =>
       React.createElement('a', rest, children),
   },
+}))
+vi.mock('lucide-react', () => ({
+  Menu: () => React.createElement('svg', { 'data-icon': 'menu' }),
+  X: () => React.createElement('svg', { 'data-icon': 'x' }),
 }))
 
 const stub = (label: string) => () => React.createElement('div', { 'data-stub': label })
@@ -40,6 +46,7 @@ vi.mock('../../src/app/components/About', () => ({ About: stub('about') }))
 vi.mock('../../src/app/components/Experience', () => ({ Experience: stub('experience') }))
 vi.mock('../../src/app/components/Services', () => ({ Services: stub('services') }))
 vi.mock('../../src/app/components/Projects', () => ({ Projects: stub('projects') }))
+vi.mock('../../src/app/components/LatestWriting', () => ({ LatestWriting: stub('latest-writing') }))
 vi.mock('../../src/app/components/Contact', () => ({ Contact: stub('contact') }))
 vi.mock('../../src/app/components/shared/StarField', () => ({ StarField: stub('starfield') }))
 vi.mock('../../src/app/components/shared/SocialLinks', () => ({ SocialLinks: stub('social') }))

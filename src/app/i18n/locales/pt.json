@@ -4,7 +4,9 @@
     "projects": "Projetos",
     "experience": "Experiência",
     "services": "Serviços",
-    "blog": "Escrita"
+    "blog": "Blog",
+    "menu_open": "Menu",
+    "menu_close": "Fechar menu"
   },
   "hero": {
     "badge": "Disponível para novos projetos",
@@ -169,6 +171,16 @@
     },
     "learn_more": "Saiba Mais"
   },
+  "home": {
+    "writing": {
+      "title_part1": "Direto do",
+      "title_part2": "Blog.",
+      "lead": "Um olhar técnico recente sobre um problema real — a evidência mais clara de como eu penso.",
+      "read_more": "Continuar lendo",
+      "card_aria": "Ler o artigo completo: {{title}}",
+      "see_all": "Ver todos os artigos"
+    }
+  },
   "footer": {
     "built_for_future": "Projetado para o amanhã."
   },
@@ -176,7 +188,7 @@
     "loading": "Carregando..."
   },
   "blog": {
-    "title": "Escrita",
+    "title": "Blog",
     "entries_one": "{{count}} artigo",
     "entries_other": "{{count}} artigos",
     "empty": "Nada publicado ainda.",
@@ -185,6 +197,6 @@
     "read_time": "{{count}} min de leitura",
     "contents": "Conteúdo",
     "close": "Fechar",
-    "back": "Voltar à escrita"
+    "back": "Voltar ao blog"
   }
 }

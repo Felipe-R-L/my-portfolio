@@ -105,7 +105,16 @@ export default function postsPlugin({ repoRoot = process.cwd() } = {}) {
     async load(id) {
       if (id !== RESOLVED_ID) return
       const posts = await loadPosts({ repoRoot })
-      return `export const posts = ${JSON.stringify(posts)};\nexport default posts;\n`
+      const summaries = posts.map(
+        ({ slug, title, date, updated, summary, tags, readingTimeMinutes }) => ({
+          slug, title, date, updated, summary, tags, readingTimeMinutes,
+        }),
+      )
+      return (
+        `export const posts = ${JSON.stringify(posts)};\n` +
+        `export default posts;\n` +
+        `export const summaries = ${JSON.stringify(summaries)};\n`
+      )
     },
     configureServer(server) {
       const dir = join(repoRoot, 'src', 'content', 'posts')

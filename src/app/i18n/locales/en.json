@@ -4,7 +4,9 @@
     "projects": "Projects",
     "experience": "Experience",
     "services": "Services",
-    "blog": "Writing"
+    "blog": "Blog",
+    "menu_open": "Menu",
+    "menu_close": "Close menu"
   },
   "hero": {
     "badge": "Available for new projects",
@@ -169,6 +171,16 @@
     },
     "learn_more": "Learn More"
   },
+  "home": {
+    "writing": {
+      "title_part1": "From the",
+      "title_part2": "Blog.",
+      "lead": "A recent, technical look at a real problem — the clearest evidence of how I think.",
+      "read_more": "Continue reading",
+      "card_aria": "Read the full article: {{title}}",
+      "see_all": "See all articles"
+    }
+  },
   "footer": {
     "built_for_future": "Built for the future."
   },
@@ -176,7 +188,7 @@
     "loading": "Loading..."
   },
   "blog": {
-    "title": "Writing",
+    "title": "Blog",
     "entries_one": "{{count}} entry",
     "entries_other": "{{count}} entries",
     "empty": "Nothing published yet.",
@@ -185,6 +197,6 @@
     "read_time": "{{count}} min read",
     "contents": "Contents",
     "close": "Close",
-    "back": "Back to writing"
+    "back": "Back to blog"
   }
 }
