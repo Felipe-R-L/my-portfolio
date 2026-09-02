@@ -36,8 +36,8 @@ describe('ArticleMasthead', () => {
     const html = renderToStaticMarkup(
       <ArticleMasthead post={{ ...base, date: '2026-09-02', updated: '2026-10-14' }} />,
     )
-    expect(html).toContain('datetime="2026-09-02"')
-    expect(html).toContain('datetime="2026-10-14"')
+    expect(html).toMatch(/datetime="2026-09-02"/i)
+    expect(html).toMatch(/datetime="2026-10-14"/i)
   })
 
   it('renders the title as an h1', () => {

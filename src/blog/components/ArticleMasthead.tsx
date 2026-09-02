@@ -11,16 +11,6 @@ import type { PostSummary } from '../main'
 
 const timecode = (iso: string) => iso.replaceAll('-', '.')
 
-// React 18 does not special-case `dateTime` in its DOM property table (only
-// the historical HTML4 casing aliases are), so a normal `dateTime={iso}`
-// prop is emitted to static markup literally as `dateTime="..."` rather than
-// the lowercase `datetime` the HTML spec (and this test suite) expects.
-// Spreading a plain lowercase-keyed object bypasses React's known-property
-// casing and renders the attribute verbatim; the resulting dev-only warning
-// is harmless because this component never mounts in a real browser — see
-// the module doc comment.
-const dateAttrs = (iso: string): Record<string, string> => ({ datetime: iso })
-
 export function ArticleMasthead({ post }: { post: PostSummary }) {
   const { t } = useTranslation()
 
@@ -45,12 +35,12 @@ export function ArticleMasthead({ post }: { post: PostSummary }) {
 
       <p className="mt-7 text-[11px] font-medium uppercase tracking-[0.2em] text-white/40">
         {t('blog.published')}{' '}
-        <time {...dateAttrs(post.date)}>{timecode(post.date)}</time>
+        <time dateTime={post.date}>{timecode(post.date)}</time>
         {post.updated && (
           <>
             {' · '}
             <span className="text-[var(--zone-a-1)]">
-              {t('blog.revised')} <time {...dateAttrs(post.updated)}>{timecode(post.updated)}</time>
+              {t('blog.revised')} <time dateTime={post.updated}>{timecode(post.updated)}</time>
             </span>
           </>
         )}

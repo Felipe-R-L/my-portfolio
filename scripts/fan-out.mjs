@@ -95,7 +95,7 @@ function mastheadHtml(post) {
 export function renderRoute({ template, kind, post, posts }) {
   const head = kind === 'article' ? articleHead(post) : indexHead()
   const content = kind === 'article'
-    ? `<article class="article" lang="en"><div class="article__slab">${mastheadHtml(post)}<div class="article__body" id="article-body">${post.html}</div></div></article>`
+    ? `<article class="article" lang="en"><div class="article__slab">${mastheadHtml(post)}<div class="article__body" id="article-body" tabindex="-1">${post.html}</div></div></article>`
     : ''
   const data = kind === 'article'
     ? { kind, post: { ...summarise(post), toc: post.toc } }

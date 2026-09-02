@@ -101,6 +101,13 @@
   color: var(--article-faint);
 }
 
+/*
+ * The skip link targets this element via tabindex="-1" so keyboard focus
+ * actually lands somewhere (see scripts/fan-out.mjs). Programmatic focus on
+ * a non-interactive container doesn't need the browser's default focus ring.
+ */
+.article [tabindex="-1"]:focus { outline: none; }
+
 /* Two tracks: prose locks to the measure, figures and code break out wider. */
 .article__body {
   display: grid;
