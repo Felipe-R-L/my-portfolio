@@ -3,7 +3,8 @@
     "about": "About",
     "projects": "Projects",
     "experience": "Experience",
-    "services": "Services"
+    "services": "Services",
+    "blog": "Writing"
   },
   "hero": {
     "badge": "Available for new projects",
@@ -173,5 +174,17 @@
   },
   "common": {
     "loading": "Loading..."
+  },
+  "blog": {
+    "title": "Writing",
+    "entries_one": "{{count}} entry",
+    "entries_other": "{{count}} entries",
+    "empty": "Nothing published yet.",
+    "published": "Published",
+    "revised": "Revised",
+    "read_time": "{{count}} min read",
+    "contents": "Contents",
+    "close": "Close",
+    "back": "Back to writing"
   }
 }
