@@ -31,16 +31,9 @@
     U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-@custom-variant dark (&:is(.dark *));
-
-:root {
-  --font-size: 16px;
-  --background: #030305;
-  --foreground: #ffffff;
-}
-
+/* Só fonte. A paleta pertence a theme.css, e enquanto este arquivo também
+ * declarava --background em :root a cor do site dependia da ordem de import
+ * em index.css, que é como o body acabou branco sob um layout escuro. */
 body {
   font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  background-color: var(--background);
-  color: var(--foreground);
 }
