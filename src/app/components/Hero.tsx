@@ -4,9 +4,15 @@ import SplitText from "./react-bits/SplitText";
 import GradientText from "./react-bits/GradientText";
 import TextType from "./react-bits/TextType";
 import { useTranslation } from "react-i18next";
+import { MessageCircle } from "lucide-react";
+import { whatsappHref } from "../data/contact";
 
 export function Hero() {
   const { t } = useTranslation();
+
+  // Business owners reply on WhatsApp far more readily than by e-mail, so the
+  // primary CTA opens a chat when a number is configured.
+  const whatsapp = whatsappHref(t("contact.whatsapp_message"));
 
   const titleVariants = t("hero.title_part2_variants", {
     returnObjects: true,
@@ -91,7 +97,7 @@ export function Hero() {
                 src="/assets/profile/profile-448.webp"
                 srcSet="/assets/profile/profile-320.webp 320w, /assets/profile/profile-448.webp 448w, /assets/profile/profile-640.webp 640w"
                 sizes="(max-width: 767px) 240px, (max-width: 1023px) 400px, 448px"
-                alt="Felipe Rodrigues Leone - Full-Stack Developer"
+                alt="Felipe Rodrigues Leone"
                 width={448}
                 height={448}
                 fetchPriority="high"
@@ -166,20 +172,25 @@ export function Hero() {
             >
               {/* Primary: Contact */}
               <a
-                href="#contact"
+                href={whatsapp ?? "#contact"}
+                {...(whatsapp ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="group relative flex items-center gap-6 px-7 md:px-9 py-5 bg-gradient-to-r from-[color-mix(in_oklab,var(--zone-a-1)_20%,transparent)] to-[color-mix(in_oklab,var(--zone-a-2)_20%,transparent)] hover:from-[color-mix(in_oklab,var(--zone-a-1)_38%,transparent)] hover:to-[color-mix(in_oklab,var(--zone-a-2)_38%,transparent)] border border-white/10 hover:border-[color-mix(in_oklab,var(--zone-a-1)_50%,transparent)] transition-all duration-300 rounded-xl overflow-hidden shadow-lg"
               >
                 {/* Metallic Hardware Shine */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-[color-mix(in_oklab,var(--zone-a-1)_20%,transparent)] opacity-50 group-hover:opacity-100 transition-opacity" />
                 
                 <span className="relative z-10 text-white font-bold tracking-[0.2em] uppercase flex items-center gap-3 text-sm md:text-base">
-                  {t("hero.role") ? t("hero.cta_contact") : "Contact"}
+                  {whatsapp ? t("hero.cta_whatsapp") : t("hero.cta_contact")}
                   <div className="w-1 h-6 flex items-center justify-center">
                     <div className="w-[1px] h-4 bg-white/30 group-hover:h-6 group-hover:bg-[var(--zone-a-1)] transition-all duration-500" />
                   </div>
-                  <svg className="w-5 h-5 group-hover:translate-y-2 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                  </svg>
+                  {whatsapp ? (
+                    <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform duration-500" aria-hidden="true" />
+                  ) : (
+                    <svg className="w-5 h-5 group-hover:translate-y-2 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                  )}
                 </span>
                 
                 {/* Tech Accents (Corners) */}

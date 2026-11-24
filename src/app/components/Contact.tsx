@@ -1,12 +1,13 @@
 import React, { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "motion/react";
-import { Mail, Send, MessageSquare } from "lucide-react";
+import { Mail, Send, MessageSquare, MessageCircle } from "lucide-react";
 
 import { Section } from "./shared/Section";
 import { SectionHeading } from "./shared/SectionHeading";
 import { SocialLinks } from "./shared/SocialLinks";
 import { GlowCard } from "./shared/GlowCard";
+import { EMAIL, whatsappHref } from "../data/contact";
 
 const FIELD_CLASS =
   "w-full bg-white/[0.03] border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/30 focus:outline-none focus:border-[color-mix(in_oklab,var(--zone-b-1)_55%,transparent)] transition-colors";
@@ -19,6 +20,7 @@ export function Contact() {
   const fieldId = useId();
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const whatsapp = whatsappHref(t("contact.whatsapp_message"));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ export function Contact() {
 
     const subject = `Portfolio Contact from ${formData.name}`;
     const body = `${formData.message}\n\nFrom: ${formData.name} (${formData.email})`;
-    window.location.href = `mailto:leone.feliper@gmail.com?subject=${encodeURIComponent(
+    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(
       subject,
     )}&body=${encodeURIComponent(body)}`;
 
@@ -62,17 +64,37 @@ export function Contact() {
               <h3 className="text-2xl font-bold text-white mb-6">{t("contact.cta_title")}</h3>
               <p className="text-gray-400 text-lg leading-relaxed mb-8">{t("contact.cta_desc")}</p>
 
+              {whatsapp && (
+                <a
+                  href={whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mb-6 inline-flex items-center gap-3 px-6 py-4 rounded-xl bg-[var(--zone-b-1)] hover:brightness-110 text-[#231603] font-bold transition-all shadow-[0_6px_24px_-6px_color-mix(in_oklab,var(--zone-b-1)_60%,transparent)]"
+                >
+                  <MessageCircle className="w-5 h-5" aria-hidden="true" />
+                  {t("contact.whatsapp_cta")}
+                </a>
+              )}
+
               <a
-                href="mailto:leone.feliper@gmail.com"
+                href={`mailto:${EMAIL}`}
                 className="flex items-center space-x-4 text-gray-300 hover:text-white transition-colors group"
               >
                 <span className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:border-[color-mix(in_oklab,var(--zone-b-1)_55%,transparent)] transition-colors">
                   <Mail className="w-6 h-6" aria-hidden="true" />
                 </span>
-                <span className="text-lg md:text-xl font-light break-all">
-                  leone.feliper@gmail.com
-                </span>
+                <span className="text-lg md:text-xl font-light break-all">{EMAIL}</span>
               </a>
+            </div>
+
+            {/* Networking has its own invitation, so a fellow developer or a
+                potential partner does not have to read the client pitch as
+                addressed to them. */}
+            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+              <h4 className="text-base font-bold text-white mb-2">{t("contact.network_title")}</h4>
+              <p className="text-gray-400 text-[15px] leading-relaxed font-light">
+                {t("contact.network_desc")}
+              </p>
             </div>
 
             <div className="space-y-6">

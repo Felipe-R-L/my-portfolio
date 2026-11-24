@@ -53,12 +53,19 @@ const SplitText: React.FC<SplitTextProps> = ({
     return () => observer.disconnect();
   }, [threshold, rootMargin]);
 
-  const letters = useMemo(() => {
-    return text.split("").map((char, i) => ({
-      char: char === " " ? "\u00A0" : char,
-      index: i,
-    }));
+  /*
+    Letters are grouped into words so a line can only break between words.
+    With every letter an independent inline-block, narrow screens broke
+    headings mid-word ("AJUD / AR"). `index` stays continuous across words so
+    the stagger reads the same as before.
+  */
+  const words = useMemo(() => {
+    let index = 0;
+    return text.split(" ").map((word) =>
+      word.split("").map((char) => ({ char, index: index++ })),
+    );
   }, [text]);
+  const letters = useMemo(() => words.flat(), [words]);
 
   const handleTransitionEnd = useCallback(
     (e: React.TransitionEvent<HTMLSpanElement>, idx: number) => {
@@ -91,27 +98,34 @@ const SplitText: React.FC<SplitTextProps> = ({
         tech the whole word instead of a stream of single characters.
       */}
       <span className="sr-only">{text}</span>
-      {letters.map(({ char, index }) => (
-        <span
-          key={index}
-          className="split-text-letter"
-          style={{
-            ...(isVisible ? animationTo : animationFrom),
-            transform: completedIndexes.has(index)
-              ? "none"
-              : isVisible
-                ? (animationTo.transform as string)
-                : (animationFrom.transform as string),
-            transition: completedIndexes.has(index)
-              ? "none"
-              : `all 0.6s ${easing} ${index * delay}ms`,
-            display: "inline-block",
-          }}
-          onTransitionEnd={(e) => handleTransitionEnd(e, index)}
-          aria-hidden="true"
-        >
-          {char}
-        </span>
+      {words.map((word, w) => (
+        <React.Fragment key={w}>
+          {w > 0 && " "}
+          <span aria-hidden="true" style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+          {word.map(({ char, index }) => (
+            <span
+              key={index}
+              className="split-text-letter"
+              style={{
+                ...(isVisible ? animationTo : animationFrom),
+                transform: completedIndexes.has(index)
+                  ? "none"
+                  : isVisible
+                    ? (animationTo.transform as string)
+                    : (animationFrom.transform as string),
+                transition: completedIndexes.has(index)
+                  ? "none"
+                  : `all 0.6s ${easing} ${index * delay}ms`,
+                display: "inline-block",
+              }}
+              onTransitionEnd={(e) => handleTransitionEnd(e, index)}
+              aria-hidden="true"
+            >
+              {char}
+            </span>
+          ))}
+          </span>
+        </React.Fragment>
       ))}
     </span>
   );
