@@ -58,18 +58,6 @@
     "title_part2": "Vamos conversar.",
     "cta_title": "Tem um projeto em mente?",
     "cta_desc": "Me conta a ideia, mesmo que ainda esteja crua. Respondo rápido e digo com sinceridade se e como posso ajudar.",
-    "social_title": "Redes sociais",
-    "form": {
-      "name": "Nome",
-      "email": "E-mail",
-      "message": "Mensagem",
-      "placeholder_name": "Seu nome aqui",
-      "placeholder_email": "seu@email.com",
-      "placeholder_message": "Conte um pouco sobre o seu negócio e o que você precisa...",
-      "send": "Enviar Mensagem",
-      "sending": "Enviando...",
-      "sent": "Mensagem pronta no seu app de e-mail!"
-    },
     "whatsapp_cta": "Chamar no WhatsApp",
     "whatsapp_message": "Oi Felipe! Vi seu portfólio e queria conversar sobre um projeto.",
     "network_title": "Dev, designer ou empreendedor?",

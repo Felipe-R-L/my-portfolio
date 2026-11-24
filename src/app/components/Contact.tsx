@@ -1,39 +1,19 @@
-import React, { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "motion/react";
-import { Mail, Send, MessageSquare, MessageCircle } from "lucide-react";
+import { Mail, MessageSquare, MessageCircle } from "lucide-react";
 
 import { Section } from "./shared/Section";
 import { SectionHeading } from "./shared/SectionHeading";
 import { SocialLinks } from "./shared/SocialLinks";
-import { GlowCard } from "./shared/GlowCard";
 import { EMAIL, whatsappHref } from "../data/contact";
 
-const FIELD_CLASS =
-  "w-full bg-white/[0.03] border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/30 focus:outline-none focus:border-[color-mix(in_oklab,var(--zone-b-1)_55%,transparent)] transition-colors";
-// Raised from text-white/40 (3.79:1 on the card background) to clear WCAG AA.
-const LABEL_CLASS =
-  "text-xs font-bold text-white/70 uppercase tracking-widest ml-1";
-
+/**
+ * Two direct channels and nothing to fill in. The old form only built a
+ * mailto: link, so it was the e-mail button with extra steps.
+ */
 export function Contact() {
   const { t } = useTranslation();
-  const fieldId = useId();
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const whatsapp = whatsappHref(t("contact.whatsapp_message"));
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("sending");
-
-    const subject = `Portfolio Contact from ${formData.name}`;
-    const body = `${formData.message}\n\nFrom: ${formData.name} (${formData.email})`;
-    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
-
-    setTimeout(() => setStatus("sent"), 1000);
-  };
 
   return (
     <Section id="contact" className="overflow-hidden">
@@ -57,19 +37,22 @@ export function Contact() {
           />
         </motion.div>
 
-        <div className="grid lg:grid-cols-5 gap-12 items-start">
-          {/* Contact Info & Socials */}
-          <div className="lg:col-span-2 space-y-12">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">{t("contact.cta_title")}</h3>
-              <p className="text-gray-400 text-lg leading-relaxed mb-8">{t("contact.cta_desc")}</p>
+        <div className="grid lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-16 items-start">
+          <div>
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+              {t("contact.cta_title")}
+            </h3>
+            <p className="text-gray-400 text-lg leading-relaxed mb-10 max-w-xl">
+              {t("contact.cta_desc")}
+            </p>
 
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
               {whatsapp && (
                 <a
                   href={whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mb-6 inline-flex items-center gap-3 px-6 py-4 rounded-xl bg-[var(--zone-b-1)] hover:brightness-110 text-[#231603] font-bold transition-all shadow-[0_6px_24px_-6px_color-mix(in_oklab,var(--zone-b-1)_60%,transparent)]"
+                  className="inline-flex items-center justify-center gap-3 px-7 py-4 rounded-full bg-[var(--zone-b-1)] hover:brightness-110 text-[#231603] font-bold text-lg transition-all shadow-[0_10px_30px_-10px_color-mix(in_oklab,var(--zone-b-1)_70%,transparent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--zone-b-1)]"
                 >
                   <MessageCircle className="w-5 h-5" aria-hidden="true" />
                   {t("contact.whatsapp_cta")}
@@ -78,128 +61,23 @@ export function Contact() {
 
               <a
                 href={`mailto:${EMAIL}`}
-                className="flex items-center space-x-4 text-gray-300 hover:text-white transition-colors group"
+                className="inline-flex items-center justify-center gap-3 px-7 py-4 rounded-full border border-white/20 hover:border-white/45 hover:bg-white/5 text-white font-medium text-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
-                <span className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:border-[color-mix(in_oklab,var(--zone-b-1)_55%,transparent)] transition-colors">
-                  <Mail className="w-6 h-6" aria-hidden="true" />
-                </span>
-                <span className="text-lg md:text-xl font-light break-all">{EMAIL}</span>
+                <Mail className="w-5 h-5" aria-hidden="true" />
+                <span className="break-all">{EMAIL}</span>
               </a>
-            </div>
-
-            {/* Networking has its own invitation, so a fellow developer or a
-                potential partner does not have to read the client pitch as
-                addressed to them. */}
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">
-              <h4 className="text-base font-bold text-white mb-2">{t("contact.network_title")}</h4>
-              <p className="text-gray-400 text-[15px] leading-relaxed font-light">
-                {t("contact.network_desc")}
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              {/* Raised from text-white/40 (3.7:1 on #030305) to clear WCAG AA. */}
-              <h4 className="text-sm font-bold text-white/70 uppercase tracking-[0.2em]">
-                {t("contact.social_title")}
-              </h4>
-              <SocialLinks variant="panel" />
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-3">
-            <GlowCard
-              glowColor="color-mix(in oklab, var(--zone-b-1) 45%, transparent)"
-              spotlightColor="color-mix(in oklab, var(--zone-b-1) 10%, transparent)"
-              className=""
-              contentClassName="p-8 md:p-10"
-            >
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor={`${fieldId}-name`} className={LABEL_CLASS}>
-                      {t("contact.form.name")}
-                    </label>
-                    <input
-                      id={`${fieldId}-name`}
-                      name="name"
-                      type="text"
-                      autoComplete="name"
-                      required
-                      placeholder={t("contact.form.placeholder_name")}
-                      className={FIELD_CLASS}
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor={`${fieldId}-email`} className={LABEL_CLASS}>
-                      {t("contact.form.email")}
-                    </label>
-                    <input
-                      id={`${fieldId}-email`}
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      placeholder={t("contact.form.placeholder_email")}
-                      className={FIELD_CLASS}
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor={`${fieldId}-message`} className={LABEL_CLASS}>
-                    {t("contact.form.message")}
-                  </label>
-                  <textarea
-                    id={`${fieldId}-message`}
-                    name="message"
-                    required
-                    rows={5}
-                    placeholder={t("contact.form.placeholder_message")}
-                    className={`${FIELD_CLASS} resize-none`}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  />
-                </div>
-
-                <motion.button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className="w-full bg-[var(--zone-b-1)] hover:brightness-110 text-[#231603] font-bold py-5 rounded-xl flex items-center justify-center gap-3 transition-all shadow-[0_6px_24px_-6px_color-mix(in_oklab,var(--zone-b-1)_60%,transparent)] disabled:opacity-70"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {status === "sending" ? (
-                    <span className="flex items-center gap-2">
-                      <span
-                        aria-hidden="true"
-                        className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"
-                      />
-                      {t("contact.form.sending")}
-                    </span>
-                  ) : status === "sent" ? (
-                    t("contact.form.sent")
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5" aria-hidden="true" />
-                      {t("contact.form.send")}
-                    </>
-                  )}
-                </motion.button>
-
-                <p aria-live="polite" className="sr-only">
-                  {status === "sending"
-                    ? t("contact.form.sending")
-                    : status === "sent"
-                      ? t("contact.form.sent")
-                      : ""}
-                </p>
-              </form>
-            </GlowCard>
+          {/* Networking has its own invitation, so a fellow developer or a
+              potential partner does not have to read the client pitch as
+              addressed to them. */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-7 md:p-8">
+            <h4 className="text-lg font-bold text-white mb-2">{t("contact.network_title")}</h4>
+            <p className="text-gray-400 text-[15px] leading-relaxed font-light mb-6">
+              {t("contact.network_desc")}
+            </p>
+            <SocialLinks variant="panel" />
           </div>
         </div>
       </div>
