@@ -58,18 +58,6 @@
     "title_part2": "Let's talk.",
     "cta_title": "Have a project in mind?",
     "cta_desc": "Tell me the idea, even if it's still rough. I reply fast and will tell you honestly whether and how I can help.",
-    "social_title": "Social",
-    "form": {
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "placeholder_name": "Your name here",
-      "placeholder_email": "your@email.com",
-      "placeholder_message": "Tell me a bit about your business and what you need...",
-      "send": "Send Message",
-      "sending": "Sending...",
-      "sent": "Message Ready in your Mail App!"
-    },
     "whatsapp_cta": "Message on WhatsApp",
     "whatsapp_message": "Hi Felipe! I saw your portfolio and would like to talk about a project.",
     "network_title": "Developer, designer or founder?",
