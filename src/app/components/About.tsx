@@ -31,7 +31,7 @@ const ORBS: Orb[] = [
  * nothing the label did not already say. A typographic list carries the same
  * four claims plus the evidence for each, in less space.
  */
-const SKILLS = ["clean_arch", "devops", "fullstack", "english"] as const;
+const SKILLS = ["direct", "business", "stack", "support"] as const;
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },

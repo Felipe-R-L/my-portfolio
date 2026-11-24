@@ -6,73 +6,79 @@
     "services": "Services",
     "blog": "Blog",
     "menu_open": "Menu",
-    "menu_close": "Close menu"
+    "menu_close": "Close menu",
+    "process": "How it works"
   },
   "hero": {
     "badge": "Available for new projects",
-    "title_part1": "Engineering",
+    "title_part1": "Software that",
     "title_part2_variants": [
-      "Solutions",
-      "Experiences",
-      "Ideas"
+      "Sells",
+      "Organizes",
+      "Automates"
     ],
-    "description": "Building scalable, high-performance web applications with a premium aesthetic.",
-    "cta_projects": "View Projects",
-    "cta_contact": "Get in Touch",
-    "role": "Fullstack Developer"
+    "description": "I build websites, online stores and custom systems for small and mid-sized businesses. You talk to me directly, from the first draft to support after launch.",
+    "cta_projects": "View projects",
+    "cta_contact": "Get in touch",
+    "role": "Websites · Stores · Systems",
+    "cta_whatsapp": "Message on WhatsApp"
   },
   "about": {
-    "title_part1": "Strategy",
-    "title_part2": "Identity.",
-    "bio_p1": "Specialized in high-impact SaaS engineering, currently driving technological evolution at OMD do Brasil. I bridge the gap between complex technical strategies and exceptional user experiences.",
-    "bio_p2": "My approach integrates Domain-Driven Design and Clean Architecture to build robust, scalable software. More than just writing code, I design systems that evolve with your vision.",
+    "title_part1": "About",
+    "title_part2": "Who I am.",
+    "bio_p1": "I'm Felipe, a fullstack developer from the countryside of São Paulo, Brazil. I also run a business of my own, so I think about cost, timelines and return, not just code.",
+    "bio_p2": "I enjoy swapping ideas with other developers, designers and business owners. If you have a project, want to partner up or just talk tech, reach out.",
     "revealed": {
       "trustworthy": "TRUSTWORTHY",
       "collaborative": "COLLABORATIVE",
       "dedicated": "DEDICATED"
     },
-    "skills_title": "Capabilities",
+    "skills_title": "Why work with me",
     "skills": {
-      "clean_arch": {
-        "title": "Clean Architecture",
-        "proof": "Domain-Driven Design and Clean Architecture across Nx and Turborepo monorepos."
+      "direct": {
+        "title": "You talk to the person building it",
+        "proof": "No agency, no middleman: the same contact from the quote to support."
       },
-      "devops": {
-        "title": "DevOps & Cloud",
-        "proof": "Infrastructure as code with Terraform, containers and CI/CD in production."
+      "business": {
+        "title": "I think like a business owner",
+        "proof": "Because I run a business too, I prioritize what gets you results, not what looks clever in code."
       },
-      "fullstack": {
-        "title": "Fullstack, end to end",
-        "proof": "Java, TypeScript, NestJS, Angular, React, Prisma, Drizzle and PostgreSQL."
+      "stack": {
+        "title": "Big-company technology",
+        "proof": "React, Next.js, NestJS and PostgreSQL, the same foundation I use on platforms with millions of records."
       },
-      "english": {
-        "title": "English (C2)",
-        "proof": "I read, write and present in English without a middleman."
+      "support": {
+        "title": "Support after delivery",
+        "proof": "Tweaks, new features and maintenance as your business grows."
       }
     }
   },
   "contact": {
-    "title_part1": "Connection",
-    "title_part2": "Let's Talk.",
-    "cta_title": "Let's turn your vision into reality.",
-    "cta_desc": "I'm always open to discussing new projects, creative ideas, or opportunities to integrate innovative visions.",
-    "social_title": "Social Presence",
+    "title_part1": "Contact",
+    "title_part2": "Let's talk.",
+    "cta_title": "Have a project in mind?",
+    "cta_desc": "Tell me the idea, even if it's still rough. I reply fast and will tell you honestly whether and how I can help.",
+    "social_title": "Social",
     "form": {
       "name": "Name",
       "email": "Email",
       "message": "Message",
       "placeholder_name": "Your name here",
       "placeholder_email": "your@email.com",
-      "placeholder_message": "Tell me a bit about your project...",
+      "placeholder_message": "Tell me a bit about your business and what you need...",
       "send": "Send Message",
       "sending": "Sending...",
       "sent": "Message Ready in your Mail App!"
-    }
+    },
+    "whatsapp_cta": "Message on WhatsApp",
+    "whatsapp_message": "Hi Felipe! I saw your portfolio and would like to talk about a project.",
+    "network_title": "Developer, designer or founder?",
+    "network_desc": "I'm always up for swapping ideas, referring work and building partnerships. Find me on LinkedIn or right here."
   },
   "projects": {
-    "title_part1": "Personal",
-    "title_part2": "And Freelance.",
-    "lead": "Projects where I built everything — from the database schema to the checkout.",
+    "title_part1": "Projects",
+    "title_part2": "Live.",
+    "lead": "Real work, running today. From the database to the checkout, I built it.",
     "labels": {
       "live": "Visit site",
       "code": "Code",
@@ -82,9 +88,9 @@
     },
     "dallas_sync": {
       "title": "Dallas Sync",
-      "category": "PMS / ERP",
-      "status": "In progress, with a real client",
-      "description": "A motel ERP that keeps running when the internet drops. Multi-tenant, co-developed with a real client, with FIFO inventory costing, a rate engine that handles public holidays, and row-level security across every table.",
+      "category": "Management system",
+      "status": "Used every day",
+      "description": "Motel management software that keeps working when the internet drops. Check-in, tabs, inventory and payments in one place, used daily by the front-desk staff.",
       "arch": {
         "offline": "Connection lost",
         "caption": "The front desk keeps working",
@@ -100,15 +106,15 @@
     },
     "secret": {
       "title": "Secret Boutique",
-      "category": "E-commerce",
-      "status": "Personal project",
-      "description": "A store built entirely around discretion: age verification at the door, anonymous reviews, a panic button, and orders traceable by room without identifying the guest."
+      "category": "Online store",
+      "status": "Store live",
+      "description": "An online store with Mercado Pago checkout, built entirely around discretion: age check at the door, anonymous reviews and trackable orders that never expose the customer."
     },
     "dallas_motel": {
       "title": "Dallas Motel",
-      "category": "Landing + menu",
-      "status": "Freelance",
-      "description": "Institutional site with a digital menu and an admin panel so management can edit suites, prices and holidays without a developer."
+      "category": "Website + digital menu",
+      "status": "Site live",
+      "description": "A business website with a digital menu and a panel where management updates suites, prices and holidays on their own, without calling a developer."
     }
   },
   "experience": {
@@ -149,33 +155,38 @@
   },
   "services": {
     "title_part1": "How I can",
-    "title_part2": "Help you.",
-    "description": "From initial concept to production-ready scale, I deliver high-end technical solutions tailored to your business goals.",
+    "title_part2": "Help.",
+    "description": "From a simple website to a full system. You explain your business problem, I handle the technical side.",
+    "example_label": "Example:",
     "items": {
       "landing_pages": {
-        "title": "Landing Pages & Websites",
-        "description": "High-performance, visually stunning digital experiences designed to convert visitors into customers."
+        "title": "Websites & landing pages",
+        "description": "A fast, good-looking site that explains what you sell and sends customers straight to your WhatsApp or checkout.",
+        "example": "the Dallas Motel site, with a digital menu and a pricing panel."
       },
       "ecommerce": {
-        "title": "Custom E-commerce",
-        "description": "Scalable online stores with a focus on checkout fluidity and conversion architecture."
+        "title": "Online stores",
+        "description": "An online store with catalog, cart and payments by Pix or card, so you can sell without relying only on marketplaces.",
+        "example": "Secret Boutique, a store with Mercado Pago checkout."
       },
-      "ai": {
-        "title": "AI & Chatbots",
-        "description": "Intelligent automation using custom AI agents and LLMs to streamline processes and scale support."
+      "systems": {
+        "title": "Management systems",
+        "description": "Custom software to track inventory, orders, bookings or service, instead of spreadsheets and notebooks.",
+        "example": "Dallas Sync, motel management that keeps working offline."
       },
-      "api": {
-        "title": "Systems & APIs",
-        "description": "Complex integrations and scalable backend systems to automate workflows and connect your tools."
+      "automation": {
+        "title": "Automation & AI",
+        "description": "I take repetitive work off your plate and connect your tools: WhatsApp alerts, automatic reports and AI assistants.",
+        "example": "my AI secretary, written up in detail on the blog."
       }
     },
-    "learn_more": "Learn More"
+    "learn_more": "Learn more"
   },
   "home": {
     "writing": {
       "title_part1": "From the",
       "title_part2": "Blog.",
-      "lead": "A recent, technical look at a real problem — the clearest evidence of how I think.",
+      "lead": "I write about real problems I've solved. A good way to see how I think before we talk.",
       "read_more": "Continue reading",
       "card_aria": "Read the full article: {{title}}",
       "see_all": "See all articles"
@@ -198,5 +209,33 @@
     "contents": "Contents",
     "close": "Close",
     "back": "Back to blog"
+  },
+  "credibility": {
+    "eyebrow": "Beyond freelance",
+    "title": "I'm also a fullstack developer at OMD do Brasil.",
+    "description": "There I designed the architecture of OMDfarm, a farm-machinery telemetry platform showcased at Agrishow. It's the same technology and the same care I bring to every client project."
+  },
+  "process": {
+    "title_part1": "How it",
+    "title_part2": "Works.",
+    "lead": "No surprises halfway through: you know what you're getting before we commit.",
+    "steps": {
+      "talk": {
+        "title": "Talk",
+        "description": "Tell me what you need, over WhatsApp or a call. No commitment and no jargon."
+      },
+      "draft": {
+        "title": "Draft",
+        "description": "I put together a preview of how it will look, plus a quote. We only move forward if it makes sense to you."
+      },
+      "build": {
+        "title": "Build",
+        "description": "I build in stages and show you progress, so you can adjust before it's done."
+      },
+      "launch": {
+        "title": "Launch & support",
+        "description": "I put it live on your domain, show you how to use it and stay around for tweaks."
+      }
+    }
   }
 }

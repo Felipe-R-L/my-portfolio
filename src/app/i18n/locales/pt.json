@@ -6,73 +6,79 @@
     "services": "Serviços",
     "blog": "Blog",
     "menu_open": "Menu",
-    "menu_close": "Fechar menu"
+    "menu_close": "Fechar menu",
+    "process": "Como funciona"
   },
   "hero": {
     "badge": "Disponível para novos projetos",
-    "title_part1": "Materializando",
+    "title_part1": "Tecnologia que",
     "title_part2_variants": [
-      "Soluções",
-      "Experiências",
-      "Ideias"
+      "Vende",
+      "Organiza",
+      "Automatiza"
     ],
-    "description": "Desenvolvendo aplicações web escaláveis e de alta performance com estética premium.",
-    "cta_projects": "Ver Projetos",
-    "cta_contact": "Entrar em Contato",
-    "role": "Desenvolvedor Fullstack"
+    "description": "Crio sites, lojas virtuais e sistemas sob medida para pequenos e médios negócios. Você fala direto comigo, do primeiro rascunho ao suporte depois que está no ar.",
+    "cta_projects": "Ver projetos",
+    "cta_contact": "Entrar em contato",
+    "role": "Sites · Lojas · Sistemas",
+    "cta_whatsapp": "Chamar no WhatsApp"
   },
   "about": {
-    "title_part1": "Estratégia",
-    "title_part2": "Identidade.",
-    "bio_p1": "Especialista em engenharia de soluções SaaS de alto impacto, atualmente liderando a evolução tecnológica na OMD do Brasil. Conecto estratégias técnicas complexas a experiências de uso excepcionais.",
-    "bio_p2": "Minha abordagem une Domain-Driven Design e Clean Architecture para criar softwares robustos e escaláveis. Mais do que escrever código, projeto sistemas que acompanham o crescimento da sua visão.",
+    "title_part1": "Sobre",
+    "title_part2": "Quem sou.",
+    "bio_p1": "Sou o Felipe, desenvolvedor fullstack do interior de São Paulo. Também tenho meu próprio negócio, então penso em custo, prazo e retorno, não só em código.",
+    "bio_p2": "Gosto de trocar ideia com outros devs, designers e donos de negócio. Se você tem um projeto, quer fazer uma parceria ou só conversar sobre tecnologia, me chama.",
     "revealed": {
       "trustworthy": "CONFIÁVEL",
       "collaborative": "COLABORATIVO",
       "dedicated": "DEDICADO"
     },
-    "skills_title": "Capacidades",
+    "skills_title": "Por que trabalhar comigo",
     "skills": {
-      "clean_arch": {
-        "title": "Arquitetura Limpa",
-        "proof": "Domain-Driven Design e Clean Architecture em monorepos Nx e Turborepo."
+      "direct": {
+        "title": "Você fala direto com quem faz",
+        "proof": "Sem agência e sem intermediário: o mesmo contato do orçamento ao suporte."
       },
-      "devops": {
-        "title": "DevOps & Cloud",
-        "proof": "Infraestrutura como código com Terraform, containers e CI/CD em produção."
+      "business": {
+        "title": "Penso como dono de negócio",
+        "proof": "Como também empreendo, priorizo o que traz resultado para você, não o que é mais bonito no código."
       },
-      "fullstack": {
-        "title": "Fullstack de ponta a ponta",
-        "proof": "Java, TypeScript, NestJS, Angular, React, Prisma, Drizzle e PostgreSQL."
+      "stack": {
+        "title": "Tecnologia de empresa grande",
+        "proof": "React, Next.js, NestJS e PostgreSQL, a mesma base que uso em plataformas com milhões de registros."
       },
-      "english": {
-        "title": "Inglês (C2)",
-        "proof": "Leio, escrevo e apresento em inglês sem intermediário."
+      "support": {
+        "title": "Suporte depois da entrega",
+        "proof": "Ajustes, novas funções e manutenção quando o seu negócio crescer."
       }
     }
   },
   "contact": {
-    "title_part1": "Conexão",
-    "title_part2": "Vamos Conversar.",
-    "cta_title": "Vamos transformar sua ideia em realidade.",
-    "cta_desc": "Estou sempre aberto a novos projetos, ideias criativas ou oportunidades para integrar visões inovadoras.",
-    "social_title": "Redes Sociais",
+    "title_part1": "Contato",
+    "title_part2": "Vamos conversar.",
+    "cta_title": "Tem um projeto em mente?",
+    "cta_desc": "Me conta a ideia, mesmo que ainda esteja crua. Respondo rápido e digo com sinceridade se e como posso ajudar.",
+    "social_title": "Redes sociais",
     "form": {
       "name": "Nome",
       "email": "E-mail",
       "message": "Mensagem",
       "placeholder_name": "Seu nome aqui",
       "placeholder_email": "seu@email.com",
-      "placeholder_message": "Conte-me um pouco sobre o seu projeto...",
+      "placeholder_message": "Conte um pouco sobre o seu negócio e o que você precisa...",
       "send": "Enviar Mensagem",
       "sending": "Enviando...",
       "sent": "Mensagem pronta no seu app de e-mail!"
-    }
+    },
+    "whatsapp_cta": "Chamar no WhatsApp",
+    "whatsapp_message": "Oi Felipe! Vi seu portfólio e queria conversar sobre um projeto.",
+    "network_title": "Dev, designer ou empreendedor?",
+    "network_desc": "Também curto trocar ideia, indicar trabalho e montar parcerias. Me chama no LinkedIn ou por aqui."
   },
   "projects": {
-    "title_part1": "Autoral",
-    "title_part2": "E Freela.",
-    "lead": "Projetos em que fiz tudo — do schema do banco ao checkout.",
+    "title_part1": "Projetos",
+    "title_part2": "No ar.",
+    "lead": "Trabalhos reais, rodando hoje. Do banco de dados ao checkout, fui eu que fiz.",
     "labels": {
       "live": "Ver o site",
       "code": "Código",
@@ -82,9 +88,9 @@
     },
     "dallas_sync": {
       "title": "Dallas Sync",
-      "category": "PMS / ERP",
-      "status": "Em construção, com cliente real",
-      "description": "ERP de motel que não para quando a internet cai. Multi-tenant, co-desenvolvido com um cliente real, com custeio FIFO de estoque, motor de tarifas com feriados e isolamento por RLS em todas as tabelas.",
+      "category": "Sistema de gestão",
+      "status": "Em uso todos os dias",
+      "description": "Sistema de gestão de motel que continua funcionando quando a internet cai. Check-in, comandas, estoque e pagamentos num lugar só, usado diariamente por quem atende no balcão.",
       "arch": {
         "offline": "Internet caiu",
         "caption": "A recepção continua operando",
@@ -100,15 +106,15 @@
     },
     "secret": {
       "title": "Secret Boutique",
-      "category": "E-commerce",
-      "status": "Projeto autoral",
-      "description": "Loja construída inteira em torno de discrição: verificação de idade na entrada, avaliações anônimas, botão de pânico e pedidos rastreáveis por quarto sem identificar o hóspede."
+      "category": "Loja virtual",
+      "status": "Loja no ar",
+      "description": "Loja online com pagamento pelo Mercado Pago e foco total em discrição: verificação de idade na entrada, avaliações anônimas e pedidos rastreáveis sem expor o cliente."
     },
     "dallas_motel": {
       "title": "Dallas Motel",
-      "category": "Landing + cardápio",
-      "status": "Freela",
-      "description": "Site institucional com cardápio digital e painel para a gerência editar suítes, preços e feriados sem depender de dev."
+      "category": "Site + cardápio digital",
+      "status": "Site no ar",
+      "description": "Site institucional com cardápio digital e um painel onde a gerência muda suítes, preços e feriados sozinha, sem precisar chamar programador."
     }
   },
   "experience": {
@@ -150,32 +156,37 @@
   "services": {
     "title_part1": "Como posso",
     "title_part2": "Te ajudar.",
-    "description": "Do conceito inicial à escala de produção, entrego soluções técnicas de alto nível adaptadas aos seus objetivos de negócio.",
+    "description": "Do site simples ao sistema completo. Você explica o problema do seu negócio, eu cuido da parte técnica.",
+    "example_label": "Exemplo:",
     "items": {
       "landing_pages": {
-        "title": "Landing Pages & Sites",
-        "description": "Experiências digitais de alto desempenho e design impactante, projetadas para transformar visitantes em clientes."
+        "title": "Sites e landing pages",
+        "description": "Um site rápido e bonito que explica o que você vende e leva o cliente direto pro seu WhatsApp ou pra compra.",
+        "example": "site do Dallas Motel, com cardápio digital e painel de preços."
       },
       "ecommerce": {
-        "title": "E-commerce Sob Medida",
-        "description": "Lojas online escaláveis com foco total na fluidez do checkout e na arquitetura de conversão."
+        "title": "Lojas virtuais",
+        "description": "Loja online com catálogo, carrinho e pagamento por Pix ou cartão, para vender sem depender só de marketplace.",
+        "example": "Secret Boutique, loja com pagamento pelo Mercado Pago."
       },
-      "ai": {
-        "title": "IA & Chatbots",
-        "description": "Automação inteligente com agentes de IA e LLMs para otimizar processos e escalar o atendimento."
+      "systems": {
+        "title": "Sistemas de gestão",
+        "description": "Sistema sob medida para controlar estoque, pedidos, agenda ou atendimento, no lugar de planilha e caderno.",
+        "example": "Dallas Sync, gestão de motel que funciona até sem internet."
       },
-      "api": {
-        "title": "Sistemas & APIs",
-        "description": "Integrações complexas e backends escaláveis para automatizar fluxos de trabalho e conectar suas ferramentas."
+      "automation": {
+        "title": "Automação e IA",
+        "description": "Tiro do seu caminho as tarefas repetitivas e conecto suas ferramentas: avisos no WhatsApp, relatórios automáticos e assistentes com IA.",
+        "example": "minha secretária de IA, contada em detalhes no blog."
       }
     },
-    "learn_more": "Saiba Mais"
+    "learn_more": "Saiba mais"
   },
   "home": {
     "writing": {
       "title_part1": "Direto do",
       "title_part2": "Blog.",
-      "lead": "Um olhar técnico recente sobre um problema real — a evidência mais clara de como eu penso.",
+      "lead": "Escrevo sobre problemas reais que resolvi. Um bom jeito de ver como eu penso antes da gente conversar.",
       "read_more": "Continuar lendo",
       "card_aria": "Ler o artigo completo: {{title}}",
       "see_all": "Ver todos os artigos"
@@ -198,5 +209,33 @@
     "contents": "Conteúdo",
     "close": "Fechar",
     "back": "Voltar ao blog"
+  },
+  "credibility": {
+    "eyebrow": "Além dos freelas",
+    "title": "Também sou desenvolvedor fullstack na OMD do Brasil.",
+    "description": "Lá criei a arquitetura do OMDfarm, plataforma de telemetria de máquinas agrícolas apresentada na Agrishow. É a mesma tecnologia e o mesmo cuidado que levo para o projeto de cada cliente."
+  },
+  "process": {
+    "title_part1": "Como",
+    "title_part2": "Funciona.",
+    "lead": "Sem surpresa no meio do caminho: você sabe o que vai receber antes de fechar.",
+    "steps": {
+      "talk": {
+        "title": "Conversa",
+        "description": "Você me conta o que precisa, pelo WhatsApp ou numa call. Sem compromisso e sem termo técnico."
+      },
+      "draft": {
+        "title": "Rascunho",
+        "description": "Monto uma prévia de como vai ficar e passo o orçamento. Só seguimos se fizer sentido pra você."
+      },
+      "build": {
+        "title": "Desenvolvimento",
+        "description": "Construo em etapas e te mostro o andamento, para você ajustar antes de ficar pronto."
+      },
+      "launch": {
+        "title": "No ar e suporte",
+        "description": "Coloco no ar com o seu domínio, te mostro como usar e continuo por perto para ajustes."
+      }
+    }
   }
 }

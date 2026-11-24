@@ -4,11 +4,11 @@ import { useReducedMotion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
 import { Hero } from "./components/Hero";
-import TechMarquee from "./components/TechMarquee";
 import { About } from "./components/About";
-import { Experience } from "./components/Experience";
 import { Services } from "./components/Services";
 import { Projects } from "./components/Projects";
+import { Credibility } from "./components/Credibility";
+import { Process } from "./components/Process";
 import { LatestWriting } from "./components/LatestWriting";
 import { Contact } from "./components/Contact";
 import { StarField } from "./components/shared/StarField";
@@ -22,7 +22,12 @@ import { useIsMobile } from "./hooks/useIsMobile";
 const LazyGalaxy = lazy(() => import("./components/react-bits/Galaxy"));
 const LazyFluidGlass = lazy(() => import("./components/react-bits/FluidGlass"));
 
-const SECTION_IDS = ["about", "projects", "experience", "services"] as const;
+/**
+ * This is the freelance and networking version of the homepage: what I do for
+ * a business comes first, then proof, then how working together goes, then who
+ * I am. `Experience` and `TechMarquee` are kept for the job-hunting version.
+ */
+const SECTION_IDS = ["services", "projects", "process", "about"] as const;
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -102,11 +107,11 @@ export default function AppLayout() {
         {/* Each section now owns its own scroll target, so the wrapper divs that
             used to carry these ids would have duplicated them. */}
         <Hero />
-        <TechMarquee />
-        <About />
-        <Projects />
-        <Experience />
         <Services />
+        <Projects />
+        <Credibility />
+        <Process />
+        <About />
         <LatestWriting />
         <Contact />
 

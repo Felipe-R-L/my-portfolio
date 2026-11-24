@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
-import { Globe, ShoppingCart, Zap, Bot, Layers } from "lucide-react";
+import { Globe, ShoppingCart, Zap, LayoutDashboard, Layers } from "lucide-react";
 
 import MobileCarousel from "./shared/MobileCarousel";
 import { Section } from "./shared/Section";
@@ -16,8 +16,8 @@ import { GlowCard } from "./shared/GlowCard";
 const SERVICES = [
   { id: "landing_pages", icon: Globe, tint: "var(--zone-b-1)" },
   { id: "ecommerce", icon: ShoppingCart, tint: "var(--zone-b-2)" },
-  { id: "ai", icon: Bot, tint: "var(--zone-b-1)" },
-  { id: "api", icon: Zap, tint: "var(--zone-b-2)" },
+  { id: "systems", icon: LayoutDashboard, tint: "var(--zone-b-1)" },
+  { id: "automation", icon: Zap, tint: "var(--zone-b-2)" },
 ] as const;
 
 type Service = (typeof SERVICES)[number];
@@ -104,6 +104,13 @@ function ServiceCard({ service, t }: { service: Service; t: TFunction }) {
 
       <p className="text-gray-400 text-base leading-relaxed flex-1">
         {t(`services.items.${service.id}.description`)}
+      </p>
+
+      {/* Each offer points at something already built, so the card is a claim
+          with evidence rather than a promise. */}
+      <p className="mt-6 pt-4 w-full border-t border-white/10 text-[13px] text-gray-400 leading-relaxed">
+        <span className="text-[var(--zone-b-1)] font-medium">{t("services.example_label")}</span>{" "}
+        {t(`services.items.${service.id}.example`)}
       </p>
     </GlowCard>
   );
