@@ -35,10 +35,16 @@
   color: #f5f7ff;
 }
 
+/* On wide screens the lines wrapper dissolves so each line is its own grid
+   item; on phones it becomes the block laid over the photo. */
+.hero-lines {
+  display: contents;
+}
+
 .hero-line {
   display: block;
   overflow: hidden;
-  /* room for descender-free caps plus the mask travel */
+  /* room for the mask travel and the thinner, taller-looking light weights */
   padding-block: 0.04em 0.02em;
 }
 
@@ -55,10 +61,42 @@
   margin-top: -0.06em;
 }
 
-.hero-word-wrap,
 .hero-word {
   display: inline-block;
+  white-space: nowrap;
   will-change: transform;
+}
+
+/*
+ * Each letter carries --k, 0 to 1: how close the pointer (or the intro sweep)
+ * is. The script sets the weight; colour and lift follow --k here so the
+ * transition smooths all three together.
+ */
+.hero-letter {
+  --k: 0;
+  display: inline-block;
+  font-weight: 700;
+  color: color-mix(in oklab, var(--zone-a-1) calc(var(--k) * 100%), #f5f7ff);
+  transform: translateY(calc(var(--k) * -0.035em));
+  transition:
+    font-weight 0.22s ease-out,
+    color 0.22s ease-out,
+    transform 0.22s ease-out;
+  /* Letters rise one by one out of the line's mask. `backwards` only, so the
+     animation stops owning `transform` once it ends and the lift can work. */
+  animation: hero-rise 1s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: calc(120ms + var(--i) * 45ms);
+}
+
+@keyframes hero-rise {
+  from {
+    transform: translateY(110%);
+  }
+}
+
+.hero-name {
+  touch-action: pan-y;
+  cursor: default;
 }
 
 .hero-photo {
@@ -267,36 +305,58 @@
 
 @media (max-width: 767px) {
   .hero {
-    --name-size: 17.6vw;
+    --name-size: 16vw;
     justify-content: flex-start;
-    padding-top: 6.5rem;
+    padding-top: 5.5rem;
   }
 
+  /* A cover: the photo full width, the name set over its lower edge. */
   .hero-name {
     grid-template-columns: 1fr;
-    grid-template-areas:
-      "photo"
-      "first"
-      "last";
-    justify-items: start;
+    grid-template-areas: "stack";
   }
 
-  /* On a phone the photo stacks above the name instead of crossing it: at
-     this size the overlap only clipped the top of FELIPE. */
   .hero-photo {
-    justify-self: start;
-    width: 56vw;
-    margin-bottom: 0.14em;
+    grid-area: stack;
+    justify-self: stretch;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    max-height: 66svh;
+    margin: 0;
     border-radius: 1.25rem;
+  }
+
+  .hero-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 35%,
+      rgb(3 3 5 / 0.75) 75%,
+      rgb(3 3 5 / 0.95)
+    );
+    pointer-events: none;
+  }
+
+  .hero-lines {
+    grid-area: stack;
+    align-self: end;
+    display: block;
+    position: relative;
+    z-index: 2;
+    padding: 0 0.12em 0.1em;
   }
 
   .hero-line--last {
     mix-blend-mode: normal;
+    margin-top: -0.04em;
   }
 
   .hero-base {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    padding-top: 1.5rem;
   }
 
   .hero-cta {
@@ -307,7 +367,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero-band-track,
-  .hero-status-dot::after {
+  .hero-status-dot::after,
+  .hero-letter {
     animation: none;
+  }
+  .hero-letter {
+    transition: none;
   }
 }
