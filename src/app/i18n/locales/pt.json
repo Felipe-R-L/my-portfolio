@@ -81,7 +81,7 @@
       "title": "Dallas Sync",
       "category": "Sistema de gestão para motéis",
       "status": "Em produção · SaaS",
-      "description": "Sistema completo de gestão para motel, em produção desde setembro de 2026 e pronto para atender outros motéis por assinatura. A recepção continua operando quando a internet cai, e o dono acompanha o negócio de qualquer lugar.",
+      "description": "Gestão completa de motel, em produção desde setembro de 2026 e vendida por assinatura para outros motéis. Recepção, estoque, financeiro e BI num sistema só.",
       "arch": {
         "offline": "Internet caiu",
         "caption": "A recepção continua operando",
@@ -94,17 +94,58 @@
         "step3_title": "Servidor reconcilia",
         "step3_note": "idempotente, dead-letter com retry"
       },
-      "highlights": {
-        "front_desk": "Mapa das suítes ao vivo, comandas, reservas e caixa por turno, tudo funcionando offline",
-        "stock": "Estoque com custo real (FIFO), transferências entre setores e venda no balcão",
-        "invoices": "Nota fiscal fotografada é lida por IA e vira despesa e entrada de estoque",
-        "bi": "Financeiro e BI: ocupação por dia e horário, ticket médio, receita por suíte e alertas de caixa",
-        "saas": "Vários motéis no mesmo sistema, cada um isolado, com assinatura e cobrança por Pix ou boleto"
-      },
       "metrics": {
-        "history": "anos de histórico migrados do sistema antigo",
-        "tests": "testes automatizados",
+        "history": "anos de histórico",
+        "tests": "testes",
         "live_since": "no ar desde"
+      },
+      "showcase": {
+        "label": "O que o Dallas Sync faz",
+        "tabs": {
+          "offline": "Funciona offline",
+          "invoice": "Nota por IA",
+          "bi": "BI do dono",
+          "tenants": "Vários motéis"
+        },
+        "captions": {
+          "offline": "Check-in, comandas e caixa continuam funcionando quando a internet cai. Quando a rede volta, tudo sincroniza sozinho, sem duplicar nada.",
+          "invoice": "Tira a foto da nota do fornecedor e a IA preenche tudo. Alguém confere, e ela vira despesa e entrada de estoque ao mesmo tempo.",
+          "bi": "O dono vê quando o motel enche, quais suítes rendem mais e quando o caixa fecha em falta, sem montar planilha.",
+          "tenants": "Cada motel usa o mesmo sistema, mas os dados de um nunca aparecem para outro. A assinatura é cobrada por Pix ou boleto, com nota fiscal."
+        },
+        "invoice": {
+          "photo_title": "Foto da nota",
+          "photo_note": "celular ou PDF, várias de uma vez",
+          "ai_title": "IA lê a nota",
+          "ai_note": "fornecedor, itens, valores e vencimento",
+          "check_title": "Alguém confere",
+          "check_note": "nada entra sem uma pessoa ver",
+          "expense_title": "Despesa",
+          "expense_note": "paga ou a pagar",
+          "stock_title": "Estoque",
+          "stock_note": "entrada com custo e frete"
+        },
+        "bi": {
+          "heatmap": "Ocupação por dia e horário",
+          "suites": "Suítes que mais rendem",
+          "illustrative": "Dados ilustrativos.",
+          "days": [
+            "Seg",
+            "Ter",
+            "Qua",
+            "Qui",
+            "Sex",
+            "Sáb",
+            "Dom"
+          ]
+        },
+        "tenants": {
+          "motel": "Motel",
+          "devices": "recepção e gerência",
+          "shield": "Cada motel só vê o seu",
+          "database": "Um banco de dados",
+          "billing": "Isolamento garantido pelo próprio banco, não só pelo app."
+        }
       }
     },
     "secret": {

@@ -81,7 +81,7 @@
       "title": "Dallas Sync",
       "category": "Motel management system",
       "status": "In production · SaaS",
-      "description": "A complete management system for motels, in production since September 2026 and ready to serve other motels on a subscription. The front desk keeps working when the internet drops, and the owner follows the business from anywhere.",
+      "description": "Complete motel management, in production since September 2026 and sold on subscription to other motels. Front desk, inventory, finance and BI in one system.",
       "arch": {
         "offline": "Connection lost",
         "caption": "The front desk keeps working",
@@ -94,17 +94,58 @@
         "step3_title": "Server reconciles",
         "step3_note": "idempotent, dead-letter with retry"
       },
-      "highlights": {
-        "front_desk": "Live suite map, tabs, bookings and per-shift cash register, all working offline",
-        "stock": "Inventory at real cost (FIFO), transfers between areas and counter sales",
-        "invoices": "A photographed supplier invoice is read by AI and becomes an expense and a stock entry",
-        "bi": "Finance and BI: occupancy by day and hour, average ticket, revenue per suite and cash alerts",
-        "saas": "Many motels on one system, each fully isolated, with subscription billing by Pix or boleto"
-      },
       "metrics": {
-        "history": "years of history migrated from the old system",
-        "tests": "automated tests",
+        "history": "years of history",
+        "tests": "tests",
         "live_since": "live since"
+      },
+      "showcase": {
+        "label": "What Dallas Sync does",
+        "tabs": {
+          "offline": "Works offline",
+          "invoice": "AI invoices",
+          "bi": "Owner's BI",
+          "tenants": "Many motels"
+        },
+        "captions": {
+          "offline": "Check-in, tabs and the cash register keep working when the internet drops. When it's back, everything syncs on its own, with nothing duplicated.",
+          "invoice": "Snap the supplier's invoice and AI fills everything in. Someone checks it, and it becomes an expense and a stock entry at once.",
+          "bi": "The owner sees when the motel fills up, which suites earn the most and when a shift closes short, without building a spreadsheet.",
+          "tenants": "Every motel runs on the same system, but one never sees another's data. The subscription is billed by Pix or boleto, with an invoice."
+        },
+        "invoice": {
+          "photo_title": "Invoice photo",
+          "photo_note": "phone or PDF, many at once",
+          "ai_title": "AI reads it",
+          "ai_note": "supplier, items, amounts and due date",
+          "check_title": "Someone checks",
+          "check_note": "nothing goes in unseen",
+          "expense_title": "Expense",
+          "expense_note": "paid or payable",
+          "stock_title": "Inventory",
+          "stock_note": "entry with cost and freight"
+        },
+        "bi": {
+          "heatmap": "Occupancy by day and hour",
+          "suites": "Top-earning suites",
+          "illustrative": "Illustrative data.",
+          "days": [
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+            "Sun"
+          ]
+        },
+        "tenants": {
+          "motel": "Motel",
+          "devices": "front desk and managers",
+          "shield": "Each motel sees only its own",
+          "database": "One database",
+          "billing": "Isolation enforced by the database itself, not just the app."
+        }
       }
     },
     "secret": {
