@@ -34,8 +34,8 @@ export interface Project {
   repo?: string;
   /** Figures shown on the featured card; labels live under `projects.<id>.metrics`. */
   metrics?: Metric[];
-  /** Keys under `projects.<id>.highlights`, rendered as a short feature list. */
-  highlights?: readonly string[];
+  /** Replaces the static visual with a tabbed set of diagrams (Dallas Sync). */
+  showcase?: boolean;
   stack: readonly string[];
   stackMore?: string;
   /** The lead project gets the wide layout; the rest sit in the compact row. */
@@ -83,7 +83,7 @@ export const PROJECTS: readonly Project[] = [
       { value: "2.000+", labelKey: "tests" },
       { value: "2026", labelKey: "live_since" },
     ],
-    highlights: ["front_desk", "stock", "invoices", "bi", "saas"],
+    showcase: true,
     stack: ["React 19", "NestJS 11", "PostgreSQL", "Dexie", "Gemini"],
     stackMore: "Turborepo · Drizzle · Better Auth · RLS · Asaas",
     featured: true,

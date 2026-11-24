@@ -1,12 +1,13 @@
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
-import { Rocket, Check } from "lucide-react";
+import { Rocket } from "lucide-react";
 
 import { PROJECTS, type Project } from "../data/projects";
 import { Section } from "./shared/Section";
 import { SectionHeading } from "./shared/SectionHeading";
 import { AmbientOrbs, type Orb } from "./shared/AmbientOrbs";
 import { ProjectVisual } from "./shared/ProjectVisual";
+import { DallasSyncShowcase } from "./shared/DallasSyncShowcase";
 import { StackTags } from "./shared/StackTags";
 import { CardLink, CardNote } from "./shared/CardLink";
 import {
@@ -93,35 +94,25 @@ function FeaturedProject({ project }: { project: Project }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="grid md:grid-cols-[1.2fr_1fr] rounded-3xl border border-white/10 bg-white/[0.02] overflow-hidden"
+      className={`grid ${
+        project.showcase ? "lg:grid-cols-[1fr_1.4fr]" : "md:grid-cols-[1.2fr_1fr]"
+      } rounded-3xl border border-white/10 bg-white/[0.02] overflow-hidden`}
     >
-      <div className="relative bg-[#07070c] min-h-[240px] md:min-h-[300px]">
-        <ProjectVisual
-          visual={project.visual}
-          alt={t(`projects.${project.id}.title`)}
-          sizes="(max-width: 767px) 100vw, 55vw"
-          tKey={`projects.${project.id}`}
-        />
-      </div>
-
-      <div className={`${leadBox} border-t md:border-t-0 md:border-l border-white/10`}>
+      {/* With a showcase the text leads and the diagrams take the wide column;
+          without one, the visual leads as before. */}
+      <div
+        className={`${leadBox} ${
+          project.showcase
+            ? "lg:border-r border-b lg:border-b-0 border-white/10"
+            : "order-2 border-t md:border-t-0 md:border-l border-white/10"
+        }`}
+      >
         <Meta project={project} />
         <h3 className={cardTitle}>{t(`projects.${project.id}.title`)}</h3>
         <p className={bodyLead}>{t(`projects.${project.id}.description`)}</p>
 
-        {project.highlights && (
-          <ul className="flex flex-col gap-2">
-            {project.highlights.map((key) => (
-              <li key={key} className="flex gap-2.5 text-sm md:text-[15px] text-gray-300 font-light leading-[1.6]">
-                <Check className="w-4 h-4 mt-[0.2em] shrink-0 text-[var(--zone-b-1)]" aria-hidden="true" />
-                <span>{t(`projects.${project.id}.highlights.${key}`)}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-
         {project.metrics && (
-          <dl className="grid grid-cols-3 gap-4 pt-1">
+          <dl className="grid grid-cols-3 gap-4 py-1">
             {project.metrics.map((metric) => (
               <div key={metric.labelKey}>
                 <dd className={statValue}>{metric.value}</dd>
@@ -138,6 +129,19 @@ function FeaturedProject({ project }: { project: Project }) {
           <Links project={project} />
         </div>
       </div>
+
+      {project.showcase ? (
+        <DallasSyncShowcase />
+      ) : (
+        <div className="order-1 relative bg-[#07070c] min-h-[240px] md:min-h-[300px]">
+          <ProjectVisual
+            visual={project.visual}
+            alt={t(`projects.${project.id}.title`)}
+            sizes="(max-width: 767px) 100vw, 55vw"
+            tKey={`projects.${project.id}`}
+          />
+        </div>
+      )}
     </motion.article>
   );
 }
