@@ -84,13 +84,16 @@
       "code": "Code",
       "private_no_deploy": "Private repo · no deploy",
       "live_aria": "Visit the {{name}} website, opens in a new tab",
-      "code_aria": "View the {{name}} source code on GitHub, opens in a new tab"
+      "code_aria": "View the {{name}} source code on GitHub, opens in a new tab",
+      "live_login": "Open the app · login required",
+      "live_login_aria": "Open {{name}}, login required, opens in a new tab",
+      "private_repo": "Private repository"
     },
     "dallas_sync": {
       "title": "Dallas Sync",
-      "category": "Management system",
-      "status": "Used every day",
-      "description": "Motel management software that keeps working when the internet drops. Check-in, tabs, inventory and payments in one place, used daily by the front-desk staff.",
+      "category": "Motel management system",
+      "status": "In production · SaaS",
+      "description": "A complete management system for motels, in production since September 2026 and ready to serve other motels on a subscription. The front desk keeps working when the internet drops, and the owner follows the business from anywhere.",
       "arch": {
         "offline": "Connection lost",
         "caption": "The front desk keeps working",
@@ -102,6 +105,18 @@
         "link2": "network returns",
         "step3_title": "Server reconciles",
         "step3_note": "idempotent, dead-letter with retry"
+      },
+      "highlights": {
+        "front_desk": "Live suite map, tabs, bookings and per-shift cash register, all working offline",
+        "stock": "Inventory at real cost (FIFO), transfers between areas and counter sales",
+        "invoices": "A photographed supplier invoice is read by AI and becomes an expense and a stock entry",
+        "bi": "Finance and BI: occupancy by day and hour, average ticket, revenue per suite and cash alerts",
+        "saas": "Many motels on one system, each fully isolated, with subscription billing by Pix or boleto"
+      },
+      "metrics": {
+        "history": "years of history migrated from the old system",
+        "tests": "automated tests",
+        "live_since": "live since"
       }
     },
     "secret": {
@@ -172,7 +187,7 @@
       "systems": {
         "title": "Management systems",
         "description": "Custom software to track inventory, orders, bookings or service, instead of spreadsheets and notebooks.",
-        "example": "Dallas Sync, motel management that keeps working offline."
+        "example": "Dallas Sync, motel management in production that keeps working offline."
       },
       "automation": {
         "title": "Automation & AI",
@@ -184,8 +199,8 @@
   },
   "home": {
     "writing": {
-      "title_part1": "From the",
-      "title_part2": "Blog.",
+      "title_part1": "Blog",
+      "title_part2": "Behind the scenes.",
       "lead": "I write about real problems I've solved. A good way to see how I think before we talk.",
       "read_more": "Continue reading",
       "card_aria": "Read the full article: {{title}}",

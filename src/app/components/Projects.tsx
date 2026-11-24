@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
-import { Rocket } from "lucide-react";
+import { Rocket, Check } from "lucide-react";
 
 import { PROJECTS, type Project } from "../data/projects";
 import { Section } from "./shared/Section";
@@ -16,6 +16,7 @@ import {
   compactBox,
   eyebrow,
   leadBox,
+  statValue,
 } from "./shared/cardType";
 
 const ORBS: Orb[] = [
@@ -61,10 +62,14 @@ function Links({ project }: { project: Project }) {
         <CardLink
           tone="warm"
           href={project.url}
-          label={t("projects.labels.live")}
-          ariaLabel={t("projects.labels.live_aria", { name })}
+          label={t(project.loginRequired ? "projects.labels.live_login" : "projects.labels.live")}
+          ariaLabel={t(
+            project.loginRequired ? "projects.labels.live_login_aria" : "projects.labels.live_aria",
+            { name },
+          )}
         />
       )}
+      {project.url && !project.repo && <CardNote>{t("projects.labels.private_repo")}</CardNote>}
       {project.repo && (
         <CardLink
           href={project.repo}
@@ -103,6 +108,31 @@ function FeaturedProject({ project }: { project: Project }) {
         <Meta project={project} />
         <h3 className={cardTitle}>{t(`projects.${project.id}.title`)}</h3>
         <p className={bodyLead}>{t(`projects.${project.id}.description`)}</p>
+
+        {project.highlights && (
+          <ul className="flex flex-col gap-2">
+            {project.highlights.map((key) => (
+              <li key={key} className="flex gap-2.5 text-sm md:text-[15px] text-gray-300 font-light leading-[1.6]">
+                <Check className="w-4 h-4 mt-[0.2em] shrink-0 text-[var(--zone-b-1)]" aria-hidden="true" />
+                <span>{t(`projects.${project.id}.highlights.${key}`)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {project.metrics && (
+          <dl className="grid grid-cols-3 gap-4 pt-1">
+            {project.metrics.map((metric) => (
+              <div key={metric.labelKey}>
+                <dd className={statValue}>{metric.value}</dd>
+                <dt className={`${eyebrow} mt-1`}>
+                  {t(`projects.${project.id}.metrics.${metric.labelKey}`)}
+                </dt>
+              </div>
+            ))}
+          </dl>
+        )}
+
         <StackTags items={project.stack} more={project.stackMore} />
         <div className="flex flex-wrap gap-2.5 pt-1">
           <Links project={project} />
