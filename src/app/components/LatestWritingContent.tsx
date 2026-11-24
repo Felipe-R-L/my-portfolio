@@ -32,7 +32,7 @@ export default function LatestWritingContent() {
         title={t("home.writing.title_part1")}
         subtitle={t("home.writing.title_part2")}
       >
-        <p className="text-gray-400 text-lg max-w-2xl leading-relaxed mt-4">
+        <p className="mt-4 text-gray-400 max-w-2xl leading-relaxed">
           {t("home.writing.lead")}
         </p>
       </SectionHeading>

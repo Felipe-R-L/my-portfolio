@@ -29,7 +29,13 @@ export interface Project {
   id: string;
   visual: { kind: "shot"; src: string; srcSet: string } | { kind: "arch" };
   url?: string;
+  /** The live URL is an app behind a login, so the link says so. */
+  loginRequired?: boolean;
   repo?: string;
+  /** Figures shown on the featured card; labels live under `projects.<id>.metrics`. */
+  metrics?: Metric[];
+  /** Keys under `projects.<id>.highlights`, rendered as a short feature list. */
+  highlights?: readonly string[];
   stack: readonly string[];
   stackMore?: string;
   /** The lead project gets the wide layout; the rest sit in the compact row. */
@@ -70,8 +76,16 @@ export const PROJECTS: readonly Project[] = [
   {
     id: "dallas_sync",
     visual: { kind: "arch" },
-    stack: ["Turborepo", "NestJS 11", "Drizzle", "React 19", "Dexie"],
-    stackMore: "CASL · Better Auth · RLS",
+    url: "https://dallassync.com.br",
+    loginRequired: true,
+    metrics: [
+      { value: "16", labelKey: "history" },
+      { value: "2.000+", labelKey: "tests" },
+      { value: "2026", labelKey: "live_since" },
+    ],
+    highlights: ["front_desk", "stock", "invoices", "bi", "saas"],
+    stack: ["React 19", "NestJS 11", "PostgreSQL", "Dexie", "Gemini"],
+    stackMore: "Turborepo · Drizzle · Better Auth · RLS · Asaas",
     featured: true,
   },
   {

@@ -84,13 +84,16 @@
       "code": "Código",
       "private_no_deploy": "Repositório privado · sem deploy",
       "live_aria": "Visitar o site de {{name}}, abre em nova aba",
-      "code_aria": "Ver o código de {{name}} no GitHub, abre em nova aba"
+      "code_aria": "Ver o código de {{name}} no GitHub, abre em nova aba",
+      "live_login": "Abrir o sistema · requer login",
+      "live_login_aria": "Abrir {{name}}, requer login, abre em nova aba",
+      "private_repo": "Repositório privado"
     },
     "dallas_sync": {
       "title": "Dallas Sync",
-      "category": "Sistema de gestão",
-      "status": "Em uso todos os dias",
-      "description": "Sistema de gestão de motel que continua funcionando quando a internet cai. Check-in, comandas, estoque e pagamentos num lugar só, usado diariamente por quem atende no balcão.",
+      "category": "Sistema de gestão para motéis",
+      "status": "Em produção · SaaS",
+      "description": "Sistema completo de gestão para motel, em produção desde setembro de 2026 e pronto para atender outros motéis por assinatura. A recepção continua operando quando a internet cai, e o dono acompanha o negócio de qualquer lugar.",
       "arch": {
         "offline": "Internet caiu",
         "caption": "A recepção continua operando",
@@ -102,6 +105,18 @@
         "link2": "rede volta",
         "step3_title": "Servidor reconcilia",
         "step3_note": "idempotente, dead-letter com retry"
+      },
+      "highlights": {
+        "front_desk": "Mapa das suítes ao vivo, comandas, reservas e caixa por turno, tudo funcionando offline",
+        "stock": "Estoque com custo real (FIFO), transferências entre setores e venda no balcão",
+        "invoices": "Nota fiscal fotografada é lida por IA e vira despesa e entrada de estoque",
+        "bi": "Financeiro e BI: ocupação por dia e horário, ticket médio, receita por suíte e alertas de caixa",
+        "saas": "Vários motéis no mesmo sistema, cada um isolado, com assinatura e cobrança por Pix ou boleto"
+      },
+      "metrics": {
+        "history": "anos de histórico migrados do sistema antigo",
+        "tests": "testes automatizados",
+        "live_since": "no ar desde"
       }
     },
     "secret": {
@@ -172,7 +187,7 @@
       "systems": {
         "title": "Sistemas de gestão",
         "description": "Sistema sob medida para controlar estoque, pedidos, agenda ou atendimento, no lugar de planilha e caderno.",
-        "example": "Dallas Sync, gestão de motel que funciona até sem internet."
+        "example": "Dallas Sync, gestão de motel em produção que funciona até sem internet."
       },
       "automation": {
         "title": "Automação e IA",
@@ -184,8 +199,8 @@
   },
   "home": {
     "writing": {
-      "title_part1": "Direto do",
-      "title_part2": "Blog.",
+      "title_part1": "Blog",
+      "title_part2": "Bastidores.",
       "lead": "Escrevo sobre problemas reais que resolvi. Um bom jeito de ver como eu penso antes da gente conversar.",
       "read_more": "Continuar lendo",
       "card_aria": "Ler o artigo completo: {{title}}",
