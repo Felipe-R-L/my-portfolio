@@ -1,0 +1,313 @@
+/*
+ * Hero. The name is set as architecture, not as a heading: one size computed
+ * so RODRIGUES fills the viewport width, FELIPE at the same size, and the
+ * portrait placed in the block FELIPE leaves empty. The size is the only loud
+ * decision on the page; everything below it uses the site's normal scale.
+ */
+
+.hero {
+  --name-size: clamp(3.5rem, 17.2vw, 22rem);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: clamp(6rem, 12vh, 9rem);
+  z-index: 10;
+}
+
+/* ---------- the name ---------- */
+
+.hero-name {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "first photo"
+    "last  last";
+  align-items: end;
+  margin: 0;
+  padding-inline: var(--gutter);
+  font-size: var(--name-size);
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: -0.065em;
+  text-transform: uppercase;
+  color: #f5f7ff;
+}
+
+.hero-line {
+  display: block;
+  overflow: hidden;
+  /* room for descender-free caps plus the mask travel */
+  padding-block: 0.04em 0.02em;
+}
+
+.hero-line--first {
+  grid-area: first;
+}
+
+.hero-line--last {
+  grid-area: last;
+  position: relative;
+  z-index: 2;
+  /* Where the surname crosses the photo it inverts it instead of hiding it. */
+  mix-blend-mode: difference;
+  margin-top: -0.06em;
+}
+
+.hero-word-wrap,
+.hero-word {
+  display: inline-block;
+  will-change: transform;
+}
+
+.hero-photo {
+  grid-area: photo;
+  justify-self: end;
+  align-self: end;
+  position: relative;
+  z-index: 1;
+  width: min(26vw, 25rem);
+  aspect-ratio: 4 / 5;
+  /* sinks into the surname line so the two layers actually meet */
+  margin-bottom: -0.32em;
+  border-radius: 1.75rem;
+  overflow: hidden;
+  box-shadow: 0 40px 80px -30px rgb(76 141 255 / 0.45);
+}
+
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  display: block;
+}
+
+/* ---------- the base row ---------- */
+
+.hero-base {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr auto;
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+  align-items: end;
+  padding: clamp(2rem, 5vh, 3.5rem) var(--gutter) clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.hero-claim {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(1.75rem, 3.2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  min-width: 0;
+}
+
+.hero-claim-lead {
+  color: rgb(245 247 255 / 0.45);
+  font-weight: 400;
+}
+
+.hero-claim-typed {
+  display: block;
+  white-space: nowrap;
+  min-height: 1.1em;
+  color: var(--zone-a-1);
+}
+
+.hero-pitch {
+  margin: 0;
+  max-width: 34ch;
+  font-size: clamp(1rem, 1.15vw, 1.125rem);
+  line-height: 1.6;
+  color: rgb(209 213 219);
+}
+
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.hero-status {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  color: rgb(209 213 219);
+}
+
+.hero-status-dot {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #3ddc84;
+}
+
+.hero-status-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: hero-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes hero-ping {
+  75%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s,
+    border-color 0.3s,
+    filter 0.3s;
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px);
+}
+
+.hero-cta:focus-visible {
+  outline: 2px solid var(--zone-a-1);
+  outline-offset: 3px;
+}
+
+.hero-cta--primary {
+  background: var(--zone-b-1);
+  color: #231603;
+  box-shadow: 0 10px 30px -10px color-mix(in oklab, var(--zone-b-1) 70%, transparent);
+}
+
+.hero-cta--primary:hover {
+  filter: brightness(1.08);
+}
+
+.hero-cta--ghost {
+  border: 1px solid rgb(255 255 255 / 0.2);
+  color: #f5f7ff;
+}
+
+.hero-cta--ghost:hover {
+  border-color: rgb(255 255 255 / 0.45);
+  background: rgb(255 255 255 / 0.05);
+}
+
+/* ---------- the service band ---------- */
+
+.hero-band {
+  border-block: 1px solid rgb(255 255 255 / 0.1);
+  overflow: hidden;
+  padding-block: 1rem;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.hero-band-track {
+  display: flex;
+  width: max-content;
+  gap: 3rem;
+  animation: hero-band 40s linear infinite;
+}
+
+.hero-band-item {
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #f5f7ff;
+  white-space: nowrap;
+}
+
+.hero-band-item--outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(245 247 255 / 0.55);
+}
+
+@keyframes hero-band {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- smaller screens ---------- */
+
+@media (max-width: 1199px) {
+  .hero-base {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    --name-size: 17.6vw;
+    justify-content: flex-start;
+    padding-top: 6.5rem;
+  }
+
+  .hero-name {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "photo"
+      "first"
+      "last";
+    justify-items: start;
+  }
+
+  /* On a phone the photo stacks above the name instead of crossing it: at
+     this size the overlap only clipped the top of FELIPE. */
+  .hero-photo {
+    justify-self: start;
+    width: 56vw;
+    margin-bottom: 0.14em;
+    border-radius: 1.25rem;
+  }
+
+  .hero-line--last {
+    mix-blend-mode: normal;
+  }
+
+  .hero-base {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .hero-cta {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-band-track,
+  .hero-status-dot::after {
+    animation: none;
+  }
+}
