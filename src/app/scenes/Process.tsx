@@ -74,7 +74,18 @@ export function Process() {
         }),
       );
     } else {
-      ScrollTrigger.create({ trigger: track, start: "bottom 85%", once: true, onEnter: () => play(1) });
+      ScrollTrigger.create({
+        trigger: track,
+        start: "bottom 85%",
+        // scrolled past before it finished: never leave half the steps unlit
+        end: "bottom top",
+        onEnter: () => play(1),
+        onLeave: () => {
+          gsap.killTweensOf(clock);
+          clock.p = 1;
+          show(1);
+        },
+      });
     }
   });
 

@@ -237,10 +237,10 @@
   object-fit: contain;
 }
 
-/* the Dallas Sync screens are wider than the card: shown whole */
+/* the Dallas Sync screens are wider than the card: anchored on the brand,
+   top left, so the crop only ever takes the far right edge */
 .work-card[data-work="dallas_sync"] .work-shot img {
-  object-fit: contain;
-  object-position: center;
+  object-position: left top;
 }
 
 .work-card[data-focus="true"] .work-shot img {
