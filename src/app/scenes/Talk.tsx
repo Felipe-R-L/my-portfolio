@@ -17,10 +17,12 @@ export function Talk() {
 
   return (
     <section id="contact" className="talk" aria-labelledby="talk-title">
+      {/* The close answers the opening: the city from the hero, now in
+          colour, seen through the letters. */}
+      <h2 id="talk-title" className="talk-title">
+        {t("contact.title_part2")}
+      </h2>
       <div className="talk-main">
-        <h2 id="talk-title" className="talk-title">
-          {t("contact.title_part2")}
-        </h2>
         <p className="talk-lead">{t("contact.cta_desc")}</p>
         <div className="talk-actions">
           {whatsapp && (
