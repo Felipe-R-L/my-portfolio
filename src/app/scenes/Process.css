@@ -5,7 +5,7 @@
   --lit: #eef1f6;
   position: relative;
   z-index: 10;
-  padding: clamp(5rem, 14vh, 9rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+  padding: clamp(5rem, 14vh, 9rem) var(--gutter) clamp(1rem, 3vh, 2rem);
   background: #050608;
   color: #eef1f6;
 }
