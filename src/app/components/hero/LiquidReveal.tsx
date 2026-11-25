@@ -28,9 +28,9 @@ const FIELD_SCALE = 1 / 4;
 /** Ink brush radius, as a fraction of the screen height. */
 const BRUSH_DESKTOP = 0.13;
 const BRUSH_PHONE = 0.11;
-/** Pointer-driven shift at full offset, in uv; the person moves 0.6 of it,
-    the city at most 0.35 of it the other way. */
-const PARALLAX = { x: 0.006, y: 0.004 };
+/** Pointer-driven lean of the whole picture at full offset, in uv (the
+    shader applies half of it): a few dozen pixels, enough to feel depth. */
+const PARALLAX = { x: 0.016, y: 0.01 };
 
 const VERT = `#version 300 es
 in vec2 a;
@@ -127,35 +127,15 @@ void main() {
   vec2 frag = vec2(v.x, 1.0 - v.y) * stage;
   vec2 uv = ((frag - cam.yz) / cam.x) / img;
 
-  // Two layers. The person (cut out by the matte) shifts as one rigid
-  // piece; the city shifts less and the other way, the horizon least.
+  // Depth: the whole picture leans a little away from the cursor. One
+  // layer only: moving him apart from the city would open a hole behind him
+  // that the photo cannot fill, and he would be drawn twice.
   vec2 shift = par * vec2(${PARALLAX.x.toFixed(4)}, ${PARALLAX.y.toFixed(4)});
-  vec2 fgUV = uv - shift * 0.6;
-  // never sample past the photo's edge, which would smear its last pixel
-  if (any(lessThan(fgUV, vec2(0.0))) || any(greaterThan(fgUV, vec2(1.0)))) fgUV = uv;
-  // A hard cut-out: a soft matte edge blends the shifted person with the
-  // city behind him and reads as a ghost (a see-through arm, a grey neck).
-  float matteRaw = texture(matte, fgUV).r;
-  // Close small holes in the matte (a thin chain, a dark fold of the shirt):
-  // a point with person on at least three of four sides 6 px away is person.
-  // An outline point has two at most, so the silhouette does not grow.
-  vec2 px = 6.0 / img;
-  float sides = step(0.5, texture(matte, fgUV + vec2(px.x, 0.0)).r)
-              + step(0.5, texture(matte, fgUV - vec2(px.x, 0.0)).r)
-              + step(0.5, texture(matte, fgUV + vec2(0.0, px.y)).r)
-              + step(0.5, texture(matte, fgUV - vec2(0.0, px.y)).r);
-  matteRaw = max(matteRaw, step(2.5, sides));
+  vec2 pUV = clamp(uv - shift * 0.5, vec2(0.0), vec2(1.0));
+  vec2 fgUV = pUV;
+  vec2 bgUV = pUV;
+  float matteRaw = texture(matte, pUV).r;
   float a = smoothstep(0.35, 0.65, matteRaw);
-  vec2 bgUV = uv + shift * 0.35 * (1.0 - clamp(uv.y, 0.0, 1.0));
-
-  // Behind the person there is no photographed city. Where the city sample
-  // would land on him, walk away from the way he moved until it reaches city,
-  // and use that edge pixel. The strip is a few pixels wide: stretching one
-  // pixel across it is invisible, sampling him again would double him.
-  // Only where the person is not drawn on top; elsewhere the fill is hidden.
-  // Where the shifted city sample would land on him, fall back to the
-  // unshifted pixel: a strip a few pixels wide, never a copied patch of sky.
-  if (a < 0.5 && texture(matte, bgUV).r >= 0.3) bgUV = uv;
 
   // the ink's edge wobbles like a liquid surface
   float n = snoise(v * vec2(stage.x / stage.y, 1.0) * 3.0 + t * 0.25) * 0.06
@@ -167,14 +147,8 @@ void main() {
   // softer reads as the photo bending.
   float aa = max(fwidth(m) * 0.75, 1e-4);
   float mask = smoothstep(0.42 - aa, 0.42 + aa, m) * hasCol;
-  // The person takes his colour as a whole, never cut across the face: once
-  // the ink reaches his face, all of him turns, over a short fade.
-  float faceInk = texture(field, faceV).r;
-  float personMask = smoothstep(0.3, 0.55, faceInk) * hasCol;
-  // Once he has turned, the city around him drains back to grey: ink left
-  // beside his head would read as a pale ghost of his outline, not as colour.
-  mask = mix(mask * (1.0 - personMask), personMask, a);
-
+  // The colour goes only where the ink is, on him and on the city alike,
+  // like a brush the cursor carries.
   bgUV = clamp(bgUV, vec2(0.0), vec2(1.0));
   vec3 base = mix(texture(bw, bgUV).rgb, texture(bw, fgUV).rgb, a);
   vec3 tint = mix(texture(col, bgUV).rgb, texture(col, fgUV).rgb, a);
@@ -370,11 +344,13 @@ export function LiquidReveal({
     const par = { x: 0, y: 0, tx: 0, ty: 0 };
     let touched = false;
 
-    const push = (x: number, y: number) => {
+    let lastClient: [number, number] | null = null;
+    const push = (x: number, y: number, byHand = true) => {
       const p: [number, number] = [x / w, 1 - y / h];
       // several moves between two frames extend one segment, no gaps
       stroke = stroke ? { a: stroke.a, b: p } : { a: lastPt ?? p, b: p };
       lastPt = p;
+      if (!byHand) return;
       par.tx = (x / w) * 2 - 1;
       par.ty = (y / h) * 2 - 1;
     };
@@ -384,31 +360,49 @@ export function LiquidReveal({
       const r = stage.getBoundingClientRect();
       return [((cx - r.left) * w) / r.width, ((cy - r.top) * h) / r.height] as const;
     };
+    // The picture sits under the name's layers, so pointer events never
+    // reach it: listen on the window and keep the points that fall on it.
+    const onPicture = (cx: number, cy: number, target: EventTarget | null) => {
+      const r = stage.getBoundingClientRect();
+      if (cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return false;
+      return !(target as Element | null)?.closest?.("[data-no-reveal], nav, a, button");
+    };
     const onPointer = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      lastClient = [e.clientX, e.clientY];
       if (!active.get()) return;
-      if ((e.target as Element | null)?.closest?.("[data-no-reveal]")) {
-        lastPt = null;
+      if (!onPicture(e.clientX, e.clientY, e.target)) {
+        onLeave();
         return;
       }
       push(...local(e.clientX, e.clientY));
     };
     const onTouch = (e: TouchEvent) => {
       const t = e.touches[0];
-      if (!t || !active.get()) return;
+      if (!t || !active.get() || !onPicture(t.clientX, t.clientY, e.target)) return;
       touched = true;
       push(...local(t.clientX, t.clientY));
     };
-    const onLeave = () => {
+    function onLeave() {
       lastPt = null;
       par.tx = 0;
       par.ty = 0;
+    }
+    // Scrolling with the mouse held still moves the picture under the cursor
+    // without any pointer event: pour where the cursor rests.
+    const onScroll = () => {
+      if (!active.get() || !lastClient) return;
+      const under = document.elementFromPoint(lastClient[0], lastClient[1]);
+      if (!onPicture(lastClient[0], lastClient[1], under)) return;
+      push(...local(lastClient[0], lastClient[1]));
     };
-    stage.addEventListener("pointermove", onPointer);
-    stage.addEventListener("pointerleave", onLeave);
-    stage.addEventListener("touchstart", onTouch, { passive: true });
-    stage.addEventListener("touchmove", onTouch, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("pointermove", onPointer, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
+    window.addEventListener("touchstart", onTouch, { passive: true });
+    window.addEventListener("touchmove", onTouch, { passive: true });
     const onTouchEnd = () => (lastPt = null);
-    stage.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
 
     // First settle: one pour crosses the photo on its own.
     let swept = false;
@@ -496,7 +490,10 @@ export function LiquidReveal({
       running = on;
       canvas.style.opacity = on ? "1" : "0";
       if (on) {
-        if (!swept) {
+        // A phone has no cursor: one pour shows that the picture takes
+        // colour, and a finger carries it from there. With a mouse, the
+        // colour only ever goes where the cursor goes.
+        if (phone && !swept) {
           swept = true;
           sweepStart = performance.now();
         }
@@ -518,11 +515,12 @@ export function LiquidReveal({
       ro.disconnect();
       if ("cancelIdleCallback" in window) window.cancelIdleCallback(idle as number);
       else window.clearTimeout(idle as number);
-      stage.removeEventListener("pointermove", onPointer);
-      stage.removeEventListener("pointerleave", onLeave);
-      stage.removeEventListener("touchstart", onTouch);
-      stage.removeEventListener("touchmove", onTouch);
-      stage.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pointermove", onPointer);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("touchstart", onTouch);
+      window.removeEventListener("touchmove", onTouch);
+      window.removeEventListener("touchend", onTouchEnd);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [bwSrc, colorSrc, matteSrc, width, height, camera, active, phone, face]);

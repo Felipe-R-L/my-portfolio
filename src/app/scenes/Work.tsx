@@ -8,10 +8,12 @@ import { useScene } from "../scroll/useScene";
 import "./Work.css";
 
 /**
- * Scene 4, the work: a carousel you drag, in black and white, where the piece
- * in focus takes its colour back, the same gesture as the hero's reveal.
- * It is not pinned: dragging is sideways only and never fights the page's
- * vertical scroll. Scrolling past it turns everything back to black and white.
+ * Scene 4, the work, in black and white, where the piece in focus takes its
+ * colour back, the same gesture as the hero's reveal. On a wide screen the
+ * section is pinned and the page's own scroll carries the cards sideways; the
+ * arrows scroll the page to a card. On a phone (and with reduced motion) it is
+ * a carousel you drag, which never fights the vertical scroll. Scrolling past
+ * it turns everything back to black and white.
  */
 export function Work() {
   const { t } = useTranslation();
@@ -22,7 +24,7 @@ export function Work() {
   const [out, setOut] = useState(false);
   const goTo = useRef<(i: number) => void>(() => {});
 
-  useScene(sectionRef, ({ reduced }) => {
+  useScene(sectionRef, ({ reduced, isPhone }) => {
     const viewport = viewportRef.current!;
     const track = trackRef.current!;
     const cards = () => [...track.querySelectorAll<HTMLElement>("[data-work]")];
@@ -37,6 +39,40 @@ export function Work() {
       });
       return best;
     };
+
+    // Wide screens: the page scroll drives the cards.
+    if (!isPhone && !reduced) {
+      // a card's width of scroll per card, so each one has time to be read
+      const travel = () => -minX() * 1.4;
+      const st = ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top top",
+        end: () => `+=${travel()}`,
+        pin: true,
+        scrub: true,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const x = minX() * self.progress;
+          gsap.set(track, { x });
+          setFocus(nearest(x));
+        },
+        onRefresh: (self) => gsap.set(track, { x: minX() * self.progress }),
+      });
+      goTo.current = (i: number) => {
+        const target = Math.max(0, Math.min(WORK.length - 1, i));
+        const m = minX();
+        const p = m === 0 ? 0 : xFor(target) / m;
+        window.scrollTo({ top: st.start + p * (st.end - st.start), behavior: "smooth" });
+      };
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: () => `top+=${travel()} top`,
+        end: "+=1",
+        onEnter: () => setOut(true),
+        onLeaveBack: () => setOut(false),
+      });
+      return;
+    }
 
     const [drag] = Draggable.create(track, {
       type: "x",

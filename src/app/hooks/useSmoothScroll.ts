@@ -16,7 +16,9 @@ export function useSmoothScroll() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (isPhone || reduced) return;
 
-    const lenis = new Lenis({ lerp: 0.08, smoothWheel: true, autoResize: true });
+    // A wheel notch moves 70% of the default: the scenes are scroll-driven, and
+    // at full speed one flick skipped a whole chapter.
+    const lenis = new Lenis({ lerp: 0.08, wheelMultiplier: 0.7, smoothWheel: true, autoResize: true });
     lenisRef.current = lenis;
 
     lenis.on("scroll", ScrollTrigger.update);

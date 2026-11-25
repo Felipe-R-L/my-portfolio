@@ -18,9 +18,10 @@
 
 .proof-title {
   margin: 0;
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 700;
-  letter-spacing: -0.035em;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(2.75rem, 5vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
   line-height: 1;
 }
 
@@ -55,10 +56,11 @@
   /* the numerals' side bearing, so their ink lines up with the label */
   margin: 0 0 0 -0.03em;
   white-space: nowrap;
-  font-size: clamp(4.5rem, 11vw, 10rem);
-  font-weight: 700;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(5rem, 12vw, 11rem);
+  font-weight: 400;
   line-height: 0.85;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -66,7 +68,7 @@
    number with its unit, not three glyphs spaced apart. */
 .proof-affix {
   font-size: 0.5em;
-  font-weight: 600;
+  color: #9fc3d6;
   letter-spacing: 0;
 }
 
