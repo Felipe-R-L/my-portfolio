@@ -115,6 +115,8 @@
 @media (max-width: 767px) {
   .hero-frame {
     --name-size: 16.2vw;
+    /* the name sits a little above the middle, not at the foot of an empty screen */
+    justify-content: center;
     padding-top: 5rem;
     /* clears the floating menu pill at the bottom of the screen */
     padding-bottom: 6.25rem;

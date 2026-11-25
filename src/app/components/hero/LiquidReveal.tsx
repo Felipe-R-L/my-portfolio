@@ -130,6 +130,8 @@ void main() {
   // piece; the city shifts less and the other way, the horizon least.
   vec2 shift = par * vec2(${PARALLAX.x.toFixed(4)}, ${PARALLAX.y.toFixed(4)});
   vec2 fgUV = uv - shift * 0.6;
+  // never sample past the photo's edge, which would smear its last pixel
+  if (any(lessThan(fgUV, vec2(0.0))) || any(greaterThan(fgUV, vec2(1.0)))) fgUV = uv;
   // A hard cut-out: a soft matte edge blends the shifted person with the
   // city behind him and reads as a ghost (a see-through arm, a grey neck).
   float a = smoothstep(0.35, 0.65, texture(matte, fgUV).r);
@@ -159,8 +161,15 @@ void main() {
   float aa = max(fwidth(m) * 0.75, 1e-4);
   float mask = smoothstep(0.42 - aa, 0.42 + aa, m) * hasCol;
 
+  bgUV = clamp(bgUV, vec2(0.0), vec2(1.0));
   vec3 base = mix(texture(bw, bgUV).rgb, texture(bw, fgUV).rgb, a);
   vec3 tint = mix(texture(col, bgUV).rgb, texture(col, fgUV).rgb, a);
+  // The colour photo only lends its hue: the black-and-white keeps the
+  // light, so crossing the edge never changes brightness (no bright patch on
+  // a forehead, no shirt turning into a flat black block).
+  const vec3 LUMA = vec3(0.2126, 0.7152, 0.0722);
+  vec3 chroma = tint - dot(tint, LUMA);
+  tint = clamp(base + chroma * 1.15, 0.0, 1.0);
   o = vec4(mix(base, tint, mask), 1.0);
 }`;
 

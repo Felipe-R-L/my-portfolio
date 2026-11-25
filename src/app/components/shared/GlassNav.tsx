@@ -200,8 +200,8 @@ export function GlassNav({
                     lang={lang.code}
                     title={lang.label}
                     aria-pressed={isActive}
-                    className={`text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
-                      isActive ? "text-[var(--zone-a-1)]" : "text-white/50 hover:text-white/80"
+                    className={`text-[11px] font-bold uppercase tracking-widest transition-all duration-300 ${
+                      isActive ? "text-white underline underline-offset-4 decoration-white/50" : "text-white/60 hover:text-white/90"
                     }`}
                   >
                     {lang.code}
