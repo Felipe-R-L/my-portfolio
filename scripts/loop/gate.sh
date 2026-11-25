@@ -7,7 +7,9 @@ cd "$(dirname "$0")/../.."
 pnpm test
 pnpm build
 DET=/home/felipe/.claude/plugins/cache/impeccable/impeccable/4.3.1/skills/impeccable/scripts/impeccable
-"$DET" detect --json src 2>/dev/null | python3 -c "
+# detect exits non-zero whenever it finds anything; the baseline decides.
+FINDINGS=$("$DET" detect --json src 2>/dev/null || true)
+printf '%s' "$FINDINGS" | python3 -c "
 import json,sys
 cur={f\"{f['antipattern']} {f['file'].split('my-portfolio/')[1]}\" for f in json.load(sys.stdin)}
 base=set(open('scripts/loop/detector-baseline.txt').read().split('\n'))-{''}

@@ -121,6 +121,7 @@ uniform vec2 img;
 uniform vec2 par;
 uniform float t;
 uniform float hasCol;
+uniform vec2 faceV;
 ${NOISE}
 void main() {
   vec2 frag = vec2(v.x, 1.0 - v.y) * stage;
@@ -142,13 +143,9 @@ void main() {
   // and use that edge pixel. The strip is a few pixels wide: stretching one
   // pixel across it is invisible, sampling him again would double him.
   // Only where the person is not drawn on top; elsewhere the fill is hidden.
-  if (a < 0.5 && length(shift) > 1e-5) {
-    vec2 away = -normalize(shift) * (3.0 / img);
-    for (int k = 0; k < 12; k++) {
-      if (texture(matte, bgUV).r < 0.3) break;
-      bgUV += away;
-    }
-  }
+  // Where the shifted city sample would land on him, fall back to the
+  // unshifted pixel: a strip a few pixels wide, never a copied patch of sky.
+  if (a < 0.5 && texture(matte, bgUV).r >= 0.3) bgUV = uv;
 
   // the ink's edge wobbles like a liquid surface
   float n = snoise(v * vec2(stage.x / stage.y, 1.0) * 3.0 + t * 0.25) * 0.06
@@ -160,6 +157,11 @@ void main() {
   // softer reads as the photo bending.
   float aa = max(fwidth(m) * 0.75, 1e-4);
   float mask = smoothstep(0.42 - aa, 0.42 + aa, m) * hasCol;
+  // The person takes his colour as a whole, never cut across the face: once
+  // the ink reaches his face, all of him turns, over a short fade.
+  float faceInk = texture(field, faceV).r;
+  float personMask = smoothstep(0.3, 0.55, faceInk) * hasCol;
+  mask = mix(mask, personMask, a);
 
   bgUV = clamp(bgUV, vec2(0.0), vec2(1.0));
   vec3 base = mix(texture(bw, bgUV).rgb, texture(bw, fgUV).rgb, a);
@@ -169,7 +171,9 @@ void main() {
   // a forehead, no shirt turning into a flat black block).
   const vec3 LUMA = vec3(0.2126, 0.7152, 0.0722);
   vec3 chroma = tint - dot(tint, LUMA);
-  tint = clamp(base + chroma * 1.15, 0.0, 1.0);
+  // near-black stays black: the noise in the shadows has no colour worth showing
+  float lb = dot(base, LUMA);
+  tint = clamp(base + chroma * 1.15 * smoothstep(0.04, 0.22, lb), 0.0, 1.0);
   o = vec4(mix(base, tint, mask), 1.0);
 }`;
 
@@ -228,6 +232,7 @@ export function LiquidReveal({
   camera,
   active,
   phone,
+  face,
 }: {
   bwSrc: string;
   colorSrc: string;
@@ -238,6 +243,9 @@ export function LiquidReveal({
   camera: Signal<Camera>;
   active: Signal<boolean>;
   phone: boolean;
+  /** Centre of the face in asset pixels: the person turns colour as a whole
+      when the ink reaches it. */
+  face: { x: number; y: number };
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -452,6 +460,7 @@ export function LiquidReveal({
       gl.uniform2f(draw.u("par"), hasCol ? par.x : 0, hasCol ? par.y : 0);
       gl.uniform1f(draw.u("t"), t);
       gl.uniform1f(draw.u("hasCol"), hasCol);
+      gl.uniform2f(draw.u("faceV"), (c.x + face.x * c.scale) / w, 1 - (c.y + face.y * c.scale) / h);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
       frame = requestAnimationFrame(tick);
@@ -490,7 +499,7 @@ export function LiquidReveal({
       stage.removeEventListener("touchend", onTouchEnd);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [bwSrc, colorSrc, matteSrc, width, height, camera, active, phone]);
+  }, [bwSrc, colorSrc, matteSrc, width, height, camera, active, phone, face]);
 
   return <canvas ref={canvasRef} className="city-reveal" aria-hidden="true" style={{ opacity: 0 }} />;
 }

@@ -1,0 +1,229 @@
+/*
+ * The work: the revelation language. Space Grotesk only, no accent colour;
+ * the only colour on screen is the work itself, given back to the piece in
+ * focus.
+ */
+
+.work {
+  position: relative;
+  z-index: 10;
+  padding: clamp(5rem, 14vh, 9rem) 0 clamp(4rem, 10vh, 7rem);
+  background: #050608;
+  color: #eef1f6;
+}
+
+.work-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.75rem 2rem;
+  padding: 0 var(--gutter);
+  margin-bottom: clamp(2rem, 5vh, 3.25rem);
+}
+
+.work-title {
+  grid-column: 1;
+  margin: 0;
+  font-size: clamp(3rem, 8vw, 7.5rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.045em;
+}
+
+.work-lead {
+  grid-column: 1;
+  margin: 0;
+  max-width: 44ch;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgb(178 186 199);
+}
+
+.work-nav {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.work-arrow {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  color: #eef1f6;
+  background: transparent;
+  transition: background-color 0.25s ease, opacity 0.25s ease;
+}
+
+.work-arrow:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.work-arrow:disabled {
+  opacity: 0.3;
+}
+
+.work-arrow:focus-visible,
+.work-link:focus-visible {
+  outline: 2px solid #eef1f6;
+  outline-offset: 3px;
+}
+
+.work-viewport {
+  overflow: hidden;
+  padding-left: var(--gutter);
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.work-viewport:active {
+  cursor: grabbing;
+}
+
+.work-track {
+  display: flex;
+  gap: clamp(1rem, 2.4vw, 2.25rem);
+  width: max-content;
+  padding-right: var(--gutter);
+  will-change: transform;
+}
+
+.work-card {
+  width: min(62vw, 64rem);
+  user-select: none;
+}
+
+.work-shot {
+  margin: 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #0c0f16;
+}
+
+.work-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  pointer-events: none;
+  filter: grayscale(1) brightness(0.82);
+  transform: scale(1.02);
+  transition: filter 0.7s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.work-shot--lockup {
+  display: grid;
+  place-items: center;
+  background: #e9ecef;
+}
+
+.work-shot--lockup img {
+  width: 46%;
+  height: auto;
+  object-fit: contain;
+}
+
+.work-card[data-focus="true"] .work-shot img {
+  filter: none;
+  transform: scale(1);
+}
+
+.work[data-out="true"] .work-card .work-shot img {
+  filter: grayscale(1) brightness(0.82);
+}
+
+.work-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.35rem 1.5rem;
+  padding-top: 1.1rem;
+  transition: opacity 0.5s ease;
+}
+
+.work-card[data-focus="false"] .work-meta {
+  opacity: 0.45;
+}
+
+.work-kind {
+  grid-column: 1 / -1;
+  font-size: 0.875rem;
+  color: rgb(178 186 199);
+}
+
+.work-name {
+  grid-column: 1;
+  margin: 0;
+  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.work-result {
+  grid-column: 1;
+  margin: 0;
+  max-width: 52ch;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: rgb(196 203 214);
+}
+
+.work-note {
+  grid-column: 1;
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgb(160 168 182);
+}
+
+.work-link {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #eef1f6;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+  text-decoration-color: rgb(255 255 255 / 0.4);
+  white-space: nowrap;
+}
+
+.work-link:hover {
+  text-decoration-color: #eef1f6;
+}
+
+@media (max-width: 767px) {
+  .work-head {
+    grid-template-columns: 1fr;
+  }
+
+  .work-nav {
+    display: none;
+  }
+
+  .work-card {
+    width: 82vw;
+  }
+
+  .work-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .work-link {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+    margin-top: 0.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-shot img,
+  .work-meta {
+    transition: none;
+  }
+}

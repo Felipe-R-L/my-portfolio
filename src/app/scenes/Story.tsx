@@ -37,7 +37,8 @@ function Chapters({ focus }: { focus: number }) {
           data-chapter={c.id}
           data-focus={i === focus ? "true" : "false"}
         >
-          <span className="story-year">{c.id === "hoje" ? t("story.today") : c.year}</span>
+          {/* "Today" is its own title; a year label would only repeat it. */}
+          {c.id !== "hoje" && <span className="story-year">{c.year}</span>}
           <h3 className="story-title">{t(`story.chapters.${c.id}.title`)}</h3>
           <p className="story-text">{t(`story.chapters.${c.id}.text`)}</p>
         </article>
@@ -113,7 +114,7 @@ function StoryList() {
 
   return (
     <section id="about" className="story-list" aria-labelledby="story-title">
-      <h2 id="story-title" className="story-heading">
+      <h2 id="story-title" className="sr-only">
         {t("story.title")}
       </h2>
       <div ref={listRef} className="story-list-items">

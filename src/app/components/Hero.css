@@ -24,6 +24,8 @@
   flex-direction: column;
   align-items: flex-start;
   font-size: var(--name-size);
+  /* the F's side bearing, so the name's ink lines up with the text below */
+  margin-left: -0.065em;
   font-weight: 700;
   line-height: 0.8;
   letter-spacing: -0.04em;

@@ -322,5 +322,44 @@
         "text": "I split my time between OMD, Dallas Sync and projects for businesses that need a website, an online store or a system built around the way they work."
       }
     }
+  },
+  "work": {
+    "title": "Work",
+    "lead": "Drag to look through. Each one is live and solves a real problem.",
+    "drag": "Drag",
+    "kind": {
+      "sistema": "System",
+      "site": "Website",
+      "loja": "Online store",
+      "omd": "Built at OMD"
+    },
+    "items": {
+      "dallas_sync": {
+        "title": "Dallas Sync",
+        "result": "The motel's front desk keeps working when the internet drops, and the owner follows occupancy, stock and finances on a single panel.",
+        "note": "Illustrative screens, no real data."
+      },
+      "dallas_motel": {
+        "title": "Dallas Motel",
+        "result": "A website with a digital menu and a panel where management updates suites, prices and holidays on their own, without calling a developer."
+      },
+      "secret": {
+        "title": "Secret Boutique",
+        "result": "An online store with Mercado Pago checkout, an age check at the door and trackable orders that never expose the customer."
+      },
+      "omdfarm": {
+        "title": "OMDfarm",
+        "result": "Real-time telemetry for agricultural machinery, with an operational map and productivity BI, presented at Agrishow."
+      },
+      "eco360": {
+        "title": "Gestão Eco 360",
+        "result": "Waste-collection logistics with video telemetry and a routing module that standardises the drivers' work."
+      }
+    },
+    "visit": "See it live",
+    "visit_login": "Open the system, login required",
+    "visit_aria": "Open {{name}} in a new tab",
+    "prev": "Previous work",
+    "next": "Next work"
   }
 }

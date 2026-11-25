@@ -322,5 +322,44 @@
         "text": "Divido o meu tempo entre a OMD, o Dallas Sync e projetos para negócios que precisam de um site, de uma loja virtual ou de um sistema feito sob medida."
       }
     }
+  },
+  "work": {
+    "title": "Trabalho",
+    "lead": "Arraste para ver. Cada um está no ar e resolve um problema de verdade.",
+    "drag": "Arraste",
+    "kind": {
+      "sistema": "Sistema",
+      "site": "Site",
+      "loja": "Loja virtual",
+      "omd": "Construí na OMD"
+    },
+    "items": {
+      "dallas_sync": {
+        "title": "Dallas Sync",
+        "result": "A recepção do motel continua funcionando quando a internet cai, e o dono acompanha ocupação, estoque e financeiro num painel só.",
+        "note": "Telas ilustrativas, sem dados reais."
+      },
+      "dallas_motel": {
+        "title": "Dallas Motel",
+        "result": "Site com cardápio digital e um painel onde a gerência muda suítes, preços e feriados sozinha, sem precisar chamar programador."
+      },
+      "secret": {
+        "title": "Secret Boutique",
+        "result": "Loja online com pagamento pelo Mercado Pago, verificação de idade na entrada e pedidos rastreáveis sem expor o cliente."
+      },
+      "omdfarm": {
+        "title": "OMDfarm",
+        "result": "Telemetria de máquinas agrícolas em tempo real, com mapa operacional e BI de produtividade, apresentada na Agrishow."
+      },
+      "eco360": {
+        "title": "Gestão Eco 360",
+        "result": "Logística de coleta de resíduos com telemetria de vídeo e um módulo de rotas que padroniza o trabalho dos motoristas."
+      }
+    },
+    "visit": "Ver no ar",
+    "visit_login": "Abrir o sistema, requer login",
+    "visit_aria": "Abrir {{name}} em nova aba",
+    "prev": "Trabalho anterior",
+    "next": "Próximo trabalho"
   }
 }

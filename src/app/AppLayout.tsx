@@ -3,9 +3,7 @@ import type { MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Hero } from "./components/Hero";
-import { Services } from "./components/Services";
-import { Projects } from "./components/Projects";
-import { Credibility } from "./components/Credibility";
+import { Work } from "./scenes/Work";
 import { Process } from "./components/Process";
 import { LatestWriting } from "./components/LatestWriting";
 import { Contact } from "./components/Contact";
@@ -24,7 +22,7 @@ const LazyFluidGlass = lazy(() => import("./components/react-bits/FluidGlass"));
  * working together goes. `Experience` and `TechMarquee` are kept for the
  * job-hunting version.
  */
-const SECTION_IDS = ["about", "services", "projects", "process"] as const;
+const SECTION_IDS = ["about", "projects", "process"] as const;
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -76,9 +74,7 @@ export default function AppLayout() {
             used to carry these ids would have duplicated them. */}
         {/* The hero; the story scene (who I am) follows it. */}
         <Hero />
-        <Services />
-        <Projects />
-        <Credibility />
+        <Work />
         <Process />
         <LatestWriting />
         <Contact />
