@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import type { MotionValue } from "motion/react";
+import type { Signal } from "../../scroll/signal";
+import type { Camera } from "./camera";
 
 /**
  * The photo, alive. Once the city scene settles on the portrait, this WebGL
@@ -21,7 +22,6 @@ import type { MotionValue } from "motion/react";
  * the photo holds; without WebGL2 it never starts and the plain photo stays.
  */
 
-type Camera = { s: number; x: number; y: number };
 
 /** Ink field resolution, as a fraction of the screen. */
 const FIELD_SCALE = 1 / 4;
@@ -130,14 +130,17 @@ void main() {
   // piece; the city shifts less and the other way, the horizon least.
   vec2 shift = par * vec2(${PARALLAX.x.toFixed(4)}, ${PARALLAX.y.toFixed(4)});
   vec2 fgUV = uv - shift * 0.6;
-  float a = texture(matte, fgUV).r;
+  // A hard cut-out: a soft matte edge blends the shifted person with the
+  // city behind him and reads as a ghost (a see-through arm, a grey neck).
+  float a = smoothstep(0.35, 0.65, texture(matte, fgUV).r);
   vec2 bgUV = uv + shift * 0.35 * (1.0 - clamp(uv.y, 0.0, 1.0));
 
   // Behind the person there is no photographed city. Where the city sample
   // would land on him, walk away from the way he moved until it reaches city,
   // and use that edge pixel. The strip is a few pixels wide: stretching one
   // pixel across it is invisible, sampling him again would double him.
-  if (length(shift) > 1e-5) {
+  // Only where the person is not drawn on top; elsewhere the fill is hidden.
+  if (a < 0.5 && length(shift) > 1e-5) {
     vec2 away = -normalize(shift) * (3.0 / img);
     for (int k = 0; k < 12; k++) {
       if (texture(matte, bgUV).r < 0.3) break;
@@ -223,8 +226,8 @@ export function LiquidReveal({
   /** Size of the scene photo the camera moves, in asset pixels. */
   width: number;
   height: number;
-  camera: MotionValue<Camera>;
-  active: MotionValue<boolean>;
+  camera: Signal<Camera>;
+  active: Signal<boolean>;
   phone: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -435,7 +438,7 @@ export function LiquidReveal({
       bind(2, "matte", tex.matte);
       bind(3, "field", targets[read].tex);
       gl.uniform2f(draw.u("stage"), w, h);
-      gl.uniform3f(draw.u("cam"), c.s, c.x, c.y);
+      gl.uniform3f(draw.u("cam"), c.scale, c.x, c.y);
       gl.uniform2f(draw.u("img"), width, height);
       gl.uniform2f(draw.u("par"), hasCol ? par.x : 0, hasCol ? par.y : 0);
       gl.uniform1f(draw.u("t"), t);

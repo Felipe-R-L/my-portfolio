@@ -53,7 +53,7 @@ export interface GlassNavProps {
 // still reads as glass over the dark page. The mobile dock sits over the
 // article slab instead — see `.glass-dark` in styles/layout.css.
 const GLASS =
-  "border border-white/[0.14] bg-[rgb(8_10_16/0.55)] backdrop-blur-2xl backdrop-saturate-150 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_8px_24px_-12px_rgba(0,0,0,0.6)]";
+  "border border-white/[0.14] bg-[rgb(8_10_16/0.78)] backdrop-blur-2xl backdrop-saturate-150 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_10px_30px_-10px_rgba(0,0,0,0.75)]";
 
 const DEFAULT_ENTRANCE: GlassNavEntrance = { duration: 0.8, delay: 1.5 };
 

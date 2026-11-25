@@ -67,15 +67,6 @@
   pointer-events: none;
 }
 
-/* The foot of the photo, darkened under the about caption; it also melts
-   the photo into the page as the scene unpins. */
-.city-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, var(--bg) 0%, rgb(5 6 8 / 0.82) 22%, rgb(5 6 8 / 0.3) 40%, transparent 55%);
-  pointer-events: none;
-}
-
 /* Everything that makes up the picture, scaled as one on the way out. */
 .city-frame {
   position: absolute;
@@ -83,14 +74,6 @@
   overflow: hidden;
   transform-origin: 50% 50%;
   box-shadow: 0 40px 90px -40px rgb(0 0 0 / 0.9);
-}
-
-/* ---------- the about caption ---------- */
-
-.city-about {
-  position: absolute;
-  inset: auto 0 0 0;
-  z-index: 3;
 }
 
 /* ---------- the windows ---------- */
@@ -129,13 +112,4 @@
     --track: var(--track-phone, 315svh);
   }
 
-  /* On a phone the start framing has the horizon at the top: let a little of
-     it through the sheet, a night silhouette over the name. */
-  .city-sheet {
-    background: linear-gradient(to bottom, rgb(70 72 76) 0%, rgb(40 42 46) 30%, var(--bg) 50%);
-  }
-
-  .city-shade {
-    background: linear-gradient(to top, var(--bg) 0%, rgb(5 6 8 / 0.9) 34%, rgb(5 6 8 / 0.35) 52%, transparent 66%);
-  }
 }

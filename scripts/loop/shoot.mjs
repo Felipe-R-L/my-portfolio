@@ -27,6 +27,10 @@ for (const run of runs) {
   await page.waitForTimeout(1500);
   for (const s of scenes) {
     const y = await page.evaluate(({ sel, p }) => {
+      if (sel === "body") {
+        const max = document.scrollingElement.scrollHeight - window.innerHeight;
+        return Math.round(p * max);
+      }
       const el = document.querySelector(sel);
       if (!el) return null;
       const r = el.getBoundingClientRect();

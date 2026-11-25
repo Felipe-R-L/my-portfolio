@@ -127,12 +127,12 @@
     - `ZOOM_*`, `PULL_*`, `HOLD_FROM`, `EXIT_*`, `FRAME_*`.
   - A hero expõe ao fim o elemento `.city-frame` com `data-scene-frame`, para a História continuar dele.
 
-- [ ] **Step 1:** Teste `cameraAt`:
+- [x] **Step 1:** Teste `cameraAt`:
   - em `p = 0`, o rect visível é igual a `SHOT_WIDE.start`, com tolerância de 1 px;
   - em `p = 1`, igual a `end(1440, 900)`;
   - a escala é monotônica no intervalo.
-- [ ] **Step 2:** Rode o teste. Esperado: FAIL. Extraia `camera.ts`. Rode de novo. Esperado: PASS.
-- [ ] **Step 3:** Troque `useSceneProgress`, os `useTransform` e os `motion.*` do `HeroCity` por **uma** timeline com `scrollTrigger: { trigger: ".city", start: "top top", end: "bottom bottom", scrub: true }`. Fixe o `.city-stage` via `pin` ou mantenha o `sticky` (escolha o que der menos jitter no print). Cada faixa (sheet, front, shade, about, frame) é um tween posicionado na fração da timeline igual à constante atual. O progresso alimenta `cameraAt` e `LiquidReveal` via `onUpdate`.
+- [x] **Step 2:** Rode o teste. Esperado: FAIL. Extraia `camera.ts`. Rode de novo. Esperado: PASS.
+- [x] **Step 3:** Troque `useSceneProgress`, os `useTransform` e os `motion.*` do `HeroCity` por **uma** timeline com `scrollTrigger: { trigger: ".city", start: "top top", end: "bottom bottom", scrub: true }`. Fixe o `.city-stage` via `pin` ou mantenha o `sticky` (escolha o que der menos jitter no print). Cada faixa (sheet, front, shade, about, frame) é um tween posicionado na fração da timeline igual à constante atual. O progresso alimenta `cameraAt` e `LiquidReveal` via `onUpdate`.
 - [ ] **Step 4:** **Skyline.**
   - Se `design-src/realesrgan/` existir (a ferramenta de ampliação, baixada só com aprovação do Felipe), `skyline.sh`:
     1. recorta a região do skyline do `level.png` (crops WIDE e TALL documentados no resumo: `-rotate 2.2`, WIDE `3856x2410+214+2820`, TALL `3856x4681+214+772`, região = `shot.start` com margem de 15%);
@@ -141,8 +141,8 @@
     4. exporta `scene-sky-*.webp`.
   - A hero mostra essa camada alinhada exatamente sobre a foto até `ZOOM_TO` e faz crossfade para a foto em `[ZOOM_TO, ZOOM_TO + 0.03]`, que é imperceptível porque os pixels coincidem.
   - Se a ferramenta não existir, pule este passo, anote `skyline: blocked` em `.loop/state.json` e siga.
-- [ ] **Step 5:** Remova a variante 2 e os assets sem uso. O `?hero=foto` não muda mais nada.
-- [ ] **Step 6:** Atualize `scenes.json` com as posições da hero e rode os portões. Commit: `loop: hero em scrolltrigger + skyline`.
+- [x] **Step 5:** Remova a variante 2 e os assets sem uso. O `?hero=foto` não muda mais nada.
+- [x] **Step 6:** Atualize `scenes.json` com as posições da hero e rode os portões. Commit: `loop: hero em scrolltrigger + skyline`.
 
 ### Task 2: Cena História (editorial)
 

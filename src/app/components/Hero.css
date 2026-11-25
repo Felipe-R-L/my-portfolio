@@ -6,7 +6,7 @@
  */
 
 .hero-frame {
-  --name-size: clamp(3.5rem, 17.2vw, 22rem);
+  --name-size: clamp(3.25rem, 16.1vw, 20.5rem);
   --ink: #f5f7ff;
   position: absolute;
   inset: 0;
