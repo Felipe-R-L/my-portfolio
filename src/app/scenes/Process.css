@@ -114,20 +114,13 @@
   color: #eef1f6;
 }
 
-.process-end {
-  display: block;
-  width: 2px;
-  height: clamp(3rem, 8vh, 5rem);
-  margin: clamp(2rem, 5vh, 3rem) auto 0;
-  background: linear-gradient(to bottom, var(--line), transparent);
-}
-
 @media (max-width: 767px) {
   .process-line {
     position: absolute;
     left: 5px;
     top: 0.75rem;
-    bottom: 0;
+    /* stops at the last step's marker, never under its text */
+    bottom: var(--line-tail, 4rem);
     width: 2px;
     height: auto;
   }

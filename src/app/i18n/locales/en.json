@@ -2,8 +2,6 @@
   "nav": {
     "about": "About",
     "projects": "Projects",
-    "experience": "Experience",
-    "services": "Services",
     "blog": "Blog",
     "menu_open": "Menu",
     "menu_close": "Close menu",
@@ -14,17 +12,7 @@
     "description": "I build websites, online stores and custom systems for small and mid-sized businesses. You talk to me directly, from the first draft to support after launch.",
     "cta_projects": "View projects"
   },
-  "about": {
-    "title": "Who I am",
-    "lines": [
-      "I'm Felipe, a fullstack developer from the countryside of São Paulo, Brazil.",
-      "I also run a business of my own, so I think about cost, timelines and return, not just code.",
-      "I enjoy swapping ideas with other developers, designers and business owners. If you have a project, want to partner up or just talk tech, reach out."
-    ],
-    "photo_alt": "Felipe on the Patriani rooftop in Campinas"
-  },
   "contact": {
-    "title_part1": "Contact",
     "title_part2": "Let's talk.",
     "cta_title": "Have a project in mind?",
     "cta_desc": "Tell me the idea, even if it's still rough. I reply fast and will tell you honestly whether and how I can help.",
@@ -180,48 +168,6 @@
       }
     }
   },
-  "services": {
-    "title_part1": "How I can",
-    "title_part2": "Help.",
-    "description": "From a simple website to a full system. You explain your business problem, I handle the technical side.",
-    "example_label": "Example:",
-    "items": {
-      "landing_pages": {
-        "title": "Websites & landing pages",
-        "description": "A fast, good-looking site that explains what you sell and sends customers straight to your WhatsApp or checkout.",
-        "example": "the Dallas Motel site, with a digital menu and a pricing panel."
-      },
-      "ecommerce": {
-        "title": "Online stores",
-        "description": "An online store with catalog, cart and payments by Pix or card, so you can sell without relying only on marketplaces.",
-        "example": "Secret Boutique, a store with Mercado Pago checkout."
-      },
-      "systems": {
-        "title": "Management systems",
-        "description": "Custom software to track inventory, orders, bookings or service, instead of spreadsheets and notebooks.",
-        "example": "Dallas Sync, motel management in production that keeps working offline."
-      },
-      "automation": {
-        "title": "Automation & AI",
-        "description": "I take repetitive work off your plate and connect your tools: WhatsApp alerts, automatic reports and AI assistants.",
-        "example": "my AI secretary, written up in detail on the blog."
-      }
-    },
-    "learn_more": "Learn more"
-  },
-  "home": {
-    "writing": {
-      "title_part1": "Blog",
-      "title_part2": "Behind the scenes.",
-      "lead": "I write about real problems I've solved. A good way to see how I think before we talk.",
-      "read_more": "Continue reading",
-      "card_aria": "Read the full article: {{title}}",
-      "see_all": "See all articles"
-    }
-  },
-  "footer": {
-    "built_for_future": "Built for the future."
-  },
   "common": {
     "loading": "Loading..."
   },
@@ -237,38 +183,9 @@
     "close": "Close",
     "back": "Back to blog"
   },
-  "credibility": {
-    "eyebrow": "Beyond freelance",
-    "title": "I'm also a fullstack developer at OMD do Brasil.",
-    "description": "There I designed the architecture of OMDfarm, a farm-machinery telemetry platform showcased at Agrishow. It's the same technology and the same care I bring to every client project."
-  },
   "process": {
-    "title_part1": "How it",
-    "title_part2": "Works.",
     "lead": "No surprises halfway through: you know what you're getting before we commit.",
     "gate": "Nothing starts without your OK.",
-    "scenes": {
-      "talk": {
-        "client": "Hi! I need a website for my store.",
-        "me": "Sure! How do you sell today?"
-      },
-      "draft": {
-        "quote": "Quote",
-        "approve": "Approve",
-        "adjust": "Ask for changes"
-      },
-      "build": {
-        "structure": "Structure",
-        "content": "Content and photos",
-        "review": "Review"
-      },
-      "launch": {
-        "domain": "yourbusiness.com",
-        "live": "Live",
-        "client": "Can we swap the cover photo?",
-        "me": "Done"
-      }
-    },
     "steps": {
       "talk": {
         "title": "Talk",

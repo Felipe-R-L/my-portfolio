@@ -6,7 +6,9 @@
  */
 
 .hero-frame {
-  --name-size: clamp(3.25rem, 16.1vw, 20.5rem);
+  /* RODRIGUES fills the width; on a short screen the three lines take the
+     height instead, so the credits never fall off the bottom */
+  --name-size: min(16.1vw, 20.5rem, calc((100svh - 21rem) / 2.45));
   --ink: #f5f7ff;
   position: absolute;
   inset: 0;
@@ -40,7 +42,7 @@
   padding-block: 0.04em 0.02em;
 }
 
-.hero-line--last {
+.hero-line--next {
   margin-top: -0.06em;
 }
 

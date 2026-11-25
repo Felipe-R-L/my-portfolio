@@ -1,6 +1,8 @@
 import { useEffect, type RefObject } from "react";
 import type Lenis from "lenis";
 
+import { ScrollTrigger } from "../scroll/gsap";
+
 /**
  * How long to keep looking for the hash target before giving up. The sections
  * mount with React, and i18n resolves on their own schedule, so the
@@ -81,6 +83,9 @@ export function useHashScroll(lenisRef: RefObject<Lenis | null>) {
       if (cancelled) return;
       const target = document.getElementById(id);
       if (target) {
+        // The pinned scenes add their scroll length only once ScrollTrigger
+        // has measured them; jumping before that lands in the wrong place.
+        ScrollTrigger.refresh();
         scrollToTarget(target);
         settle(performance.now());
         return;

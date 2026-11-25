@@ -24,7 +24,6 @@ const ENTER_FROM = 0.09;
 const ENTER_TO = 0.16;
 const TRAVEL_FROM = 0.14;
 const TRAVEL_TO = 0.86;
-const EXIT_FROM = 0.84;
 
 function Chapters({ focus }: { focus: number }) {
   const { t } = useTranslation();
@@ -67,11 +66,12 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
     if (!rail || !track) return;
     const apply = (p: number) => {
       const enter = span(p, ENTER_FROM, ENTER_TO);
-      const exit = span(p, EXIT_FROM, 1);
-      rail.style.opacity = String(Math.min(enter, 1 - exit));
-      rail.style.visibility = p <= 0 || p >= 1 ? "hidden" : "visible";
+      // No fade on the way out: the last chapter stays lit and the stage,
+      // released by its sticky parent, carries it off the top of the screen.
+      rail.style.opacity = String(enter);
+      rail.style.visibility = p <= 0 ? "hidden" : "visible";
       const x = -distance.current * span(p, TRAVEL_FROM, TRAVEL_TO);
-      track.style.transform = `translate3d(${x + (1 - enter) * 80}px, ${exit * -24}px, 0)`;
+      track.style.transform = `translate3d(${x + (1 - enter) * 80}px, 0, 0)`;
       setFocus(chapterAt(span(p, TRAVEL_FROM, TRAVEL_TO), STORY.length));
     };
     const measure = () => {

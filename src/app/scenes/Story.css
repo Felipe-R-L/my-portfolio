@@ -70,9 +70,9 @@
   overflow: hidden;
   visibility: hidden;
   opacity: 0;
-  /* the rail fades out at its right edge, where chapters wait their turn */
-  /* chapters fade in at the right edge and out at the left, never cut */
-  mask-image: linear-gradient(to right, transparent 0, transparent 3%, #000 15%, #000 80%, transparent 100%);
+  /* chapters fade in at the right edge and out at the left, never cut, and
+     the chapter in focus always sits in the fully opaque middle */
+  mask-image: linear-gradient(to right, transparent 0, transparent 3%, #000 15%, #000 91%, transparent 100%);
 }
 
 .story-track {

@@ -44,6 +44,7 @@ vi.mock('../../src/app/components/Hero', () => ({ Hero: stub('hero') }))
 vi.mock('../../src/app/scenes/Work', () => ({ Work: stub('work') }))
 vi.mock('../../src/app/scenes/Proof', () => ({ Proof: stub('proof') }))
 vi.mock('../../src/app/scenes/Talk', () => ({ Talk: stub('talk') }))
+vi.mock('../../src/app/scroll/gsap', () => ({ ScrollTrigger: { refresh: vi.fn() }, gsap: {} }))
 vi.mock('../../src/app/scenes/Process', () => ({ Process: stub('process') }))
 vi.mock('../../src/app/components/shared/StarField', () => ({ StarField: stub('starfield') }))
 
@@ -74,6 +75,13 @@ async function mountAppLayout() {
 }
 
 describe('AppLayout nav pill click handler', () => {
+  it('lists the scenes in page order', async () => {
+    lenisRef.current = null
+    const el = await mountAppLayout()
+    const hrefs = [...el.querySelectorAll<HTMLAnchorElement>('nav a[href^="#"]')].map((a) => a.getAttribute('href'))
+    expect([...new Set(hrefs)]).toEqual(['#about', '#projects', '#process', '#contact'])
+  })
+
   it('does not call preventDefault when Lenis is unavailable (mobile), letting the anchor jump natively', async () => {
     lenisRef.current = null
     const el = await mountAppLayout()
