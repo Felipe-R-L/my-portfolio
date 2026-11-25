@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { STORY, chapterAt } from "../data/story";
+import { STORY, chapterAt, type StoryChapter } from "../data/story";
 import { span, timelineDistance } from "../scroll/math";
 import type { Signal } from "../scroll/signal";
 import "./Story.css";
@@ -25,6 +25,50 @@ const ENTER_TO = 0.16;
 const TRAVEL_FROM = 0.14;
 const TRAVEL_TO = 0.86;
 
+/** The chapter's picture: a photo, or a drawing where no photo fits. */
+function ChapterImage({ chapter }: { chapter: StoryChapter }) {
+  const { t } = useTranslation();
+  const img = chapter.image!;
+  if ("figure" in img) {
+    return (
+      <figure className={`story-media story-media--${img.figure}`} aria-hidden="true">
+        {img.figure === "orbit" ? (
+          // the night sky of an astronomy olympiad: orbits round a star
+          <svg viewBox="0 0 320 200">
+            <ellipse cx="160" cy="100" rx="140" ry="52" />
+            <ellipse cx="160" cy="100" rx="96" ry="36" />
+            <ellipse cx="160" cy="100" rx="52" ry="20" />
+            <circle className="story-star" cx="160" cy="100" r="7" />
+            <circle className="story-planet" cx="300" cy="100" r="5" />
+            <circle className="story-planet" cx="112" cy="75" r="4" />
+            <circle className="story-planet" cx="190" cy="118" r="3" />
+          </svg>
+        ) : (
+          // the first program everyone writes
+          <pre className="story-code">
+            <span>{"int main() {"}</span>
+            <span>{'  printf("Hello, world");'}</span>
+            <span>{"  return 0;"}</span>
+            <span>{"}"}</span>
+          </pre>
+        )}
+      </figure>
+    );
+  }
+  return (
+    <figure className="story-media">
+      <img
+        src={img.src}
+        srcSet={img.srcSet}
+        sizes="(max-width: 767px) 90vw, 24vw"
+        alt={t(`story.chapters.${chapter.id}.alt`)}
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+  );
+}
+
 function Chapters({ focus }: { focus: number }) {
   const { t } = useTranslation();
   return (
@@ -45,6 +89,7 @@ function Chapters({ focus }: { focus: number }) {
               ·
             </span>
           )}
+          {c.image && <ChapterImage chapter={c} />}
           <h3 className="story-title">{t(`story.chapters.${c.id}.title`)}</h3>
           <p className="story-text">{t(`story.chapters.${c.id}.text`)}</p>
         </article>

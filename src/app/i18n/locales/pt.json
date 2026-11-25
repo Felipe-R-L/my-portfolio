@@ -213,7 +213,8 @@
     "chapters": {
       "diamante": {
         "title": "Diamante, Calábria",
-        "text": "Meu tataravô Vincenzo Leone nasceu em Diamante, no sul da Itália, e é dele que vem o sobrenome Leone."
+        "text": "Meu tataravô Vincenzo Leone nasceu em Diamante, no sul da Itália, e é dele que vem o sobrenome Leone.",
+        "alt": "Diamante vista do alto, a cidade branca sobre o mar da Calábria"
       },
       "oba": {
         "title": "Prata na OBA",
@@ -225,15 +226,18 @@
       },
       "ifsp": {
         "title": "Engenharia no IFSP",
-        "text": "Depois do ensino médio fui estudar engenharia mecânica no IFSP, e foram justamente as aulas de programação que me fizeram voltar para a tecnologia."
+        "text": "Depois do ensino médio fui estudar engenharia mecânica no IFSP, e foram justamente as aulas de programação que me fizeram voltar para a tecnologia.",
+        "alt": "Entrada do IFSP, câmpus Sertãozinho"
       },
       "dallas": {
         "title": "Dallas Motel",
-        "text": "Fiz o site e o cardápio digital do Dallas Motel, e desse trabalho nasceu o Dallas Sync, o sistema de gestão que o motel hoje usa por assinatura."
+        "text": "Fiz o site e o cardápio digital do Dallas Motel, e desse trabalho nasceu o Dallas Sync, o sistema de gestão que o motel hoje usa por assinatura.",
+        "alt": "O site do Dallas Motel"
       },
       "omd": {
         "title": "OMD do Brasil",
-        "text": "Entrei na OMD do Brasil depois de uma conversa com o dono da empresa, e atualmente cuido de três plataformas em produção que atendem 31 empresas."
+        "text": "Entrei na OMD do Brasil em 2024 como desenvolvedor, e atualmente cuido de três plataformas em produção que atendem 31 empresas.",
+        "alt": "Tela do OMDfarm"
       },
       "hoje": {
         "title": "Hoje",
@@ -293,6 +297,7 @@
   "talk": {
     "blog_label": "Último artigo no blog",
     "email_label": "Ou por e-mail",
-    "rights": "Todos os direitos reservados."
+    "rights": "Todos os direitos reservados.",
+    "credits": "Fotos de Diamante (Eugenio Magurno) e do IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons."
   }
 }

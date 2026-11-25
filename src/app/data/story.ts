@@ -8,16 +8,21 @@ export type StoryChapter = {
   year: string;
   /** A small seal instead of a full chapter weight (the OBA medal). */
   seal?: boolean;
-  image?: { src: string; alt: string; credit?: string };
+  /** A photo (alt text in i18n under `story.chapters.<id>.alt`) or one of
+      the drawn figures, for chapters no photo can honestly show. */
+  image?: { src: string; srcSet?: string } | { figure: "orbit" | "code" };
 };
 
+const S = "/assets/story";
+const P = "/assets/projects";
+
 export const STORY: readonly StoryChapter[] = [
-  { id: "diamante", year: "1867" },
-  { id: "oba", year: "2017", seal: true },
-  { id: "etec", year: "2020" },
-  { id: "ifsp", year: "2022" },
-  { id: "dallas", year: "2023" },
-  { id: "omd", year: "2024" },
+  { id: "diamante", year: "1867", image: { src: `${S}/diamante-1280.webp`, srcSet: `${S}/diamante-640.webp 640w, ${S}/diamante-1280.webp 1280w` } },
+  { id: "oba", year: "2017", seal: true, image: { figure: "orbit" } },
+  { id: "etec", year: "2020", image: { figure: "code" } },
+  { id: "ifsp", year: "2022", image: { src: `${S}/ifsp-1280.webp`, srcSet: `${S}/ifsp-640.webp 640w, ${S}/ifsp-1280.webp 1280w` } },
+  { id: "dallas", year: "2023", image: { src: `${P}/dallas-720.webp`, srcSet: `${P}/dallas-720.webp 720w, ${P}/dallas.webp 1919w` } },
+  { id: "omd", year: "2024", image: { src: `${P}/omdfarm-720.webp` } },
   { id: "hoje", year: "hoje" },
 ];
 

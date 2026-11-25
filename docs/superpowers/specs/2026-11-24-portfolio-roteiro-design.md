@@ -139,3 +139,6 @@ O sobrenome **Leone** entra no nome da hero e em todo lugar onde o nome dele apa
 - **Rolagem menos sensível e história mais lenta.** O texto de cada capítulo precisa de tempo de leitura.
 - **Imagens na história.** Cada capítulo ganha uma imagem: fotos com licença livre da Wikimedia Commons (Diamante, ETEC, IFSP, OBA), mostradas ao Felipe antes de entrar, e as telas dos projetos nos capítulos de trabalho (Dallas, OMD).
 - **Skyline:** upscale com Real-ESRGAN autorizado.
+- **OMD:** o site não conta que a vaga veio de uma conversa com o dono; o capítulo diz só que ele entrou em 2024 como desenvolvedor.
+- **Skyline:** o Real-ESRGAN não recupera detalhe da névoa da foto original; o mergulho passou a partir dos prédios próximos, que são nítidos.
+- **Imagens da história:** Diamante (Eugenio Magurno) e IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, com crédito no rodapé. ETEC Idio Zucchi e OBA sem foto livre: um trecho de "Hello, world" e um desenho de órbitas.

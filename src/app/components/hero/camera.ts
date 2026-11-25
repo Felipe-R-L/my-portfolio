@@ -29,8 +29,10 @@ export const SHOT_WIDE: Shot = {
   width: 3400,
   height: 2125,
   face: { x: 1790, y: 543 },
-  // Left third of the frame: horizon high, dense blocks, the railing low.
-  start: { x: 0, y: 93, w: 1141, h: 900 },
+  // Lower left of the frame: the near blocks, which the phone photographed
+  // sharp. The distant skyline is haze in the original, and no upscaling
+  // brings back detail that was never captured.
+  start: { x: 0, y: 1000, w: 1141, h: 900 },
   end: () => ({ x: 0, y: 0, w: 3400, h: 2125 }),
 };
 

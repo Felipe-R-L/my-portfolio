@@ -46,6 +46,66 @@
   text-wrap: pretty;
 }
 
+/* ---------- the chapter's picture ---------- */
+
+.story-media {
+  margin: 0 0 0.5rem;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #0c0f16;
+}
+
+.story-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* editorial: the past in black and white, the chapter in focus in colour */
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 0.8s ease;
+}
+
+.story-chapter[data-focus="true"] .story-media img {
+  filter: none;
+}
+
+.story-media--orbit,
+.story-media--code {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(159 195 214 / 0.25);
+  background: radial-gradient(ellipse at 50% 50%, rgb(159 195 214 / 0.08), transparent 70%);
+}
+
+.story-media--orbit svg {
+  width: 88%;
+  height: auto;
+}
+
+.story-media--orbit ellipse {
+  fill: none;
+  stroke: rgb(159 195 214 / 0.45);
+  stroke-width: 1;
+}
+
+.story-star {
+  fill: #eef1f6;
+}
+
+.story-planet {
+  fill: var(--story-accent);
+}
+
+.story-code {
+  margin: 0;
+  display: grid;
+  gap: 0.3rem;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  line-height: 1.4;
+  color: var(--story-accent);
+}
+
 /* Keeps "Today" on the same line as the other titles. */
 .story-year--blank {
   visibility: hidden;
