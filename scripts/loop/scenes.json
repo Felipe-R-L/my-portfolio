@@ -1,0 +1,10 @@
+[
+  { "name": "01-abertura-00", "sel": ".city", "p": 0 },
+  { "name": "01-abertura-10", "sel": ".city", "p": 0.1 },
+  { "name": "01-mergulho-25", "sel": ".city", "p": 0.25 },
+  { "name": "02-encontro-50", "sel": ".city", "p": 0.5 },
+  { "name": "02-encontro-70", "sel": ".city", "p": 0.7 },
+  { "name": "02-quadro-88", "sel": ".city", "p": 0.88 },
+  { "name": "02-quadro-100", "sel": ".city", "p": 1 },
+  { "name": "99-fim", "sel": "body", "p": 1 }
+]
