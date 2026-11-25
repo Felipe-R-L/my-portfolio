@@ -55,7 +55,7 @@ export function Process() {
     ScrollTrigger.create({
       trigger: track,
       start: "top 75%",
-      end: isPhone ? "bottom 80%" : "top 35%",
+      end: isPhone ? "bottom 80%" : "top 45%",
       scrub: true,
       onUpdate: (self) => show(self.progress),
       onRefresh: (self) => {

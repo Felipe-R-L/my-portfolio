@@ -53,8 +53,7 @@
 
 .proof-value {
   order: -1;
-  /* the numerals' side bearing, so their ink lines up with the label */
-  margin: 0 0 0 -0.03em;
+  margin: 0;
   white-space: nowrap;
   font-family: "Instrument Serif", Georgia, serif;
   font-size: clamp(5rem, 12vw, 11rem);
