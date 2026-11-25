@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { WORK } from "../data/work";
 import { Draggable, ScrollTrigger, gsap } from "../scroll/gsap";
+import { span } from "../scroll/math";
 import { useScene } from "../scroll/useScene";
 import "./Work.css";
 
@@ -61,7 +62,12 @@ export function Work() {
     // Wide screens: the page scroll drives the cards.
     if (!isPhone && !reduced) {
       // a card's width of scroll per card, so each one has time to be read
-      const travel = () => -minX() * 1.4;
+      // a stretch of scroll before the first card moves and after the last
+      // one arrives, so the scene never starts or ends mid-motion
+      const holdPx = () => window.innerHeight * 0.7;
+      const travel = () => -minX() * 1.6 + 2 * holdPx();
+      const hold = () => holdPx() / Math.max(1, travel());
+      const at = (p: number) => span(p, hold(), 1 - hold());
       const st = ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
@@ -70,16 +76,16 @@ export function Work() {
         scrub: true,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
-          const x = minX() * self.progress;
+          const x = minX() * at(self.progress);
           gsap.set(track, { x });
           setFocus(nearest(x));
         },
-        onRefresh: (self) => gsap.set(track, { x: minX() * self.progress }),
+        onRefresh: (self) => gsap.set(track, { x: minX() * at(self.progress) }),
       });
       goTo.current = (i: number) => {
         const target = Math.max(0, Math.min(WORK.length - 1, i));
         const m = minX();
-        const p = m === 0 ? 0 : xFor(target) / m;
+        const p = m === 0 ? 0 : hold() + (xFor(target) / m) * (1 - 2 * hold());
         window.scrollTo({ top: st.start + p * (st.end - st.start), behavior: "smooth" });
       };
       ScrollTrigger.create({

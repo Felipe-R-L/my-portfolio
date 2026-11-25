@@ -242,7 +242,7 @@
       "hoje": {
         "title": "Hoje",
         "text": "Divido o meu tempo entre a OMD, o Dallas Sync e projetos para negócios que precisam de um site, de uma loja virtual ou de um sistema feito sob medida.",
-        "alt": "O painel do Dallas Sync"
+        "alt": "O mapa de suítes do Dallas Sync"
       }
     }
   },
@@ -260,7 +260,7 @@
       "dallas_sync": {
         "title": "Dallas Sync",
         "result": "A recepção do motel continua funcionando quando a internet cai, e o dono acompanha ocupação, estoque e financeiro num painel só.",
-        "note": "Telas ilustrativas, sem dados reais."
+        "note": "Tela do sistema em modo treino, sem dados reais."
       },
       "dallas_motel": {
         "title": "Dallas Motel",
