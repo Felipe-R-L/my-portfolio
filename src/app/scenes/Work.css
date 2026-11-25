@@ -24,10 +24,11 @@
 .work-title {
   grid-column: 1;
   margin: 0;
-  font-size: clamp(3rem, 8vw, 7.5rem);
-  font-weight: 700;
-  line-height: 0.85;
-  letter-spacing: -0.045em;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(3.5rem, 9vw, 8.5rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
 }
 
 .work-lead {
@@ -75,16 +76,23 @@
 .work-viewport {
   overflow: hidden;
   padding-left: var(--gutter);
-  cursor: grab;
   touch-action: pan-y;
   /* a card dragged past the left edge fades out in the gutter, never leaving
      a stray letter behind */
   mask-image: linear-gradient(to right, transparent 0, transparent calc(var(--gutter) * 0.6), #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent 100%);
 }
 
-.work-viewport:active {
-  cursor: grabbing;
+/* only the phone carousel is dragged */
+@media (max-width: 767px) {
+  .work-viewport {
+    cursor: grab;
+  }
+
+  .work-viewport:active {
+    cursor: grabbing;
+  }
 }
+
 
 .work-track {
   display: flex;
@@ -157,15 +165,16 @@
 .work-kind {
   grid-column: 1 / -1;
   font-size: 0.875rem;
-  color: rgb(178 186 199);
+  color: #9fc3d6;
 }
 
 .work-name {
   grid-column: 1;
   margin: 0;
-  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(1.875rem, 2.8vw, 2.75rem);
+  font-weight: 400;
+  letter-spacing: -0.005em;
 }
 
 .work-result {
@@ -229,5 +238,44 @@
   .work-shot img,
   .work-meta {
     transition: none;
+  }
+}
+
+/* Pinned on a wide screen: the whole scene fits one screen while the
+   cards pass, so the card's height is taken from what the screen has left. */
+@media (min-width: 768px) {
+  .work {
+    height: 100svh;
+    padding: 5.5rem 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .work-head {
+    margin-bottom: 1.5rem;
+  }
+
+  .work-title {
+    font-size: clamp(3rem, 6vw, 6rem);
+  }
+
+  .work-lead {
+    margin-top: 0.4rem;
+  }
+
+  /* the picture takes what the heading and the caption leave */
+  .work-card {
+    width: min(62vw, 64rem, calc((100svh - 31rem) * 1.6));
+  }
+
+  .work-meta {
+    padding-top: 0.85rem;
+  }
+
+  .work-result {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }

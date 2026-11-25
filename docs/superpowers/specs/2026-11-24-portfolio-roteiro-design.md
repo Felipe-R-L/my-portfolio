@@ -132,3 +132,10 @@ O fio condutor é a sensação de já ter conversado com o Felipe. Cada cena ter
 ## Adendo (2026-11-24, pedido do Felipe)
 
 O sobrenome **Leone** entra no nome da hero e em todo lugar onde o nome dele aparece (h1, aria-label, títulos). Preferência: o nome completo **FELIPE RODRIGUES LEONE**. Se não couber bem (desktop 1440×900 e celular 390×844), usar **FELIPE R. LEONE**. O mergulho da câmera continua por uma letra da linha que mostra a cidade.
+
+## Adendo 2 (2026-11-24, retorno do Felipe)
+- **Um estilo só, editorial em tudo.** Todos os títulos de seção (Trabalho, Prova, Processo, Conversa) em Instrument Serif, com o azul de Diamante (#9fc3d6) como único acento da página. O texto corrido segue no sans. O nome do hero continua em caixa alta pesada, porque é a peça de arquitetura da página. Isto substitui a divisão "Editorial para a história, Revelação para o trabalho".
+- **Trabalho rola com o scroll do mouse.** No desktop a seção fica presa e os cards passam na horizontal conforme a rolagem; arrastar e as setas continuam. No celular, arrasto.
+- **Rolagem menos sensível e história mais lenta.** O texto de cada capítulo precisa de tempo de leitura.
+- **Imagens na história.** Cada capítulo ganha uma imagem: fotos com licença livre da Wikimedia Commons (Diamante, ETEC, IFSP, OBA), mostradas ao Felipe antes de entrar, e as telas dos projetos nos capítulos de trabalho (Dallas, OMD).
+- **Skyline:** upscale com Real-ESRGAN autorizado.

@@ -12,7 +12,10 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'pt' } }),
 }))
 
-const { draggableCreate } = vi.hoisted(() => ({ draggableCreate: vi.fn(() => [{ kill: vi.fn(), update: vi.fn(), applyBounds: vi.fn() }]) }))
+const { draggableCreate, scrollCreate } = vi.hoisted(() => ({
+  draggableCreate: vi.fn(() => [{ kill: vi.fn(), update: vi.fn(), applyBounds: vi.fn() }]),
+  scrollCreate: vi.fn(() => ({ start: 0, end: 1 })),
+}))
 vi.mock('../../src/app/scroll/gsap', () => ({
   gsap: {
     context: (fn: () => void) => { fn(); return { revert: vi.fn() } },
@@ -20,7 +23,7 @@ vi.mock('../../src/app/scroll/gsap', () => ({
     set: vi.fn(),
     utils: { snap: () => (v: number) => v },
   },
-  ScrollTrigger: { defaults: vi.fn(), create: vi.fn() },
+  ScrollTrigger: { defaults: vi.fn(), create: scrollCreate },
   Draggable: { create: draggableCreate },
   InertiaPlugin: {},
 }))
@@ -35,8 +38,10 @@ afterEach(() => {
   container?.remove()
 })
 
-function render() {
-  window.matchMedia = ((q: string) => ({ matches: false, media: q, addEventListener() {}, removeEventListener() {} })) as unknown as typeof window.matchMedia
+function render(phone = false) {
+  draggableCreate.mockClear()
+  scrollCreate.mockClear()
+  window.matchMedia = ((q: string) => ({ matches: phone && q.includes('max-width'), media: q, addEventListener() {}, removeEventListener() {} })) as unknown as typeof window.matchMedia
   container = document.createElement('div')
   document.body.appendChild(container)
   root = createRoot(container)
@@ -61,8 +66,15 @@ describe('work carousel', () => {
     }
   })
 
-  it('drags sideways only, leaving vertical scrolling to the page', () => {
-    render()
+  it('on a wide screen, pins the scene and lets the page scroll carry the cards', () => {
+    render(false)
+    expect(draggableCreate).not.toHaveBeenCalled()
+    const vars = scrollCreate.mock.calls.map((c) => (c as unknown[])[0] as Record<string, unknown>)
+    expect(vars.some((v) => v.pin === true && v.scrub === true)).toBe(true)
+  })
+
+  it('on a phone, drags sideways only, leaving vertical scrolling to the page', () => {
+    render(true)
     expect(draggableCreate).toHaveBeenCalled()
     const vars = (draggableCreate.mock.calls[0] as unknown[])[1] as Record<string, unknown>
     expect(vars.type).toBe('x')

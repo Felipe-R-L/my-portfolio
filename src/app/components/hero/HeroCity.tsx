@@ -44,7 +44,7 @@ const TRACK_PHONE = 3.15;
 const TRACK_REDUCED = 1.2;
 /** Desktop only: the story plays on in the same pinned stage, for this many
     more screens, with the framed photo moved aside. */
-const STORY_TRACK = 2.8;
+const STORY_TRACK = 5;
 /** Story beat, over story progress: the frame moves aside, and stays there
     until the released stage carries it off the top. */
 const ASIDE_TO = 0.1;
@@ -67,7 +67,8 @@ const ZOOM_TO = 0.275;
     holds and the colour can be revealed. */
 const PULL_FROM = 0.32;
 const PULL_TO = 0.565;
-const HOLD_FROM = 0.58;
+/** The colour reveal runs from the moment the sheet has gone. */
+const REVEAL_FROM = 0.29;
 /** The exit: the photo pulls back into a framed picture in the middle of
     the dark page, and is left behind as the page scrolls on. */
 const EXIT_FROM = 0.8;
@@ -199,7 +200,9 @@ export function HeroCity() {
         // The colour drains as the picture becomes a frame, so the frame that
         // is left behind (and carried into the story) is a clean black and white.
         reveal.style.opacity = String(1 - k);
-        revealActive.set(!reduce && p >= HOLD_FROM && p < EXIT_TO);
+        // the colour can be poured as soon as the photo shows, not only
+        // once the camera has settled
+        revealActive.set(!reduce && p >= REVEAL_FROM && p < EXIT_TO);
         front.style.pointerEvents = p > 0.04 ? "none" : "auto";
       };
 
