@@ -62,7 +62,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 31vw;
+  left: 29vw;
   right: 0;
   z-index: 3;
   display: flex;
@@ -72,14 +72,14 @@
   opacity: 0;
   /* the rail fades out at its right edge, where chapters wait their turn */
   /* chapters fade in at the right edge and out at the left, never cut */
-  mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 80%, transparent 100%);
 }
 
 .story-track {
   display: flex;
   align-items: flex-start;
   gap: clamp(3rem, 6vw, 6.5rem);
-  padding-left: 3vw;
+  padding-left: 5vw;
   padding-right: 30vw;
   will-change: transform;
 }
@@ -95,7 +95,7 @@
 }
 
 .story-rail .story-chapter[data-focus="false"] {
-  opacity: 0.42;
+  opacity: 0.62;
 }
 
 /* ---------- phones and reduced motion: a vertical list ---------- */
@@ -107,15 +107,6 @@
   background: #050608;
 }
 
-.story-heading {
-  margin: 0 0 2.5rem;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(2.75rem, 11vw, 4.5rem);
-  line-height: 1;
-  color: var(--story-ink);
-}
-
 .story-list-items {
   display: flex;
   flex-direction: column;
@@ -125,7 +116,18 @@
 }
 
 .story-list .story-chapter[data-focus="false"] {
-  opacity: 0.55;
+  opacity: 0.72;
+}
+
+/* Reduced motion on a wide screen: the list spreads into columns. */
+@media (min-width: 768px) {
+  .story-list-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 3rem clamp(2rem, 4vw, 4rem);
+    border-left: 0;
+    padding-left: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

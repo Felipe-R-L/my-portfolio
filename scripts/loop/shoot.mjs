@@ -27,7 +27,7 @@ for (const run of runs) {
   // the nav arrives 1.5 s after load (0.8 s entrance); shoot once it has
   await page.waitForTimeout(2800);
   for (const s of scenes) {
-    const y = await page.evaluate(({ sel, p, hero, story }) => {
+    const y = await page.evaluate(({ sel, p, hero, story, offset }) => {
       const vh = window.innerHeight;
       const phone = window.matchMedia("(max-width: 767px)").matches;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -52,10 +52,23 @@ for (const run of runs) {
       const r = el.getBoundingClientRect();
       const top = r.top + window.scrollY;
       const travel = Math.max(0, r.height - window.innerHeight);
-      return Math.round(top + p * travel);
+      return Math.round(top + p * travel + (offset ?? 0) * window.innerHeight);
     }, s);
     if (y === null) { console.error(`[${run.prefix}] missing target for ${s.name}`); continue; }
     await page.evaluate((y) => window.scrollTo(0, y), y);
+    if (s.drag) {
+      // drag the work carousel sideways, by mouse on desktop and by finger on a phone
+      const box = await page.locator(".work-track").boundingBox();
+      if (box) {
+        const sx = Math.min(box.x + box.width - 20, run.viewport.width * 0.7);
+        const sy = box.y + 120;
+        await page.mouse.move(sx, sy);
+        await page.mouse.down();
+        for (let i = 1; i <= 12; i++) await page.mouse.move(sx + (s.drag * i) / 12, sy, { steps: 2 });
+        await page.mouse.up();
+        await page.waitForTimeout(1200);
+      }
+    }
     // Lenis smooths wheel input only; a programmatic jump lands at once. Give
     // ScrollTrigger and the scrubs time to settle.
     await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));

@@ -52,6 +52,8 @@ const LEAVE_FROM = 0.9;
 const ASIDE_SCALE = 0.52;
 const ASIDE_CROP_L = 0.32;
 const ASIDE_CROP_R = 0.24;
+/** The foot of the photo is mostly black shirt; the portrait drops it. */
+const ASIDE_CROP_B = 0.12;
 const ASIDE_LEFT = 0.05;
 
 /** How far the camera flies into the I. Scale grows exponentially with
@@ -70,7 +72,7 @@ const HOLD_FROM = 0.58;
 const EXIT_FROM = 0.8;
 const EXIT_TO = 0.95;
 const FRAME_DESKTOP = 0.46;
-const FRAME_PHONE = 0.74;
+const FRAME_PHONE = 0.66;
 /** Corner radius of the finished frame, in screen pixels. */
 const FRAME_RADIUS = 18;
 
@@ -186,6 +188,7 @@ export function HeroCity() {
         const radius = sc >= 0.999 ? 0 : (FRAME_RADIUS * (1 - sc)) / (1 - frameTarget) / sc;
         gsap.set(frame, { scale: sc, borderRadius: radius, x: 0, clipPath: "none", opacity: 1 });
 
+        // stays on into the story: switching it off would clear the ink at once
         revealActive.set(!reduce && p >= HOLD_FROM);
         front.style.pointerEvents = p > 0.04 ? "none" : "auto";
       };
@@ -219,10 +222,9 @@ export function HeroCity() {
           scale: sc * (1 - 0.06 * leave),
           x,
           borderRadius: r,
-          clipPath: `inset(0% ${cropR * 100}% 0% ${cropL * 100}% round ${r}px)`,
+          clipPath: `inset(0% ${cropR * 100}% ${ASIDE_CROP_B * a * 100}% ${cropL * 100}% round ${r}px)`,
           opacity: 1 - leave,
         });
-        revealActive.set(false);
       };
 
       const heroLength = () => (isMobile ? TRACK_PHONE : TRACK_DESKTOP) * stage.clientHeight;
@@ -261,7 +263,8 @@ export function HeroCity() {
       // Reduced motion: the sheet does not dissolve, it is simply gone.
       if (reduce) tl.set(sheet, { opacity: 0 }, 0.23).set(sheet, { opacity: 1 }, 0);
       else band(sheet, 0.23, 0.29, { opacity: 1 }, { opacity: 0 });
-      band(front, 0.004, 0.054, { opacity: 1 }, { opacity: 0 });
+      if (reduce) tl.set(front, { opacity: 0 }, 0.23).set(front, { opacity: 1 }, 0);
+      else band(front, 0.004, 0.054, { opacity: 1 }, { opacity: 0 });
       if (!reduce) band(front, 0, 0.06, { y: "0vh" }, { y: "-5vh" });
       return () => ro.disconnect();
     },
@@ -307,6 +310,7 @@ export function HeroCity() {
             camera={camera}
             active={revealActive}
             phone={isMobile}
+            face={shot.face}
           />
         </div>
 

@@ -45,6 +45,7 @@ vi.mock('../../src/app/components/TechMarquee', () => ({ default: stub('marquee'
 vi.mock('../../src/app/components/About', () => ({ About: stub('about') }))
 vi.mock('../../src/app/components/Experience', () => ({ Experience: stub('experience') }))
 vi.mock('../../src/app/components/Services', () => ({ Services: stub('services') }))
+vi.mock('../../src/app/scenes/Work', () => ({ Work: stub('work') }))
 vi.mock('../../src/app/components/Projects', () => ({ Projects: stub('projects') }))
 vi.mock('../../src/app/components/Credibility', () => ({ Credibility: stub('credibility') }))
 vi.mock('../../src/app/components/Process', () => ({ Process: stub('process') }))
