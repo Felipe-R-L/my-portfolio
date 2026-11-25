@@ -237,6 +237,12 @@
   object-fit: contain;
 }
 
+/* the Dallas Sync screens are wider than the card: shown whole */
+.work-card[data-work="dallas_sync"] .work-shot img {
+  object-fit: contain;
+  object-position: center;
+}
+
 .work-card[data-focus="true"] .work-shot img {
   filter: none;
   transform: scale(1);

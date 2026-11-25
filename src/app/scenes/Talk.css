@@ -40,6 +40,13 @@
   }
 }
 
+@media (max-width: 767px) {
+  .talk-title {
+    font-size: 21vw;
+    margin-bottom: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .talk-title {
     animation: none;
@@ -180,6 +187,7 @@
 @media (max-width: 767px) {
   .talk {
     grid-template-columns: 1fr;
+    min-height: auto;
     /* clears the floating menu pill */
     padding-bottom: 7rem;
   }
