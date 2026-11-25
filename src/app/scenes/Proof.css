@@ -1,0 +1,76 @@
+/* The proof: three figures, set large, in the page's one typeface. */
+
+.proof {
+  position: relative;
+  z-index: 10;
+  padding: clamp(5rem, 14vh, 9rem) var(--gutter);
+  background: #050608;
+  color: #eef1f6;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.proof-head {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 48rem;
+  margin-bottom: clamp(3rem, 8vh, 5rem);
+}
+
+.proof-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.proof-lead {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgb(178 186 199);
+}
+
+.proof-figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem clamp(1.5rem, 4vw, 4rem);
+  margin: 0;
+}
+
+.proof-figure {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(255 255 255 / 0.16);
+}
+
+.proof-value {
+  margin: 0;
+  font-size: clamp(4.5rem, 11vw, 10rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.proof-label {
+  max-width: 24ch;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: rgb(196 203 214);
+}
+
+.proof-foot {
+  margin: clamp(2.5rem, 6vh, 4rem) 0 0;
+  font-size: 1rem;
+  color: rgb(178 186 199);
+}
+
+@media (max-width: 767px) {
+  .proof-figures {
+    grid-template-columns: 1fr;
+  }
+}

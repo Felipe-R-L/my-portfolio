@@ -24,7 +24,7 @@ const ENTER_FROM = 0.09;
 const ENTER_TO = 0.16;
 const TRAVEL_FROM = 0.14;
 const TRAVEL_TO = 0.86;
-const EXIT_FROM = 0.9;
+const EXIT_FROM = 0.84;
 
 function Chapters({ focus }: { focus: number }) {
   const { t } = useTranslation();
@@ -36,9 +36,16 @@ function Chapters({ focus }: { focus: number }) {
           className={`story-chapter${c.seal ? " story-chapter--seal" : ""}`}
           data-chapter={c.id}
           data-focus={i === focus ? "true" : "false"}
+          data-past={i < focus ? "true" : "false"}
         >
           {/* "Today" is its own title; a year label would only repeat it. */}
-          {c.id !== "hoje" && <span className="story-year">{c.year}</span>}
+          {c.id !== "hoje" ? (
+            <span className="story-year">{c.year}</span>
+          ) : (
+            <span className="story-year story-year--blank" aria-hidden="true">
+              ·
+            </span>
+          )}
           <h3 className="story-title">{t(`story.chapters.${c.id}.title`)}</h3>
           <p className="story-text">{t(`story.chapters.${c.id}.text`)}</p>
         </article>

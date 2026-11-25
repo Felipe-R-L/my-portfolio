@@ -1,0 +1,161 @@
+/* How it works: one line, four stops. */
+
+.process {
+  --line: rgb(255 255 255 / 0.14);
+  --lit: #eef1f6;
+  position: relative;
+  z-index: 10;
+  padding: clamp(5rem, 14vh, 9rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+  background: #050608;
+  color: #eef1f6;
+}
+
+.process-head {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 48rem;
+  margin-bottom: clamp(3rem, 8vh, 5rem);
+}
+
+.process-title {
+  margin: 0;
+  font-size: clamp(3rem, 8vw, 7.5rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.045em;
+}
+
+.process-lead {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgb(178 186 199);
+}
+
+.process-track {
+  position: relative;
+}
+
+/* The line runs along the tops of the four steps. */
+.process-line {
+  position: relative;
+  height: 2px;
+  background: var(--line);
+}
+
+.process-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--lit);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+
+.process[data-done="true"] .process-fill {
+  transform: none;
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process-step {
+  position: relative;
+  padding-top: 1.75rem;
+  transition: opacity 0.5s ease;
+}
+
+.process-step[data-lit="false"] {
+  opacity: 0.5;
+}
+
+.process-marker {
+  position: absolute;
+  top: -7px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #050608;
+  border: 2px solid var(--line);
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.process-step[data-lit="true"] .process-marker {
+  background: var(--lit);
+  border-color: var(--lit);
+}
+
+.process-step-title {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.375rem, 2vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.process-step-text {
+  margin: 0;
+  max-width: 30ch;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: rgb(196 203 214);
+}
+
+.process-gate {
+  margin: 1rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #eef1f6;
+}
+
+.process-end {
+  display: block;
+  width: 2px;
+  height: clamp(3rem, 8vh, 5rem);
+  margin: clamp(2rem, 5vh, 3rem) auto 0;
+  background: linear-gradient(to bottom, var(--line), transparent);
+}
+
+@media (max-width: 767px) {
+  .process-line {
+    position: absolute;
+    left: 5px;
+    top: 0.75rem;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+  }
+
+  .process-fill {
+    transform-origin: 50% 0;
+    transform: scaleY(0);
+  }
+
+  .process-steps {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding-left: 2rem;
+  }
+
+  .process-step {
+    padding-top: 0;
+  }
+
+  .process-marker {
+    top: 0.45rem;
+    left: -2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-step,
+  .process-marker {
+    transition: none;
+  }
+}

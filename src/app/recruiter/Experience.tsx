@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Terminal } from "lucide-react";
 
 import { OMD_PRODUCTS, type Product } from "../data/projects";
-import { Section } from "./shared/Section";
-import { SectionHeading } from "./shared/SectionHeading";
-import { AmbientOrbs, type Orb } from "./shared/AmbientOrbs";
-import { ProjectVisual } from "./shared/ProjectVisual";
-import { StackTags } from "./shared/StackTags";
-import { CardLink, CardNote } from "./shared/CardLink";
+import { Section } from "../components/shared/Section";
+import { SectionHeading } from "../components/shared/SectionHeading";
+import { AmbientOrbs, type Orb } from "../components/shared/AmbientOrbs";
+import { ProjectVisual } from "../components/shared/ProjectVisual";
+import { StackTags } from "../components/shared/StackTags";
+import { CardLink, CardNote } from "../components/shared/CardLink";
 import {
   bodyLead,
   cardTitle,
@@ -17,7 +17,7 @@ import {
   footnote,
   leadBox,
   statValue,
-} from "./shared/cardType";
+} from "../components/shared/cardType";
 
 const ORBS: Orb[] = [
   {
