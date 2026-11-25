@@ -136,6 +136,15 @@ void main() {
   // A hard cut-out: a soft matte edge blends the shifted person with the
   // city behind him and reads as a ghost (a see-through arm, a grey neck).
   float matteRaw = texture(matte, fgUV).r;
+  // Close small holes in the matte (a thin chain, a dark fold of the shirt):
+  // a point with person on at least three of four sides 6 px away is person.
+  // An outline point has two at most, so the silhouette does not grow.
+  vec2 px = 6.0 / img;
+  float sides = step(0.5, texture(matte, fgUV + vec2(px.x, 0.0)).r)
+              + step(0.5, texture(matte, fgUV - vec2(px.x, 0.0)).r)
+              + step(0.5, texture(matte, fgUV + vec2(0.0, px.y)).r)
+              + step(0.5, texture(matte, fgUV - vec2(0.0, px.y)).r);
+  matteRaw = max(matteRaw, step(2.5, sides));
   float a = smoothstep(0.35, 0.65, matteRaw);
   vec2 bgUV = uv + shift * 0.35 * (1.0 - clamp(uv.y, 0.0, 1.0));
 
@@ -469,7 +478,12 @@ export function LiquidReveal({
       gl.uniform2f(draw.u("stage"), w, h);
       gl.uniform3f(draw.u("cam"), c.scale, c.x, c.y);
       gl.uniform2f(draw.u("img"), width, height);
-      gl.uniform2f(draw.u("par"), hasCol ? par.x : 0, hasCol ? par.y : 0);
+      // While the canvas drains on the way out, the still photo beneath shows
+      // through it; any depth shift left would draw him twice (two chains, two
+      // signatures). The shift goes long before the canvas does.
+      const op = Number(canvas.style.opacity || 1);
+      const depth = hasCol ? op ** 4 : 0;
+      gl.uniform2f(draw.u("par"), par.x * depth, par.y * depth);
       gl.uniform1f(draw.u("t"), t);
       gl.uniform1f(draw.u("hasCol"), hasCol);
       gl.uniform2f(draw.u("faceV"), (c.x + face.x * c.scale) / w, 1 - (c.y + face.y * c.scale) / h);
