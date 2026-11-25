@@ -76,6 +76,16 @@
   box-shadow: 0 40px 90px -40px rgb(0 0 0 / 0.9);
 }
 
+/* The portrait's edge beside the story (placed by HeroCity). */
+.city-ring {
+  position: absolute;
+  z-index: 1;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 18px;
+  pointer-events: none;
+  opacity: 0;
+}
+
 /* ---------- the windows ---------- */
 
 /*

@@ -79,7 +79,7 @@
   touch-action: pan-y;
   /* a card dragged past the left edge fades out in the gutter, never leaving
      a stray letter behind */
-  mask-image: linear-gradient(to right, transparent 0, #000 var(--gutter));
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--gutter), #000 calc(100% - 5rem), transparent 100%);
 }
 
 .work-viewport:active {

@@ -52,7 +52,7 @@
 
 .proof-value {
   order: -1;
-  margin: 0 0 0 -0.04em;
+  margin: 0;
   white-space: nowrap;
   font-size: clamp(4.5rem, 11vw, 10rem);
   font-weight: 700;
@@ -61,8 +61,16 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* "<" and "s" are set smaller than the figure, so "< 2 s" reads as one
+   number with its unit, not three glyphs spaced apart. */
+.proof-affix {
+  font-size: 0.5em;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
 .proof-label {
-  max-width: 24ch;
+  max-width: 34ch;
   font-size: 1rem;
   line-height: 1.45;
   color: rgb(196 203 214);

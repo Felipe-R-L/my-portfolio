@@ -213,7 +213,7 @@
     "chapters": {
       "diamante": {
         "title": "Diamante, Calábria",
-        "text": "Meu tataravô Vincenzo Leone nasceu em Diamante, no sul da Itália, em 1867, e foi dele que veio o sobrenome que eu carrego, junto com a família que atravessou o oceano até o Brasil."
+        "text": "Meu tataravô Vincenzo Leone nasceu em Diamante, no sul da Itália, e é dele que vem o sobrenome Leone."
       },
       "oba": {
         "title": "Prata na OBA",
@@ -229,7 +229,7 @@
       },
       "dallas": {
         "title": "Dallas Motel",
-        "text": "Fiz o site e o cardápio digital do Dallas Motel, e a partir dali construí o sistema de gestão que virou o Dallas Sync, hoje vendido por assinatura para outros motéis."
+        "text": "Fiz o site e o cardápio digital do Dallas Motel, e desse trabalho nasceu o Dallas Sync, o sistema de gestão que o motel hoje usa por assinatura."
       },
       "omd": {
         "title": "OMD do Brasil",
@@ -282,13 +282,13 @@
   },
   "proof": {
     "title": "OMD do Brasil",
-    "lead": "Desde 2024 sou desenvolvedor na OMD do Brasil, onde cuido da base das plataformas de telemetria da empresa.",
+    "lead": "Desde 2024 sou desenvolvedor na OMD do Brasil, construindo as plataformas que empresas usam para acompanhar suas máquinas e veículos em tempo real.",
     "items": {
       "empresas": "empresas usam as plataformas",
       "maquinas": "máquinas conectadas",
-      "consulta": "para abrir um relatório que antes levava 30 s"
+      "consulta": "para abrir um relatório que levava 30 s"
     },
-    "agrishow": "O OMDfarm foi apresentado na Agrishow."
+    "agrishow": "O OMDfarm, uma dessas plataformas, foi apresentado na Agrishow."
   },
   "talk": {
     "blog_label": "Último artigo no blog",

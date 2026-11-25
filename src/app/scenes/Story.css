@@ -119,9 +119,7 @@
   padding-left: 1.25rem;
 }
 
-.story-list .story-chapter[data-focus="false"] {
-  opacity: 0.72;
-}
+/* In the list every chapter is read in turn: none is dimmed. */
 
 /* Reduced motion on a wide screen: the list spreads into columns. */
 @media (min-width: 768px) {

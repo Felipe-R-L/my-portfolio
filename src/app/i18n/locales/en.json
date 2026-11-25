@@ -213,7 +213,7 @@
     "chapters": {
       "diamante": {
         "title": "Diamante, Calabria",
-        "text": "My great-great-grandfather Vincenzo Leone was born in Diamante, in the south of Italy, in 1867, which is where the surname I carry comes from, along with the family that crossed the ocean to Brazil."
+        "text": "My great-great-grandfather Vincenzo Leone was born in Diamante, in the south of Italy, and it is from him that the surname Leone comes."
       },
       "oba": {
         "title": "Silver at the OBA",
@@ -229,7 +229,7 @@
       },
       "dallas": {
         "title": "Dallas Motel",
-        "text": "I built the website and the digital menu for Dallas Motel, and from there the management system that became Dallas Sync, which other motels now pay for as a subscription."
+        "text": "I built the website and the digital menu for Dallas Motel, and from that work came Dallas Sync, the management system the motel now uses as a subscription."
       },
       "omd": {
         "title": "OMD do Brasil",
@@ -282,13 +282,13 @@
   },
   "proof": {
     "title": "OMD do Brasil",
-    "lead": "Since 2024 I have been a developer at OMD do Brasil, where I look after the foundation of the company's telemetry platforms.",
+    "lead": "Since 2024 I have been a developer at OMD do Brasil, building the platforms companies use to follow their machines and vehicles in real time.",
     "items": {
       "empresas": "companies use the platforms",
       "maquinas": "connected machines",
-      "consulta": "to open a report that used to take 30 s"
+      "consulta": "to open a report that took 30 s"
     },
-    "agrishow": "OMDfarm was presented at Agrishow."
+    "agrishow": "OMDfarm, one of these platforms, was presented at Agrishow."
   },
   "talk": {
     "blog_label": "Latest article on the blog",

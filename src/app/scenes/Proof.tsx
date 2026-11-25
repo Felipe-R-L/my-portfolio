@@ -10,7 +10,7 @@ import "./Proof.css";
 export const PROOF = [
   { id: "empresas", value: 31, prefix: "", suffix: "" },
   { id: "maquinas", value: 92, prefix: "", suffix: "" },
-  { id: "consulta", value: 2, prefix: "< ", suffix: " s" },
+  { id: "consulta", value: 2, prefix: "<\u2009", suffix: "\u2009s" },
 ] as const;
 
 /**
@@ -54,9 +54,9 @@ export function Proof() {
           <div key={f.id} className="proof-figure">
             <dt className="proof-label">{t(`proof.items.${f.id}`)}</dt>
             <dd className="proof-value">
-              {f.prefix}
+              {f.prefix && <span className="proof-affix">{f.prefix}</span>}
               <span data-count={f.value}>{f.value}</span>
-              {f.suffix}
+              {f.suffix && <span className="proof-affix">{f.suffix}</span>}
             </dd>
           </div>
         ))}

@@ -135,7 +135,8 @@ void main() {
   if (any(lessThan(fgUV, vec2(0.0))) || any(greaterThan(fgUV, vec2(1.0)))) fgUV = uv;
   // A hard cut-out: a soft matte edge blends the shifted person with the
   // city behind him and reads as a ghost (a see-through arm, a grey neck).
-  float a = smoothstep(0.35, 0.65, texture(matte, fgUV).r);
+  float matteRaw = texture(matte, fgUV).r;
+  float a = smoothstep(0.35, 0.65, matteRaw);
   vec2 bgUV = uv + shift * 0.35 * (1.0 - clamp(uv.y, 0.0, 1.0));
 
   // Behind the person there is no photographed city. Where the city sample
@@ -175,7 +176,11 @@ void main() {
   vec3 chroma = tint - dot(tint, LUMA);
   // near-black stays black: the noise in the shadows has no colour worth showing
   float lb = dot(base, LUMA);
-  tint = clamp(base + chroma * 1.15 * smoothstep(0.04, 0.22, lb), 0.0, 1.0);
+  // At the matte's fringe (loose curls against the sky) the colour photo is
+  // mostly sky, which would draw a blue outline around his hair: there the
+  // person keeps only the grey.
+  float fringe = mix(1.0, smoothstep(0.7, 0.97, matteRaw), a);
+  tint = clamp(base + chroma * 1.15 * smoothstep(0.04, 0.22, lb) * fringe, 0.0, 1.0);
   o = vec4(mix(base, tint, mask), 1.0);
 }`;
 

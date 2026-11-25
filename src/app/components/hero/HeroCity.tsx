@@ -162,6 +162,7 @@ export function HeroCity() {
       const sheet = q<HTMLDivElement>(".city-sheet");
       const front = q<HTMLDivElement>(".city-front");
       const reveal = q<HTMLCanvasElement>(".city-reveal");
+      const ring = stage.querySelector<HTMLDivElement>(".city-ring");
       const frameTarget = isMobile ? FRAME_PHONE : FRAME_DESKTOP;
 
       let vw = stage.clientWidth;
@@ -217,7 +218,10 @@ export function HeroCity() {
       // portrait, and stays while the chapters pass; then it leaves.
       const renderStory = (ps: number) => {
         storyProgress.set(ps);
-        if (ps <= 0) return;
+        if (ps <= 0) {
+          if (ring) ring.style.opacity = "0";
+          return;
+        }
         const a = easeInOut(span(ps, 0, ASIDE_TO));
         const sc = FRAME_DESKTOP + (ASIDE_SCALE - FRAME_DESKTOP) * a;
         const cropL = ASIDE_CROP_L * a;
@@ -233,6 +237,15 @@ export function HeroCity() {
           clipPath: `inset(0% ${cropR * 100}% ${ASIDE_CROP_B * a * 100}% ${cropL * 100}% round ${r}px)`,
           opacity: 1,
         });
+        // A hairline traced around the portrait: his black shirt meets the
+        // page's black at the bottom, and without it the frame has no edge.
+        if (ring) {
+          const left = vw / 2 + (cropL * vw - vw / 2) * sc + x;
+          const right = vw / 2 + ((1 - cropR) * vw - vw / 2) * sc + x;
+          const top = vh / 2 - (vh / 2) * sc;
+          const bottom = vh / 2 + (vh * (1 - ASIDE_CROP_B * a) - vh / 2) * sc;
+          gsap.set(ring, { left, top, width: right - left, height: bottom - top, opacity: a });
+        }
       };
 
       const heroLength = () =>
@@ -322,6 +335,8 @@ export function HeroCity() {
             face={shot.face}
           />
         </div>
+
+        {storyInStage && <div className="city-ring" aria-hidden="true" />}
 
         {/* The dark sheet with the surname cut as windows. */}
         <div className="city-sheet" aria-hidden="true">
