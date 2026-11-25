@@ -1,8 +1,8 @@
 import "./StarField.css";
 
 /**
- * Zero-cost background used wherever the WebGL Galaxy is not worth its price:
- * mobile devices and `prefers-reduced-motion`.
+ * The page background, shared by the homepage and the blog. Static CSS only:
+ * see StarField.css for why the WebGL galaxy was retired.
  */
 export function StarField() {
   return <div className="starfield" aria-hidden="true" />;

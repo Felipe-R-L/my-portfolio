@@ -1,10 +1,8 @@
 import { Suspense, lazy } from "react";
 import type { MouseEvent } from "react";
-import { useReducedMotion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
 import { Hero } from "./components/Hero";
-import { About } from "./components/About";
 import { Services } from "./components/Services";
 import { Projects } from "./components/Projects";
 import { Credibility } from "./components/Credibility";
@@ -17,17 +15,16 @@ import { GlassNav, type GlassNavItem } from "./components/shared/GlassNav";
 import GradientText from "./components/react-bits/GradientText";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 import { useHashScroll } from "./hooks/useHashScroll";
-import { useIsMobile } from "./hooks/useIsMobile";
 
-const LazyGalaxy = lazy(() => import("./components/react-bits/Galaxy"));
 const LazyFluidGlass = lazy(() => import("./components/react-bits/FluidGlass"));
 
 /**
- * This is the freelance and networking version of the homepage: what I do for
- * a business comes first, then proof, then how working together goes, then who
- * I am. `Experience` and `TechMarquee` are kept for the job-hunting version.
+ * This is the freelance and networking version of the homepage: the name, then
+ * the portrait and who I am, then what I do for a business, proof, and how
+ * working together goes. `Experience` and `TechMarquee` are kept for the
+ * job-hunting version.
  */
-const SECTION_IDS = ["services", "projects", "process", "about"] as const;
+const SECTION_IDS = ["about", "services", "projects", "process"] as const;
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -40,8 +37,6 @@ export default function AppLayout() {
   // the blog are cross-document, so nothing else would act on the fragment.
   useHashScroll(lenisRef);
   const { t, i18n } = useTranslation();
-  const isReducedMotion = useReducedMotion();
-  const isMobile = useIsMobile();
 
   const navItems: GlassNavItem[] = [
     ...SECTION_IDS.map((id) => ({
@@ -58,39 +53,12 @@ export default function AppLayout() {
     { id: "blog", href: "/blog", label: t("nav.blog") },
   ];
 
-  // The WebGL starfield is the heaviest thing on the page and is barely
-  // perceptible on a phone screen, so mobile and reduced-motion users get the
-  // static CSS starfield instead.
-  const useWebGLBackground = !isMobile && !isReducedMotion;
-
   return (
-    <div className="bg-[#030305] min-h-screen font-sans selection:bg-blue-500/30 selection:text-blue-200 overflow-x-hidden">
-      {/* 1. Global background: WebGL galaxy on pointer devices, static CSS elsewhere.
-             Decorative only, so it stays out of the accessibility tree. */}
+    <div className="bg-[#050608] min-h-screen font-sans selection:bg-blue-500/30 selection:text-blue-200 overflow-x-clip">
+      {/* Global background: static CSS, decorative only. */}
       <div className="fixed inset-0 z-0" aria-hidden="true">
-        {useWebGLBackground ? (
-          <Suspense fallback={<StarField />}>
-            <LazyGalaxy
-              mouseRepulsion
-              mouseInteraction
-              density={0.3}
-              glowIntensity={0.2}
-              numLayers={4}
-              repulsionStrength={0.2}
-              saturation={0.2}
-              hueShift={240}
-            />
-          </Suspense>
-        ) : (
-          <StarField />
-        )}
+        <StarField />
       </div>
-
-      {/* Cinematic gradient overlay on top of background. Made subtle so the bright Apple-style glassmorphism pops */}
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 pointer-events-none z-[1] bg-gradient-to-b from-[#030305]/10 via-[#030305]/30 to-[#030305]/80"
-      />
 
       {/* Floating frosted navigation pill (desktop) / expanding bottom pill (mobile) */}
       <GlassNav
@@ -103,15 +71,15 @@ export default function AppLayout() {
         entrance={{ duration: 0.8, delay: 1.5 }}
       />
 
-      <main className="relative z-10 w-full overflow-x-hidden">
+      <main className="relative z-10 w-full overflow-x-clip">
         {/* Each section now owns its own scroll target, so the wrapper divs that
             used to carry these ids would have duplicated them. */}
+        {/* Hero renders About too: inside its scene, or right after it. */}
         <Hero />
         <Services />
         <Projects />
         <Credibility />
         <Process />
-        <About />
         <LatestWriting />
         <Contact />
 
