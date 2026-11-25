@@ -287,5 +287,40 @@
         "description": "Coloco no ar no seu domínio e continuo por perto pra ajustes."
       }
     }
+  },
+  "story": {
+    "title": "Quem sou",
+    "label": "Minha história",
+    "today": "hoje",
+    "chapters": {
+      "diamante": {
+        "title": "Diamante, Calábria",
+        "text": "Meu tataravô Vincenzo Leone nasceu em Diamante, no sul da Itália, em 1867, e foi dele que veio o sobrenome que eu carrego, junto com a família que atravessou o oceano até o Brasil."
+      },
+      "oba": {
+        "title": "Prata na OBA",
+        "text": "Ainda na escola, conquistei a medalha de prata na XIX Olimpíada Brasileira de Astronomia e Astronáutica."
+      },
+      "etec": {
+        "title": "Técnico na ETEC",
+        "text": "Comecei o técnico em Análise e Desenvolvimento de Sistemas na ETEC durante a pandemia e acabei trancando o curso, mas foi ali o meu primeiro contato com programação."
+      },
+      "ifsp": {
+        "title": "Engenharia no IFSP",
+        "text": "Depois do ensino médio fui estudar engenharia mecânica no IFSP, e foram justamente as aulas de programação que me fizeram voltar para a tecnologia."
+      },
+      "dallas": {
+        "title": "Dallas Motel",
+        "text": "Fiz o site e o cardápio digital do Dallas Motel, e a partir dali construí o sistema de gestão que virou o Dallas Sync, hoje vendido por assinatura para outros motéis."
+      },
+      "omd": {
+        "title": "OMD do Brasil",
+        "text": "Entrei na OMD do Brasil depois de uma conversa com o dono da empresa, e atualmente cuido de três plataformas em produção que atendem 31 empresas."
+      },
+      "hoje": {
+        "title": "Hoje",
+        "text": "Divido o meu tempo entre a OMD, o Dallas Sync e projetos para negócios que precisam de um site, de uma loja virtual ou de um sistema feito sob medida."
+      }
+    }
   }
 }

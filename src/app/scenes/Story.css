@@ -1,0 +1,138 @@
+/*
+ * The story: editorial, set in Instrument Serif, with the sea blue of
+ * Diamante as its only accent. The rest of the page never uses either.
+ */
+
+.story-rail,
+.story-list {
+  --story-accent: #9fc3d6;
+  --story-ink: #eef1f6;
+  --story-muted: rgb(178 186 199);
+}
+
+/* ---------- shared chapter ---------- */
+
+.story-chapter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: opacity 0.5s ease;
+}
+
+.story-year {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--story-accent);
+}
+
+.story-title {
+  margin: 0;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.25rem, 3.4vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--story-ink);
+  text-wrap: balance;
+}
+
+.story-text {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--story-muted);
+  text-wrap: pretty;
+}
+
+/* The OBA medal: a small seal, not a full chapter's weight. */
+.story-chapter--seal .story-title {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+}
+
+.story-chapter--seal .story-text {
+  font-size: 0.9375rem;
+  max-width: 26ch;
+}
+
+/* ---------- desktop rail, inside the hero's pinned stage ---------- */
+
+.story-rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 31vw;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  /* the rail fades out at its right edge, where chapters wait their turn */
+  /* chapters fade in at the right edge and out at the left, never cut */
+  mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 80%, transparent 100%);
+}
+
+.story-track {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(3rem, 6vw, 6.5rem);
+  padding-left: 3vw;
+  padding-right: 30vw;
+  will-change: transform;
+}
+
+.story-rail .story-chapter {
+  flex: 0 0 auto;
+  width: clamp(17rem, 24vw, 24rem);
+}
+
+.story-rail .story-chapter--seal {
+  width: clamp(13rem, 16vw, 16rem);
+  padding-top: 2.5rem;
+}
+
+.story-rail .story-chapter[data-focus="false"] {
+  opacity: 0.42;
+}
+
+/* ---------- phones and reduced motion: a vertical list ---------- */
+
+.story-list {
+  position: relative;
+  z-index: 10;
+  padding: clamp(4rem, 12vh, 7rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+  background: #050608;
+}
+
+.story-heading {
+  margin: 0 0 2.5rem;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.75rem, 11vw, 4.5rem);
+  line-height: 1;
+  color: var(--story-ink);
+}
+
+.story-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2.75rem;
+  border-left: 1px solid rgb(159 195 214 / 0.35);
+  padding-left: 1.25rem;
+}
+
+.story-list .story-chapter[data-focus="false"] {
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-chapter {
+    transition: none;
+  }
+  .story-list .story-chapter[data-focus="false"] {
+    opacity: 1;
+  }
+}

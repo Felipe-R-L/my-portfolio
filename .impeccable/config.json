@@ -56,6 +56,12 @@
         ],
         "createdAt": "2026-11-24T23:54:52.424Z",
         "reason": "Claude: throwaway direction mockup in gitignored .superpowers; rail intentionally bleeds off the stage edge like a carousel"
+      },
+      {
+        "rule": "overused-font",
+        "value": "instrument serif",
+        "createdAt": "2026-11-25T00:58:41.451Z",
+        "reason": "user confirmed: Felipe escolheu a direção Editorial (mock com Instrument Serif) em 2026-11-24"
       }
     ]
   }

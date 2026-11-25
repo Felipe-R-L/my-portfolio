@@ -24,9 +24,25 @@ for (const run of runs) {
   const page = await ctx.newPage();
   page.on("pageerror", (e) => console.error(`[${run.prefix}] pageerror:`, e.message));
   await page.goto(url, { waitUntil: "networkidle" });
-  await page.waitForTimeout(1500);
+  // the nav arrives 1.5 s after load (0.8 s entrance); shoot once it has
+  await page.waitForTimeout(2800);
   for (const s of scenes) {
-    const y = await page.evaluate(({ sel, p }) => {
+    const y = await page.evaluate(({ sel, p, hero, story }) => {
+      const vh = window.innerHeight;
+      const phone = window.matchMedia("(max-width: 767px)").matches;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const city = document.querySelector(".city");
+      const cityTop = city ? city.getBoundingClientRect().top + window.scrollY : 0;
+      // Mirrors HeroCity: TRACK_DESKTOP 3.4 / TRACK_PHONE 3.15, STORY_TRACK 2.8.
+      const heroLen = (phone ? 3.15 : 3.4) * vh;
+      if (hero !== undefined) return Math.round(cityTop + hero * heroLen);
+      if (story !== undefined) {
+        if (!phone && !reduced) return Math.round(cityTop + heroLen + story * 2.8 * vh);
+        const list = document.querySelector(".story-list");
+        if (!list) return null;
+        const r = list.getBoundingClientRect();
+        return Math.round(r.top + window.scrollY + story * Math.max(0, r.height - vh));
+      }
       if (sel === "body") {
         const max = document.scrollingElement.scrollHeight - window.innerHeight;
         return Math.round(p * max);
@@ -38,7 +54,7 @@ for (const run of runs) {
       const travel = Math.max(0, r.height - window.innerHeight);
       return Math.round(top + p * travel);
     }, s);
-    if (y === null) { console.error(`[${run.prefix}] missing ${s.sel} for ${s.name}`); continue; }
+    if (y === null) { console.error(`[${run.prefix}] missing target for ${s.name}`); continue; }
     await page.evaluate((y) => window.scrollTo(0, y), y);
     // Lenis smooths wheel input only; a programmatic jump lands at once. Give
     // ScrollTrigger and the scrubs time to settle.

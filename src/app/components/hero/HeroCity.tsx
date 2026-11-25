@@ -5,6 +5,7 @@ import { gsap } from "../../scroll/gsap";
 import { span } from "../../scroll/math";
 import { createSignal } from "../../scroll/signal";
 import { useScene } from "../../scroll/useScene";
+import { Story } from "../../scenes/Story";
 import { LiquidReveal } from "./LiquidReveal";
 import { Credits, FIRST, LAST, Letters } from "./HeroParts";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
@@ -40,6 +41,18 @@ import "./HeroCity.css";
 /** Scroll length of the scene, as a multiple of the viewport height. */
 const TRACK_DESKTOP = 3.4;
 const TRACK_PHONE = 3.15;
+/** Desktop only: the story plays on in the same pinned stage, for this many
+    more screens, with the framed photo moved aside. */
+const STORY_TRACK = 2.8;
+/** Story beats, over story progress: the frame moves aside, then leaves. */
+const ASIDE_TO = 0.1;
+const LEAVE_FROM = 0.9;
+/** The frame beside the story: scale, the sides cropped to a portrait (in
+    fractions of the frame's width) and its left edge (fraction of vw). */
+const ASIDE_SCALE = 0.52;
+const ASIDE_CROP_L = 0.32;
+const ASIDE_CROP_R = 0.24;
+const ASIDE_LEFT = 0.05;
 
 /** How far the camera flies into the I. Scale grows exponentially with
     progress, which reads as a constant speed of approach. */
@@ -126,6 +139,10 @@ export function HeroCity() {
   // Written by the scroll timeline every frame, read by the WebGL reveal.
   const camera = useMemo(() => createSignal<Camera>({ x: 0, y: 0, scale: 1 }), []);
   const revealActive = useMemo(() => createSignal(false), []);
+  const storyProgress = useMemo(() => createSignal(0), []);
+  // On a phone, or with reduced motion, the story is a list after the scene.
+  const storyInStage = !isMobile && !reduce;
+  const trackDesktop = TRACK_DESKTOP + (storyInStage ? STORY_TRACK : 0);
 
   useScene(
     sectionRef,
@@ -153,13 +170,21 @@ export function HeroCity() {
         const pull = reduce ? (p < 0.23 ? 0 : 1) : span(p, PULL_FROM, PULL_TO);
         const c = cameraAt(pull, shot, vw, vh);
         camera.set(c);
-        gsap.set(photo, { x: c.x, y: c.y, scale: c.scale });
+        // Inside the letters the shadows of the buildings would eat the
+        // letterforms; the photo is lifted there and settles as the name goes.
+        const lift = 1 - span(p, 0.23, 0.29);
+        gsap.set(photo, {
+          x: c.x,
+          y: c.y,
+          scale: c.scale,
+          filter: lift > 0 ? `brightness(${1 + 0.2 * lift}) contrast(${1 - 0.14 * lift})` : "none",
+        });
 
-        const k = reduce ? (p >= EXIT_TO ? 1 : 0) : easeInOut(span(p, EXIT_FROM, EXIT_TO));
+        const k = reduce ? (p >= EXIT_FROM ? 1 : 0) : easeInOut(span(p, EXIT_FROM, EXIT_TO));
         const sc = 1 - (1 - frameTarget) * k;
         // radius compensated for the scale, so it lands at a fixed size on screen
         const radius = sc >= 0.999 ? 0 : (FRAME_RADIUS * (1 - sc)) / (1 - frameTarget) / sc;
-        gsap.set(frame, { scale: sc, borderRadius: radius });
+        gsap.set(frame, { scale: sc, borderRadius: radius, x: 0, clipPath: "none", opacity: 1 });
 
         revealActive.set(!reduce && p >= HOLD_FROM);
         front.style.pointerEvents = p > 0.04 ? "none" : "auto";
@@ -176,15 +201,56 @@ export function HeroCity() {
       ro.observe(stage);
       document.fonts?.ready.then(measure);
 
+      // The story: the framed photo moves aside to the left, cropped to a
+      // portrait, and stays while the chapters pass; then it leaves.
+      const renderStory = (ps: number) => {
+        storyProgress.set(ps);
+        if (ps <= 0) return;
+        const a = easeInOut(span(ps, 0, ASIDE_TO));
+        const leave = span(ps, LEAVE_FROM, 1);
+        const sc = FRAME_DESKTOP + (ASIDE_SCALE - FRAME_DESKTOP) * a;
+        const cropL = ASIDE_CROP_L * a;
+        const cropR = ASIDE_CROP_R * a;
+        // left edge of what shows, before moving: the frame is scaled about its centre
+        const shownLeft = vw / 2 - (sc * vw) / 2 + sc * cropL * vw;
+        const x = (ASIDE_LEFT * vw - shownLeft) * a;
+        const r = FRAME_RADIUS / sc;
+        gsap.set(frame, {
+          scale: sc * (1 - 0.06 * leave),
+          x,
+          borderRadius: r,
+          clipPath: `inset(0% ${cropR * 100}% 0% ${cropL * 100}% round ${r}px)`,
+          opacity: 1 - leave,
+        });
+        revealActive.set(false);
+      };
+
+      const heroLength = () => (isMobile ? TRACK_PHONE : TRACK_DESKTOP) * stage.clientHeight;
+      if (storyInStage) {
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: () => `top+=${heroLength()} top`,
+            end: "bottom bottom",
+            scrub: true,
+            onUpdate: (self) => renderStory(self.progress),
+            onRefresh: (self) => renderStory(self.progress),
+          },
+        });
+      }
+
       // The linear bands, placed on a timeline whose length is the scene (1).
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "bottom bottom",
+          end: () => `+=${heroLength()}`,
           scrub: true,
-          onUpdate: (self) => render(self.progress),
+          onUpdate: (self) => {
+            render(self.progress);
+            if (storyInStage && storyProgress.get() > 0) renderStory(storyProgress.get());
+          },
           onRefresh: (self) => render(self.progress),
         },
       });
@@ -192,7 +258,8 @@ export function HeroCity() {
       const band = (el: Element, from: number, to: number, a: gsap.TweenVars, b: gsap.TweenVars) =>
         tl.fromTo(el, a, { ...b, duration: to - from, immediateRender: false }, from);
 
-      if (reduce) band(sheet, 0.04, 0.23, { opacity: 1 }, { opacity: 0 });
+      // Reduced motion: the sheet does not dissolve, it is simply gone.
+      if (reduce) tl.set(sheet, { opacity: 0 }, 0.23).set(sheet, { opacity: 1 }, 0);
       else band(sheet, 0.23, 0.29, { opacity: 1 }, { opacity: 0 });
       band(front, 0.004, 0.054, { opacity: 1 }, { opacity: 0 });
       if (!reduce) band(front, 0, 0.06, { y: "0vh" }, { y: "-5vh" });
@@ -202,12 +269,13 @@ export function HeroCity() {
   );
 
   return (
+    <>
     <section
       ref={sectionRef}
       className="city"
       aria-label="Felipe Rodrigues"
       style={{
-        ["--track-desktop" as string]: `${TRACK_DESKTOP * 100}svh`,
+        ["--track-desktop" as string]: `${trackDesktop * 100}svh`,
         ["--track-phone" as string]: `${TRACK_PHONE * 100}svh`,
       }}
     >
@@ -253,12 +321,21 @@ export function HeroCity() {
           <NameLayout show="first" measure />
         </div>
 
+        {storyInStage && <Story mode="rail" progress={storyProgress} />}
       </div>
 
       <div className="city-track" aria-hidden="true">
-        {/* Where the nav's "Sobre" lands, until the story scene takes it. */}
-        <span id="about" className="city-anchor" />
+        {/* Where the nav's "Sobre" lands: the story, once the photo has moved aside. */}
+        {storyInStage && (
+          <span
+            id="about"
+            className="city-anchor"
+            style={{ top: `calc(${TRACK_DESKTOP * 100 + STORY_TRACK * 100 * 0.12}svh - 100svh)` }}
+          />
+        )}
       </div>
     </section>
+    {!storyInStage && <Story mode="list" />}
+    </>
   );
 }
