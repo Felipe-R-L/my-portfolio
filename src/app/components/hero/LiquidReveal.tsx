@@ -404,20 +404,6 @@ export function LiquidReveal({
     const onTouchEnd = () => (lastPt = null);
     window.addEventListener("touchend", onTouchEnd, { passive: true });
 
-    // First settle: one pour crosses the photo on its own.
-    let swept = false;
-    let sweepStart = 0;
-    const SWEEP_MS = 1900;
-    const sweepPoint = (now: number) => {
-      const k = Math.min(1, (now - sweepStart) / SWEEP_MS);
-      const e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
-      // on a phone the pour stays below his face: half a face in colour
-      // reads as a stain, not as a reveal
-      const [base, lift] = phone ? [0.86, 0.12] : [0.74, 0.38];
-      push(w * (0.08 + 0.84 * e), h * (base - lift * Math.sin(e * Math.PI)));
-      return k < 1;
-    };
-
     const brush = phone ? BRUSH_PHONE : BRUSH_DESKTOP;
     const t0 = performance.now();
 
@@ -425,11 +411,6 @@ export function LiquidReveal({
       frame = 0;
       if (disposed || !running) return;
       const t = (now - t0) / 1000;
-
-      if (sweepStart && !sweepPoint(now)) {
-        sweepStart = 0;
-        lastPt = null;
-      }
 
       // 1. ink field
       gl.useProgram(field.p);
@@ -492,13 +473,9 @@ export function LiquidReveal({
       running = on;
       canvas.style.opacity = on ? "1" : "0";
       if (on) {
-        // A phone has no cursor: one pour shows that the picture takes
-        // colour, and a finger carries it from there. With a mouse, the
-        // colour only ever goes where the cursor goes.
-        if (phone && !swept) {
-          swept = true;
-          sweepStart = performance.now();
-        }
+        // The colour only ever goes where a cursor or a finger goes. (An
+        // automatic pour lands in screen space while the photo moves under
+        // it, and leaves a stripe across his face.)
         if (!frame) frame = requestAnimationFrame(tick);
       } else {
         cancelAnimationFrame(frame);
