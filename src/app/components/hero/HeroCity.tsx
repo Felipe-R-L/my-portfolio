@@ -41,19 +41,20 @@ import "./HeroCity.css";
 /** Scroll length of the scene, as a multiple of the viewport height. */
 const TRACK_DESKTOP = 3.4;
 const TRACK_PHONE = 3.15;
+const TRACK_REDUCED = 1.2;
 /** Desktop only: the story plays on in the same pinned stage, for this many
     more screens, with the framed photo moved aside. */
 const STORY_TRACK = 2.8;
 /** Story beats, over story progress: the frame moves aside, then leaves. */
 const ASIDE_TO = 0.1;
-const LEAVE_FROM = 0.9;
+const LEAVE_FROM = 0.86;
 /** The frame beside the story: scale, the sides cropped to a portrait (in
     fractions of the frame's width) and its left edge (fraction of vw). */
 const ASIDE_SCALE = 0.52;
 const ASIDE_CROP_L = 0.32;
 const ASIDE_CROP_R = 0.24;
 /** The foot of the photo is mostly black shirt; the portrait drops it. */
-const ASIDE_CROP_B = 0.12;
+const ASIDE_CROP_B = 0.2;
 const ASIDE_LEFT = 0.05;
 
 /** How far the camera flies into the I. Scale grows exponentially with
@@ -144,7 +145,8 @@ export function HeroCity() {
   const storyProgress = useMemo(() => createSignal(0), []);
   // On a phone, or with reduced motion, the story is a list after the scene.
   const storyInStage = !isMobile && !reduce;
-  const trackDesktop = TRACK_DESKTOP + (storyInStage ? STORY_TRACK : 0);
+  // Reduced motion: nothing plays, so the scene is barely longer than a screen.
+  const trackDesktop = reduce ? TRACK_REDUCED : TRACK_DESKTOP + (storyInStage ? STORY_TRACK : 0);
 
   useScene(
     sectionRef,
@@ -155,6 +157,7 @@ export function HeroCity() {
       const frame = q<HTMLDivElement>(".city-frame");
       const sheet = q<HTMLDivElement>(".city-sheet");
       const front = q<HTMLDivElement>(".city-front");
+      const reveal = q<HTMLCanvasElement>(".city-reveal");
       const frameTarget = isMobile ? FRAME_PHONE : FRAME_DESKTOP;
 
       let vw = stage.clientWidth;
@@ -188,8 +191,10 @@ export function HeroCity() {
         const radius = sc >= 0.999 ? 0 : (FRAME_RADIUS * (1 - sc)) / (1 - frameTarget) / sc;
         gsap.set(frame, { scale: sc, borderRadius: radius, x: 0, clipPath: "none", opacity: 1 });
 
-        // stays on into the story: switching it off would clear the ink at once
-        revealActive.set(!reduce && p >= HOLD_FROM);
+        // The colour drains as the picture becomes a frame, so the frame that
+        // is left behind (and carried into the story) is a clean black and white.
+        reveal.style.opacity = String(1 - k);
+        revealActive.set(!reduce && p >= HOLD_FROM && p < EXIT_TO);
         front.style.pointerEvents = p > 0.04 ? "none" : "auto";
       };
 
@@ -227,7 +232,8 @@ export function HeroCity() {
         });
       };
 
-      const heroLength = () => (isMobile ? TRACK_PHONE : TRACK_DESKTOP) * stage.clientHeight;
+      const heroLength = () =>
+        (reduce ? TRACK_REDUCED : isMobile ? TRACK_PHONE : TRACK_DESKTOP) * stage.clientHeight;
       if (storyInStage) {
         gsap.timeline({
           scrollTrigger: {
@@ -279,7 +285,7 @@ export function HeroCity() {
       aria-label="Felipe Rodrigues"
       style={{
         ["--track-desktop" as string]: `${trackDesktop * 100}svh`,
-        ["--track-phone" as string]: `${TRACK_PHONE * 100}svh`,
+        ["--track-phone" as string]: `${(reduce ? TRACK_REDUCED : TRACK_PHONE) * 100}svh`,
       }}
     >
       <div ref={stageRef} className="city-stage">

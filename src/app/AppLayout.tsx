@@ -1,28 +1,23 @@
-import { Suspense, lazy } from "react";
 import type { MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Hero } from "./components/Hero";
 import { Work } from "./scenes/Work";
-import { Process } from "./components/Process";
-import { LatestWriting } from "./components/LatestWriting";
-import { Contact } from "./components/Contact";
+import { Proof } from "./scenes/Proof";
+import { Process } from "./scenes/Process";
+import { Talk } from "./scenes/Talk";
 import { StarField } from "./components/shared/StarField";
-import { SocialLinks } from "./components/shared/SocialLinks";
 import { GlassNav, type GlassNavItem } from "./components/shared/GlassNav";
-import GradientText from "./components/react-bits/GradientText";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 import { useHashScroll } from "./hooks/useHashScroll";
 
-const LazyFluidGlass = lazy(() => import("./components/react-bits/FluidGlass"));
-
 /**
- * This is the freelance and networking version of the homepage: the name, then
- * the portrait and who I am, then what I do for a business, proof, and how
- * working together goes. `Experience` and `TechMarquee` are kept for the
- * job-hunting version.
+ * The homepage, for business owners: seven scenes in one take. The name and
+ * the city, the portrait, the story, the work, the proof, how it works, and
+ * the conversation that closes the page. `src/app/recruiter/` keeps the pieces
+ * of a future version for recruiters.
  */
-const SECTION_IDS = ["about", "projects", "process"] as const;
+const SECTION_IDS = ["about", "projects", "process", "contact"] as const;
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -75,41 +70,9 @@ export default function AppLayout() {
         {/* The hero; the story scene (who I am) follows it. */}
         <Hero />
         <Work />
+        <Proof />
         <Process />
-        <LatestWriting />
-        <Contact />
-
-        <footer className="relative z-10 mt-16 px-[var(--gutter)] pb-20">
-          <Suspense
-            fallback={
-              <div className="bg-white/[0.03] border border-white/10 rounded-[3rem] py-16 px-4 text-center" />
-            }
-          >
-            <LazyFluidGlass
-              mode="lens"
-              containerClassName="bg-white/[0.03] border border-white/10 rounded-[3rem] py-16 px-4 text-center"
-            >
-              <div className="flex flex-col items-center gap-8">
-                <SocialLinks variant="footer" />
-
-                {/* Raised from text-gray-500/opacity-50 to clear WCAG AA on #030305 */}
-                <p className="text-gray-400 font-medium text-sm tracking-wide md:tracking-widest uppercase flex flex-col lg:flex-row items-center justify-center gap-2 md:gap-4">
-                  <span>© {new Date().getFullYear()}</span>
-                  <GradientText
-                    colors={["#9ca3af", "#4c8dff", "#8b5cf6", "#9ca3af"]}
-                    animationSpeed={10}
-                  >
-                    Felipe Rodrigues Leone
-                  </GradientText>
-                  <span className="hidden lg:inline opacity-50" aria-hidden="true">
-                    •
-                  </span>
-                  <span>{t("footer.built_for_future")}</span>
-                </p>
-              </div>
-            </LazyFluidGlass>
-          </Suspense>
-        </footer>
+        <Talk />
       </main>
     </div>
   );

@@ -32,7 +32,7 @@
 
 .work-lead {
   grid-column: 1;
-  margin: 0;
+  margin: 0.75rem 0 0;
   max-width: 44ch;
   font-size: 1.0625rem;
   line-height: 1.6;

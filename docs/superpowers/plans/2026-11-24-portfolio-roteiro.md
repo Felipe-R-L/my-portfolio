@@ -161,21 +161,21 @@
   - `chapterAt(p: number, n: number): number` devolve o índice do capítulo em foco.
   - A seção tem `id="about"`.
 
-- [ ] **Step 1:** Escreva os testes:
+- [x] **Step 1:** Escreva os testes:
   - `chapterAt(0, 7) === 0` e `chapterAt(1, 7) === 6`;
   - o render de `<Story/>` com i18n stub mostra os 7 títulos, na ordem do `STORY`;
   - com reduced motion, o render não cria pin e os 7 capítulos ficam visíveis;
   - existe o texto "Vincenzo Leone";
   - nenhuma string contém "família" ou "cresci".
-- [ ] **Step 2:** Rode. Esperado: FAIL.
-- [ ] **Step 3:** Implemente o layout:
+- [x] **Step 2:** Rode. Esperado: FAIL.
+- [x] **Step 3:** Implemente o layout:
   - **Desktop:** seção presa. O quadro, à esquerda com 24% da largura, continua do `.city-frame`: no fim da hero, o quadro faz FLIP para essa posição. O trilho horizontal translada `-timelineDistance(...)` com `scrub`.
   - **Celular:** lista vertical, com o quadro no topo, menor.
   - **Tipografia:** títulos em Instrument Serif, ano em `#9fc3d6`.
   - **OBA:** um selo pequeno, sem destaque.
   - **Saída:** em "hoje", o quadro e a serifa saem com opacidade e escala, e o fundo segue escuro para o Trabalho.
-- [ ] **Step 4:** Textos pt/en de cada capítulo, com no máximo 2 frases, na voz do Felipe (skill `writing-as-felipe`). Dallas 2023: site, cardápio digital e o sistema de gestão que virou o Dallas Sync.
-- [ ] **Step 5:** Portões e `scenes.json` (História em 0, 0.33, 0.66 e 1). Commit.
+- [x] **Step 4:** Textos pt/en de cada capítulo, com no máximo 2 frases, na voz do Felipe (skill `writing-as-felipe`). Dallas 2023: site, cardápio digital e o sistema de gestão que virou o Dallas Sync.
+- [x] **Step 5:** Portões e `scenes.json` (História em 0, 0.33, 0.66 e 1). Commit.
 
 ### Task 3: Cena Trabalho (carrossel revelação)
 
@@ -192,20 +192,20 @@
   - `WorkItem = { id: string; kind: "sistema" | "site" | "loja" | "omd"; image: string; href?: string }`.
   - A seção tem `id="projects"`.
 
-- [ ] **Step 1:** Testes:
+- [x] **Step 1:** Testes:
   - os 5 cards aparecem, na ordem;
   - o Dallas Sync tem `data-focus="true"` no estado inicial;
   - OMDfarm e Eco360 mostram o rótulo i18n `work.kind.omd` ("construí na OMD");
   - nenhum card contém "87", "40M" ou "274";
   - o `Draggable` é criado com `type: "x"`, `lockAxis: true`, `allowNativeTouchScrolling: true` e `inertia: true`.
-- [ ] **Step 2:** Rode. Esperado: FAIL.
-- [ ] **Step 3:** Implemente a seção, que **não fica presa**:
+- [x] **Step 2:** Rode. Esperado: FAIL.
+- [x] **Step 3:** Implemente a seção, que **não fica presa**:
   - **Cards:** telas grandes (cerca de 62vw no desktop, 82vw no celular) em P&B (`filter: grayscale(1)`). O card em foco transiciona para a cor: hover no desktop, o card mais central no celular, recalculado no `onDrag` e no `onThrowUpdate`.
   - **Snap:** para o card mais próximo.
   - **Texto de cada card:** o que resolveu, em uma frase de dono de negócio, mais o tipo (site, loja ou sistema).
   - **Saída:** ao rolar para fora, todos voltam a P&B (ScrollTrigger com `start: "bottom 60%"`).
-- [ ] **Step 4:** Telas: use `dallas`, `secret` e `omdfarm` do `public/assets/projects/`. Para o Eco360 sem tela, mostre o logo `eco360-logo.webp` sobre um fundo neutro. Nada de tela falsa.
-- [ ] **Step 5:** Portões e `scenes.json` (Trabalho no início, com o card 3 em foco no celular). Commit.
+- [x] **Step 4:** Telas: use `dallas`, `secret` e `omdfarm` do `public/assets/projects/`. Para o Eco360 sem tela, mostre o logo `eco360-logo.webp` sobre um fundo neutro. Nada de tela falsa.
+- [x] **Step 5:** Portões e `scenes.json` (Trabalho no início, com o card 3 em foco no celular). Commit.
 
 ### Task 4: Cena Prova (números OMD)
 
@@ -218,16 +218,16 @@
 - Consumes: `useScene` e `countAt`.
 - Produces: `PROOF = [{ id: "empresas", value: 31 }, { id: "maquinas", value: 92 }, { id: "consulta", value: 2, prefix: "<", before: "30 s" }]` e mais a linha da Agrishow.
 
-- [ ] **Step 1:** Testes:
+- [x] **Step 1:** Testes:
   - com reduced motion, aparecem 31, 92 e "< 2 s" no texto final;
   - aparece "OMD do Brasil";
   - não aparece "87", "40M" nem "274".
-- [ ] **Step 2:** Rode. Esperado: FAIL.
-- [ ] **Step 3:** Implemente:
+- [x] **Step 2:** Rode. Esperado: FAIL.
+- [x] **Step 3:** Implemente:
   - Os números grandes em Space Grotesk contam com `scrub` (`countAt`) enquanto a seção cruza a tela.
   - Uma linha curta diz o que são.
   - Sem pin longo: no máximo 100vh.
-- [ ] **Step 4:** Portões e `scenes.json`. Commit.
+- [x] **Step 4:** Portões e `scenes.json`. Commit.
 
 ### Task 5: Cena Como funciona
 
@@ -239,13 +239,13 @@
 - Consumes: `useScene`.
 - Produces: a seção com `id="process"` e o elemento `[data-process-end]` onde a linha termina, que é o alvo da cena 7.
 
-- [ ] **Step 1:** Testes:
+- [x] **Step 1:** Testes:
   - os 4 passos aparecem na ordem Conversa, Rascunho, Desenvolvimento, No ar;
   - a frase "Nada começa sem o seu ok." aparece;
   - com reduced motion, a linha aparece completa.
-- [ ] **Step 2:** Rode. Esperado: FAIL.
-- [ ] **Step 3:** Implemente: uma linha SVG com `stroke-dashoffset` em `scrub`. Cada passo acende quando a linha chega nele. A linha é vertical no celular e horizontal no desktop (`gsap.matchMedia`).
-- [ ] **Step 4:** Portões e `scenes.json`. Commit.
+- [x] **Step 2:** Rode. Esperado: FAIL.
+- [x] **Step 3:** Implemente: uma linha SVG com `stroke-dashoffset` em `scrub`. Cada passo acende quando a linha chega nele. A linha é vertical no celular e horizontal no desktop (`gsap.matchMedia`).
+- [x] **Step 4:** Portões e `scenes.json`. Commit.
 
 ### Task 6: Cena Conversa e rodapé
 
@@ -260,19 +260,19 @@
 - Consumes: o `[data-process-end]` do Task 5.
 - Produces: a seção com `id="contact"`.
 
-- [ ] **Step 1:** Testes:
+- [x] **Step 1:** Testes:
   - o link do WhatsApp tem `href` com `wa.me` e a mensagem `contact.whatsapp_message` encodada;
   - existem o convite de networking e o link do LinkedIn;
   - o link do blog aponta para o post mais recente;
   - o rodapé tem "© {ano} Felipe Rodrigues Leone".
-- [ ] **Step 2:** Rode. Esperado: FAIL.
-- [ ] **Step 3:** Implemente:
+- [x] **Step 2:** Rode. Esperado: FAIL.
+- [x] **Step 3:** Implemente:
   - uma frase curta em Instrument Serif, na voz do Felipe;
   - o botão do WhatsApp;
   - o convite de networking;
   - o rodapé discreto: LinkedIn, GitHub, blog e copyright.
   - A linha do processo termina no botão, que acende quando a linha chega.
-- [ ] **Step 4:** Portões e `scenes.json` (o fim da página). Commit.
+- [x] **Step 4:** Portões e `scenes.json` (o fim da página). Commit.
 
 ### Task 7: Navegação, link profundo e limpeza final
 

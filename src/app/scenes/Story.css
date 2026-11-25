@@ -46,14 +46,14 @@
   text-wrap: pretty;
 }
 
-/* The OBA medal: a small seal, not a full chapter's weight. */
-.story-chapter--seal .story-title {
-  font-size: clamp(1.5rem, 2vw, 2rem);
+/* Keeps "Today" on the same line as the other titles. */
+.story-year--blank {
+  visibility: hidden;
 }
 
-.story-chapter--seal .story-text {
-  font-size: 0.9375rem;
-  max-width: 26ch;
+/* The OBA medal: a smaller title, not a full chapter's weight. */
+.story-chapter--seal .story-title {
+  font-size: clamp(1.75rem, 2.4vw, 2.5rem);
 }
 
 /* ---------- desktop rail, inside the hero's pinned stage ---------- */
@@ -62,7 +62,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 29vw;
+  left: 25vw;
   right: 0;
   z-index: 3;
   display: flex;
@@ -72,14 +72,14 @@
   opacity: 0;
   /* the rail fades out at its right edge, where chapters wait their turn */
   /* chapters fade in at the right edge and out at the left, never cut */
-  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, transparent 3%, #000 15%, #000 80%, transparent 100%);
 }
 
 .story-track {
   display: flex;
   align-items: flex-start;
   gap: clamp(3rem, 6vw, 6.5rem);
-  padding-left: 5vw;
+  padding-left: 11vw;
   padding-right: 30vw;
   will-change: transform;
 }
@@ -90,12 +90,16 @@
 }
 
 .story-rail .story-chapter--seal {
-  width: clamp(13rem, 16vw, 16rem);
-  padding-top: 2.5rem;
+  width: clamp(15rem, 18vw, 18rem);
 }
 
 .story-rail .story-chapter[data-focus="false"] {
-  opacity: 0.62;
+  opacity: 0.8;
+}
+
+/* A chapter already told steps out of the way before it reaches the photo. */
+.story-rail .story-chapter[data-past="true"] {
+  opacity: 0;
 }
 
 /* ---------- phones and reduced motion: a vertical list ---------- */

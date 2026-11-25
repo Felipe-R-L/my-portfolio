@@ -61,6 +61,36 @@
     "drag": -700
   },
   {
+    "name": "05-prova-00",
+    "sel": ".proof",
+    "p": 0,
+    "offset": -0.25
+  },
+  {
+    "name": "05-prova-40",
+    "sel": ".proof",
+    "p": 0,
+    "offset": 0.2
+  },
+  {
+    "name": "06-processo-00",
+    "sel": "#process",
+    "p": 0,
+    "offset": 0.05
+  },
+  {
+    "name": "06-processo-60",
+    "sel": "#process",
+    "p": 0,
+    "offset": 0.6
+  },
+  {
+    "name": "07-conversa",
+    "sel": "#contact",
+    "p": 0,
+    "offset": 0
+  },
+  {
     "name": "99-fim",
     "sel": "body",
     "p": 1

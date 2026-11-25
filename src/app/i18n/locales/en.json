@@ -7,7 +7,8 @@
     "blog": "Blog",
     "menu_open": "Menu",
     "menu_close": "Close menu",
-    "process": "How it works"
+    "process": "How it works",
+    "contact": "Contact"
   },
   "hero": {
     "description": "I build websites, online stores and custom systems for small and mid-sized businesses. You talk to me directly, from the first draft to support after launch.",
@@ -159,11 +160,10 @@
         "contribution": "Project author",
         "description": "Real-time telemetry for agricultural machinery: operational map, field logs, productivity BI and an external API for third-party integration. I wrote the initial project and defined the architecture — Nx, clean architecture on the server, standalone Angular on the front — plus the Terraform infrastructure. Presented at Agrishow.",
         "metrics": {
-          "points": "telemetry points",
-          "machines": "machines served",
-          "days": "days of telemetry"
+          "companies": "companies served",
+          "machines": "connected machines"
         },
-        "metrics_source": "Figures published on the OMDfarm landing page.",
+        "metrics_source": "Figures for OMD's telemetry platform.",
         "visit": "View the platform",
         "visit_aria": "Visit the OMDfarm landing page, opens in a new tab",
         "private": "Private repository"
@@ -286,7 +286,8 @@
         "title": "Launch & support",
         "description": "I put it live on your domain and stay around for tweaks."
       }
-    }
+    },
+    "title": "How it works"
   },
   "story": {
     "title": "Who I am",
@@ -361,5 +362,20 @@
     "visit_aria": "Open {{name}} in a new tab",
     "prev": "Previous work",
     "next": "Next work"
+  },
+  "proof": {
+    "title": "OMD do Brasil",
+    "lead": "Since 2024 I have been a developer at OMD do Brasil, where I look after the foundation of the company's telemetry platforms.",
+    "items": {
+      "empresas": "companies use the platforms",
+      "maquinas": "connected machines",
+      "consulta": "to open a report that used to take 30 s"
+    },
+    "agrishow": "OMDfarm was presented at Agrishow."
+  },
+  "talk": {
+    "blog_label": "Latest article on the blog",
+    "email_label": "Or by email",
+    "rights": "All rights reserved."
   }
 }

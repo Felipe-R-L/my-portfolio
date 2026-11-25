@@ -7,7 +7,8 @@
     "blog": "Blog",
     "menu_open": "Menu",
     "menu_close": "Fechar menu",
-    "process": "Como funciona"
+    "process": "Como funciona",
+    "contact": "Contato"
   },
   "hero": {
     "description": "Crio sites, lojas virtuais e sistemas sob medida para pequenos e médios negócios. Você fala direto comigo, do primeiro rascunho ao suporte depois que está no ar.",
@@ -159,11 +160,10 @@
         "contribution": "Autor do projeto",
         "description": "Telemetria de máquinas agrícolas em tempo real: mapa operacional, apontamentos, BI de produtividade e API externa para integração de terceiros. Escrevi o projeto inicial e defini a arquitetura — Nx, clean architecture no server, Angular standalone no front — além da infraestrutura em Terraform. Apresentado na Agrishow.",
         "metrics": {
-          "points": "pontos de telemetria",
-          "machines": "máquinas atendidas",
-          "days": "dias de telemetria"
+          "companies": "empresas atendidas",
+          "machines": "máquinas conectadas"
         },
-        "metrics_source": "Números publicados na landing page da OMDfarm.",
+        "metrics_source": "Números da plataforma de telemetria da OMD.",
         "visit": "Ver a plataforma",
         "visit_aria": "Visitar a landing page da OMDfarm, abre em nova aba",
         "private": "Repositório privado"
@@ -286,7 +286,8 @@
         "title": "No ar e suporte",
         "description": "Coloco no ar no seu domínio e continuo por perto pra ajustes."
       }
-    }
+    },
+    "title": "Como funciona"
   },
   "story": {
     "title": "Quem sou",
@@ -361,5 +362,20 @@
     "visit_aria": "Abrir {{name}} em nova aba",
     "prev": "Trabalho anterior",
     "next": "Próximo trabalho"
+  },
+  "proof": {
+    "title": "OMD do Brasil",
+    "lead": "Desde 2024 sou desenvolvedor na OMD do Brasil, onde cuido da base das plataformas de telemetria da empresa.",
+    "items": {
+      "empresas": "empresas usam as plataformas",
+      "maquinas": "máquinas conectadas",
+      "consulta": "para abrir um relatório que antes levava 30 s"
+    },
+    "agrishow": "O OMDfarm foi apresentado na Agrishow."
+  },
+  "talk": {
+    "blog_label": "Último artigo no blog",
+    "email_label": "Ou por e-mail",
+    "rights": "Todos os direitos reservados."
   }
 }

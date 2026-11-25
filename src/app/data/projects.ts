@@ -55,9 +55,8 @@ export const OMD_PRODUCTS: readonly Product[] = [
     visual: shot("omdfarm"),
     url: "https://www.omdfarm.com.br",
     metrics: [
-      { value: "40M+", labelKey: "points" },
-      { value: "87", labelKey: "machines" },
-      { value: "274", labelKey: "days" },
+      { value: "31", labelKey: "companies" },
+      { value: "92", labelKey: "machines" },
     ],
     stack: ["Nx", "NestJS", "Prisma", "Angular 21", "MQTT", "BullMQ"],
     stackMore: "Terraform · Redis · ECharts",
