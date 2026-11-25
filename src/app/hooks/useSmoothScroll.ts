@@ -1,39 +1,31 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 
+import { gsap, ScrollTrigger } from "../scroll/gsap";
+
 /**
- * Initialises Lenis smooth-scroll with momentum/inertia.
- *
- * `lerp` controls how quickly the scroll "catches up" to the target —
- * lower = more momentum & glide, higher = snappier.
- * 0.06-0.08 gives a nice Apple-like coasting feel.
+ * Lenis smooth scrolling on desktop, driven by GSAP's ticker so ScrollTrigger
+ * and Lenis read the same frame. Off on phones (native touch scrolling) and
+ * for visitors who asked for reduced motion.
  */
 export function useSmoothScroll() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) return;
+    const isPhone = window.matchMedia("(max-width: 767px)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isPhone || reduced) return;
 
-    const lenis = new Lenis({
-      lerp: 0.07, // low lerp = more momentum glide
-      smoothWheel: true, // smooth mouse-wheel scrolling
-      autoResize: true, // recalculate on resize
-    });
-
+    const lenis = new Lenis({ lerp: 0.08, smoothWheel: true, autoResize: true });
     lenisRef.current = lenis;
 
-    // The frame id has to be captured: `lenis.destroy()` only cancels Lenis's
-    // own loop, and it never starts one here because `autoRaf` defaults to
-    // false. Without this the loop outlives the effect and keeps calling
-    // `raf()` on a destroyed instance — one leaked loop per hot reload.
-    let frameId = requestAnimationFrame(function raf(time: number) {
-      lenis.raf(time);
-      frameId = requestAnimationFrame(raf);
-    });
+    lenis.on("scroll", ScrollTrigger.update);
+    const tick = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      cancelAnimationFrame(frameId);
+      gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;
     };
