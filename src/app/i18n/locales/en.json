@@ -213,7 +213,8 @@
     "chapters": {
       "diamante": {
         "title": "Diamante, Calabria",
-        "text": "My great-great-grandfather Vincenzo Leone was born in Diamante, in the south of Italy, and it is from him that the surname Leone comes."
+        "text": "My great-great-grandfather Vincenzo Leone was born in Diamante, in the south of Italy, and it is from him that the surname Leone comes.",
+        "alt": "Diamante from above, the white town over the Calabrian sea"
       },
       "oba": {
         "title": "Silver at the OBA",
@@ -225,15 +226,18 @@
       },
       "ifsp": {
         "title": "Engineering at IFSP",
-        "text": "After high school I went on to study mechanical engineering at IFSP, and it was the programming classes in that course that brought me back to technology."
+        "text": "After high school I went on to study mechanical engineering at IFSP, and it was the programming classes in that course that brought me back to technology.",
+        "alt": "The entrance of IFSP, Sertãozinho campus"
       },
       "dallas": {
         "title": "Dallas Motel",
-        "text": "I built the website and the digital menu for Dallas Motel, and from that work came Dallas Sync, the management system the motel now uses as a subscription."
+        "text": "I built the website and the digital menu for Dallas Motel, and from that work came Dallas Sync, the management system the motel now uses as a subscription.",
+        "alt": "The Dallas Motel website"
       },
       "omd": {
         "title": "OMD do Brasil",
-        "text": "I joined OMD do Brasil after a conversation with the owner of the company, and I currently look after three production platforms that serve 31 companies."
+        "text": "I joined OMD do Brasil in 2024 as a developer, and I currently look after three production platforms that serve 31 companies.",
+        "alt": "An OMDfarm screen"
       },
       "hoje": {
         "title": "Today",
@@ -293,6 +297,7 @@
   "talk": {
     "blog_label": "Latest article on the blog",
     "email_label": "Or by email",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "credits": "Photos of Diamante (Eugenio Magurno) and IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons."
   }
 }

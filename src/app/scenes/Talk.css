@@ -141,6 +141,13 @@
   align-self: start;
 }
 
+.talk-credits {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgb(140 148 162);
+}
+
 .talk-foot {
   grid-column: 1 / -1;
   display: flex;

@@ -66,6 +66,7 @@ export function Talk() {
           ))}
           <a href="/blog">Blog</a>
         </nav>
+        <p className="talk-credits">{t("talk.credits")}</p>
       </footer>
     </section>
   );
