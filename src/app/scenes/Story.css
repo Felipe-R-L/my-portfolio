@@ -48,9 +48,10 @@
 
 /* ---------- the chapter's picture ---------- */
 
+/* One height for every picture, so every title starts on the same line. */
 .story-media {
   margin: 0 0 0.5rem;
-  aspect-ratio: 16 / 10;
+  height: clamp(9rem, 24vh, 14rem);
   overflow: hidden;
   border-radius: 10px;
   background: #0c0f16;
@@ -99,6 +100,7 @@
 
 .story-code {
   margin: 0;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   display: grid;
   gap: 0.3rem;
   font-size: clamp(0.75rem, 1vw, 0.95rem);

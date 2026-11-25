@@ -42,6 +42,19 @@ export function Work() {
 
     // Wide screens: the page scroll drives the cards.
     if (!isPhone && !reduced) {
+      // The scene is one screen tall: the picture gets the height the
+      // heading and the tallest caption leave, so no caption is ever cut.
+      const fit = () => {
+        for (let pass = 0; pass < 2; pass++) {
+          const metas = [...track.querySelectorAll<HTMLElement>(".work-meta")];
+          const meta = Math.max(0, ...metas.map((m) => m.offsetHeight));
+          const room = viewport.clientHeight - meta - 12;
+          const h = Math.max(140, Math.min(room, (window.innerWidth * 0.62) / 1.6));
+          track.style.setProperty("--shot-h", `${Math.round(h)}px`);
+        }
+      };
+      fit();
+      ScrollTrigger.addEventListener("refreshInit", fit);
       // a card's width of scroll per card, so each one has time to be read
       const travel = () => -minX() * 1.4;
       const st = ScrollTrigger.create({
@@ -71,7 +84,7 @@ export function Work() {
         onEnter: () => setOut(true),
         onLeaveBack: () => setOut(false),
       });
-      return;
+      return () => ScrollTrigger.removeEventListener("refreshInit", fit);
     }
 
     const [drag] = Draggable.create(track, {

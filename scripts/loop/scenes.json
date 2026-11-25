@@ -51,13 +51,13 @@
     "name": "04-trabalho-00",
     "sel": "#projects",
     "p": 0,
-    "offset": -0.15
+    "offset": 0.01
   },
   {
     "name": "04-trabalho-arrastado",
     "sel": "#projects",
-    "p": 0,
-    "offset": -0.15,
+    "p": 0.5,
+    "offset": 0.01,
     "drag": -700
   },
   {

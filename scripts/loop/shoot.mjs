@@ -49,7 +49,9 @@ for (const run of runs) {
       }
       const el = document.querySelector(sel);
       if (!el) return null;
-      const r = el.getBoundingClientRect();
+      // a pinned scene scrolls through its pin spacer, not its own height
+      const box = el.closest(".pin-spacer") ?? el;
+      const r = box.getBoundingClientRect();
       const top = r.top + window.scrollY;
       const travel = Math.max(0, r.height - window.innerHeight);
       return Math.round(top + p * travel + (offset ?? 0) * window.innerHeight);

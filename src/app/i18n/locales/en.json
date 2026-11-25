@@ -241,7 +241,8 @@
       },
       "hoje": {
         "title": "Today",
-        "text": "I split my time between OMD, Dallas Sync and projects for businesses that need a website, an online store or a system built around the way they work."
+        "text": "I split my time between OMD, Dallas Sync and projects for businesses that need a website, an online store or a system built around the way they work.",
+        "alt": "The Dallas Sync panel"
       }
     }
   },
@@ -271,7 +272,7 @@
       },
       "omdfarm": {
         "title": "OMDfarm",
-        "result": "Real-time telemetry for agricultural machinery, with an operational map and productivity BI, presented at Agrishow."
+        "result": "Real-time telemetry for agricultural machinery, with an operational map and productivity BI."
       },
       "eco360": {
         "title": "Gestão Eco 360",

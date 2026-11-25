@@ -3,6 +3,7 @@
 .process {
   --line: rgb(255 255 255 / 0.14);
   --lit: #9fc3d6;
+  --step-gap: clamp(1.5rem, 3vw, 3rem);
   position: relative;
   z-index: 10;
   padding: clamp(5rem, 14vh, 9rem) var(--gutter) clamp(1rem, 3vh, 2rem);
@@ -42,6 +43,8 @@
 .process-line {
   position: relative;
   height: 2px;
+  /* ends at the last step's marker, not past it */
+  margin-right: calc((100% - 3 * var(--step-gap)) / 4);
   background: var(--line);
 }
 
@@ -60,7 +63,7 @@
 .process-steps {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(1.5rem, 3vw, 3rem);
+  gap: var(--step-gap);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -73,7 +76,7 @@
 }
 
 .process-step[data-lit="false"] {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .process-marker {

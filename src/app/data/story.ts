@@ -23,7 +23,7 @@ export const STORY: readonly StoryChapter[] = [
   { id: "ifsp", year: "2022", image: { src: `${S}/ifsp-1280.webp`, srcSet: `${S}/ifsp-640.webp 640w, ${S}/ifsp-1280.webp 1280w` } },
   { id: "dallas", year: "2023", image: { src: `${P}/dallas-720.webp`, srcSet: `${P}/dallas-720.webp 720w, ${P}/dallas.webp 1919w` } },
   { id: "omd", year: "2024", image: { src: `${P}/omdfarm-720.webp` } },
-  { id: "hoje", year: "hoje" },
+  { id: "hoje", year: "hoje", image: { src: `${P}/dallas-sync-720.webp`, srcSet: `${P}/dallas-sync-720.webp 720w, ${P}/dallas-sync-1440.webp 1440w` } },
 ];
 
 /** Index of the chapter in focus at story progress `p`. */
