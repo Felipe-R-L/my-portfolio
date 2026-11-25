@@ -180,6 +180,11 @@ void main() {
   // mostly sky, which would draw a blue outline around his hair: there the
   // person keeps only the grey.
   float fringe = mix(1.0, smoothstep(0.7, 0.97, matteRaw), a);
+  // The matte also keeps sky between the curls well inside his outline. On
+  // him nothing is both bright and blue (skin is warm, hair and shirt dark),
+  // so a bright, blue pixel there is sky, and it stays grey.
+  float skyOnHim = a * smoothstep(0.0, 0.05, tint.b - tint.r) * smoothstep(0.45, 0.7, lb);
+  fringe *= 1.0 - skyOnHim;
   tint = clamp(base + chroma * 1.15 * smoothstep(0.04, 0.22, lb) * fringe, 0.0, 1.0);
   o = vec4(mix(base, tint, mask), 1.0);
 }`;

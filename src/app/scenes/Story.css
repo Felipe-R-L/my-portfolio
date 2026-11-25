@@ -80,7 +80,9 @@
   align-items: flex-start;
   gap: clamp(3rem, 6vw, 6.5rem);
   padding-left: 11vw;
-  padding-right: 30vw;
+  /* the last chapter comes to rest in the middle of the space beside the
+     portrait, not against its edge */
+  padding-right: 20vw;
   will-change: transform;
 }
 

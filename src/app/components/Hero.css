@@ -8,7 +8,7 @@
 .hero-frame {
   /* RODRIGUES fills the width; on a short screen the three lines take the
      height instead, so the credits never fall off the bottom */
-  --name-size: min(16.1vw, 20.5rem, calc((100svh - 21rem) / 2.45));
+  --name-size: min(16.1vw, 20.5rem, calc((100svh - 22rem) / 2.5));
   --ink: #f5f7ff;
   position: absolute;
   inset: 0;
