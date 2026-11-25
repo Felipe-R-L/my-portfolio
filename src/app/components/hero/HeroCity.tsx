@@ -39,12 +39,12 @@ import "./HeroCity.css";
  */
 
 /** Scroll length of the scene, as a multiple of the viewport height. */
-const TRACK_DESKTOP = 3.4;
+const TRACK_DESKTOP = 2.8;
 const TRACK_PHONE = 3.15;
 const TRACK_REDUCED = 1.2;
 /** Desktop only: the story plays on in the same pinned stage, for this many
     more screens, with the framed photo moved aside. */
-const STORY_TRACK = 6;
+const STORY_TRACK = 6.4;
 /** Story beat, over story progress: the frame moves aside, and stays there
     until the released stage carries it off the top. */
 const ASIDE_TO = 0.05;

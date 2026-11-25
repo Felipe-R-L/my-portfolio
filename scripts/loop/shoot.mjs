@@ -33,11 +33,11 @@ for (const run of runs) {
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const city = document.querySelector(".city");
       const cityTop = city ? city.getBoundingClientRect().top + window.scrollY : 0;
-      // Mirrors HeroCity: TRACK_DESKTOP 3.4 / TRACK_PHONE 3.15, STORY_TRACK 6.
-      const heroLen = (reduced ? 1.2 : phone ? 3.15 : 3.4) * vh;
+      // Mirrors HeroCity: TRACK_DESKTOP 2.8 / TRACK_PHONE 3.15, STORY_TRACK 6.4.
+      const heroLen = (reduced ? 1.2 : phone ? 3.15 : 2.8) * vh;
       if (hero !== undefined) return Math.round(cityTop + hero * heroLen);
       if (story !== undefined) {
-        if (!phone && !reduced) return Math.round(cityTop + heroLen + story * 6 * vh);
+        if (!phone && !reduced) return Math.round(cityTop + heroLen + story * 6.4 * vh);
         const list = document.querySelector(".story-list");
         if (!list) return null;
         const r = list.getBoundingClientRect();
