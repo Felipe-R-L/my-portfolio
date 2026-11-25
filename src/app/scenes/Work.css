@@ -115,6 +115,103 @@
   background: #0c0f16;
 }
 
+.work-open {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  perspective: 1200px;
+}
+
+.work-open:focus-visible {
+  outline: 2px solid #9fc3d6;
+  outline-offset: 4px;
+  border-radius: 14px;
+}
+
+.work-shot {
+  position: relative;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.work-shot[data-tilting="true"] {
+  transition: transform 0.12s linear;
+}
+
+/* "See details" appears on the piece in focus */
+.work-open-hint {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgb(8 10 15 / 0.82);
+  border: 1px solid rgb(159 195 214 / 0.4);
+  font-size: 0.875rem;
+  color: #eef1f6;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.work-card[data-focus="true"] .work-open-hint {
+  opacity: 1;
+  transform: none;
+}
+
+/* The piece in focus is never a still: the camera drifts slowly across it,
+   and a product with more screens shows them in turn. */
+.work-card[data-focus="true"] .work-shot:not(.work-shot--lockup) img {
+  animation: work-drift 16s ease-in-out infinite alternate;
+}
+
+@keyframes work-drift {
+  from {
+    transform: scale(1.02) translate(0, 0);
+  }
+  to {
+    transform: scale(1.1) translate(-2%, -3%);
+  }
+}
+
+.work-shot--cycle img {
+  position: absolute;
+  inset: 0;
+}
+
+.work-shot--cycle img:first-child {
+  position: relative;
+}
+
+.work-card[data-focus="true"] .work-shot--cycle img:not(:first-child) {
+  animation:
+    work-drift 16s ease-in-out infinite alternate,
+    work-cycle 10s ease-in-out infinite;
+}
+
+.work-shot--cycle img:not(:first-child) {
+  opacity: 0;
+}
+
+@keyframes work-cycle {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  50%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .work-shot img {
   width: 100%;
   height: 100%;
@@ -235,6 +332,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .work-card[data-focus="true"] .work-shot img {
+    animation: none !important;
+  }
+
   .work-shot img,
   .work-meta {
     transition: none;

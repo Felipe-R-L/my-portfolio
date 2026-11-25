@@ -43,13 +43,29 @@
 
 /* The figure on top, its label under it: every number starts on the same
    line, however many lines its label runs to. */
+.proof-figures {
+  perspective: 1100px;
+}
+
+/* each figure is a card that leans towards the pointer */
 .proof-figure {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 0.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgb(255 255 255 / 0.16);
+  padding: clamp(1.25rem, 2.2vw, 2rem);
+  border-radius: 18px;
+  border: 1px solid rgb(159 195 214 / 0.18);
+  background:
+    radial-gradient(circle at var(--gx, 20%) var(--gy, 0%), rgb(159 195 214 / 0.1), transparent 60%),
+    linear-gradient(160deg, #0d1219, #07090d);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.9);
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.proof-figure[data-tilting="true"] {
+  transition: transform 0.12s linear;
 }
 
 .proof-value {
@@ -161,6 +177,15 @@
   border-top: 1px solid rgb(255 255 255 / 0.08);
   font-size: 1.0625rem;
   color: rgb(196 203 214);
+}
+
+@media (min-width: 768px) {
+  .proof {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 767px) {

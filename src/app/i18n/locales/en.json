@@ -260,30 +260,61 @@
       "dallas_sync": {
         "title": "Dallas Sync",
         "result": "The motel's front desk keeps working when the internet drops, and the owner follows occupancy, stock and finances on a single panel.",
-        "note": "The system in training mode, with no real data."
+        "note": "The system in training mode, with no real data.",
+        "case": {
+          "problem": "Motels usually run on systems that only record what happened, and when the internet drops the front desk stops, which in the middle of a shift means a queue at the gate and bills closed on paper.",
+          "built": "I built Dallas Sync as an offline-first PMS, where check-in, orders, payment and checkout are saved on the front desk computer itself and go into a queue the server reconciles when the network comes back, with money always kept in cents and every customer isolated by RLS in the database.",
+          "now": "The system has been in production since September 2026, with Dallas Motel as a customer, and the layer I am building now is the intelligence one, starting with reading invoices through AI with a mandatory human confirmation before anything is recorded."
+        }
       },
       "dallas_motel": {
         "title": "Dallas Motel",
-        "result": "A website with a digital menu and a panel where management updates suites, prices and holidays on their own, without calling a developer."
+        "result": "A website with a digital menu and a panel where management updates suites, prices and holidays on their own, without calling a developer.",
+        "case": {
+          "problem": "Dallas Motel needed a website that showed its suites and its menu without depending on someone outside every time a price or a holiday changed.",
+          "built": "I built the website with a digital menu and a panel where management updates suites, prices and holidays on their own, without calling a developer."
+        }
       },
       "secret": {
         "title": "Secret Boutique",
-        "result": "An online store with Mercado Pago checkout, an age check at the door and trackable orders that never expose the customer."
+        "result": "An online store with Mercado Pago checkout, an age check at the door and trackable orders that never expose the customer.",
+        "case": {
+          "problem": "A store for intimate products sells better when customers feel nobody will ever know about the order, so discretion had to be part of every step of the purchase.",
+          "built": "I built the store with Mercado Pago checkout, an age check at the door, anonymous reviews and trackable orders that never expose who bought."
+        }
       },
       "omdfarm": {
         "title": "OMDfarm",
-        "result": "Real-time telemetry for agricultural machinery, with an operational map and productivity BI."
+        "result": "Real-time telemetry for agricultural machinery, with an operational map and productivity BI.",
+        "case": {
+          "problem": "People running agricultural machinery need to know in real time where each machine is and how much it produced, without waiting for the end-of-day report.",
+          "built": "I wrote the initial OMDfarm project and defined its architecture, with Nx, clean architecture on the server and standalone Angular on the front, plus the Terraform infrastructure, and the platform delivers an operational map, field logs, productivity BI and an external API for third-party integration.",
+          "now": "OMD platforms serve 31 companies and 92 connected machines today, and OMDfarm was presented at Agrishow."
+        }
       },
       "eco360": {
         "title": "Gestão Eco 360",
-        "result": "Waste-collection logistics with video telemetry and a routing module that standardises the drivers' work."
+        "result": "Waste-collection logistics with video telemetry and a routing module that standardises the drivers' work.",
+        "case": {
+          "problem": "Waste collection depends on routes followed to the letter, and the company needed to follow its fleet live and measure route coverage in each neighbourhood.",
+          "built": "I built the whole infrastructure and deploy layer of the multi-tenant platform from scratch and delivered its riskiest subsystems, such as sharing assets between customers, RLS isolation and telemetry with snap-to-road."
+        }
       }
     },
     "visit": "See it live",
     "visit_login": "Open the system, login required",
     "visit_aria": "Open {{name}} in a new tab",
     "prev": "Previous work",
-    "next": "Next work"
+    "next": "Next work",
+    "case": {
+      "problem": "The problem",
+      "built": "What I built",
+      "now": "Today",
+      "stack": "Built with",
+      "close": "Close",
+      "open": "See details",
+      "open_aria": "See the details of {{name}}"
+    }
   },
   "proof": {
     "title": "OMD do Brasil",

@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ScrollTrigger } from "../scroll/gsap";
+import { ScrollTrigger, gsap } from "../scroll/gsap";
 import { countAt, span } from "../scroll/math";
 import { useScene } from "../scroll/useScene";
+import { useTilt } from "../scroll/useTilt";
 import "./Proof.css";
 
 /** The OMD figures (LinkedIn, confirmed by Felipe on 2026-11-24). */
@@ -14,12 +15,15 @@ export const PROOF = [
 ] as const;
 
 /**
- * Scene 5, the proof: the numbers count up as the section crosses the
- * screen. No pin; with reduced motion they simply show their final values.
+ * Scene 5, the proof: once the figures are well inside the screen, they
+ * count up on their own, once, at their own pace, never tied to the scroll
+ * (tied to it, they ran before anyone was looking). With reduced motion they
+ * simply show their final values.
  */
 export function Proof() {
   const { t } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
+  useTilt(sectionRef, 5);
 
   useScene(sectionRef, ({ reduced }) => {
     if (reduced) return;
@@ -41,13 +45,14 @@ export function Proof() {
         if (bar) bar.style.transform = `scaleX(${1 - local * (1 - 2 / 30)})`;
       });
     show(0);
+    const clock = { p: 0 };
     ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top 85%",
-      end: "center 45%",
-      scrub: true,
-      onUpdate: (self) => show(self.progress),
-      onRefresh: (self) => show(self.progress),
+      trigger: root.querySelector(".proof-figures"),
+      // the whole row of figures on screen, a little above the middle
+      start: "bottom 85%",
+      once: true,
+      onEnter: () =>
+        gsap.to(clock, { p: 1, duration: 2.4, ease: "none", onUpdate: () => show(clock.p) }),
     });
   });
 
@@ -61,7 +66,7 @@ export function Proof() {
       </div>
       <dl className="proof-figures">
         {PROOF.map((f) => (
-          <div key={f.id} className="proof-figure">
+          <div key={f.id} className="proof-figure" data-tilt="">
             <dt className="proof-label">{t(`proof.items.${f.id}`)}</dt>
             <dd className="proof-value">
               {f.prefix && <span className="proof-affix">{f.prefix}</span>}
