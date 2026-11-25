@@ -23,7 +23,7 @@ vi.mock('../../src/app/scroll/gsap', () => ({
     set: vi.fn(),
     utils: { snap: () => (v: number) => v },
   },
-  ScrollTrigger: { defaults: vi.fn(), create: scrollCreate },
+  ScrollTrigger: { defaults: vi.fn(), create: scrollCreate, addEventListener: vi.fn(), removeEventListener: vi.fn() },
   Draggable: { create: draggableCreate },
   InertiaPlugin: {},
 }))

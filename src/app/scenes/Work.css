@@ -263,9 +263,15 @@
     margin-top: 0.4rem;
   }
 
-  /* the picture takes what the heading and the caption leave */
+  .work-viewport {
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* the picture takes the height the heading and the captions leave
+     (measured in Work.tsx), and its width follows */
   .work-card {
-    width: min(62vw, 64rem, calc((100svh - 31rem) * 1.6));
+    width: calc(var(--shot-h, 50svh) * 1.6);
   }
 
   .work-meta {
@@ -274,7 +280,7 @@
 
   .work-result {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }

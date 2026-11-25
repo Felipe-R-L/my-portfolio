@@ -23,9 +23,9 @@
   line-height: 0.88;
   letter-spacing: -0.02em;
   color: #eef1f6;
-  /* the hero's city in colour (its left half, where he is not), drifting
-     slowly behind the letters */
-  background: url("/assets/profile/scene-wide-color.webp") 0% 62% / 230% auto no-repeat;
+  /* the hero's city in colour (a crop of its left side, where he is not),
+     drifting slowly behind the letters */
+  background: url("/assets/profile/talk-city.webp") 0% 50% / cover no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -34,7 +34,7 @@
 
 @keyframes talk-drift {
   to {
-    background-position: 22% 70%;
+    background-position: 100% 50%;
   }
 }
 
