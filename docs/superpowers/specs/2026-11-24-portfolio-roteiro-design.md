@@ -128,3 +128,7 @@ O fio condutor é a sensação de já ter conversado com o Felipe. Cada cena ter
   - Fatos vêm da tabela acima ou do conteúdo já publicado no site (descrições e métricas atuais de `pt.json`/`en.json`, que o Felipe já aprovou). Nada inventado. *Decisão minha.*
 - **Eco360 e OMDfarm no carrossel:** aparecem como "construí na OMD", não como serviço que ele vende. *Decisão minha.*
 - **Hero, cena 1 → 2:** a transição sem corte é obrigatória, porque o Felipe rejeitou o corte entre duas fotos. O skyline em alta resolução precisa ser registrado pixel a pixel sobre a mesma foto. O master é `level.png` (4284×5712, já nivelado) e o original é `drive/look-left-sky.jpg`, ambos no scratchpad da sessão; copiar para `design-src/` (ignorado pelo git) antes de construir.
+
+## Adendo (2026-11-24, pedido do Felipe)
+
+O sobrenome **Leone** entra no nome da hero e em todo lugar onde o nome dele aparece (h1, aria-label, títulos). Preferência: o nome completo **FELIPE RODRIGUES LEONE**. Se não couber bem (desktop 1440×900 e celular 390×844), usar **FELIPE R. LEONE**. O mergulho da câmera continua por uma letra da linha que mostra a cidade.

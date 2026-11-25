@@ -281,14 +281,14 @@
 - Delete: chaves i18n órfãs, componentes e assets sem import (`pnpm build` + `grep` para confirmar), `motion` do `package.json` se não restar nenhum uso
 - Test: `tests/ui/app-layout-nav.test.tsx`, `tests/ui/hash-scroll.test.tsx`
 
-- [ ] **Step 1:** Testes:
+- [x] **Step 1:** Testes:
   - o nav lista `about`, `projects`, `process` e `contact`, nessa ordem;
   - o clique chama `lenis.scrollTo("#projects", …)`;
   - `useHashScroll` chama `ScrollTrigger.refresh()` antes de rolar até o hash.
-- [ ] **Step 2:** Rode. Esperado: FAIL. Implemente. Rode de novo. Esperado: PASS.
-- [ ] **Step 3:** Limpeza:
+- [x] **Step 2:** Rode. Esperado: FAIL. Implemente. Rode de novo. Esperado: PASS.
+- [x] **Step 3:** Limpeza:
   - remova as chaves i18n sem uso (o teste de paridade continua verde);
   - remova os arquivos órfãos;
   - se `motion` não tiver mais uso, rode `pnpm remove motion`;
   - os mocks dos testes que citam `motion/react` acompanham a remoção.
-- [ ] **Step 4:** Portões completos e `scenes.json` final, com a página inteira em cerca de 30 posições. Commit: `loop: navegação e limpeza`.
+- [x] **Step 4:** Portões completos e `scenes.json` final, com a página inteira em cerca de 30 posições. Commit: `loop: navegação e limpeza`.

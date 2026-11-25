@@ -3,7 +3,7 @@
 .proof {
   position: relative;
   z-index: 10;
-  padding: clamp(5rem, 14vh, 9rem) var(--gutter);
+  padding: clamp(4rem, 10vh, 6.5rem) var(--gutter) clamp(3rem, 8vh, 5rem);
   background: #050608;
   color: #eef1f6;
   border-top: 1px solid rgb(255 255 255 / 0.08);
@@ -39,16 +39,21 @@
   margin: 0;
 }
 
+/* The figure on top, its label under it: every number starts on the same
+   line, however many lines its label runs to. */
 .proof-figure {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
+  justify-content: flex-start;
   gap: 0.75rem;
   padding-top: 1.25rem;
   border-top: 1px solid rgb(255 255 255 / 0.16);
 }
 
 .proof-value {
-  margin: 0;
+  order: -1;
+  margin: 0 0 0 -0.04em;
+  white-space: nowrap;
   font-size: clamp(4.5rem, 11vw, 10rem);
   font-weight: 700;
   line-height: 0.85;
@@ -65,8 +70,10 @@
 
 .proof-foot {
   margin: clamp(2.5rem, 6vh, 4rem) 0 0;
-  font-size: 1rem;
-  color: rgb(178 186 199);
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+  font-size: 1.0625rem;
+  color: rgb(196 203 214);
 }
 
 @media (max-width: 767px) {

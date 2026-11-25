@@ -36,7 +36,6 @@ describe('process', () => {
     expect(steps).toEqual(['talk', 'draft', 'build', 'launch'])
     expect(c.textContent).toContain('process.gate')
     expect(c.querySelector('section#process')).not.toBeNull()
-    expect(c.querySelector('[data-process-end]')).not.toBeNull()
   })
 
   it('shows the line complete and every step lit with reduced motion', () => {

@@ -2,8 +2,6 @@
   "nav": {
     "about": "Sobre",
     "projects": "Projetos",
-    "experience": "Experiência",
-    "services": "Serviços",
     "blog": "Blog",
     "menu_open": "Menu",
     "menu_close": "Fechar menu",
@@ -14,17 +12,7 @@
     "description": "Crio sites, lojas virtuais e sistemas sob medida para pequenos e médios negócios. Você fala direto comigo, do primeiro rascunho ao suporte depois que está no ar.",
     "cta_projects": "Ver projetos"
   },
-  "about": {
-    "title": "Quem sou",
-    "lines": [
-      "Sou o Felipe, desenvolvedor fullstack do interior de São Paulo.",
-      "Também tenho meu próprio negócio, então penso em custo, prazo e retorno, não só em código.",
-      "Gosto de trocar ideia com outros devs, designers e donos de negócio. Se você tem um projeto, quer fazer uma parceria ou só conversar sobre tecnologia, me chama."
-    ],
-    "photo_alt": "Felipe no terraço do Patriani, em Campinas"
-  },
   "contact": {
-    "title_part1": "Contato",
     "title_part2": "Vamos conversar.",
     "cta_title": "Tem um projeto em mente?",
     "cta_desc": "Me conta a ideia, mesmo que ainda esteja crua. Respondo rápido e digo com sinceridade se e como posso ajudar.",
@@ -180,48 +168,6 @@
       }
     }
   },
-  "services": {
-    "title_part1": "Como posso",
-    "title_part2": "Te ajudar.",
-    "description": "Do site simples ao sistema completo. Você explica o problema do seu negócio, eu cuido da parte técnica.",
-    "example_label": "Exemplo:",
-    "items": {
-      "landing_pages": {
-        "title": "Sites e landing pages",
-        "description": "Um site rápido e bonito que explica o que você vende e leva o cliente direto pro seu WhatsApp ou pra compra.",
-        "example": "site do Dallas Motel, com cardápio digital e painel de preços."
-      },
-      "ecommerce": {
-        "title": "Lojas virtuais",
-        "description": "Loja online com catálogo, carrinho e pagamento por Pix ou cartão, para vender sem depender só de marketplace.",
-        "example": "Secret Boutique, loja com pagamento pelo Mercado Pago."
-      },
-      "systems": {
-        "title": "Sistemas de gestão",
-        "description": "Sistema sob medida para controlar estoque, pedidos, agenda ou atendimento, no lugar de planilha e caderno.",
-        "example": "Dallas Sync, gestão de motel em produção que funciona até sem internet."
-      },
-      "automation": {
-        "title": "Automação e IA",
-        "description": "Tiro do seu caminho as tarefas repetitivas e conecto suas ferramentas: avisos no WhatsApp, relatórios automáticos e assistentes com IA.",
-        "example": "minha secretária de IA, contada em detalhes no blog."
-      }
-    },
-    "learn_more": "Saiba mais"
-  },
-  "home": {
-    "writing": {
-      "title_part1": "Blog",
-      "title_part2": "Bastidores.",
-      "lead": "Escrevo sobre problemas reais que resolvi. Um bom jeito de ver como eu penso antes da gente conversar.",
-      "read_more": "Continuar lendo",
-      "card_aria": "Ler o artigo completo: {{title}}",
-      "see_all": "Ver todos os artigos"
-    }
-  },
-  "footer": {
-    "built_for_future": "Projetado para o amanhã."
-  },
   "common": {
     "loading": "Carregando..."
   },
@@ -237,38 +183,9 @@
     "close": "Fechar",
     "back": "Voltar ao blog"
   },
-  "credibility": {
-    "eyebrow": "Além dos freelas",
-    "title": "Também sou desenvolvedor fullstack na OMD do Brasil.",
-    "description": "Lá criei a arquitetura do OMDfarm, plataforma de telemetria de máquinas agrícolas apresentada na Agrishow. É a mesma tecnologia e o mesmo cuidado que levo para o projeto de cada cliente."
-  },
   "process": {
-    "title_part1": "Como",
-    "title_part2": "Funciona.",
     "lead": "Sem surpresa no meio do caminho: você sabe o que vai receber antes de fechar.",
     "gate": "Nada começa sem o seu ok.",
-    "scenes": {
-      "talk": {
-        "client": "Oi! Preciso de um site pra minha loja.",
-        "me": "Bora! Me conta como você vende hoje?"
-      },
-      "draft": {
-        "quote": "Orçamento",
-        "approve": "Aprovar",
-        "adjust": "Pedir ajuste"
-      },
-      "build": {
-        "structure": "Estrutura",
-        "content": "Conteúdo e fotos",
-        "review": "Revisão"
-      },
-      "launch": {
-        "domain": "seunegocio.com.br",
-        "live": "No ar",
-        "client": "Dá pra trocar a foto da capa?",
-        "me": "Feito"
-      }
-    },
     "steps": {
       "talk": {
         "title": "Conversa",

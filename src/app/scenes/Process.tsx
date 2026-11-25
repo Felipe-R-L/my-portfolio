@@ -10,8 +10,8 @@ const STEPS = ["talk", "draft", "build", "launch"] as const;
 /**
  * Scene 6, how it works: four steps on a line that draws itself as the page
  * scrolls, each step lighting up as the line reaches it. The line is
- * horizontal on a wide screen and vertical on a phone, and it ends pointing
- * at the conversation that closes the page.
+ * horizontal on a wide screen and vertical on a phone, where it stops at
+ * the last step's marker.
  */
 export function Process() {
   const { t } = useTranslation();
@@ -26,6 +26,15 @@ export function Process() {
       setDone(true);
       return;
     }
+    const track = sectionRef.current!.querySelector<HTMLElement>(".process-track")!;
+    // On a phone the line runs down the left; it ends at the last marker
+    // (0.45rem from the top of the last step, plus half the marker).
+    const fitTail = () => {
+      if (!isPhone) return;
+      const last = track.querySelector<HTMLElement>(".process-step:last-child");
+      if (last) track.style.setProperty("--line-tail", `${Math.max(0, last.offsetHeight - 13)}px`);
+    };
+    fitTail();
     const axis = isPhone ? "scaleY" : "scaleX";
     const show = (p: number) => {
       gsap.set(fill, { [axis]: p });
@@ -35,12 +44,15 @@ export function Process() {
     };
     show(0);
     ScrollTrigger.create({
-      trigger: sectionRef.current!.querySelector(".process-track"),
+      trigger: track,
       start: "top 75%",
       end: isPhone ? "bottom 55%" : "top 25%",
       scrub: true,
       onUpdate: (self) => show(self.progress),
-      onRefresh: (self) => show(self.progress),
+      onRefresh: (self) => {
+        fitTail();
+        show(self.progress);
+      },
     });
   });
 
@@ -69,7 +81,6 @@ export function Process() {
         ))}
       </ol>
       </div>
-      <span className="process-end" data-process-end="" aria-hidden="true" />
     </section>
   );
 }

@@ -7,7 +7,7 @@ import { createSignal } from "../../scroll/signal";
 import { useScene } from "../../scroll/useScene";
 import { Story } from "../../scenes/Story";
 import { LiquidReveal } from "./LiquidReveal";
-import { Credits, FIRST, LAST, Letters } from "./HeroParts";
+import { Credits, Letters, NAME } from "./HeroParts";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
 import "./HeroCity.css";
 
@@ -45,9 +45,9 @@ const TRACK_REDUCED = 1.2;
 /** Desktop only: the story plays on in the same pinned stage, for this many
     more screens, with the framed photo moved aside. */
 const STORY_TRACK = 2.8;
-/** Story beats, over story progress: the frame moves aside, then leaves. */
+/** Story beat, over story progress: the frame moves aside, and stays there
+    until the released stage carries it off the top. */
 const ASIDE_TO = 0.1;
-const LEAVE_FROM = 0.86;
 /** The frame beside the story: scale, the sides cropped to a portrait (in
     fractions of the frame's width) and its left edge (fraction of vw). */
 const ASIDE_SCALE = 0.52;
@@ -97,7 +97,7 @@ function useReducedMotion() {
 function measureZoomOrigin(stage: HTMLElement): string {
   const target = stage.querySelector<HTMLElement>("[data-measure] [data-zoom-target]");
   if (!target) return "50% 75%";
-  let x = target.offsetWidth / 2;
+  let x = target.offsetWidth * Number(target.dataset.zoomTarget || 0.5);
   let y = target.offsetHeight * 0.55;
   let el: HTMLElement | null = target;
   while (el && el !== stage) {
@@ -108,26 +108,30 @@ function measureZoomOrigin(stage: HTMLElement): string {
   return `${Math.round(x)}px ${Math.round(y)}px`;
 }
 
-/** The name laid out identically in every layer; `show` picks which word
-    this layer draws. */
-function NameLayout({ show, measure = false }: { show: "first" | "last"; measure?: boolean }) {
+/** The name laid out identically in every layer; `show` picks what this
+    layer draws: the city line alone, or every other line and the credits. */
+function NameLayout({ show, measure = false }: { show: "front" | "city"; measure?: boolean }) {
+  let offset = 0;
   return (
     <div className="hero-frame">
       <div className="hero-name" aria-hidden="true" {...(measure ? { "data-measure": "" } : {})}>
-        <span className={`hero-line ${show === "first" ? "" : "city-ghost"}`}>
-          <span className="hero-word">
-            <Letters word={FIRST} offset={0} />
-          </span>
-        </span>
-        <span className={`hero-line hero-line--last ${show === "last" ? "" : "city-ghost"}`}>
-          <span className="hero-word">
-            <Letters word={LAST} offset={FIRST.length} markI />
-          </span>
-        </span>
+        {NAME.lines.map((word, i) => {
+          const isCity = i === NAME.city;
+          const drawn = show === "city" ? isCity : !isCity;
+          const start = offset;
+          offset += word.length;
+          return (
+            <span key={word} className={`hero-line${i > 0 ? " hero-line--next" : ""}${drawn ? "" : " city-ghost"}`}>
+              <span className="hero-word">
+                <Letters word={word} offset={start} {...(isCity ? { mark: NAME.mark, markX: NAME.markX } : {})} />
+              </span>
+            </span>
+          );
+        })}
       </div>
       {/* Every layer reserves the credits' height so the name sits at the
           same place; only the front layer shows them. */}
-      <Credits className={show === "first" ? "" : "city-ghost"} />
+      <Credits className={show === "front" ? "" : "city-ghost"} />
     </div>
   );
 }
@@ -215,7 +219,6 @@ export function HeroCity() {
         storyProgress.set(ps);
         if (ps <= 0) return;
         const a = easeInOut(span(ps, 0, ASIDE_TO));
-        const leave = span(ps, LEAVE_FROM, 1);
         const sc = FRAME_DESKTOP + (ASIDE_SCALE - FRAME_DESKTOP) * a;
         const cropL = ASIDE_CROP_L * a;
         const cropR = ASIDE_CROP_R * a;
@@ -224,11 +227,11 @@ export function HeroCity() {
         const x = (ASIDE_LEFT * vw - shownLeft) * a;
         const r = FRAME_RADIUS / sc;
         gsap.set(frame, {
-          scale: sc * (1 - 0.06 * leave),
+          scale: sc,
           x,
           borderRadius: r,
           clipPath: `inset(0% ${cropR * 100}% ${ASIDE_CROP_B * a * 100}% ${cropL * 100}% round ${r}px)`,
-          opacity: 1 - leave,
+          opacity: 1,
         });
       };
 
@@ -282,7 +285,7 @@ export function HeroCity() {
     <section
       ref={sectionRef}
       className="city"
-      aria-label="Felipe Rodrigues"
+      aria-label={NAME.full}
       style={{
         ["--track-desktop" as string]: `${trackDesktop * 100}svh`,
         ["--track-phone" as string]: `${(reduce ? TRACK_REDUCED : TRACK_PHONE) * 100}svh`,
@@ -322,13 +325,13 @@ export function HeroCity() {
 
         {/* The dark sheet with the surname cut as windows. */}
         <div className="city-sheet" aria-hidden="true">
-          <NameLayout show="last" />
+          <NameLayout show="city" />
         </div>
 
         {/* FELIPE, the credits, and the real heading for assistive tech. */}
         <div className="city-front">
-          <h1 className="sr-only">Felipe Rodrigues</h1>
-          <NameLayout show="first" measure />
+          <h1 className="sr-only">{NAME.full}</h1>
+          <NameLayout show="front" measure />
         </div>
 
         {storyInStage && <Story mode="rail" progress={storyProgress} />}

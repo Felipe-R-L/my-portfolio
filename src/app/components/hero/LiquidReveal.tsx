@@ -161,7 +161,9 @@ void main() {
   // the ink reaches his face, all of him turns, over a short fade.
   float faceInk = texture(field, faceV).r;
   float personMask = smoothstep(0.3, 0.55, faceInk) * hasCol;
-  mask = mix(mask, personMask, a);
+  // Once he has turned, the city around him drains back to grey: ink left
+  // beside his head would read as a pale ghost of his outline, not as colour.
+  mask = mix(mask * (1.0 - personMask), personMask, a);
 
   bgUV = clamp(bgUV, vec2(0.0), vec2(1.0));
   vec3 base = mix(texture(bw, bgUV).rgb, texture(bw, fgUV).rgb, a);

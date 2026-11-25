@@ -7,7 +7,7 @@
 .work {
   position: relative;
   z-index: 10;
-  padding: clamp(5rem, 14vh, 9rem) 0 clamp(4rem, 10vh, 7rem);
+  padding: clamp(5rem, 14vh, 9rem) 0 clamp(1.5rem, 4vh, 3rem);
   background: #050608;
   color: #eef1f6;
 }
@@ -77,6 +77,9 @@
   padding-left: var(--gutter);
   cursor: grab;
   touch-action: pan-y;
+  /* a card dragged past the left edge fades out in the gutter, never leaving
+     a stray letter behind */
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--gutter));
 }
 
 .work-viewport:active {
@@ -116,10 +119,11 @@
   transition: filter 0.7s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
+/* The Eco360 mark is drawn for a dark ground: white letters, glowing 360. */
 .work-shot--lockup {
   display: grid;
   place-items: center;
-  background: #e9ecef;
+  background: radial-gradient(ellipse at 50% 55%, #14201b 0%, #0a0f0d 70%);
 }
 
 .work-shot--lockup img {
