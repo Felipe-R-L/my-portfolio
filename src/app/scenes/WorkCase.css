@@ -1,0 +1,181 @@
+/* The details of one piece of work: a tall sheet over the dimmed page. */
+
+.case {
+  width: min(64rem, calc(100vw - 2 * var(--gutter)));
+  max-width: none;
+  max-height: calc(100svh - 3rem);
+  margin: auto;
+  padding: 0;
+  border: 1px solid rgb(159 195 214 / 0.22);
+  border-radius: 20px;
+  background: #080a0f;
+  color: #eef1f6;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.case::backdrop {
+  background: rgb(3 4 6 / 0.78);
+  backdrop-filter: blur(6px);
+}
+
+.case[open] {
+  animation: case-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes case-in {
+  from {
+    opacity: 0;
+    transform: translateY(2rem) scale(0.98);
+  }
+}
+
+.case-body {
+  position: relative;
+  display: grid;
+  gap: 1.25rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.case-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  color: #eef1f6;
+  background: #080a0f;
+}
+
+.case-close:hover {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.case-close:focus-visible,
+.case-link:focus-visible {
+  outline: 2px solid #9fc3d6;
+  outline-offset: 3px;
+}
+
+.case-kind {
+  font-size: 0.875rem;
+  color: #9fc3d6;
+}
+
+.case-title {
+  margin: -0.5rem 0 0;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 0.95;
+}
+
+.case-screens {
+  display: grid;
+  gap: 1rem;
+}
+
+.case-screen {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #0c0f16;
+}
+
+.case-screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.case-screen--lockup {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 7;
+  background: radial-gradient(ellipse at 50% 55%, #14201b 0%, #0a0f0d 70%);
+}
+
+.case-screen--lockup img {
+  width: 40%;
+}
+
+.case-text {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem 2.5rem;
+  margin: 0.5rem 0 0;
+}
+
+.case-text dt {
+  margin-bottom: 0.5rem;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: 1.5rem;
+  color: #eef1f6;
+}
+
+.case-text dd {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: rgb(196 203 214);
+}
+
+.case-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-stack li {
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgb(159 195 214 / 0.3);
+  font-size: 0.875rem;
+  color: #dce6ee;
+}
+
+.case-note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgb(160 168 182);
+}
+
+.case-link {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  background: #eef1f6;
+  color: #050608;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .case {
+    width: 100vw;
+    max-height: 100svh;
+    height: 100svh;
+    border-radius: 0;
+    border: 0;
+  }
+
+  .case-text {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case[open] {
+    animation: none;
+  }
+}

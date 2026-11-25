@@ -142,3 +142,9 @@ O sobrenome **Leone** entra no nome da hero e em todo lugar onde o nome dele apa
 - **OMD:** o site não conta que a vaga veio de uma conversa com o dono; o capítulo diz só que ele entrou em 2024 como desenvolvedor.
 - **Skyline:** o Real-ESRGAN não recupera detalhe da névoa da foto original; o mergulho passou a partir dos prédios próximos, que são nítidos.
 - **Imagens da história:** Diamante (Eugenio Magurno) e IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, com crédito no rodapé. ETEC Idio Zucchi e OBA sem foto livre: um trecho de "Hello, world" e um desenho de órbitas.
+
+## Adendo 3 (2026-11-25, retorno do Felipe)
+- **Animações disparadas, não arrastadas.** Os números da OMD e o trilho do Processo tocam sozinhos, uma vez, quando a seção está bem visível; não acompanham a rolagem.
+- **Uma tela por cena embaixo.** Prova, Processo e Conversa ocupam cada uma uma tela inteira no desktop; nunca aparecem duas ao mesmo tempo.
+- **Cards 3D.** Os passos do Processo se levantam da página quando a linha chega, e cards de números, passos e projetos se inclinam na direção do ponteiro.
+- **Projetos em movimento e com detalhes.** A imagem em foco se move devagar (e o Dallas Sync alterna entre duas telas reais, em modo treino); clicar abre os detalhes: o problema, o que foi feito, hoje, a stack e todas as telas. Base do Dallas Sync: `dallas-turborepo/docs/VISAO-PRODUTO.md` e README.

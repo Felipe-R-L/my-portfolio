@@ -2,10 +2,12 @@ import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-import { WORK } from "../data/work";
+import { WORK, type WorkItem } from "../data/work";
 import { Draggable, ScrollTrigger, gsap } from "../scroll/gsap";
 import { span } from "../scroll/math";
 import { useScene } from "../scroll/useScene";
+import { useTilt } from "../scroll/useTilt";
+import { WorkCase } from "./WorkCase";
 import "./Work.css";
 
 /**
@@ -24,6 +26,9 @@ export function Work() {
   const [focus, setFocus] = useState(0);
   const [out, setOut] = useState(false);
   const goTo = useRef<(i: number) => void>(() => {});
+  const [open, setOpen] = useState<WorkItem | null>(null);
+  const pressAt = useRef<[number, number] | null>(null);
+  useTilt(sectionRef, 4);
 
   useScene(sectionRef, ({ reduced, isPhone }) => {
     const viewport = viewportRef.current!;
@@ -180,17 +185,41 @@ export function Work() {
                 data-focus={i === focus ? "true" : "false"}
                 onPointerEnter={(e) => e.pointerType === "mouse" && setFocus(i)}
               >
-                <figure className={`work-shot${w.image.lockup ? " work-shot--lockup" : ""}`}>
-                  <img
-                    src={w.image.src}
-                    srcSet={w.image.srcSet}
-                    sizes="(max-width: 767px) 82vw, 62vw"
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    draggable={false}
-                  />
-                </figure>
+                {/* The picture opens the details. A tap that was really a drag
+                    (it moved) does not. */}
+                <button
+                  type="button"
+                  className="work-open"
+                  aria-label={t("work.case.open_aria", { name })}
+                  onPointerDown={(e) => (pressAt.current = [e.clientX, e.clientY])}
+                  onClick={(e) => {
+                    const [x, y] = pressAt.current ?? [e.clientX, e.clientY];
+                    if (Math.hypot(e.clientX - x, e.clientY - y) > 8) return;
+                    setOpen(w);
+                  }}
+                >
+                  <figure
+                    className={`work-shot${w.image.lockup ? " work-shot--lockup" : ""}${w.gallery ? " work-shot--cycle" : ""}`}
+                    data-tilt=""
+                  >
+                    {[w.image, ...(w.gallery ?? [])].map((s, k) => (
+                      <img
+                        key={s.src}
+                        src={s.src}
+                        srcSet={s.srcSet}
+                        sizes="(max-width: 767px) 82vw, 62vw"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        draggable={false}
+                        style={{ ["--k" as string]: k }}
+                      />
+                    ))}
+                    <span className="work-open-hint" aria-hidden="true">
+                      {t("work.case.open")}
+                    </span>
+                  </figure>
+                </button>
                 <div className="work-meta">
                   <span className="work-kind">{t(`work.kind.${w.kind}`)}</span>
                   <h3 className="work-name">{name}</h3>
@@ -212,6 +241,7 @@ export function Work() {
           })}
         </div>
       </div>
+      <WorkCase item={open} onClose={() => setOpen(null)} />
     </section>
   );
 }

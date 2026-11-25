@@ -6,7 +6,7 @@
   --step-gap: clamp(1.5rem, 3vw, 3rem);
   position: relative;
   z-index: 10;
-  padding: clamp(5rem, 14vh, 9rem) var(--gutter) clamp(1rem, 3vh, 2rem);
+  padding: clamp(6rem, 16vh, 10rem) var(--gutter);
   background: #050608;
   color: #eef1f6;
 }
@@ -72,11 +72,48 @@
 .process-step {
   position: relative;
   padding-top: 1.75rem;
-  transition: opacity 0.5s ease;
+  perspective: 900px;
 }
 
-.process-step[data-lit="false"] {
-  opacity: 0.6;
+/* Each step is a card that stands up out of the page, in 3D, when the line
+   reaches it, and leans towards the pointer after that. */
+.process-card {
+  position: relative;
+  height: 100%;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+  border-radius: 16px;
+  border: 1px solid rgb(159 195 214 / 0.18);
+  background:
+    radial-gradient(circle at var(--gx, 30%) var(--gy, 0%), rgb(159 195 214 / 0.12), transparent 60%),
+    linear-gradient(160deg, #0d1219, #07090d);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.9);
+  transform-origin: 50% 100%;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease, border-color 0.6s ease;
+}
+
+.process-card[data-tilting="true"] {
+  transition: transform 0.12s linear, opacity 0.6s ease, border-color 0.6s ease;
+}
+
+.process-step[data-lit="false"] .process-card {
+  opacity: 0.25;
+  transform: rotateX(62deg) translateY(1.5rem);
+}
+
+.process-step[data-lit="true"] .process-card {
+  border-color: rgb(159 195 214 / 0.32);
+}
+
+/* the step's number, large and faint, behind its drawing */
+.process-num {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  line-height: 1;
+  color: rgb(159 195 214 / 0.14);
 }
 
 .process-marker {
@@ -144,6 +181,17 @@
   color: #eef1f6;
 }
 
+/* On a wide screen every lower scene owns a whole screen, so two of them
+   never share the view. */
+@media (min-width: 768px) {
+  .process {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 767px) {
   .process-line {
     position: absolute;
@@ -177,6 +225,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .process-card,
   .process-icon path,
   .process-step,
   .process-marker {

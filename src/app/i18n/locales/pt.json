@@ -260,30 +260,61 @@
       "dallas_sync": {
         "title": "Dallas Sync",
         "result": "A recepção do motel continua funcionando quando a internet cai, e o dono acompanha ocupação, estoque e financeiro num painel só.",
-        "note": "Tela do sistema em modo treino, sem dados reais."
+        "note": "Tela do sistema em modo treino, sem dados reais.",
+        "case": {
+          "problem": "Motéis costumam operar com sistemas que só registram o que aconteceu, e quando a internet cai a recepção para, o que no meio de um turno significa fila na portaria e conta fechada no papel.",
+          "built": "Construí o Dallas Sync como um PMS offline-first, em que check-in, comanda, pagamento e checkout gravam no próprio computador da recepção e entram numa fila que o servidor reconcilia quando a rede volta, com o dinheiro sempre em centavos e cada cliente isolado por RLS no banco.",
+          "now": "O sistema está em produção desde setembro de 2026, com o Dallas Motel como cliente, e a camada que estou construindo agora é a de inteligência, começando pela leitura de notas fiscais por IA com confirmação humana obrigatória antes de qualquer lançamento."
+        }
       },
       "dallas_motel": {
         "title": "Dallas Motel",
-        "result": "Site com cardápio digital e um painel onde a gerência muda suítes, preços e feriados sozinha, sem precisar chamar programador."
+        "result": "Site com cardápio digital e um painel onde a gerência muda suítes, preços e feriados sozinha, sem precisar chamar programador.",
+        "case": {
+          "problem": "O Dallas Motel precisava de um site que mostrasse as suítes e o cardápio sem depender de alguém de fora toda vez que um preço ou um feriado mudasse.",
+          "built": "Fiz o site institucional com cardápio digital e um painel em que a própria gerência atualiza suítes, preços e feriados, sem precisar chamar um desenvolvedor."
+        }
       },
       "secret": {
         "title": "Secret Boutique",
-        "result": "Loja online com pagamento pelo Mercado Pago, verificação de idade na entrada e pedidos rastreáveis sem expor o cliente."
+        "result": "Loja online com pagamento pelo Mercado Pago, verificação de idade na entrada e pedidos rastreáveis sem expor o cliente.",
+        "case": {
+          "problem": "Uma loja de produtos íntimos vende melhor quando o cliente sente que ninguém vai saber do pedido, então a discrição precisava estar em cada etapa da compra.",
+          "built": "Construí a loja com pagamento pelo Mercado Pago, verificação de idade na entrada, avaliações anônimas e pedidos rastreáveis que nunca expõem quem comprou."
+        }
       },
       "omdfarm": {
         "title": "OMDfarm",
-        "result": "Telemetria de máquinas agrícolas em tempo real, com mapa operacional e BI de produtividade."
+        "result": "Telemetria de máquinas agrícolas em tempo real, com mapa operacional e BI de produtividade.",
+        "case": {
+          "problem": "Quem opera máquinas agrícolas precisa saber em tempo real onde cada máquina está e quanto ela produziu, sem esperar o relatório do fim do dia.",
+          "built": "Escrevi o projeto inicial do OMDfarm e defini a arquitetura, com Nx, clean architecture no servidor e Angular standalone no front, além da infraestrutura em Terraform, e a plataforma entrega mapa operacional, apontamentos, BI de produtividade e uma API externa para integração de terceiros.",
+          "now": "As plataformas da OMD atendem hoje 31 empresas e 92 máquinas conectadas, e o OMDfarm foi apresentado na Agrishow."
+        }
       },
       "eco360": {
         "title": "Gestão Eco 360",
-        "result": "Logística de coleta de resíduos com telemetria de vídeo e um módulo de rotas que padroniza o trabalho dos motoristas."
+        "result": "Logística de coleta de resíduos com telemetria de vídeo e um módulo de rotas que padroniza o trabalho dos motoristas.",
+        "case": {
+          "problem": "A coleta de resíduos depende de rotas cumpridas à risca, e a empresa precisava acompanhar a frota ao vivo e medir a cobertura de rota em cada bairro.",
+          "built": "Construí do zero toda a camada de infraestrutura e deploy da plataforma multi-tenant e entreguei os subsistemas de maior risco, como o compartilhamento de ativos entre clientes, o isolamento por RLS e a telemetria com snap-to-road."
+        }
       }
     },
     "visit": "Ver no ar",
     "visit_login": "Abrir o sistema, requer login",
     "visit_aria": "Abrir {{name}} em nova aba",
     "prev": "Trabalho anterior",
-    "next": "Próximo trabalho"
+    "next": "Próximo trabalho",
+    "case": {
+      "problem": "O problema",
+      "built": "O que eu fiz",
+      "now": "Hoje",
+      "stack": "Feito com",
+      "close": "Fechar",
+      "open": "Ver detalhes",
+      "open_aria": "Ver detalhes de {{name}}"
+    }
   },
   "proof": {
     "title": "OMD do Brasil",

@@ -9,6 +9,8 @@
   /* A full section break above, sized so that the close, with its footer,
      about fills the last screen and nothing of the steps peeks out behind
      the menu at the very end; no stretched gap inside it. */
+  min-height: 100svh;
+  align-content: center;
   padding: clamp(6rem, 16vh, 9rem) var(--gutter) clamp(3rem, 8vh, 5rem);
   background: #050608;
   color: #eef1f6;
