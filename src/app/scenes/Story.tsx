@@ -20,9 +20,9 @@ export function Story(props: { mode: "rail"; progress: Signal<number> } | { mode
 
 /** Rail beats, over story progress: the rail enters once the photo has
     moved aside (HeroCity's ASIDE_TO is 0.1), travels, then leaves. */
-const ENTER_FROM = 0.09;
-const ENTER_TO = 0.16;
-const TRAVEL_FROM = 0.14;
+const ENTER_FROM = 0.03;
+const ENTER_TO = 0.08;
+const TRAVEL_FROM = 0.07;
 const TRAVEL_TO = 0.86;
 
 /** The chapter's picture: a photo, or a drawing where no photo fits. */

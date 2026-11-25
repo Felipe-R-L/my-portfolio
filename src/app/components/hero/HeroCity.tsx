@@ -47,7 +47,7 @@ const TRACK_REDUCED = 1.2;
 const STORY_TRACK = 5;
 /** Story beat, over story progress: the frame moves aside, and stays there
     until the released stage carries it off the top. */
-const ASIDE_TO = 0.1;
+const ASIDE_TO = 0.05;
 /** The frame beside the story: scale, the sides cropped to a portrait (in
     fractions of the frame's width) and its left edge (fraction of vw). */
 const ASIDE_SCALE = 0.52;

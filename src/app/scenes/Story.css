@@ -144,7 +144,7 @@
   padding-left: 11vw;
   /* the last chapter comes to rest in the middle of the space beside the
      portrait, not against its edge */
-  padding-right: 20vw;
+  padding-right: 40vw;
   will-change: transform;
 }
 
