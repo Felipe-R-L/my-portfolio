@@ -9,9 +9,9 @@
   /* The close owns the last screen: at the very end of the page nothing of
      the previous scene peeks out behind the menu. */
   min-height: 100svh;
-  /* the conversation in the middle of the screen, the footer at its foot */
+  /* the conversation right after the steps, the footer at the screen's foot */
   grid-template-rows: 1fr auto;
-  padding: clamp(5rem, 10vh, 7rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+  padding: clamp(4rem, 9vh, 6rem) var(--gutter) clamp(3rem, 8vh, 5rem);
   background: #050608;
   color: #eef1f6;
 }
@@ -119,7 +119,7 @@
 
 .talk-main,
 .talk-side {
-  align-self: center;
+  align-self: start;
 }
 
 .talk-foot {

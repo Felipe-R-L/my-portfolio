@@ -52,7 +52,8 @@
 
 .proof-value {
   order: -1;
-  margin: 0;
+  /* the numerals' side bearing, so their ink lines up with the label */
+  margin: 0 0 0 -0.03em;
   white-space: nowrap;
   font-size: clamp(4.5rem, 11vw, 10rem);
   font-weight: 700;
