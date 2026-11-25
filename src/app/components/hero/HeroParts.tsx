@@ -1,21 +1,13 @@
 import { useTranslation } from "react-i18next";
 
 /**
- * Pieces both hero compositions share: the name set letter by letter, and the
+ * Pieces of the hero: the name set letter by letter, and the
  * credits row under it (one sentence and one link), set like the
  * billing block at the foot of a film poster.
  */
 
 export const FIRST = "Felipe";
 export const LAST = "Rodrigues";
-
-/** Which composition to render while the two are being compared. */
-export type HeroVariant = "cidade" | "foto";
-
-export function readHeroVariant(): HeroVariant {
-  if (typeof window === "undefined") return "cidade";
-  return new URLSearchParams(window.location.search).get("hero") === "foto" ? "foto" : "cidade";
-}
 
 export function Letters({
   word,

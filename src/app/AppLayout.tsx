@@ -74,7 +74,7 @@ export default function AppLayout() {
       <main className="relative z-10 w-full overflow-x-clip">
         {/* Each section now owns its own scroll target, so the wrapper divs that
             used to carry these ids would have duplicated them. */}
-        {/* Hero renders About too: inside its scene, or right after it. */}
+        {/* The hero; the story scene (who I am) follows it. */}
         <Hero />
         <Services />
         <Projects />

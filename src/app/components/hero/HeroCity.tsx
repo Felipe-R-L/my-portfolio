@@ -1,10 +1,13 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
-import { About } from "../About";
+import { gsap } from "../../scroll/gsap";
+import { span } from "../../scroll/math";
+import { createSignal } from "../../scroll/signal";
+import { useScene } from "../../scroll/useScene";
 import { LiquidReveal } from "./LiquidReveal";
 import { Credits, FIRST, LAST, Letters } from "./HeroParts";
+import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
 import "./HeroCity.css";
 
 /**
@@ -44,63 +47,8 @@ const ZOOM_MAX = 90;
 const ZOOM_FROM = 0.023;
 const ZOOM_TO = 0.275;
 
-/**
- * The photo the whole scene is shot on, per device: the asset's size in
- * pixels, the corner of it that is only buildings (where the scene starts),
- * and where the camera ends up. Coordinates are in asset pixels.
- */
-type Rect = { x: number; y: number; w: number; h: number };
-type Shot = {
-  src: string;
-  /** The same frame in colour, any resolution, same aspect. */
-  color: string;
-  /** The person cut out: white is him. Same aspect. */
-  matte: string;
-  width: number;
-  height: number;
-  start: Rect;
-  /** Final framing for a given viewport size. */
-  end: (vw: number, vh: number) => Rect;
-};
-
-const SHOT_WIDE: Shot = {
-  src: "/assets/profile/scene-wide-3400.webp",
-  color: "/assets/profile/scene-wide-color.webp",
-  matte: "/assets/profile/scene-wide-matte.webp",
-  width: 3400,
-  height: 2125,
-  // Left third of the frame: horizon high, dense blocks, the railing low.
-  start: { x: 0, y: 93, w: 1141, h: 900 },
-  end: () => ({ x: 0, y: 0, w: 3400, h: 2125 }),
-};
-
-const SHOT_TALL: Shot = {
-  src: "/assets/profile/scene-tall-1800.webp",
-  color: "/assets/profile/scene-tall-color.webp",
-  matte: "/assets/profile/scene-tall-matte.webp",
-  width: 1800,
-  height: 2185,
-  // Lower-left corner: blocks and the railing, clear of the arm.
-  start: { x: 0, y: 1075, w: 323, h: 1025 },
-  // Centred on the person, head in the upper third, so the about caption
-  // at the foot of the frame sits over the shirt, not the face.
-  end: (vw, vh) => {
-    const h = 1589;
-    const w = (h * vw) / vh;
-    return { x: 826 - w / 2, y: 576, w, h };
-  },
-};
-
-/** Scale and centre that make `r` cover a vw x vh viewport. */
-function cover(r: Rect, vw: number, vh: number) {
-  const s = Math.max(vw / r.w, vh / r.h);
-  return { s, cx: r.x + r.w / 2, cy: r.y + r.h / 2 };
-}
-
-const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
-
 /** When the camera pulls back, over scene progress; after it, the photo
-    holds and the blueprint can be revealed. */
+    holds and the colour can be revealed. */
 const PULL_FROM = 0.32;
 const PULL_TO = 0.565;
 const HOLD_FROM = 0.58;
@@ -113,86 +61,35 @@ const FRAME_PHONE = 0.74;
 /** Corner radius of the finished frame, in screen pixels. */
 const FRAME_RADIUS = 18;
 
-function useStageSize(stageRef: React.RefObject<HTMLElement | null>) {
-  const [size, setSize] = useState({ w: 1440, h: 900 });
+const REDUCED_QUERY = "(prefers-reduced-motion: reduce)";
+
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
   useLayoutEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    const measure = () => setSize({ w: stage.clientWidth, h: stage.clientHeight });
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(stage);
-    return () => ro.disconnect();
-  }, [stageRef]);
-  return size;
+    const mql = window.matchMedia(REDUCED_QUERY);
+    setReduced(mql.matches);
+    const on = () => setReduced(mql.matches);
+    mql.addEventListener("change", on);
+    return () => mql.removeEventListener("change", on);
+  }, []);
+  return reduced;
 }
 
-function useZoomOrigin(stageRef: React.RefObject<HTMLElement | null>) {
-  const [origin, setOrigin] = useState("50% 75%");
-
-  useLayoutEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    // Measured on the front layer's (invisible) surname: same layout as the
-    // windows layer, never scaled. offsetLeft/Top ignore transforms, so the
-    // rise animation does not skew it.
-    const target = stage.querySelector<HTMLElement>("[data-measure] [data-zoom-target]");
-    if (!target) return;
-
-    const measure = () => {
-      let x = target.offsetWidth / 2;
-      let y = target.offsetHeight * 0.55;
-      let el: HTMLElement | null = target;
-      while (el && el !== stage) {
-        x += el.offsetLeft;
-        y += el.offsetTop;
-        el = el.offsetParent as HTMLElement | null;
-      }
-      setOrigin(`${Math.round(x)}px ${Math.round(y)}px`);
-    };
-
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(stage);
-    document.fonts?.ready.then(measure);
-    return () => ro.disconnect();
-  }, [stageRef]);
-
-  return origin;
-}
-
-/**
- * Scene progress, 0 at the top of the page and 1 when the track has scrolled
- * through. Derived from window scroll and measured geometry on purpose: a
- * targeted useScroll lets motion hand opacity to a native ScrollTimeline,
- * which measures the track wrong inside a sticky scene and leaves layers
- * stuck half-visible. A derived value is never handed off.
- */
-function useSceneProgress(
-  sectionRef: React.RefObject<HTMLElement | null>,
-  trackRef: React.RefObject<HTMLElement | null>,
-) {
-  const geom = useRef({ start: 0, length: 1 });
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    const track = trackRef.current;
-    if (!section || !track) return;
-    const measure = () => {
-      geom.current = {
-        start: section.getBoundingClientRect().top + window.scrollY,
-        length: Math.max(1, track.offsetHeight),
-      };
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(section);
-    return () => ro.disconnect();
-  }, [sectionRef, trackRef]);
-
-  const { scrollY } = useScroll();
-  return useTransform(scrollY, (y) =>
-    Math.min(1, Math.max(0, (y - geom.current.start) / geom.current.length)),
-  );
+/** Where the fly-through aims: the middle of the I's stem, measured on the
+    front layer's invisible surname (same layout, never scaled). offsetLeft
+    and offsetTop ignore transforms, so the rise animation does not skew it. */
+function measureZoomOrigin(stage: HTMLElement): string {
+  const target = stage.querySelector<HTMLElement>("[data-measure] [data-zoom-target]");
+  if (!target) return "50% 75%";
+  let x = target.offsetWidth / 2;
+  let y = target.offsetHeight * 0.55;
+  let el: HTMLElement | null = target;
+  while (el && el !== stage) {
+    x += el.offsetLeft;
+    y += el.offsetTop;
+    el = el.offsetParent as HTMLElement | null;
+  }
+  return `${Math.round(x)}px ${Math.round(y)}px`;
 }
 
 /** The name laid out identically in every layer; `show` picks which word
@@ -220,59 +117,89 @@ function NameLayout({ show, measure = false }: { show: "first" | "last"; measure
 }
 
 export function HeroCity() {
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotion();
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const origin = useZoomOrigin(stageRef);
-  const p = useSceneProgress(sectionRef, trackRef);
-
-  const sheetScale = useTransform(p, (v) => {
-    if (reduce) return 1;
-    const k = Math.min(1, Math.max(0, (v - ZOOM_FROM) / (ZOOM_TO - ZOOM_FROM)));
-    return Math.pow(ZOOM_MAX, k);
-  });
-  const sheetOpacity = useTransform(p, reduce ? [0.04, 0.23] : [0.23, 0.29], [1, 0]);
-  const frontOpacity = useTransform(p, [0.004, 0.054], [1, 0]);
-  const frontY = useTransform(p, [0, 0.06], ["0vh", reduce ? "0vh" : "-5vh"]);
-  const frontEvents = useTransform(p, (v) => (v > 0.04 ? "none" : "auto"));
-
-  // The camera: one photo, from the empty corner of buildings to the person.
   const shot = isMobile ? SHOT_TALL : SHOT_WIDE;
-  const size = useStageSize(stageRef);
-  const camera = useTransform(p, (v) => {
-    const a = cover(shot.start, size.w, size.h);
-    const b = cover(shot.end(size.w, size.h), size.w, size.h);
-    const q = reduce ? 1 : easeInOut(Math.min(1, Math.max(0, (v - PULL_FROM) / (PULL_TO - PULL_FROM))));
-    // Scale moves geometrically so the pull-back keeps a constant speed.
-    const s = a.s * Math.pow(b.s / a.s, q);
-    const cx = a.cx + (b.cx - a.cx) * q;
-    const cy = a.cy + (b.cy - a.cy) * q;
-    return { s, x: size.w / 2 - cx * s, y: size.h / 2 - cy * s };
-  });
-  const photoX = useTransform(camera, (c) => c.x);
-  const photoY = useTransform(camera, (c) => c.y);
-  const photoScale = useTransform(camera, (c) => c.s);
-  // The foot of the photo darkens for the about caption, which settles in
-  // once the photo holds.
-  const shadeOpacity = useTransform(p, [0.566, 0.66, 0.8, 0.9], [0, 1, 1, 0.3]);
-  const aboutOpacity = useTransform(p, [0.61, 0.69, 0.8, 0.84], [0, 1, 1, 0]);
-  const aboutY = useTransform(p, [0.61, 0.69, 0.8, 0.84], reduce ? [0, 0, 0, 0] : [24, 0, 0, -24]);
-  const aboutEvents = useTransform(p, (v) => (v > 0.63 && v < 0.82 ? "auto" : "none"));
-  // The exit: the whole picture scales down into a frame, corners rounding
-  // as it goes, the radius compensated for the scale so it lands at a fixed
-  // size on screen.
-  const frameScale = useTransform(p, (v) => {
-    if (reduce) return 1;
-    const k = Math.min(1, Math.max(0, (v - EXIT_FROM) / (EXIT_TO - EXIT_FROM)));
-    const target = isMobile ? FRAME_PHONE : FRAME_DESKTOP;
-    return 1 - (1 - target) * easeInOut(k);
-  });
-  const frameRadius = useTransform(frameScale, (sc) =>
-    sc >= 0.999 ? "0px" : `${(FRAME_RADIUS * (1 - sc)) / (1 - (isMobile ? FRAME_PHONE : FRAME_DESKTOP)) / sc}px`,
+
+  // Written by the scroll timeline every frame, read by the WebGL reveal.
+  const camera = useMemo(() => createSignal<Camera>({ x: 0, y: 0, scale: 1 }), []);
+  const revealActive = useMemo(() => createSignal(false), []);
+
+  useScene(
+    sectionRef,
+    () => {
+      const stage = stageRef.current!;
+      const q = <T extends Element>(sel: string) => stage.querySelector<T>(sel)!;
+      const photo = q<HTMLImageElement>(".city-photo");
+      const frame = q<HTMLDivElement>(".city-frame");
+      const sheet = q<HTMLDivElement>(".city-sheet");
+      const front = q<HTMLDivElement>(".city-front");
+      const frameTarget = isMobile ? FRAME_PHONE : FRAME_DESKTOP;
+
+      let vw = stage.clientWidth;
+      let vh = stage.clientHeight;
+      let progress = 0;
+
+      // The non-linear parts: the fly-through, the camera and the exit.
+      const render = (p: number) => {
+        progress = p;
+        const zoom = reduce ? 1 : Math.pow(ZOOM_MAX, span(p, ZOOM_FROM, ZOOM_TO));
+        gsap.set(sheet, { scale: zoom });
+
+        // Reduced motion: no camera move. The skyline stays behind the name
+        // until the sheet has gone, then the portrait is simply there.
+        const pull = reduce ? (p < 0.23 ? 0 : 1) : span(p, PULL_FROM, PULL_TO);
+        const c = cameraAt(pull, shot, vw, vh);
+        camera.set(c);
+        gsap.set(photo, { x: c.x, y: c.y, scale: c.scale });
+
+        const k = reduce ? (p >= EXIT_TO ? 1 : 0) : easeInOut(span(p, EXIT_FROM, EXIT_TO));
+        const sc = 1 - (1 - frameTarget) * k;
+        // radius compensated for the scale, so it lands at a fixed size on screen
+        const radius = sc >= 0.999 ? 0 : (FRAME_RADIUS * (1 - sc)) / (1 - frameTarget) / sc;
+        gsap.set(frame, { scale: sc, borderRadius: radius });
+
+        revealActive.set(!reduce && p >= HOLD_FROM);
+        front.style.pointerEvents = p > 0.04 ? "none" : "auto";
+      };
+
+      const measure = () => {
+        vw = stage.clientWidth;
+        vh = stage.clientHeight;
+        sheet.style.transformOrigin = measureZoomOrigin(stage);
+        render(progress);
+      };
+      measure();
+      const ro = new ResizeObserver(measure);
+      ro.observe(stage);
+      document.fonts?.ready.then(measure);
+
+      // The linear bands, placed on a timeline whose length is the scene (1).
+      const tl = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+          onUpdate: (self) => render(self.progress),
+          onRefresh: (self) => render(self.progress),
+        },
+      });
+      tl.to({}, { duration: 1 }, 0);
+      const band = (el: Element, from: number, to: number, a: gsap.TweenVars, b: gsap.TweenVars) =>
+        tl.fromTo(el, a, { ...b, duration: to - from, immediateRender: false }, from);
+
+      if (reduce) band(sheet, 0.04, 0.23, { opacity: 1 }, { opacity: 0 });
+      else band(sheet, 0.23, 0.29, { opacity: 1 }, { opacity: 0 });
+      band(front, 0.004, 0.054, { opacity: 1 }, { opacity: 0 });
+      if (!reduce) band(front, 0, 0.06, { y: "0vh" }, { y: "-5vh" });
+      return () => ro.disconnect();
+    },
+    [isMobile, reduce],
   );
-  const revealActive = useTransform(p, (v) => !reduce && v >= HOLD_FROM);
 
   return (
     <section
@@ -285,12 +212,12 @@ export function HeroCity() {
       }}
     >
       <div ref={stageRef} className="city-stage">
-        {/* The picture: photo, colour reveal and shade, scaled as one into
+        {/* The picture: photo, colour reveal, scaled as one into
             a frame on the way out. */}
-        <motion.div className="city-frame" style={{ scale: frameScale, borderRadius: frameRadius }}>
+        <div className="city-frame" data-scene-frame="">
           {/* The whole scene is shot on this one photo; the camera moves over
               it. LCP element: index.html preloads both device versions. */}
-          <motion.img
+          <img
             key={shot.src}
             className="city-photo"
             src={shot.src}
@@ -298,13 +225,7 @@ export function HeroCity() {
             aria-hidden="true"
             width={shot.width}
             height={shot.height}
-            style={{
-              width: shot.width,
-              height: shot.height,
-              x: photoX,
-              y: photoY,
-              scale: photoScale,
-            }}
+            style={{ width: shot.width, height: shot.height }}
             {...{ fetchpriority: "high" }}
             decoding="async"
           />
@@ -319,41 +240,23 @@ export function HeroCity() {
             active={revealActive}
             phone={isMobile}
           />
-
-          <motion.div className="city-shade" style={{ opacity: shadeOpacity }} aria-hidden="true" />
-        </motion.div>
+        </div>
 
         {/* The dark sheet with the surname cut as windows. */}
-        <motion.div
-          className="city-sheet"
-          style={{ scale: sheetScale, opacity: sheetOpacity, transformOrigin: origin }}
-          aria-hidden="true"
-        >
+        <div className="city-sheet" aria-hidden="true">
           <NameLayout show="last" />
-        </motion.div>
+        </div>
 
         {/* FELIPE, the credits, and the real heading for assistive tech. */}
-        <motion.div
-          className="city-front"
-          style={{ opacity: frontOpacity, y: frontY, pointerEvents: frontEvents }}
-        >
+        <div className="city-front">
           <h1 className="sr-only">Felipe Rodrigues</h1>
           <NameLayout show="first" measure />
-        </motion.div>
-
-        {/* Who I am, as the caption of the photo. */}
-        <motion.div
-          className="city-about"
-          data-no-reveal=""
-          style={{ opacity: aboutOpacity, y: aboutY, pointerEvents: aboutEvents }}
-        >
-          <About overlay />
-        </motion.div>
+        </div>
 
       </div>
 
-      <div ref={trackRef} className="city-track" aria-hidden="true">
-        {/* Where the nav's "Sobre" lands: the caption is in (progress 0.7). */}
+      <div className="city-track" aria-hidden="true">
+        {/* Where the nav's "Sobre" lands, until the story scene takes it. */}
         <span id="about" className="city-anchor" />
       </div>
     </section>
