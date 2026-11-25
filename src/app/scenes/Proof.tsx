@@ -23,12 +23,22 @@ export function Proof() {
 
   useScene(sectionRef, ({ reduced }) => {
     if (reduced) return;
-    const nums = [...sectionRef.current!.querySelectorAll<HTMLElement>("[data-count]")];
+    const root = sectionRef.current!;
+    const nums = [...root.querySelectorAll<HTMLElement>("[data-count]")];
     const show = (p: number) =>
       nums.forEach((el, i) => {
         // each figure starts a little after the previous one
         const local = span(p, i * 0.08, 0.6 + i * 0.08);
-        el.textContent = String(countAt(local, Number(el.dataset.count)));
+        const n = countAt(local, Number(el.dataset.count));
+        el.textContent = String(n);
+        const fig = el.closest<HTMLElement>(".proof-figure")!;
+        // one square per company, one dot per machine, lit as the count climbs
+        fig.querySelectorAll<HTMLElement>(".proof-unit").forEach((u, k) => {
+          u.dataset.on = k < n ? "true" : "false";
+        });
+        // the report: a 30 s bar that shrinks to the 2 s it takes now
+        const bar = fig.querySelector<HTMLElement>(".proof-bar-now");
+        if (bar) bar.style.transform = `scaleX(${1 - local * (1 - 2 / 30)})`;
       });
     show(0);
     ScrollTrigger.create({
@@ -57,6 +67,22 @@ export function Proof() {
               {f.prefix && <span className="proof-affix">{f.prefix}</span>}
               <span data-count={f.value}>{f.value}</span>
               {f.suffix && <span className="proof-affix">{f.suffix}</span>}
+            </dd>
+            <dd className={`proof-viz proof-viz--${f.id}`} aria-hidden="true">
+              {f.id === "consulta" ? (
+                <>
+                  <span className="proof-bar">
+                    <span className="proof-bar-was" />
+                    <span className="proof-bar-tag">30 s</span>
+                  </span>
+                  <span className="proof-bar">
+                    <span className="proof-bar-now" />
+                    <span className="proof-bar-tag">2 s</span>
+                  </span>
+                </>
+              ) : (
+                Array.from({ length: f.value }, (_, k) => <span key={k} className="proof-unit" data-on="true" />)
+              )}
             </dd>
           </div>
         ))}

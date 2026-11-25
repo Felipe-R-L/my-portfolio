@@ -93,6 +93,31 @@
   border-color: var(--lit);
 }
 
+/* The step's drawing traces itself, stroke by stroke, once the step lights. */
+.process-icon {
+  display: block;
+  width: clamp(3rem, 4.5vw, 4.25rem);
+  height: auto;
+  margin: 0 0 1.25rem;
+  overflow: visible;
+}
+
+.process-icon path {
+  fill: none;
+  stroke: #9fc3d6;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+  transition-delay: calc(var(--k) * 140ms);
+}
+
+.process-step[data-lit="true"] .process-icon path {
+  stroke-dashoffset: 0;
+}
+
 .process-step-title {
   margin: 0 0 0.6rem;
   font-family: "Instrument Serif", Georgia, serif;
@@ -149,6 +174,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .process-icon path,
   .process-step,
   .process-marker {
     transition: none;

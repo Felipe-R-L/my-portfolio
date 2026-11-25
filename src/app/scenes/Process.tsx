@@ -7,6 +7,15 @@ import "./Process.css";
 
 const STEPS = ["talk", "draft", "build", "launch"] as const;
 
+/** One line drawing per step, traced as the line reaches it: a speech
+    bubble, a sketched page, blocks going up, a launch. */
+const ICONS: Record<(typeof STEPS)[number], string[]> = {
+  talk: ["M8 12h40v24H26l-10 9v-9H8z", "M16 22h24", "M16 28h14"],
+  draft: ["M12 6h26l8 8v36H12z", "M38 6v8h8", "M19 24h20", "M19 31h20", "M19 38h12"],
+  build: ["M6 50h44", "M10 50V36h12v14", "M22 50V24h12v26", "M34 50V12h12v38"],
+  launch: ["M10 46L44 12", "M24 12h20v20", "M10 30v16h16"],
+};
+
 /**
  * Scene 6, how it works: four steps on a line that draws itself as the page
  * scrolls, each step lighting up as the line reaches it. The line is
@@ -74,6 +83,11 @@ export function Process() {
         {STEPS.map((s, i) => (
           <li key={s} className="process-step" data-step={s} data-lit={i < lit ? "true" : "false"}>
             <span className="process-marker" aria-hidden="true" />
+            <svg className="process-icon" viewBox="0 0 56 56" aria-hidden="true">
+              {ICONS[s].map((d, k) => (
+                <path key={k} d={d} pathLength={1} style={{ ["--k" as string]: k }} />
+              ))}
+            </svg>
             <h3 className="process-step-title">{t(`process.steps.${s}.title`)}</h3>
             <p className="process-step-text">{t(`process.steps.${s}.description`)}</p>
             {s === "draft" && <p className="process-gate">{t("process.gate")}</p>}

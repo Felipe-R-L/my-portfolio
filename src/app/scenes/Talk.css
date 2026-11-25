@@ -15,12 +15,33 @@
 }
 
 .talk-title {
-  margin: 0 0 1.5rem;
+  grid-column: 1 / -1;
+  margin: 0 0 calc(-1 * clamp(1.5rem, 3vw, 3rem));
   font-family: "Instrument Serif", Georgia, serif;
   font-weight: 400;
-  font-size: clamp(3.5rem, 9vw, 8.5rem);
-  line-height: 0.92;
-  letter-spacing: -0.01em;
+  font-size: clamp(4.5rem, 15.5vw, 15rem);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  color: #eef1f6;
+  /* the hero's city in colour (its left half, where he is not), drifting
+     slowly behind the letters */
+  background: url("/assets/profile/scene-wide-color.webp") 0% 62% / 230% auto no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: talk-drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes talk-drift {
+  to {
+    background-position: 22% 70%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .talk-title {
+    animation: none;
+  }
 }
 
 .talk-lead {
