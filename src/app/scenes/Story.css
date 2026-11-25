@@ -67,6 +67,12 @@
   transition: filter 0.8s ease;
 }
 
+/* a product screen is shown whole, never cropped */
+.story-chapter[data-chapter="hoje"] .story-media img,
+.story-chapter[data-chapter="omd"] .story-media img {
+  object-fit: contain;
+}
+
 .story-chapter[data-focus="true"] .story-media img {
   filter: none;
 }

@@ -411,7 +411,9 @@ export function LiquidReveal({
     const sweepPoint = (now: number) => {
       const k = Math.min(1, (now - sweepStart) / SWEEP_MS);
       const e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
-      const [base, lift] = phone ? [0.82, 0.3] : [0.74, 0.38];
+      // on a phone the pour stays below his face: half a face in colour
+      // reads as a stain, not as a reveal
+      const [base, lift] = phone ? [0.86, 0.12] : [0.74, 0.38];
       push(w * (0.08 + 0.84 * e), h * (base - lift * Math.sin(e * Math.PI)));
       return k < 1;
     };
