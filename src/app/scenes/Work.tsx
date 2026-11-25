@@ -18,6 +18,10 @@ import "./Work.css";
  * a carousel you drag, which never fights the vertical scroll. Scrolling past
  * it turns everything back to black and white.
  */
+/** Scroll pixels per pixel of sideways travel: the same rate as the story
+    rail (HeroCity STORY_TRACK), so every scene resists the wheel alike. */
+const SCROLL_PER_PX = 1.5;
+
 export function Work() {
   const { t } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
@@ -70,7 +74,7 @@ export function Work() {
       // a stretch of scroll before the first card moves and after the last
       // one arrives, so the scene never starts or ends mid-motion
       const holdPx = () => window.innerHeight * 0.7;
-      const travel = () => -minX() * 1.6 + 2 * holdPx();
+      const travel = () => -minX() * SCROLL_PER_PX + 2 * holdPx();
       const hold = () => holdPx() / Math.max(1, travel());
       const at = (p: number) => span(p, hold(), 1 - hold());
       const st = ScrollTrigger.create({
