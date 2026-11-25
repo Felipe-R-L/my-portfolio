@@ -242,7 +242,7 @@
       "hoje": {
         "title": "Today",
         "text": "I split my time between OMD, Dallas Sync and projects for businesses that need a website, an online store or a system built around the way they work.",
-        "alt": "The Dallas Sync panel"
+        "alt": "The Dallas Sync suite map"
       }
     }
   },
@@ -260,7 +260,7 @@
       "dallas_sync": {
         "title": "Dallas Sync",
         "result": "The motel's front desk keeps working when the internet drops, and the owner follows occupancy, stock and finances on a single panel.",
-        "note": "Illustrative screens, no real data."
+        "note": "The system in training mode, with no real data."
       },
       "dallas_motel": {
         "title": "Dallas Motel",

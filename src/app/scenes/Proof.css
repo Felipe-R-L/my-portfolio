@@ -3,7 +3,8 @@
 .proof {
   position: relative;
   z-index: 10;
-  padding: clamp(4rem, 10vh, 6.5rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+  /* the work unpins into a full breath of page before the figures */
+  padding: clamp(8rem, 24vh, 14rem) var(--gutter) clamp(3rem, 8vh, 5rem);
   background: #050608;
   color: #eef1f6;
   border-top: 1px solid rgb(255 255 255 / 0.08);
