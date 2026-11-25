@@ -47,12 +47,13 @@ export interface GlassNavProps {
 // whose height would now be animating, which is exactly what produced a
 // rendering glitch.
 //
-// This is the *desktop* recipe and it stays as it is. The pill floats over
-// the galaxy up there, so there is real light behind it to blur. The mobile
-// dock sits over the article slab instead, where a blur of near-black returns
-// near-black — see `.glass-dark` in styles/layout.css for what that needs.
+// The desktop recipe. The glass is tinted dark, not white: the hero's photo
+// puts a bright sky behind the pill, and white text on a white-tinted blur of
+// white sky disappears. Dark tint keeps the labels legible over the sky and
+// still reads as glass over the dark page. The mobile dock sits over the
+// article slab instead — see `.glass-dark` in styles/layout.css.
 const GLASS =
-  "border border-white/[0.14] bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16)]";
+  "border border-white/[0.14] bg-[rgb(8_10_16/0.55)] backdrop-blur-2xl backdrop-saturate-150 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_8px_24px_-12px_rgba(0,0,0,0.6)]";
 
 const DEFAULT_ENTRANCE: GlassNavEntrance = { duration: 0.8, delay: 1.5 };
 
@@ -147,7 +148,7 @@ export function GlassNav({
   );
 
   const linkClassName =
-    "text-[9px] md:text-xs font-medium uppercase tracking-[0.05em] md:tracking-[0.2em] text-white/60 hover:text-white transition-colors relative group whitespace-nowrap";
+    "text-[9px] md:text-xs font-medium uppercase tracking-[0.05em] md:tracking-[0.2em] text-white/75 hover:text-white transition-colors relative group whitespace-nowrap";
 
   const openHeight = openHeightFor(items.length);
   const panelTransition = prefersReducedMotion

@@ -10,48 +10,17 @@
     "process": "How it works"
   },
   "hero": {
-    "badge": "Available for new projects",
-    "title_part1": "Software that",
-    "title_part2_variants": [
-      "Sells",
-      "Organizes",
-      "Automates"
-    ],
     "description": "I build websites, online stores and custom systems for small and mid-sized businesses. You talk to me directly, from the first draft to support after launch.",
-    "cta_projects": "View projects",
-    "cta_contact": "Get in touch",
-    "role": "Websites · Stores · Systems",
-    "cta_whatsapp": "Message on WhatsApp"
+    "cta_projects": "View projects"
   },
   "about": {
-    "title_part1": "About",
-    "title_part2": "Who I am.",
-    "bio_p1": "I'm Felipe, a fullstack developer from the countryside of São Paulo, Brazil. I also run a business of my own, so I think about cost, timelines and return, not just code.",
-    "bio_p2": "I enjoy swapping ideas with other developers, designers and business owners. If you have a project, want to partner up or just talk tech, reach out.",
-    "revealed": {
-      "trustworthy": "TRUSTWORTHY",
-      "collaborative": "COLLABORATIVE",
-      "dedicated": "DEDICATED"
-    },
-    "skills_title": "Why work with me",
-    "skills": {
-      "direct": {
-        "title": "You talk to the person building it",
-        "proof": "No agency, no middleman: the same contact from the quote to support."
-      },
-      "business": {
-        "title": "I think like a business owner",
-        "proof": "Because I run a business too, I prioritize what gets you results, not what looks clever in code."
-      },
-      "stack": {
-        "title": "Big-company technology",
-        "proof": "React, Next.js, NestJS and PostgreSQL, the same foundation I use on platforms with millions of records."
-      },
-      "support": {
-        "title": "Support after delivery",
-        "proof": "Tweaks, new features and maintenance as your business grows."
-      }
-    }
+    "title": "Who I am",
+    "lines": [
+      "I'm Felipe, a fullstack developer from the countryside of São Paulo, Brazil.",
+      "I also run a business of my own, so I think about cost, timelines and return, not just code.",
+      "I enjoy swapping ideas with other developers, designers and business owners. If you have a project, want to partner up or just talk tech, reach out."
+    ],
+    "photo_alt": "Felipe on the Patriani rooftop in Campinas"
   },
   "contact": {
     "title_part1": "Contact",
@@ -101,34 +70,51 @@
       },
       "showcase": {
         "label": "What Dallas Sync does",
+        "illustrative": "Illustrative screens, no real data.",
         "tabs": {
-          "offline": "Works offline",
-          "invoice": "AI invoices",
-          "bi": "Owner's BI",
+          "offline": "No internet",
+          "invoice": "Invoice by photo",
+          "bi": "Owner's panel",
           "tenants": "Many motels"
         },
         "captions": {
-          "offline": "Check-in, tabs and the cash register keep working when the internet drops. When it's back, everything syncs on its own, with nothing duplicated.",
-          "invoice": "Snap the supplier's invoice and AI fills everything in. Someone checks it, and it becomes an expense and a stock entry at once.",
-          "bi": "The owner sees when the motel fills up, which suites earn the most and when a shift closes short, without building a spreadsheet.",
-          "tenants": "Every motel runs on the same system, but one never sees another's data. The subscription is billed by Pix or boleto, with an invoice."
+          "offline": "The internet drops and the front desk keeps checking guests in, adding orders and taking payments. When it's back, everything syncs on its own, with nothing duplicated.",
+          "invoice": "Snap the supplier's invoice and AI fills in the entry. Someone checks it, and it becomes an expense and a stock entry at once.",
+          "bi": "The owner sees when the motel fills up and which suites earn the most, without building a spreadsheet.",
+          "tenants": "Many motels run on the same system, and one never sees another's data."
+        },
+        "offline": {
+          "screen": "Front desk",
+          "offline": "No internet",
+          "online": "Synced",
+          "action_checkin": "Check-in, suite 102",
+          "action_order": "Suite 204 order: 2 waters, 1 snack",
+          "action_payment": "Suite 101 paid by Pix",
+          "busy": "Occupied",
+          "free": "Free",
+          "cleaning": "Cleaning"
         },
         "invoice": {
-          "photo_title": "Invoice photo",
-          "photo_note": "phone or PDF, many at once",
-          "ai_title": "AI reads it",
-          "ai_note": "supplier, items, amounts and due date",
-          "check_title": "Someone checks",
-          "check_note": "nothing goes in unseen",
-          "expense_title": "Expense",
-          "expense_note": "paid or payable",
-          "stock_title": "Inventory",
-          "stock_note": "entry with cost and freight"
+          "supplier": "Boa Vista Supply Co.",
+          "receipt_kind": "Purchase invoice",
+          "items": [
+            "Still water 500 ml × 48",
+            "Soda can × 24",
+            "Hand towel × 30"
+          ],
+          "supplier_label": "Supplier",
+          "total_label": "Total",
+          "total": "R$ 842.30",
+          "due_label": "Due",
+          "due": "Dec 12",
+          "entry_title": "New expense",
+          "to_stock": "3 items go to stock",
+          "confirm": "Confirm"
         },
         "bi": {
+          "screen": "Owner's panel",
           "heatmap": "Occupancy by day and hour",
           "suites": "Top-earning suites",
-          "illustrative": "Illustrative data.",
           "days": [
             "Mon",
             "Tue",
@@ -141,10 +127,7 @@
         },
         "tenants": {
           "motel": "Motel",
-          "devices": "front desk and managers",
-          "shield": "Each motel sees only its own",
-          "database": "One database",
-          "billing": "Isolation enforced by the database itself, not just the app."
+          "shield": "Each motel sees only its own"
         }
       }
     },
@@ -263,22 +246,45 @@
     "title_part1": "How it",
     "title_part2": "Works.",
     "lead": "No surprises halfway through: you know what you're getting before we commit.",
+    "gate": "Nothing starts without your OK.",
+    "scenes": {
+      "talk": {
+        "client": "Hi! I need a website for my store.",
+        "me": "Sure! How do you sell today?"
+      },
+      "draft": {
+        "quote": "Quote",
+        "approve": "Approve",
+        "adjust": "Ask for changes"
+      },
+      "build": {
+        "structure": "Structure",
+        "content": "Content and photos",
+        "review": "Review"
+      },
+      "launch": {
+        "domain": "yourbusiness.com",
+        "live": "Live",
+        "client": "Can we swap the cover photo?",
+        "me": "Done"
+      }
+    },
     "steps": {
       "talk": {
         "title": "Talk",
-        "description": "Tell me what you need, over WhatsApp or a call. No commitment and no jargon."
+        "description": "Tell me what you need, over WhatsApp or a call. No commitment."
       },
       "draft": {
         "title": "Draft",
-        "description": "I put together a preview of how it will look, plus a quote. We only move forward if it makes sense to you."
+        "description": "You see a preview and the quote before deciding anything."
       },
       "build": {
         "title": "Build",
-        "description": "I build in stages and show you progress, so you can adjust before it's done."
+        "description": "I build in stages, and you follow along and adjust on the way."
       },
       "launch": {
         "title": "Launch & support",
-        "description": "I put it live on your domain, show you how to use it and stay around for tweaks."
+        "description": "I put it live on your domain and stay around for tweaks."
       }
     }
   }

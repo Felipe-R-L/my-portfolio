@@ -6,7 +6,7 @@ import { Suspense, lazy } from "react";
  * business riding into the homepage's main chunk just so this teaser can read
  * a title and a summary. Loading the data-reading half of the section behind
  * a dynamic import gives it its own chunk, split off from `main`, mirroring
- * how AppLayout already lazy-loads Galaxy and FluidGlass.
+ * how AppLayout already lazy-loads FluidGlass.
  */
 const LatestWritingContent = lazy(() => import("./LatestWritingContent"));
 

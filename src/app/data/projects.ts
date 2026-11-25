@@ -85,7 +85,6 @@ export const PROJECTS: readonly Project[] = [
     ],
     showcase: true,
     stack: ["React 19", "NestJS 11", "PostgreSQL", "Dexie", "Gemini"],
-    stackMore: "Turborepo · Drizzle · Better Auth · RLS · Asaas",
     featured: true,
   },
   {

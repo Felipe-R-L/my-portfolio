@@ -35,20 +35,30 @@
       React mounted (LCP "requestDiscoverable: false"), and the font sat behind
       a chain of two third-party requests to Google. Both are now same-origin.
     -->
+    <!--
+      LCP: the photo the city hero is shot on, one version per device, split
+      at the same breakpoint as useIsMobile.
+    -->
+    <link
+      rel="preload"
+      as="image"
+      media="(min-width: 769px)"
+      href="/assets/profile/scene-wide-3400.webp"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      media="(max-width: 768px)"
+      href="/assets/profile/scene-tall-1800.webp"
+      fetchpriority="high"
+    />
     <link
       rel="preload"
       href="/assets/fonts/space-grotesk-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin
-    />
-    <link
-      rel="preload"
-      as="image"
-      href="/assets/profile/profile-448.webp"
-      imagesrcset="/assets/profile/profile-320.webp 320w, /assets/profile/profile-448.webp 448w, /assets/profile/profile-640.webp 640w"
-      imagesizes="(max-width: 767px) 92vw, 26vw"
-      fetchpriority="high"
     />
     <style>
       html,
