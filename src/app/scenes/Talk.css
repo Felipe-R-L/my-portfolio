@@ -6,12 +6,10 @@
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   gap: clamp(3rem, 6vw, 6rem);
-  /* The close owns the last screen: at the very end of the page nothing of
-     the previous scene peeks out behind the menu. */
-  min-height: 100svh;
-  /* the conversation right after the steps, the footer at the screen's foot */
-  grid-template-rows: 1fr auto;
-  padding: clamp(4rem, 9vh, 6rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+  /* A full section break above, sized so that the close, with its footer,
+     about fills the last screen and nothing of the steps peeks out behind
+     the menu at the very end; no stretched gap inside it. */
+  padding: clamp(6rem, 16vh, 9rem) var(--gutter) clamp(3rem, 8vh, 5rem);
   background: #050608;
   color: #eef1f6;
 }
@@ -152,7 +150,6 @@
 @media (max-width: 767px) {
   .talk {
     grid-template-columns: 1fr;
-    grid-template-rows: none;
     /* clears the floating menu pill */
     padding-bottom: 7rem;
   }
