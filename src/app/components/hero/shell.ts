@@ -43,13 +43,14 @@ export function nameFrontHtml(copy: ShellCopy): string {
 }
 
 /**
- * Diamante behind the name: the photo (one file per device, so the browser
+ * Diamante behind the name, the Torrione under a full moon (Lorenzo Caputo
+ * James, CC BY-SA 4.0, chosen 2026-11-26): the photo (one file per device, so the browser
  * fetches only one), the film grain, and the travel stamp. Graded by CSS
  * (HeroCity.css). React mounts this same markup.
  */
 export const PLACE_HTML =
-  `<picture><source media="(max-width: 768px)" srcset="/assets/story/diamante-c-1200.webp">` +
-  `<img class="city-place-photo" src="/assets/story/diamante-c-1800.webp" alt="" width="1800" height="1173" fetchpriority="high" decoding="async"></picture>` +
+  `<picture><source media="(max-width: 768px)" srcset="/assets/story/torrione-tall-980.webp">` +
+  `<img class="city-place-photo" src="/assets/story/torrione-2000.webp" alt="" width="2000" height="1500" fetchpriority="high" decoding="async"></picture>` +
   `<div class="city-place-grain"></div>` +
   `<div class="hero-stamp">${STAMP_SVG}</div>`;
 

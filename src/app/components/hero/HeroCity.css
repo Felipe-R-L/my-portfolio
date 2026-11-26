@@ -114,7 +114,8 @@
   height: 100%;
   max-width: none;
   object-fit: cover;
-  object-position: 60% 62%;
+  /* the tower and the moon above the dark hillside, where the name sits */
+  object-position: 50% 42%;
   filter: saturate(calc(0.72 * (1 - var(--drain)))) contrast(1.06)
     brightness(calc(0.92 - 0.32 * var(--drain)));
   /* the slow drift stands in for footage until the licensed clip arrives */

@@ -44,3 +44,12 @@ Files committed to this repository (latin subset, from Google Fonts):
 - `public/assets/fonts/eb-garamond-latin.woff2`
 - `public/assets/fonts/eb-garamond-latin-italic.woff2` — variable weight, used
   for the blog's running text.
+
+## Photographs of Diamante (Wikimedia Commons)
+
+- `public/assets/story/torrione-2000.webp`, `public/assets/story/torrione-tall-980.webp`:
+  "Diamante - Torrione di Diamante - 2024-09-08 09-00-35 001.jpg" by Lorenzo
+  Caputo James, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Diamante_-_Torrione_di_Diamante_-_2024-09-08_09-00-35_001.jpg
+  (resized, cropped for phones and graded on the page).
+- `public/assets/story/diamante-*.webp`: "PanoramadiamanteEM1.jpg" and
+  "PanoramadiamanteEM2.jpg" by Eugenio Magurno, CC BY-SA 3.0, via Wikimedia Commons.
