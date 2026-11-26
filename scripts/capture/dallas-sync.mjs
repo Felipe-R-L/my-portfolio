@@ -101,21 +101,31 @@ console.log(`scene: ${await page.locator('.suite[data-room-status="ocupada"]').c
 if (free < (which === "all" ? 2 : 1)) throw new Error("not enough free rooms for the takes");
 
 // ---------- the takes ----------
-async function checkInTake(plate) {
+// The marks and boxes the motion layer reads (direction A: the camera follows
+// the gesture): the room, the modal, the plate, the confirm, the ticket.
+async function checkInTake(plate, take) {
   const room = (await freeRooms()).first();
   const number = (await room.innerText()).match(/\d{3}/)?.[0];
+  await take?.box("room", room);
+  await take?.box("map", page.locator(".suite").first().locator(".."));
   await human.click(room);
   const modal = page.getByRole("dialog", { name: /^Check-in · Quarto/ });
   await modal.waitFor();
+  take?.mark("modal");
+  await take?.box("plate", modal.getByPlaceholder("AAA9A99 ou AAA9999"));
+  await take?.box("confirm", modal.getByRole("button", { name: "Confirmar check-in" }));
   await human.wait(500);
   await human.click(modal.getByRole("combobox").first());
   await human.wait(350);
   await human.click(page.getByRole("option").first());
   await human.wait(300);
   await human.click(modal.getByPlaceholder("AAA9A99 ou AAA9999"));
+  take?.mark("typing");
   await human.type(plate);
+  take?.mark("typed");
   await human.wait(400);
   await human.click(modal.getByRole("button", { name: "Confirmar check-in" }));
+  take?.mark("confirm");
   await modal.waitFor({ state: "detached" });
   // the ticket's print preview opens; the desk closes it, back to the map
   const close = page.getByRole("button", { name: /^fechar$/i });
@@ -124,6 +134,10 @@ async function checkInTake(plate) {
     await human.click(close);
     await close.waitFor({ state: "detached" }).catch(() => {});
   }
+  take?.mark("occupied");
+  const taken = page.locator(".suite", { hasText: number ?? "" }).first();
+  await take?.box("roomAfter", taken);
+  await take?.box("panel", page.locator(".suite-panel, aside").last());
   return number;
 }
 
@@ -136,7 +150,7 @@ if (which === "card" || which === "all") {
   const take = await record();
   await human.wait(900);
   take.mark("in");
-  await checkInTake("QTR4E21");
+  await checkInTake("QTR4E21", take);
   await human.move(1180, 760);
   await human.wait(2600); // the room's clock running
   take.mark("out");
@@ -155,7 +169,7 @@ if (which === "offline" || which === "all") {
   take.mark("in");
   // the network goes down, for real
   await context.setOffline(true);
-  const room = await checkInTake("LMX2D45");
+  const room = await checkInTake("LMX2D45", take);
   await human.wait(900);
   // and a consumption on the same room
   const occupiedRoom = page.locator(`.suite[data-room-status="ocupada"]`, { hasText: room ?? "" }).first();

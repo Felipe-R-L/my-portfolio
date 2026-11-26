@@ -62,13 +62,22 @@ if (which === "secret-detail" || which === "all") {
   take.mark("in");
   await human.click(page.getByRole("button", { name: "Ver opções" }).first());
   await human.wait(1300);
-  await human.click(page.getByText("Capim-limão", { exact: true }).first());
+  const variant = page.getByText("Capim-limão", { exact: true }).first();
+  await human.click(variant);
   await human.wait(900);
+  // detail 1: the variant chosen, with its own price on the button
+  take.mark("variant");
+  await take.box("variant", variant.locator("xpath=ancestor::button[1]"));
+  await take.box("add", page.getByRole("button", { name: /Adicionar ao Carrinho/ }));
   await human.click(page.getByRole("button", { name: /Adicionar ao Carrinho/ }));
   await human.wait(1000);
   await human.click(page.getByRole("link", { name: /Ver carrinho|Ver Carrinho/ }).first());
   await page.waitForURL(/\/cart/);
   await human.wait(1100);
+  // detail 2: what the cart holds, and where to pick it up
+  take.mark("cart");
+  await take.box("cartItem", page.getByText("Capim-limão").first().locator("xpath=ancestor::*[.//button][1]"));
+  await take.box("pickup", page.getByRole("button", { name: /Retirar na recepção/ }));
   await human.click(page.getByRole("button", { name: /Retirar na recepção/ }));
   await human.wait(500);
   await human.click(page.getByRole("button", { name: /^Continuar$/ }));
@@ -79,10 +88,16 @@ if (which === "secret-detail" || which === "all") {
   await human.type("Gravação");
   await human.click(page.getByPlaceholder("Seu sobrenome"));
   await human.type("portfólio");
-  await human.wait(1400);
+  await human.wait(600);
+  // detail 3: Pix, the Mercado Pago step, and why it asks for CPF
+  take.mark("pix");
+  await take.box("pixOption", page.getByRole("button", { name: /Pix agora/ }));
+  await take.box("pixNote", page.getByText(/exigidos pelo/).first());
+  await take.box("name", page.getByPlaceholder("Seu nome"));
+  await human.wait(900);
   take.mark("out");
   const t = await take.stop();
-  results["secret-detail"] = { ...encode(t, `${OUT}secret-detail`, { from: t.marks.in - 0.3, to: t.marks.out }), blocked: blocked() };
+  results["secret-detail"] = { ...encode(t, `${OUT}secret-detail`, { from: t.marks.in - 0.3, to: t.marks.out, stills: { variant: t.marks.variant, cart: t.marks.cart, pix: t.marks.pix } }), blocked: blocked() };
   discard(t);
   await browser.close();
 }
@@ -118,15 +133,23 @@ if (which === "motel-detail" || which === "all") {
   const take = await record();
   await human.wait(900);
   take.mark("in");
+  // the first row of suites, whose prices change with the day
+  const price = page.getByText(/^R\$\s?\d/).first();
+  await take.box("tabs", weekend.locator(".."));
+  await take.box("price", price);
+  await take.box("card", price.locator("xpath=ancestor::*[.//img][1]"));
+  take.mark("weekday");
   await human.click(weekend);
   await human.wait(1500);
+  take.mark("weekend");
   await human.click(page.getByRole("button", { name: /Feriados/ }).first());
   await human.wait(1500);
+  take.mark("holiday");
   await human.click(page.getByRole("button", { name: /Segunda a quinta/ }).first());
   await human.wait(1400);
   take.mark("out");
   const t = await take.stop();
-  results["motel-detail"] = { ...encode(t, `${OUT}dallas-motel-detail`, { from: t.marks.in - 0.3, to: t.marks.out }), blocked: blocked() };
+  results["motel-detail"] = { ...encode(t, `${OUT}dallas-motel-detail`, { from: t.marks.in - 0.3, to: t.marks.out, stills: { weekday: t.marks.weekday, weekend: t.marks.weekend + 1.2, holiday: t.marks.holiday + 1.2 } }), blocked: blocked() };
   discard(t);
   await browser.close();
 }
