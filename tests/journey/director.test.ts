@@ -89,4 +89,14 @@ describe("the director", () => {
     expect(layerMix("cut", 0.49).inOpacity).toBe(0);
     expect(layerMix("cut", 0.5).inOpacity).toBe(1);
   });
+
+  it("steps the frame aside while the project cards change places", () => {
+    expect(layerMix("swap", 0).box).toBe(1);
+    expect(layerMix("swap", 0.3).box).toBe(0);
+    expect(layerMix("swap", 0.6).box).toBe(0);
+    expect(layerMix("swap", 1).box).toBe(1);
+    // the new screen is the one that comes back
+    expect(layerMix("swap", 0.8).inOpacity).toBe(1);
+    expect(layerMix("rack", 0.5).box).toBe(1);
+  });
 });

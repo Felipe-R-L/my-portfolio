@@ -66,6 +66,8 @@ export function JourneyFrame() {
       if (box.style.getPropertyValue("--inv") !== inv) box.style.setProperty("--inv", inv);
 
       const m = layerMix(s.gesture, s.mix);
+      const boxOpacity = s.prev ? m.box.toFixed(3) : "1";
+      if (box.style.opacity !== boxOpacity) box.style.opacity = boxOpacity;
       layerRefs.current.forEach((el, id) => {
         const isIn = id === s.content;
         const isOut = id === s.prev;

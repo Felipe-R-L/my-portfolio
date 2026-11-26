@@ -79,7 +79,8 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
         // the last one ends as the stage lets go: Em uso takes the frame from there (T3)
         end: top + (i + 1) * beatPx,
         arrive: i === 0 ? (0.5 * vh + ARRIVE * beatPx) / (0.5 * vh + beatPx) : ARRIVE,
-        gesture: "rack" as const,
+        // the first comes into focus out of the story; between projects the cards change places
+        gesture: i === 0 ? ("rack" as const) : ("swap" as const),
         slot,
       }));
     });
@@ -127,10 +128,13 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
         const moving = i > 0 && arrive > 0 && arrive < 1;
         const swap = ease(clamp01(arrive / 0.55));
         const pass = ease(clamp01((arrive - 0.68) / 0.32));
+        // drawn in depth order: the old card is nearer until they cross
+        const nearer = swap < 0.5 ? "ghost" : "curtain";
         ghosts.forEach((el, k) => {
           const on = moving && k === i - 1 && arrive < 0.6;
           el.style.visibility = on ? "visible" : "hidden";
           if (!on) return;
+          el.style.zIndex = nearer === "ghost" ? "2" : "1";
           el.style.opacity = (1 - clamp01((arrive - 0.2) / 0.35)).toFixed(3);
           el.style.transform = `translate3d(${(-36 * swap).toFixed(2)}%, 0, ${(-560 * swap).toFixed(1)}px) rotateY(${(30 * swap).toFixed(2)}deg)`;
         });
@@ -139,6 +143,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
           el.style.visibility = on ? "visible" : "hidden";
           if (!on) return;
           const back = 1 - swap;
+          el.style.zIndex = nearer === "curtain" ? "2" : "1";
           el.style.opacity = (clamp01(arrive / 0.18) * (1 - pass)).toFixed(3);
           el.style.transform = `translate3d(${(36 * back).toFixed(2)}%, 0, ${(-560 * back + 260 * pass).toFixed(1)}px) rotateY(${(-30 * back).toFixed(2)}deg)`;
         });

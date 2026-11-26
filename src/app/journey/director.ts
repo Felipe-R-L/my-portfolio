@@ -22,7 +22,12 @@ export type Gesture =
       the old one sinks back and darkens. */
   | "rack"
   /** A straight cut, halfway through the arrival. */
-  | "cut";
+  | "cut"
+  /** Cards changing places (Projetos): the frame steps aside while the
+      scene's own 3D cards cross (the old screen falls back, the next one's
+      title card comes forward), and is back behind the title card as it
+      passes towards the reader. */
+  | "swap";
 
 export type Beat = {
   /** Content id (see journey/contents.ts). */
@@ -107,9 +112,11 @@ export function frameAt(scroll: number, beats: readonly Beat[]): FrameState {
 
 /** Opacity and scale of the incoming and outgoing pictures at arrival `mix`. */
 export function layerMix(gesture: Gesture, mix: number) {
-  if (gesture === "cut") {
+  if (gesture === "cut" || gesture === "swap") {
     const on = mix >= 0.5 ? 1 : 0;
-    return { inOpacity: on, inScale: 1, inSharp: 1, outOpacity: 1 - on, outScale: 1, outDim: 0 };
+    // swap: gone as the old card starts to fall back, back as the title card passes
+    const box = gesture === "cut" ? 1 : mix < 0.06 ? 1 - mix / 0.06 : clamp01((mix - 0.66) / 0.14);
+    return { inOpacity: on, inScale: 1, inSharp: 1, outOpacity: 1 - on, outScale: 1, outDim: 0, box };
   }
   const e = easeInOut(mix);
   return {
@@ -122,5 +129,6 @@ export function layerMix(gesture: Gesture, mix: number) {
     outOpacity: 1 - e,
     outScale: 1 - 0.1 * e,
     outDim: 0.6 * e,
+    box: 1,
   };
 }

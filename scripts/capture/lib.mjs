@@ -204,12 +204,15 @@ export function encode(take, outBase, { from, to, fps = 30, crf = { mp4: 27, web
   mkdirSync(dirname(outBase), { recursive: true });
   const out = {};
   for (const w of [1440, 720]) {
-    const vf = `fps=${fps},scale=${w}:-2:flags=lanczos,format=yuv420p`;
+    // limited range, tagged BT.709: the JPEG frames are full range, and
+    // Chrome refuses to decode a full-range VP9 (PIPELINE_ERROR_DECODE)
+    const vf = `fps=${fps},scale=${w}:-2:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p`;
+    const color = ["-color_range", "tv", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709"];
     const mp4 = `${outBase}-${w}.mp4`;
     const webm = `${outBase}-${w}.webm`;
-    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", list, "-vf", vf, "-an",
+    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", list, "-vf", vf, "-an", ...color,
       "-c:v", "libx264", "-preset", "slow", "-crf", String(crf.mp4 + (w === 720 ? 1 : 0)), "-movflags", "+faststart", mp4]);
-    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", list, "-vf", vf, "-an",
+    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", list, "-vf", vf, "-an", ...color,
       "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", String(crf.webm + (w === 720 ? 2 : 0)), "-row-mt", "1", "-deadline", "good", "-cpu-used", "2", webm]);
     out[w] = { mp4: statSync(mp4).size, webm: statSync(webm).size };
   }

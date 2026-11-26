@@ -90,6 +90,9 @@ export function MotionShot({
   const still = useStillOnly();
   const [meta, setMeta] = useState<ClipMeta | null>(null);
   const [armed, setArmed] = useState(false);
+  // a decode error on the webm does not move the browser on to the next
+  // <source>, so the clip would stay on its poster: drop the webm and reload
+  const [noWebm, setNoWebm] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const worldRef = useRef<HTMLDivElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
@@ -245,7 +248,7 @@ export function MotionShot({
     return () => cancelAnimationFrame(raf);
     // render reads refs; it changes with meta, plan and the language only
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active, armed, meta, plan, playable]);
+  }, [active, armed, meta, plan, playable, noWebm]);
 
   const file = wide ? sources.w1440 : sources.w720;
   const showVideo = armed && playable;
@@ -255,8 +258,16 @@ export function MotionShot({
       <div ref={worldRef} className="ms-world">
         <div ref={screenRef} className="ms-screen">
           {showVideo ? (
-            <video ref={videoRef} poster={sources.poster} muted playsInline preload="auto">
-              {file.webm && <source src={file.webm} type="video/webm" />}
+            <video
+              key={noWebm ? "mp4" : "any"}
+              ref={videoRef}
+              poster={sources.poster}
+              muted
+              playsInline
+              preload="auto"
+              onError={() => setNoWebm(true)}
+            >
+              {file.webm && !noWebm && <source src={file.webm} type="video/webm" onError={() => setNoWebm(true)} />}
               <source src={file.mp4} type="video/mp4" />
             </video>
           ) : (
