@@ -23,7 +23,8 @@
   width: 100vw;
   aspect-ratio: 16 / 10;
   transform-origin: 0 0;
-  border-radius: 28px;
+  /* --inv is 1 / scale (set with the transform): the corner lands at 18 px */
+  border-radius: calc(18px * var(--inv, 1));
   overflow: hidden;
   background: #05070a;
   will-change: transform;
@@ -78,7 +79,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  border: 1.5px solid rgb(159 195 214 / 0.55);
+  border: calc(1.5px * var(--inv, 1)) solid rgb(159 195 214 / 0.55);
   pointer-events: none;
   z-index: 3;
 }

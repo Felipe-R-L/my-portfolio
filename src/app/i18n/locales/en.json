@@ -184,29 +184,6 @@
     "close": "Close",
     "back": "Back to blog"
   },
-  "process": {
-    "lead": "No surprises halfway through: you know what you're getting before we commit.",
-    "gate": "Nothing starts without your OK.",
-    "steps": {
-      "talk": {
-        "title": "Talk",
-        "description": "Tell me what you need, over WhatsApp or a call. No commitment."
-      },
-      "draft": {
-        "title": "Draft",
-        "description": "You see a preview and the quote before deciding anything."
-      },
-      "build": {
-        "title": "Build",
-        "description": "I build in stages, and you follow along and adjust on the way."
-      },
-      "launch": {
-        "title": "Launch & support",
-        "description": "I put it live on your domain and stay around for tweaks."
-      }
-    },
-    "title": "How it works"
-  },
   "story": {
     "title": "Who I am",
     "label": "My story",
