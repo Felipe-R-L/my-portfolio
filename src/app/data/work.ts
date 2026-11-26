@@ -36,6 +36,8 @@ export type WorkItem = {
   /** Recorded loops: the card's, and the longer one inside the case. Absent
       until captured; the image stands in. */
   video?: { card?: ProjectVideoSources; detail?: ProjectVideoSources };
+  /** The clip presented with motion in the frame and the case (data/motion.ts). */
+  motion?: string;
 };
 
 const P = "/assets/projects";
@@ -66,6 +68,7 @@ export const WORK: readonly WorkItem[] = [
     parts: ["context", "problem", "decision", "result", "now"],
     // the training organization, made-up data; the detail is recorded offline
     video: { card: clip("dallas-sync-card"), detail: clip("dallas-sync-offline") },
+    motion: "dallas-sync-card",
   },
   {
     id: "secret",
@@ -77,6 +80,7 @@ export const WORK: readonly WorkItem[] = [
     parts: ["context", "problem", "decision", "result"],
     // the open (SFW) catalogue; the detail stops at the Pix form, never submitted
     video: { card: clip("secret-detail"), detail: clip("secret-detail") },
+    motion: "secret-detail",
   },
   {
     id: "dallas_motel",
@@ -87,6 +91,7 @@ export const WORK: readonly WorkItem[] = [
     stack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase", "Vercel"],
     parts: ["context", "problem", "decision", "result"],
     video: { card: clip("dallas-motel-detail"), detail: clip("dallas-motel-detail") },
+    motion: "dallas-motel-detail",
   },
 ];
 

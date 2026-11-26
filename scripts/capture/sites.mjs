@@ -149,7 +149,7 @@ if (which === "motel-detail" || which === "all") {
   await human.wait(1400);
   take.mark("out");
   const t = await take.stop();
-  results["motel-detail"] = { ...encode(t, `${OUT}dallas-motel-detail`, { from: t.marks.in - 0.3, to: t.marks.out, stills: { weekday: t.marks.weekday, weekend: t.marks.weekend + 1.2, holiday: t.marks.holiday + 1.2 } }), blocked: blocked() };
+  results["motel-detail"] = { ...encode(t, `${OUT}dallas-motel-detail`, { from: t.marks.in - 0.3, to: t.marks.out, stills: { weekday: t.marks.weekday, weekend: t.marks.weekend, holiday: t.marks.holiday } }), blocked: blocked() };
   discard(t);
   await browser.close();
 }

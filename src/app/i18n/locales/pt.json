@@ -239,6 +239,11 @@
           "decision": "Escolhi construir o sistema offline-first, com check-in, comanda e pagamento gravando no próprio computador da recepção e entrando numa fila que o servidor reconcilia quando a rede volta, e descartei o caminho mais comum de um sistema que só funciona conectado, porque a internet do motel cai e o turno não pode parar esperando por ela. Pelo mesmo motivo, quem está aprendendo usa um modo treino que é uma organização separada, com as mesmas telas e nenhum dado real, já que um erro de treino lançado no sistema em uso viraria dinheiro errado no caixa.",
           "result": "A recepção continua lançando check-in, comanda e pagamento sem internet, vê a fila do que ainda não subiu e sincroniza quando a rede volta, e as recepcionistas aprendem no modo treino sem tocar em nenhum dado do motel.",
           "now": "A camada que estou construindo agora é a de gestão e inteligência, com um painel para o dono em que cada indicador é composto só de métricas medidas e abre até a transação que o originou, enquanto projeções e sugestões ficam numa camada acima que nunca entra no número."
+        },
+        "motion": {
+          "map": "Check-in direto pelo mapa das suítes",
+          "plate": "A placa vira o identificador da estadia",
+          "clock": "O relógio do quarto já está correndo"
         }
       },
       "dallas_motel": {
@@ -249,6 +254,11 @@
           "problem": "Quem procura motel decide pelo celular antes de sair de casa, e como o preço muda conforme a suíte, o dia da semana, o feriado e as horas de permanência, toda dúvida virava mensagem no WhatsApp, a recepção passava o dia respondendo a mesma pergunta e muita gente desistia antes de perguntar.",
           "decision": "Montei o site com as páginas geradas já com preços e cardápio escritos no HTML e descartei o site React comum, que só desenha o conteúdo no navegador, porque os assistentes de IA que já respondem boa parte da busca local não executam JavaScript e encontrariam uma página em branco. Se o banco não responde durante a montagem, a publicação para e o site anterior continua no ar, já que uma home sem preços seria pior do que uma home desatualizada por alguns minutos.",
           "result": "O motel passou a ter um endereço próprio, com o preço certo calculado na hora antes de qualquer conversa, reservas que chegam no WhatsApp já com a suíte e as horas escolhidas e um painel em que a equipe muda preços, feriados e cardápio sem chamar ninguém."
+        },
+        "motion": {
+          "weekday": "Segunda a quinta",
+          "weekend": "Fim de semana",
+          "holiday": "Feriados"
         }
       },
       "secret": {
@@ -259,6 +269,11 @@
           "problem": "Uma loja de produtos íntimos vende melhor quando o cliente sente que ninguém vai saber do pedido, então a discrição precisava estar em cada etapa da compra.",
           "decision": "Escolhi o Mercado Pago, com Pix e cartão, além da opção de pagar na entrega com cartão ou dinheiro, e não deixei a confirmação do pagamento depender só do aviso que o Mercado Pago manda ao servidor, porque um aviso perdido deixaria um pedido pago parado como pendente, então a loja também consulta o pagamento até ele se resolver.",
           "result": "O cliente compra sem expor quem é, com verificação de idade na entrada, avaliações anônimas e pedidos rastreáveis por código, e eu acompanho cada pedido do pagamento à entrega num painel só."
+        },
+        "motion": {
+          "variant": "Cada variante com o seu preço",
+          "cart": "Carrinho sem criar conta",
+          "pix": "Pix pelo Mercado Pago"
         }
       }
     },

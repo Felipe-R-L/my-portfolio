@@ -239,6 +239,11 @@
           "decision": "I chose to build it offline-first, with check-in, tabs and payments saved on the front desk's own computer and placed in a queue that the server reconciles once the network is back, and I ruled out the more common system that only works while connected, since the motel's internet does drop and a shift cannot wait for it. For the same reason, whoever is learning works in a training mode that is a separate organization, with the same screens and no real data, so a practice mistake never turns into wrong money in the till.",
           "result": "The front desk keeps recording check-ins, tabs and payments with no internet, sees the queue of what has not gone up yet and syncs once the network returns, while new receptionists learn in training mode without touching any of the motel's data.",
           "now": "The layer I am building now is management and intelligence, starting with an owner's dashboard in which every indicator is made only of measured metrics and opens down to the transaction behind it, while projections and suggestions live in a layer above that never enters the number."
+        },
+        "motion": {
+          "map": "Check-in straight from the room map",
+          "plate": "The plate becomes the stay's identifier",
+          "clock": "The room's clock is already running"
         }
       },
       "dallas_motel": {
@@ -249,6 +254,11 @@
           "problem": "People looking for a motel decide on their phone before leaving home, and since the price changes with the suite, the day of the week, holidays and the hours of the stay, every question became a WhatsApp message, the front desk spent the day answering the same question and many people gave up before asking.",
           "decision": "I built the site with pages generated with prices and the menu already written into the HTML, and I ruled out the usual React site that only draws its content in the browser, since the AI assistants that already answer much of local search do not run JavaScript and would find a blank page. If the database does not answer during the build, publishing stops and the previous site stays up, which is better than a home page without prices.",
           "result": "The motel now has an address of its own, with the right price calculated on the spot before any conversation, bookings that arrive on WhatsApp with the suite and the hours already chosen, and a panel in which the staff change prices, holidays and the menu without calling anyone."
+        },
+        "motion": {
+          "weekday": "Monday to Thursday",
+          "weekend": "Weekend",
+          "holiday": "Holidays"
         }
       },
       "secret": {
@@ -259,6 +269,11 @@
           "problem": "An intimate products store sells better when customers feel nobody will know about the order, so discretion had to be part of every step of the purchase.",
           "decision": "I chose Mercado Pago, with Pix and card, plus the option to pay on delivery by card or cash, and I did not let the payment confirmation depend only on the notice Mercado Pago sends, since a lost notice would leave a paid order stuck as pending, so the store also checks the payment until it settles.",
           "result": "Customers buy without exposing who they are, with age verification at the door, anonymous reviews and orders tracked by a code, and I follow each order from payment to delivery in a single panel."
+        },
+        "motion": {
+          "variant": "Each variant with its own price",
+          "cart": "A cart with no account to create",
+          "pix": "Pix through Mercado Pago"
         }
       }
     },

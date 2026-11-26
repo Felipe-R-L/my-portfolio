@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import type Lenis from "lenis";
 
 import { ProjectVideo } from "../components/ProjectVideo";
+import { MotionShot } from "../components/motion/MotionShot";
 import type { WorkItem } from "../data/work";
 import type { Box } from "../journey/director";
 import { useJourneyMode } from "../journey/useJourneyMode";
@@ -180,7 +181,11 @@ export function CaseLayer({
         </button>
 
         <div ref={mediaRef} className="case-media" style={{ aspectRatio: String(shown.video?.detail || shown.video?.card ? 1.6 : (shown.image.ratio ?? 1.6)) }}>
-          <ProjectVideo sources={shown.video?.detail ?? shown.video?.card} image={shown.image} active wide />
+          {shown.motion && shown.video?.card ? (
+            <MotionShot clip={shown.motion} textBase={`work.items.${shown.id}.motion`} sources={shown.video.card} active wide />
+          ) : (
+            <ProjectVideo sources={shown.video?.detail ?? shown.video?.card} image={shown.image} active wide />
+          )}
         </div>
         {shown.illustrative && <p className="case-note">{t(`${base}.note`)}</p>}
 
