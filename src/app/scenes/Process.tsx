@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Blocks, FilePenLine, MessagesSquare, type LucideIcon } from "lucide-react";
 
 import { pageTop, registerBeats } from "../journey/beats";
 import type { Box } from "../journey/director";
@@ -10,6 +11,9 @@ import "./Process.css";
 
 /** The three steps, in order. Prose: `plano.steps.<id>`; no step promises a deadline. */
 export const STEPS = ["talk", "proposal", "start"] as const;
+
+/** What each step is, at a glance: a conversation, a written proposal, a build in stages. */
+const ICONS: Record<(typeof STEPS)[number], LucideIcon> = { talk: MessagesSquare, proposal: FilePenLine, start: Blocks };
 
 /**
  * The scenery behind the line: Diamante, a white town on the Calabrian coast
@@ -55,6 +59,11 @@ export function Process() {
         mode === "swipe"
           ? { x: lineBox.x - MARKER.w / 2, y: lineBox.y + k * lineBox.h - MARKER.h / 2, w: MARKER.w, h: MARKER.h }
           : { x: lineBox.x + k * lineBox.w - MARKER.w / 2, y: lineBox.y - MARKER.h / 2, w: MARKER.w, h: MARKER.h };
+      // how much of the line the marker has covered: the thread fills behind it
+      const thread = (k: number) => {
+        line.style.setProperty("--k", k.toFixed(4));
+        line.style.setProperty("--len", `${line.offsetWidth}px`);
+      };
       const reach = (i: number) => {
         if (i !== reachedRef.current) {
           reachedRef.current = i;
@@ -67,7 +76,7 @@ export function Process() {
       if (mode === "swipe") {
         // the marker rides the line down, held at the middle of the screen
         // between the first stop and the last; each stop sits at its step
-        const stops = Array.from(line.children) as HTMLElement[];
+        const stops = Array.from(line.querySelectorAll<HTMLElement>(".plano-stop"));
         const center = (el: HTMLElement) => {
           const r = el.getBoundingClientRect();
           return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
@@ -97,7 +106,17 @@ export function Process() {
       const pullFrom = proof ? pageTop(proof) + proof.getBoundingClientRect().height - vh : stuck - vh;
       return [
         // T4: the pull-back, from the front desk's screen down to the marker at the first stop
-        { content: "offline", start: pullFrom, end: stuck, arrive: 1, gesture: "cut" as const, slot: () => markerAt(0, lineBox) },
+        {
+          content: "offline",
+          start: pullFrom,
+          end: stuck,
+          arrive: 1,
+          gesture: "cut" as const,
+          slot: () => {
+            thread(0);
+            return markerAt(0, lineBox);
+          },
+        },
         // the travel along the line
         {
           content: "offline",
@@ -108,6 +127,7 @@ export function Process() {
           slot: () => {
             const k = clamp01((window.scrollY - stuck) / travel);
             mark(k);
+            thread(k);
             return markerAt(k, lineBox);
           },
         },
@@ -120,6 +140,7 @@ export function Process() {
           gesture: "cut" as const,
           slot: () => {
             mark(1);
+            thread(1);
             return markerAt(1, lineBox);
           },
         },
@@ -141,7 +162,7 @@ export function Process() {
         const r = el.getBoundingClientRect();
         return r.top + r.height / 2 - top;
       });
-      Array.from(line.children).forEach((stop, i) => (stop as HTMLElement).style.setProperty("--at", `${ys[i]}px`));
+      line.querySelectorAll<HTMLElement>(".plano-stop").forEach((stop, i) => stop.style.setProperty("--at", `${ys[i]}px`));
       line.style.setProperty("--from", `${ys[0]}px`);
       line.style.setProperty("--to", `${ys[ys.length - 1]}px`);
     };
@@ -153,8 +174,10 @@ export function Process() {
     const onScroll = () => {
       if (line.offsetHeight === 0) return; // not laid out
       const mid = window.innerHeight / 2 + 1;
-      const n = Array.from(line.children).filter((el) => el.getBoundingClientRect().top <= mid).length;
+      const ys = Array.from(line.querySelectorAll(".plano-stop")).map((el) => el.getBoundingClientRect().top);
+      const n = ys.filter((y) => y <= mid).length;
       const i = Math.max(0, n - 1);
+      line.style.setProperty("--k", clamp01((mid - ys[0]) / Math.max(1, ys[ys.length - 1] - ys[0])).toFixed(4));
       if (i !== reachedRef.current) {
         reachedRef.current = i;
         setReached(i);
@@ -197,6 +220,12 @@ export function Process() {
     <ol ref={stepsRef} className="steps">
       {STEPS.map((id, i) => (
         <li key={id} className="step" data-reached={i <= reached ? "true" : "false"}>
+          <span className="step-icon" aria-hidden="true">
+            {(() => {
+              const Icon = ICONS[id];
+              return <Icon size={24} strokeWidth={1.6} />;
+            })()}
+          </span>
           <span className="step-n" aria-hidden="true">
             {String(i + 1).padStart(2, "0")}
           </span>
@@ -228,6 +257,9 @@ export function Process() {
           <div className="plano-route">
             {/* the line the marker rides, with one stop per step */}
             <div ref={lineRef} className="plano-line" aria-hidden="true">
+              {/* the thread: solid behind the marker, a soft light where it is */}
+              <span className="plano-fill" />
+              <span className="plano-head" />
               {STEPS.map((id, i) => (
                 <span key={id} className="plano-stop" data-reached={i <= reached ? "true" : "false"} />
               ))}

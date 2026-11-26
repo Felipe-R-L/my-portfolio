@@ -68,22 +68,45 @@
   gap: 2.5rem;
 }
 
-/* The line: a hairline across, with a stop under each step. */
+/* The line: dashed ahead of the marker, a solid thread behind it (--k, the
+   share covered, set by the beats), and a soft light where the marker is. */
 .plano-line {
+  --k: 0;
   position: relative;
   display: grid;
   grid-template-columns: repeat(var(--stops), minmax(0, 1fr));
-  height: 1px;
+  height: 2px;
   margin: 0 calc(100% / var(--stops) / 2);
-  background: var(--hairline);
+  background: repeating-linear-gradient(90deg, var(--hairline) 0 7px, transparent 7px 14px);
+}
+
+.plano-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(159 195 214 / 0.35), var(--diamante));
+  transform: scaleX(var(--k));
+  transform-origin: 0 50%;
+  box-shadow: 0 0 12px rgb(159 195 214 / 0.35);
+}
+
+.plano-head {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 140px;
+  height: 40px;
+  margin: -20px 0 0 -70px;
+  background: radial-gradient(closest-side, rgb(159 195 214 / 0.45), transparent);
+  transform: translateX(calc(var(--k) * var(--len, 0px)));
+  pointer-events: none;
 }
 
 .plano-stop {
   position: absolute;
   top: 50%;
-  width: 9px;
-  height: 9px;
-  margin: -4.5px 0 0 -4.5px;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
   border-radius: 50%;
   background: #23292f;
   transition: background-color 0.4s var(--ease-travel);
@@ -95,6 +118,37 @@
 
 .plano-stop[data-reached="true"] {
   background: var(--diamante);
+}
+
+/* a ring goes out from a stop the moment the marker reaches it */
+.plano-stop::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1.5px solid var(--diamante);
+  opacity: 0;
+}
+
+.plano-stop[data-reached="true"]::after {
+  animation: plano-reach 0.9s var(--ease-arrive) 1;
+}
+
+@keyframes plano-reach {
+  from {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plano-stop[data-reached="true"]::after {
+    animation: none;
+  }
 }
 
 .steps {
@@ -112,6 +166,50 @@
   gap: 0.5rem;
   text-align: center;
   justify-items: center;
+  padding: 1.4rem 1.25rem 1.6rem;
+  border-radius: 18px;
+  border: 1px solid var(--hairline);
+  background: rgb(7 9 12 / 0.62);
+  transition: border-color 0.5s var(--ease-travel);
+}
+
+.step[data-reached="true"] {
+  border-color: rgb(159 195 214 / 0.32);
+}
+
+/* the step's mark: lit in the accent once the marker gets there */
+.step-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 0.35rem;
+  border-radius: 14px;
+  border: 1px solid var(--hairline);
+  background: rgb(255 255 255 / 0.03);
+  color: var(--ink-faint);
+  transition: color 0.5s var(--ease-travel), border-color 0.5s var(--ease-travel), transform 0.6s var(--ease-arrive);
+}
+
+.step-icon::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(159 195 214 / 0.28), transparent);
+  opacity: 0;
+  transition: opacity 0.6s var(--ease-travel);
+}
+
+.step[data-reached="true"] .step-icon {
+  color: var(--diamante);
+  border-color: rgb(159 195 214 / 0.55);
+  transform: translateY(-3px);
+}
+
+.step[data-reached="true"] .step-icon::before {
+  opacity: 1;
 }
 
 .step-n {
@@ -167,9 +265,9 @@
 
 .plano[data-mode="swipe"] .plano-line,
 .plano[data-mode="list"] .plano-line {
-  width: 1px;
+  width: 2px;
   height: auto;
-  margin: 0 0 0 calc(1.25rem - 0.5px);
+  margin: 0 0 0 calc(1.25rem - 1px);
   grid-template-columns: none;
   /* the hairline runs from the first step's title to the last one's */
   background: linear-gradient(
@@ -179,6 +277,26 @@
     var(--hairline) var(--to, 100%),
     transparent var(--to, 100%)
   );
+}
+
+/* the thread runs down from the first stop, as far as the marker */
+.plano[data-mode="swipe"] .plano-fill,
+.plano[data-mode="list"] .plano-fill {
+  inset: auto 0 auto 0;
+  top: var(--from, 0);
+  height: calc(var(--to, 100%) - var(--from, 0px));
+  background: linear-gradient(180deg, rgb(159 195 214 / 0.35), var(--diamante));
+  transform: scaleY(var(--k));
+  transform-origin: 50% 0;
+}
+
+.plano[data-mode="swipe"] .plano-head,
+.plano[data-mode="list"] .plano-head {
+  display: none;
+}
+
+.plano[data-mode="list"] .plano-line {
+  --k: 1;
 }
 
 /* each stop is level with its step's title (Process.tsx measures --at) */
@@ -198,6 +316,7 @@
 .plano[data-mode="list"] .step {
   text-align: left;
   justify-items: start;
+  padding: 1.1rem 1.1rem 1.25rem;
 }
 
 
