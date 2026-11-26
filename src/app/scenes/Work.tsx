@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 
 import { WORK, type WorkItem } from "../data/work";
 import { boxOf, notify, pageTop, registerBeats } from "../journey/beats";
+import type { Box } from "../journey/director";
 import { SCROLL } from "../motion/tokens";
 import { ScrollTrigger } from "../scroll/gsap";
 import { clamp01 } from "../scroll/math";
 import { useJourneyMode } from "../journey/useJourneyMode";
-import { WorkCase } from "./WorkCase";
 import "./Work.css";
 
 /** Share of a destination's scroll spent arriving; the rest holds still. */
@@ -24,7 +24,16 @@ const ARRIVE = SCROLL.destination.approach / (SCROLL.destination.approach + SCRO
  *   are a native horizontal swipe; swiping changes what the frame shows.
  * - Reduced motion: a plain list, each with its own picture, no frame.
  */
-export function Work() {
+/** Where the journey's frame is now, if it is showing this destination. */
+function frameBox(id: string): Box | null {
+  const jf = document.querySelector<HTMLElement>(".jf");
+  const box = document.querySelector(".jf-box");
+  if (!jf || !box || jf.dataset.visible !== "true" || jf.dataset.content !== id) return null;
+  const r = box.getBoundingClientRect();
+  return { x: r.left, y: r.top, w: r.width, h: r.height };
+}
+
+export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box | null) => void }) {
   const { t } = useTranslation();
   const mode = useJourneyMode();
   const sectionRef = useRef<HTMLElement>(null);
@@ -33,7 +42,6 @@ export function Work() {
   const listRef = useRef<HTMLOListElement>(null);
   const swipeRef = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
-  const [open, setOpen] = useState<WorkItem | null>(null);
   const currentRef = useRef(0);
   currentRef.current = current;
 
@@ -155,7 +163,7 @@ export function Work() {
         <p className="dest-result">{t(`work.items.${w.id}.result`)}</p>
         {w.illustrative && <p className="dest-note">{t(`work.items.${w.id}.note`)}</p>}
         <div className="dest-actions">
-          <button type="button" className="dest-open" onClick={() => setOpen(w)} aria-label={t("work.case.open_aria", { name })}>
+          <button type="button" className="dest-open" onClick={() => onOpenCase?.(w, frameBox(w.id))} aria-label={t("work.case.open_aria", { name })}>
             {t("work.case.open")}
           </button>
           <a className="dest-link" href={w.href} target="_blank" rel="noreferrer" aria-label={t("work.visit_aria", { name })}>
@@ -233,7 +241,6 @@ export function Work() {
         </div>
       )}
 
-      <WorkCase item={open} onClose={() => setOpen(null)} />
     </section>
   );
 }

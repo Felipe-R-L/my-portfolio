@@ -47,6 +47,7 @@ vi.mock('../../src/app/scenes/Talk', () => ({ Talk: stub('talk') }))
 vi.mock('../../src/app/scroll/gsap', () => ({
   ScrollTrigger: {
     refresh: vi.fn(),
+    defaults: vi.fn(),
     create: vi.fn(() => ({ kill: vi.fn() })),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
