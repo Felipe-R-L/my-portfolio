@@ -92,3 +92,12 @@
       transform 0.45s var(--ease-arrive);
   }
 }
+
+/* The screen's own cold light goes out with the telemetry's light change. */
+.jf-box {
+  transition: box-shadow 0.6s var(--ease-travel);
+}
+
+.jf[data-content="offline"] .jf-box {
+  box-shadow: 0 30px 120px -30px rgb(214 218 222 / 0.05);
+}

@@ -1,195 +1,131 @@
-/* The proof: three figures, set large, in the page's one typeface. */
+/*
+ * Em uso. Like the destinations, the scene draws words only and leaves the
+ * picture to the journey's frame; its stage uses the same grid, so the slot
+ * lands on the exact box the destinations gave the frame (T3 does not move it).
+ * Transparent: the frame is painted beneath the page.
+ */
 
 .proof {
   position: relative;
-  z-index: 10;
-  /* the work unpins into a full breath of page before the figures */
-  padding: clamp(8rem, 24vh, 14rem) var(--gutter) clamp(3rem, 8vh, 5rem);
-  background: #050608;
-  color: #eef1f6;
-  border-top: 1px solid rgb(255 255 255 / 0.08);
+  color: var(--ink);
 }
 
-.proof-head {
+.proof-track {
+  position: relative;
+  height: calc(var(--hold) + 100svh);
+}
+
+.proof-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
   display: grid;
-  gap: 0.9rem;
-  max-width: 48rem;
-  margin-bottom: clamp(3rem, 8vh, 5rem);
+  grid-template-columns: minmax(0, 34fr) minmax(0, 60fr);
+  column-gap: clamp(2rem, 4vw, 4.5rem);
+  padding: clamp(5.5rem, 12vh, 8rem) var(--gutter) clamp(2rem, 6vh, 4rem);
+  padding-left: calc(var(--gutter) + 1.5rem);
+}
+
+.proof-words {
+  align-self: center;
+  max-width: 34rem;
 }
 
 .proof-title {
-  margin: 0;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(2.75rem, 5vw, 4.5rem);
+  margin: 0 0 2rem;
+  font-family: var(--serif);
   font-weight: 400;
-  letter-spacing: -0.01em;
+  font-size: clamp(2.5rem, 4.2vw, 4rem);
   line-height: 1;
 }
 
-.proof-lead {
-  margin: 0;
-  max-width: 52ch;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: rgb(178 186 199);
-}
-
-.proof-figures {
+/* The log: a date or a state, then the fact. */
+.log {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2rem clamp(1.5rem, 4vw, 4rem);
+  gap: 1.5rem;
   margin: 0;
 }
 
-/* The figure on top, its label under it: every number starts on the same
-   line, however many lines its label runs to. */
-.proof-figures {
-  perspective: 1100px;
+.log-entry {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--hairline);
 }
 
-/* each figure is a card that leans towards the pointer */
-.proof-figure {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.75rem;
-  padding: clamp(1.25rem, 2.2vw, 2rem);
-  border-radius: 18px;
-  border: 1px solid rgb(159 195 214 / 0.18);
-  background:
-    radial-gradient(circle at var(--gx, 20%) var(--gy, 0%), rgb(159 195 214 / 0.1), transparent 60%),
-    linear-gradient(160deg, #0d1219, #07090d);
-  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.9);
-  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.proof-figure[data-tilting="true"] {
-  transition: transform 0.12s linear;
-}
-
-.proof-value {
-  order: -1;
-  margin: 0;
-  white-space: nowrap;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(5rem, 12vw, 11rem);
-  font-weight: 400;
-  line-height: 0.85;
-  letter-spacing: -0.02em;
+.log-label {
+  color: var(--diamante);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 
-/* "<" and "s" are set smaller than the figure, so "< 2 s" reads as one
-   number with its unit, not three glyphs spaced apart. */
-.proof-affix {
-  font-size: 0.5em;
-  color: #9fc3d6;
-  letter-spacing: 0;
+.log-text {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.55;
 }
 
-/* Under each figure, the figure drawn: a square per company, a dot per
-   machine, and the report's wait as a bar that shrinks from 30 s to 2 s. */
-.proof-viz {
-  order: -2;
-  margin: 0 0 1.25rem;
-  min-height: 4.5rem;
-  display: grid;
-  align-content: end;
-  gap: 5px;
-}
-
-.proof-viz--empresas {
-  grid-template-columns: repeat(16, 12px);
-}
-
-.proof-viz--maquinas {
-  grid-template-columns: repeat(23, 7px);
-  gap: 6px;
-}
-
-.proof-unit {
-  display: block;
-  aspect-ratio: 1;
-  background: rgb(255 255 255 / 0.1);
-  transition: background-color 0.35s ease, transform 0.35s ease;
-}
-
-.proof-viz--maquinas .proof-unit {
-  border-radius: 999px;
-}
-
-.proof-unit[data-on="true"] {
-  background: #9fc3d6;
-}
-
-.proof-viz--consulta {
-  gap: 0.6rem;
-}
-
-.proof-bar {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 1.5rem;
-}
-
-.proof-bar-was,
-.proof-bar-now {
-  display: block;
-  height: 10px;
+/* The same column and the same 16:10 box as the destinations' slot. */
+.proof-side {
+  align-self: center;
+  justify-self: end;
   width: 100%;
-  transform-origin: 0 50%;
+  position: relative;
 }
 
-.proof-bar-was {
-  background: rgb(255 255 255 / 0.14);
+.proof-slot {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: calc(100svh - 9rem);
 }
 
-.proof-bar-now {
-  background: #9fc3d6;
-  transform: scaleX(0.0667);
+.proof-note {
+  margin: 0.75rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
 }
 
-.proof-bar-tag {
+.proof-side .proof-note {
   position: absolute;
-  right: 0;
-  top: -1.1rem;
-  font-size: 0.75rem;
-  color: rgb(160 168 182);
-}
-
-.proof-bar:last-child .proof-bar-tag {
-  right: auto;
+  top: 100%;
   left: 0;
 }
 
-.proof-label {
-  max-width: 34ch;
-  font-size: 1rem;
-  line-height: 1.45;
-  color: rgb(196 203 214);
+/* ---------- phone ---------- */
+
+.proof-phone {
+  padding: 5rem var(--gutter) 3rem;
 }
 
-.proof-foot {
-  margin: clamp(2.5rem, 6vh, 4rem) 0 0;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgb(255 255 255 / 0.08);
-  font-size: 1.0625rem;
-  color: rgb(196 203 214);
+.proof-phone .proof-slot {
+  margin-top: 0.5rem;
 }
 
-@media (min-width: 768px) {
-  .proof {
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+.proof-phone .log {
+  margin-top: 2rem;
 }
 
-@media (max-width: 767px) {
-  .proof-figures {
-    grid-template-columns: 1fr;
-  }
+/* ---------- reduced motion ---------- */
+
+.proof-plain {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 6rem var(--gutter) 4rem;
+}
+
+.proof-still {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 14px;
+  border: 1.5px solid rgb(159 195 214 / 0.4);
+}
+
+.proof-plain .log {
+  margin-top: 2rem;
 }
