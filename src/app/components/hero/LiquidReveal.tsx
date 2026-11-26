@@ -342,7 +342,6 @@ export function LiquidReveal({
     let stroke: { a: [number, number]; b: [number, number] } | null = null;
     let lastPt: [number, number] | null = null;
     const par = { x: 0, y: 0, tx: 0, ty: 0 };
-    let touched = false;
 
     let lastClient: [number, number] | null = null;
     const push = (x: number, y: number, byHand = true) => {
@@ -380,8 +379,9 @@ export function LiquidReveal({
     const onTouch = (e: TouchEvent) => {
       const t = e.touches[0];
       if (!t || !active.get() || !onPicture(t.clientX, t.clientY, e.target)) return;
-      touched = true;
-      push(...local(t.clientX, t.clientY));
+      // a finger on a phone is mostly scrolling: it pours colour but does not
+      // pull the depth along, or he slides against the city as the page moves
+      push(...local(t.clientX, t.clientY), false);
     };
     function onLeave() {
       lastPt = null;
@@ -432,7 +432,7 @@ export function LiquidReveal({
       read = 1 - read;
 
       // 2. depth follows the pointer, eased; on a phone it also sways a little
-      const sway = phone && !touched ? 1 : 0;
+      const sway = phone ? 1 : 0;
       const tx = par.tx + sway * Math.sin(t * 0.5) * 0.6;
       const ty = par.ty + sway * Math.cos(t * 0.37) * 0.3;
       par.x += (tx - par.x) * 0.06;

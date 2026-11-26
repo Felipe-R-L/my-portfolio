@@ -100,11 +100,21 @@ export function JourneyFrame() {
       schedule();
     };
 
+    // A phone's address bar showing or hiding changes only the height; the
+    // beats are rebuilt by ScrollTrigger's refresh when it matters, and doing
+    // it on every step of the bar made the frame jump (iOS Chrome).
+    let lastW = window.innerWidth;
+    const onResize = () => {
+      if (window.innerWidth === lastW && matchMedia("(pointer: coarse)").matches) return;
+      lastW = window.innerWidth;
+      rebuild();
+    };
+
     rebuild();
     const offBeats = onBeatsChange(rebuild);
     ScrollTrigger.addEventListener("refresh", rebuild);
     window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", rebuild);
+    window.addEventListener("resize", onResize);
     // images and fonts arriving change the page's height, and with it every
     // beat's scroll offsets; re-measure whenever that happens
     const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(rebuild) : null;
@@ -114,7 +124,7 @@ export function JourneyFrame() {
       offBeats();
       ScrollTrigger.removeEventListener("refresh", rebuild);
       window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", rebuild);
+      window.removeEventListener("resize", onResize);
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);

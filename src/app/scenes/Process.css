@@ -299,3 +299,37 @@
 .plano-stage .plano-route {
   opacity: calc(1 - var(--leave, 0));
 }
+
+/* Phone: the marker rides the line in the page. The rider spans the line
+   from the first stop to the last (plus the marker's height); the marker
+   inside is sticky at the middle of the screen, so it scrolls with the page
+   natively and stops on the first and the last stop. */
+.plano-rider {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--from, 0px) - 17.5px);
+  height: calc(var(--to, 100%) - var(--from, 0px) + 35px);
+  width: 56px;
+  margin-left: -28px;
+  pointer-events: none;
+}
+
+.plano-marker {
+  position: sticky;
+  top: calc(50svh - 17.5px);
+  display: block;
+  width: 56px;
+  height: 35px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #05070a;
+  border: 1.5px solid rgb(159 195 214 / 0.55);
+  box-shadow: 0 8px 30px -8px rgb(159 195 214 / 0.3);
+}
+
+.plano-marker img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}

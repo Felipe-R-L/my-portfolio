@@ -256,21 +256,37 @@
 }
 
 @media (max-width: 767px) {
-  .talk-runway {
-    height: 60svh;
-  }
-
   .talk-body {
     grid-template-columns: 1fr;
     gap: 3rem;
-    padding: 4rem var(--gutter) calc(6.5rem + env(safe-area-inset-bottom, 0px));
+    min-height: 0;
+    /* the title rises into the photo's dark foot */
+    margin-top: -5.5rem;
+    padding: 0 var(--gutter) calc(6.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   .talk-side {
     grid-template-columns: 1fr;
   }
+}
 
-  .talk-body::before {
-    background: linear-gradient(0deg, rgb(4 5 8 / 0.92) 0%, rgb(4 5 8 / 0.7) 60%, rgb(4 5 8 / 0.35) 100%);
-  }
+/* Phone: the photo is a picture in the page, his face in the upper part and
+   its foot fading into the page, so every word sits on the dark. */
+.talk-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  max-height: 78svh;
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+.talk-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 54% 30%;
 }

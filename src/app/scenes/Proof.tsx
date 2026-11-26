@@ -1,7 +1,8 @@
 import { useLayoutEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { boxOf, pageTop, registerBeats } from "../journey/beats";
+import { pageTop, registerBeats } from "../journey/beats";
+import { InlineFrame } from "../journey/InlineFrame";
 import type { Box } from "../journey/director";
 import { useJourneyMode } from "../journey/useJourneyMode";
 import { SCROLL } from "../motion/tokens";
@@ -38,16 +39,12 @@ export function Proof() {
   const slotRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    if (mode === "list") return;
+    // a phone has the picture in its slot (InlineFrame)
+    if (mode !== "scroll") return;
     return registerBeats("telemetria", () => {
       const slot = slotRef.current;
       if (!slot) return [];
       const vh = window.innerHeight;
-      if (mode === "swipe") {
-        const live = () => boxOf(slotRef.current);
-        const top = pageTop(slot);
-        return [{ content: "offline", start: top - vh, end: top + slot.offsetHeight, arrive: 0, gesture: "cut" as const, slot: live }];
-      }
       const track = trackRef.current;
       const stage = stageRef.current;
       const dest = document.querySelector(".dest-track");
@@ -115,7 +112,9 @@ export function Proof() {
       {mode === "swipe" && (
         <div className="proof-phone">
           {head}
-          <div ref={slotRef} className="proof-slot" data-frame-slot="telemetria" />
+          <div ref={slotRef} className="proof-slot" data-frame-slot="telemetria">
+            <InlineFrame ids={["offline"]} current="offline" />
+          </div>
           {note}
           {log}
         </div>

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Blocks, FilePenLine, MessagesSquare, type LucideIcon } from "lucide-react";
 
 import { pageTop, registerBeats } from "../journey/beats";
+import { FRAME_CONTENTS } from "../journey/contents";
 import type { Box } from "../journey/director";
 import { useJourneyMode } from "../journey/useJourneyMode";
 import { SCROLL } from "../motion/tokens";
@@ -18,6 +19,8 @@ const ICONS: Record<(typeof STEPS)[number], LucideIcon> = { talk: MessagesSquare
 
 /** The frame, pulled all the way back: the "you are here" marker. 16:10. */
 const MARKER = { w: 56, h: 35 };
+/** What the marker shows on a phone: the front desk of Em uso, still. */
+const MARKER_SRC = FRAME_CONTENTS.find((c) => c.id === "offline")!.image.src;
 
 /**
  * Como funciona: what working together looks like, in three steps.
@@ -38,17 +41,20 @@ export function Process() {
   const reachedRef = useRef(reached);
 
   useLayoutEffect(() => {
-    if (mode === "list") return;
+    // a phone's marker rides the line in the page (.plano-rider), no frame
+    if (mode !== "scroll") return;
     return registerBeats("plano", () => {
       const line = lineRef.current;
       if (!line) return [];
       const vh = window.innerHeight;
       const vw = window.innerWidth;
       // where the marker sits along the line at progress k (0 = first stop, 1 = last)
-      const markerAt = (k: number, lineBox: Box): Box =>
-        mode === "swipe"
-          ? { x: lineBox.x - MARKER.w / 2, y: lineBox.y + k * lineBox.h - MARKER.h / 2, w: MARKER.w, h: MARKER.h }
-          : { x: lineBox.x + k * lineBox.w - MARKER.w / 2, y: lineBox.y - MARKER.h / 2, w: MARKER.w, h: MARKER.h };
+      const markerAt = (k: number, lineBox: Box): Box => ({
+        x: lineBox.x + k * lineBox.w - MARKER.w / 2,
+        y: lineBox.y - MARKER.h / 2,
+        w: MARKER.w,
+        h: MARKER.h,
+      });
       // how much of the line the marker has covered: the thread fills behind it
       const thread = (k: number) => {
         line.style.setProperty("--k", k.toFixed(4));
@@ -62,25 +68,6 @@ export function Process() {
       };
       // a stop is reached once the marker is on it
       const mark = (k: number) => reach(Math.min(STEPS.length - 1, Math.floor(k * (STEPS.length - 1) + 1e-6)));
-
-      if (mode === "swipe") {
-        // the marker rides the line down, held at the middle of the screen
-        // between the first stop and the last; each stop sits at its step
-        const stops = Array.from(line.querySelectorAll<HTMLElement>(".plano-stop"));
-        const center = (el: HTMLElement) => {
-          const r = el.getBoundingClientRect();
-          return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-        };
-        const first = pageTop(stops[0]);
-        const last = pageTop(stops[stops.length - 1]);
-        const live = (): Box => {
-          const ys = stops.map((el) => center(el).y);
-          const y = Math.min(Math.max(vh / 2, ys[0]), ys[ys.length - 1]);
-          const x = center(stops[0]).x;
-          return { x: x - MARKER.w / 2, y: y - MARKER.h / 2, w: MARKER.w, h: MARKER.h };
-        };
-        return [{ content: "offline", start: first - vh / 2, end: last - vh / 2 + 1, arrive: 0, gesture: "cut" as const, slot: live }];
-      }
 
       const track = trackRef.current;
       const stage = stageRef.current;
@@ -252,6 +239,15 @@ export function Process() {
               {STEPS.map((id, i) => (
                 <span key={id} className="plano-stop" data-reached={i <= reached ? "true" : "false"} />
               ))}
+              {/* phone: the marker, held at the middle of the screen by
+                  sticky positioning between the first stop and the last */}
+              {mode === "swipe" && (
+                <span className="plano-rider">
+                  <span className="plano-marker">
+                    <img src={MARKER_SRC} alt="" decoding="async" loading="lazy" />
+                  </span>
+                </span>
+              )}
             </div>
             {steps}
           </div>

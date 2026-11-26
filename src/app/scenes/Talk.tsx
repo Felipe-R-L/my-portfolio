@@ -12,13 +12,6 @@ import { span } from "../scroll/math";
 import { easeInOut } from "../components/hero/camera";
 import "./Talk.css";
 
-/** The frame covering the whole screen, at 16:10. */
-function coverBox(vw: number, vh: number): Box {
-  const w = Math.max(vw, vh * 1.6);
-  const h = w / 1.6;
-  return { x: (vw - w) / 2, y: (vh - h) / 2, w, h };
-}
-
 /**
  * Where the frame comes to rest on a wide screen: a framed photo on the right,
  * clear of the invitation on the left, so Diamante (the chapter's light,
@@ -58,31 +51,16 @@ export function Talk() {
   const lang = i18n.language?.startsWith("pt") ? "pt" : "en";
 
   useLayoutEffect(() => {
-    if (mode === "list") return;
+    // Phone: the photo is a plain picture in the page (see the JSX). A fixed
+    // frame placed by script on every scroll trembled on iOS Chrome while the
+    // address bar collapsed, and the city behind every word was hard to read.
+    if (mode !== "scroll") return;
     return registerBeats("retorno", () => {
       const runway = runwayRef.current;
       if (!runway) return [];
       const vh = window.innerHeight;
       const vw = window.innerWidth;
       const end = document.documentElement.scrollHeight;
-      if (mode === "swipe") {
-        // phone: the city rises with the runway, the width of the screen, and
-        // opens to the whole screen as the runway reaches the top; the steps
-        // above it are never set over the picture
-        const top = pageTop(runway);
-        // and only once the marker of Como funciona has reached its last stop
-        const lastStop = document.querySelector<HTMLElement>(".plano-stop:last-child");
-        const start = Math.max(top - vh, lastStop ? pageTop(lastStop) - vh / 2 + 1 : 0);
-        const rise = (): Box => {
-          const r = runway.getBoundingClientRect();
-          const k = span((vh - r.top) / vh, 0.5, 1);
-          return lerpBox({ x: 0, y: r.top, w: vw, h: vw / 1.6 }, coverBox(vw, vh), easeInOut(k));
-        };
-        return [
-          { content: "city", start, end: top + runway.offsetHeight, arrive: 0, gesture: "cut" as const, slot: rise },
-          { content: "city", start: top + runway.offsetHeight, end, arrive: 0, gesture: "cut" as const, still: true, slot: () => coverBox(vw, vh) },
-        ];
-      }
       // T5 starts where Como funciona leaves the marker
       const plano = document.querySelector(".plano-track");
       const from = plano ? pageTop(plano) + plano.getBoundingClientRect().height - vh : pageTop(runway) - vh;
@@ -116,8 +94,22 @@ export function Talk() {
       aria-labelledby="talk-title"
       style={{ ["--runway" as string]: `${SCROLL.finale * 100}svh` }}
     >
-      {/* where the camera pulls back over the city (T5) */}
-      <div ref={runwayRef} className="talk-runway" aria-hidden="true" />
+      {mode === "swipe" ? (
+        // phone: him on the rooftop, in the flow of the page, fading into it
+        <div className="talk-photo" aria-hidden="true">
+          <img
+            src="/assets/profile/talk-side-1200.webp"
+            srcSet="/assets/profile/talk-side-1200.webp 1200w, /assets/profile/talk-side-2400.webp 2400w"
+            sizes="100vw"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ) : (
+        // where the camera pulls back over the city (T5)
+        <div ref={runwayRef} className="talk-runway" aria-hidden="true" />
+      )}
 
       <div className="talk-body">
         <div className="talk-main">

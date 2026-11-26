@@ -300,18 +300,24 @@ export function HeroCity() {
       }
 
       // The linear bands, placed on a timeline whose length is the scene (1).
+      // Phone: the scene follows the scroll through a short smoothing. On iOS
+      // Chrome the scroll position jumps while the address bar collapses
+      // (scrolling down), and a scene tied to it frame by frame trembled.
+      const smooth = isMobile && !reduce;
       const tl = gsap.timeline({
         defaults: { ease: "none" },
+        ...(smooth ? { onUpdate: () => render(tl.progress()) } : {}),
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
           end: () => `+=${heroLength()}`,
-          scrub: true,
+          scrub: smooth ? 0.35 : true,
           onUpdate: (self) => {
+            if (smooth) return;
             render(self.progress);
             if (storyInStage && storyProgress.get() > 0) renderStory(storyProgress.get());
           },
-          onRefresh: (self) => render(self.progress),
+          onRefresh: (self) => render(smooth ? tl.progress() : self.progress),
         },
       });
       tl.to({}, { duration: 1 }, 0);

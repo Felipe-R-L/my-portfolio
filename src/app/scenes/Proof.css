@@ -103,6 +103,7 @@
 }
 
 .proof-phone .proof-slot {
+  position: relative; /* holds the picture (InlineFrame) */
   margin-top: 0.5rem;
 }
 

@@ -2,7 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { WORK, type WorkItem } from "../data/work";
-import { boxOf, notify, pageTop, registerBeats } from "../journey/beats";
+import { boxOf, pageTop, registerBeats } from "../journey/beats";
+import { InlineFrame } from "../journey/InlineFrame";
 import type { Box } from "../journey/director";
 import { SCROLL } from "../motion/tokens";
 import { ScrollTrigger } from "../scroll/gsap";
@@ -26,6 +27,12 @@ const ARRIVE = SCROLL.destination.approach / (SCROLL.destination.approach + SCRO
  */
 /** Where the journey's frame is now, if it is showing this destination. */
 function frameBox(id: string): Box | null {
+  // phone: the picture is in the page
+  const inline = document.querySelector<HTMLElement>(`.dest-phone .fi[data-content="${id}"]`);
+  if (inline) {
+    const r = inline.getBoundingClientRect();
+    return { x: r.left, y: r.top, w: r.width, h: r.height };
+  }
   const jf = document.querySelector<HTMLElement>(".jf");
   const box = document.querySelector(".jf-box");
   if (!jf || !box || jf.dataset.visible !== "true" || jf.dataset.content !== id) return null;
@@ -45,27 +52,12 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
   const currentRef = useRef(0);
   currentRef.current = current;
 
-  // The frame's beats: one per destination on a wide screen, one for the
-  // whole scene on a phone (its content follows the swipe).
+  // The frame's beats, one per destination (wide screens; a phone has the
+  // pictures in the cards' slot, see InlineFrame).
   useLayoutEffect(() => {
-    if (mode === "list") return;
+    if (mode !== "scroll") return;
     return registerBeats("destinos", () => {
       const slot = () => boxOf(slotRef.current);
-      if (mode === "swipe") {
-        const s = slotRef.current;
-        if (!s) return [];
-        const top = pageTop(s);
-        return [
-          {
-            content: WORK[currentRef.current].id,
-            start: top - window.innerHeight,
-            end: top + s.offsetHeight,
-            arrive: 0,
-            gesture: "rack",
-            slot,
-          },
-        ];
-      }
       const track = trackRef.current;
       if (!track) return [];
       const vh = window.innerHeight;
@@ -85,11 +77,6 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
       }));
     });
   }, [mode]);
-
-  // Phone: a swipe changes the frame's content.
-  useEffect(() => {
-    if (mode === "swipe") notify();
-  }, [mode, current]);
 
   // Wide: the words follow the scroll through the track.
   useLayoutEffect(() => {
@@ -182,7 +169,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
   const openOnClick = {
     onClick: () => {
       // what the frame shows, which between two destinations can lag the text
-      const showing = document.querySelector<HTMLElement>(".jf")?.dataset.content;
+      const showing = document.querySelector<HTMLElement>(mode === "swipe" ? ".dest-phone .fi" : ".jf")?.dataset.content;
       const w = WORK.find((x) => x.id === showing) ?? WORK[currentRef.current];
       if (w) onOpenCase?.(w, frameBox(w.id));
     },
@@ -286,7 +273,9 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
             </h2>
             <p className="dest-lead">{t("work.lead")}</p>
           </header>
-          <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" {...openOnClick} />
+          <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" {...openOnClick}>
+            <InlineFrame ids={WORK.map((w) => w.id)} current={WORK[current].id} />
+          </div>
           <div ref={swipeRef} className="dest-swipe">
             {WORK.map((w, i) => (
               <article key={w.id} className="dest-card" data-dest={w.id} data-current={i === current ? "true" : "false"}>
