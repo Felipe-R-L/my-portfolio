@@ -4,6 +4,7 @@ import { Blocks, FilePenLine, MessagesSquare, type LucideIcon } from "lucide-rea
 
 import { pageTop, registerBeats } from "../journey/beats";
 import { FRAME_CONTENTS } from "../journey/contents";
+import { registerPassages } from "../scroll/glide";
 import type { Box } from "../journey/director";
 import { useJourneyMode } from "../journey/useJourneyMode";
 import { SCROLL } from "../motion/tokens";
@@ -39,6 +40,28 @@ export function Process() {
   const lineRef = useRef<HTMLDivElement>(null);
   const [reached, setReached] = useState(mode === "list" ? STEPS.length - 1 : 0);
   const reachedRef = useRef(reached);
+
+  // Never left half done (scroll/glide.ts): T4's pull-back to the first
+  // stop, and the marker between two stops.
+  useLayoutEffect(() => {
+    if (mode !== "scroll") return;
+    return registerPassages("plano", () => {
+      const track = trackRef.current;
+      if (!track) return [];
+      const vh = window.innerHeight;
+      const stuck = pageTop(track);
+      const travel = SCROLL.track * vh;
+      const proof = document.querySelector(".proof-track");
+      const pullFrom = proof ? pageTop(proof) + proof.getBoundingClientRect().height - vh : stuck - vh;
+      const legs = STEPS.length - 1;
+      return [
+        { from: pullFrom, to: stuck, duration: 1.5 },
+        ...Array.from({ length: legs }, (_, j) => ({ from: stuck + (travel * j) / legs, to: stuck + (travel * (j + 1)) / legs })),
+        // the marker waits at the last stop until the stage lets go (T5)
+        { from: stuck + travel, to: stuck + track.getBoundingClientRect().height - vh, hold: true },
+      ];
+    });
+  }, [mode]);
 
   useLayoutEffect(() => {
     // a phone's marker rides the line in the page (.plano-rider), no frame

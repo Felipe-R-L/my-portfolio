@@ -8,6 +8,7 @@ import { pageTop, registerBeats } from "../journey/beats";
 import { lerpBox, type Box } from "../journey/director";
 import { useJourneyMode } from "../journey/useJourneyMode";
 import { SCROLL } from "../motion/tokens";
+import { registerPassages } from "../scroll/glide";
 import { span } from "../scroll/math";
 import { easeInOut } from "../components/hero/camera";
 import "./Talk.css";
@@ -49,6 +50,26 @@ export function Talk() {
   const linkedin = socialLinks.find((s) => s.label === "LinkedIn");
   const whatsapp = whatsappHref(t(`talk.chips.${kind ?? "outro"}.message`));
   const lang = i18n.language?.startsWith("pt") ? "pt" : "en";
+
+  // T5 is never left half done (scroll/glide.ts): from the last stop, the
+  // camera pulls back over the city, the photo moves aside to the right and,
+  // in the same move, the invitation rises whole into view (it used to stop
+  // halfway, waiting for another gesture).
+  useLayoutEffect(() => {
+    if (mode !== "scroll") return;
+    return registerPassages("retorno", () => {
+      const runway = runwayRef.current;
+      if (!runway) return [];
+      const vh = window.innerHeight;
+      const plano = document.querySelector(".plano-track");
+      const from = plano ? pageTop(plano) + plano.getBoundingClientRect().height - vh : pageTop(runway) - vh;
+      // to the page's end: the invitation and the footer under it are less
+      // than a screen, there is nothing to stop for in between
+      const to = document.documentElement.scrollHeight - vh;
+      // the closing move barely hurries: it is the last thing seen
+      return [{ from, to, duration: 2.2, sensitivity: 0.5 }];
+    });
+  }, [mode]);
 
   useLayoutEffect(() => {
     // Phone: the photo is a plain picture in the page (see the JSX). A fixed

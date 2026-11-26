@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { WORK, type WorkItem } from "../data/work";
 import { boxOf, pageTop, registerBeats } from "../journey/beats";
 import { InlineFrame } from "../journey/InlineFrame";
+import { registerPassages } from "../scroll/glide";
 import type { Box } from "../journey/director";
 import { SCROLL } from "../motion/tokens";
 import { ScrollTrigger } from "../scroll/gsap";
@@ -56,7 +57,24 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
   // pictures in the cards' slot, see InlineFrame).
   useLayoutEffect(() => {
     if (mode !== "scroll") return;
-    return registerBeats("destinos", () => {
+    // Changes never left half done (scroll/glide.ts): the first arrival out
+    // of the story, then each card turning into the next.
+    const offPassages = registerPassages("destinos", () => {
+      const track = trackRef.current;
+      if (!track) return [];
+      const vh = window.innerHeight;
+      const beatPx = (SCROLL.destination.approach + SCROLL.destination.hold) * vh;
+      const top = pageTop(track);
+      return WORK.flatMap((_, i) => [
+        // the first takes in the hero's stage going up as this one rises
+        i === 0
+          ? { from: top - vh, to: top + ARRIVE * beatPx, duration: 1.5 }
+          : { from: top + i * beatPx, to: top + (i + ARRIVE) * beatPx },
+        // each project then holds, read on a still stage
+        { from: top + (i + ARRIVE) * beatPx, to: top + (i + 1) * beatPx, hold: true },
+      ]);
+    });
+    const offBeats = registerBeats("destinos", () => {
       const slot = () => boxOf(slotRef.current);
       const track = trackRef.current;
       if (!track) return [];
@@ -76,6 +94,10 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
         slot,
       }));
     });
+    return () => {
+      offPassages();
+      offBeats();
+    };
   }, [mode]);
 
   // Wide: the words follow the scroll through the track.
@@ -112,7 +134,8 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
         // to the left; the next one's title card comes out of the depth on
         // the right to the front, holds, and carries on towards the reader as
         // it opens on the new screen. Even a hurried scroll sees the name.
-        const moving = i > 0 && arrive > 0 && arrive < 1;
+        // (a glide lands on the very end: a hair short of 1 is at rest)
+        const moving = i > 0 && arrive > 0.001 && arrive < 0.999;
         const swap = ease(clamp01(arrive / 0.55));
         const pass = ease(clamp01((arrive - 0.68) / 0.32));
         // drawn in depth order: the old card is nearer until they cross
@@ -136,7 +159,8 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
         });
         // The index over the picture: where we are among the projects.
         marks.forEach((el, k) => {
-          el.style.setProperty("--p", (k < i ? 1 : k === i ? clamp01(local) : 0).toFixed(4));
+          // filled by the arrival, so it is whole by the time the project rests
+          el.style.setProperty("--p", (k < i ? 1 : k === i ? arrive : 0).toFixed(4));
           el.dataset.on = k === i ? "true" : "false";
         });
         if (i !== currentRef.current) setCurrent(i);

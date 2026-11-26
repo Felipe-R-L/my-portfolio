@@ -5,7 +5,9 @@ import { gsap } from "../../scroll/gsap";
 import { span } from "../../scroll/math";
 import { createSignal } from "../../scroll/signal";
 import { useScene } from "../../scroll/useScene";
-import { Story } from "../../scenes/Story";
+import { RAIL_ENTER_TO, RAIL_TRAVEL_FROM, RAIL_TRAVEL_TO, Story, railStops } from "../../scenes/Story";
+import { STORY } from "../../data/story";
+import { registerPassages } from "../../scroll/glide";
 import { LiquidReveal } from "./LiquidReveal";
 import { Credits, Letters, NAME } from "./HeroParts";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
@@ -286,6 +288,46 @@ export function HeroCity() {
 
       const heroLength = () =>
         (reduce ? TRACK_REDUCED : isMobile ? TRACK_PHONE : TRACK_DESKTOP) * stage.clientHeight;
+      // Desktop: changes never left half done (scroll/glide.ts). The dive
+      // through the name and the pull-back to the portrait; the photo framing
+      // itself and moving aside as the chapters come in; the rail between two
+      // chapters; and T1, the portrait back in the middle as the stage lets go.
+      const offPassages = storyInStage
+        ? registerPassages("partida", () => {
+            const section = sectionRef.current;
+            if (!section) return [];
+            const top = section.getBoundingClientRect().top + window.scrollY;
+            const L = heroLength();
+            const end = top + section.offsetHeight - stage.clientHeight;
+            const storyFrom = top + L;
+            const chapters = (end - storyFrom) * CHAPTERS_END;
+            const at = (p2: number) => storyFrom + chapters * p2;
+            // the rail rests where each card has come up against the portrait
+            // (measured by the rail; evenly spaced until it has been)
+            const legs = STORY.length - 1;
+            const measured = railStops.current.length === STORY.length;
+            // (the first card already rests beside the portrait, its
+            // background lit, where the rail comes in: its stop is the start)
+            const measuredStops = measured ? railStops.current.slice(1) : STORY.slice(1).map((_, j) => (j + 1) / legs);
+            const stops = [...new Set([0, ...measuredStops, 1].map((u) => Math.round(u * 1e4) / 1e4))].sort((a, b) => a - b);
+            const travelAt = (u: number) => at(RAIL_TRAVEL_FROM + (RAIL_TRAVEL_TO - RAIL_TRAVEL_FROM) * u);
+            const rail = stops.slice(1).map((u, j) => ({ from: travelAt(stops[j]), to: travelAt(u) }));
+            return [
+              // seconds at 1x: the camera moves are given more time than their
+              // scroll length would, the eye has a lot to follow in them
+              { from: top, to: top + PULL_TO * L, duration: 1.9 },
+              // the portrait holding for the colour (poured by the pointer)
+              { from: top + PULL_TO * L, to: top + EXIT_FROM * L, hold: true },
+              { from: top + EXIT_FROM * L, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: 1.6 },
+              { from: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), to: at(RAIL_TRAVEL_FROM), hold: true },
+              // the cards keep up with a fast scroll more than the camera does
+              ...rail.map((r) => ({ ...r, duration: 1.1, sensitivity: 1.6 })),
+              { from: at(RAIL_TRAVEL_TO), to: storyFrom + chapters, hold: true },
+              { from: storyFrom + chapters, to: end, duration: 1.4 },
+            ];
+          })
+        : null;
+
       if (storyInStage) {
         gsap.timeline({
           scrollTrigger: {
@@ -330,7 +372,10 @@ export function HeroCity() {
       if (reduce) tl.set(front, { opacity: 0 }, 0.23).set(front, { opacity: 1 }, 0);
       else band(front, 0.004, 0.054, { opacity: 1 }, { opacity: 0 });
       if (!reduce) band(front, 0, 0.06, { y: "0vh" }, { y: "-5vh" });
-      return () => ro.disconnect();
+      return () => {
+        ro.disconnect();
+        offPassages?.();
+      };
     },
     [isMobile, reduce],
   );

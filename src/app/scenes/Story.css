@@ -240,8 +240,11 @@
   visibility: hidden;
   opacity: 0;
   /* chapters fade in at the right edge and out at the left, never cut, and
-     the chapter in focus always sits in the fully opaque middle */
-  mask-image: linear-gradient(to right, transparent 0, transparent 3%, #000 15%, #000 91%, transparent 100%);
+     the chapter in focus always sits in the fully opaque part. The left fade
+     only hides the cards slipping behind the portrait: it ends before the
+     card at rest, which sits about 50px clear of the portrait (it used to
+     reach 15% and shade the card's left side). */
+  mask-image: linear-gradient(to right, transparent 0, transparent 2.5%, #000 6.5%, #000 91%, transparent 100%);
 }
 
 .story-track {

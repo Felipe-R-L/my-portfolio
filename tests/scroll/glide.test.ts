@@ -1,0 +1,74 @@
+import { describe, expect, it } from "vitest";
+
+import { mergePassages, playDuration, playTarget, settleDuration, settleTarget } from "../../src/app/scroll/glide";
+
+const list = mergePassages([
+  { from: 100, to: 200 },
+  { from: 300, to: 400 },
+  { from: 400, to: 500 },
+]);
+
+describe("passages", () => {
+  it("keeps touching passages apart and merges overlapping ones", () => {
+    expect(list).toHaveLength(3);
+    expect(mergePassages([{ from: 0, to: 100 }, { from: 50, to: 150 }])).toEqual([{ from: 0, to: 150 }]);
+  });
+
+  it("lets the wheel through outside a change", () => {
+    expect(playTarget(list, 0, 50)).toBeNull();
+    expect(playTarget(list, 250, 30)).toBeNull();
+    expect(playTarget(list, 250, -30)).toBeNull();
+  });
+
+  it("plays a change through as a gesture enters it, either way", () => {
+    expect(playTarget(list, 90, 20)?.to).toBe(200);
+    expect(playTarget(list, 210, -20)?.to).toBe(100);
+    expect(playTarget(list, 150, -1)?.to).toBe(100);
+  });
+
+  it("finishes a change the scrollbar left half done, the way it was going", () => {
+    expect(settleTarget(list, 120, 1)).toBe(200);
+    expect(settleTarget(list, 180, -1)).toBe(100);
+    expect(settleTarget(list, 130, 0)).toBe(100);
+    expect(settleTarget(list, 200, 1)).toBeNull();
+  });
+
+  it("plays at a pace that can be followed, never long enough to hold anyone", () => {
+    expect(playDuration(10, 900)).toBe(0.75);
+    expect(playDuration(5000, 900)).toBe(1.5);
+    expect(settleDuration(10, 900)).toBe(0.45);
+    expect(settleDuration(5000, 900)).toBe(0.9);
+  });
+});
+
+describe("a passage's own time", () => {
+  it("plays a camera move for its own duration, less when entered partway", async () => {
+    const { durationFor } = await import("../../src/app/scroll/glide");
+    const dive = { from: 0, to: 1000, duration: 1.9 };
+    expect(durationFor(dive, 1000, 900)).toBe(1.9);
+    expect(durationFor(dive, 500, 900)).toBeCloseTo(0.95);
+    expect(durationFor({ from: 0, to: 630 }, 630, 900)).toBeCloseTo(1.01, 2);
+  });
+});
+
+describe("holds", () => {
+  it("are crossed from either edge, in the gesture's direction", async () => {
+    const { holdAhead } = await import("../../src/app/scroll/glide");
+    const hs = [{ from: 200, to: 300, hold: true }];
+    expect(holdAhead(hs, 200, 1)).toBe(300);
+    expect(holdAhead(hs, 250, 1)).toBe(300);
+    expect(holdAhead(hs, 300, -1)).toBe(200);
+    expect(holdAhead(hs, 300, 1)).toBeNull();
+    expect(holdAhead(hs, 200, -1)).toBeNull();
+  });
+});
+
+describe("sensitivity", () => {
+  it("scales a change's speed-up, never its pace at 1x", async () => {
+    const { speedFor } = await import("../../src/app/scroll/glide");
+    expect(speedFor({ from: 0, to: 1 }, 2.5)).toBe(2.5);
+    expect(speedFor({ from: 0, to: 1, sensitivity: 0.5 }, 2.5)).toBe(1.75);
+    expect(speedFor({ from: 0, to: 1, sensitivity: 1.6 }, 2.5)).toBeCloseTo(3.4);
+    expect(speedFor({ from: 0, to: 1, sensitivity: 1.6 }, 1)).toBe(1);
+  });
+});

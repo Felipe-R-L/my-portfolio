@@ -240,3 +240,14 @@ Pedido do Felipe em 2026-11-25: a home vira uma jornada em capítulos, com um ú
 
 - **Tipografia.** Felipe comparou seis pares serifados numa prévia (https://claude.ai/artifact/GihAbtWNMxYSqpVPdRGsmf) e escolheu Cormorant Garamond, com a densidade da Fraunces. Ela substitui a Instrument Serif em todos os títulos da jornada e do blog. Tokens em `src/styles/journey.css`: peso 500 nos títulos e 600 nos subtítulos, espaçamento -0,035em e -0,02em (medido contra a Fraunces, entre 2,3% e 5%), escala 1,1 porque o x dela é mais baixo. Contadores e anos usam algarismos alinhados. Todo texto em serifa foi medido antes e depois em 1440, 1280 e 390 px: nenhuma linha a mais e nada passando da caixa. O texto corrido do portfólio segue no sans.
 - **Blog.** O papel claro da tela de detalhes, com tema escuro (a noite da jornada) que segue o sistema e guarda a escolha do leitor. Índice como lista de leitura; artigo em uma coluna, com o sumário fixo ao lado e o texto em EB Garamond. O dev renderiza `/blog` como o build (`plugins/vite-plugin-posts.mjs`). A galáxia e o menu antigo saíram do blog.
+
+## Adendo 6 (2026-11-26): transições que nunca ficam pela metade
+
+Pedido do Felipe: a troca 3D de projetos às vezes parava no meio, com a folha de rosto no ar e o trilho superior pela metade, e o visitante tinha de equilibrar o scroll para ver a cena. Iterado com ele até a versão aprovada:
+
+- Cada cena registra suas passagens (`src/app/scroll/glide.ts`): os trechos em que algo muda na tela. No desktop, um gesto de roda ou trackpad que entra numa passagem a toca inteira, em tempo próprio por cena (mergulho 1,9 s, moldura 1,6 s, capítulo 1,1 s, T1 1,4 s, T3 1,4 s, T4 1,5 s, T5 2,2 s; o resto deriva do comprimento, 0,75 a 1,5 s). Curvas senoidais: o pico de velocidade é cerca de 1,6x a média, uma cúbica (3x) lia como tranco.
+- A força do scroll vira velocidade de reprodução, como num vídeo: até 2,5x, com a inércia encurtada junto. Cada passagem tem sensibilidade própria (capítulos da história 1,6, T5 0,5). Sem fila de transições: insistir acelera a atual.
+- Engate antes do fim: um gesto na mesma direção nos últimos 40% de uma passagem engata a próxima, que começa na velocidade de chegada da atual. Gesto contrário inverte.
+- Os holds (palco parado entre duas mudanças) são atravessados na hora. A trilha da história para onde cada card encosta no retrato, medido, com o fundo dele no brilho máximo.
+- Barra de rolagem e teclado continuam nativos; ao soltar dentro de uma passagem, ela termina no sentido em que vinha. Celular e movimento reduzido ficam com a rolagem nativa.
+- Rejeitado no caminho: travar o scroll por 2,6 s (segurava o visitante), assentar só ao parar (lento para quem lê), soltar o scroll ao detectar pressa (perdia a cena), empilhar transições (a página fugia).

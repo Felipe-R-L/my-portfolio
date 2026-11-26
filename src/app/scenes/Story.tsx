@@ -21,9 +21,23 @@ export function Story(props: { mode: "rail"; progress: Signal<number> } | { mode
 /** Rail beats, over story progress: the rail enters once the photo has
     moved aside (HeroCity's ASIDE_TO is 0.1), travels, then leaves. */
 const ENTER_FROM = 0.03;
-const ENTER_TO = 0.08;
-const TRAVEL_FROM = 0.19;
-const TRAVEL_TO = 0.85;
+export const RAIL_ENTER_TO = 0.08;
+const ENTER_TO = RAIL_ENTER_TO;
+export const RAIL_TRAVEL_FROM = 0.19;
+export const RAIL_TRAVEL_TO = 0.85;
+const TRAVEL_FROM = RAIL_TRAVEL_FROM;
+const TRAVEL_TO = RAIL_TRAVEL_TO;
+
+/**
+ * Where the rail rests, as travel (0..1 of RAIL_TRAVEL_FROM..RAIL_TRAVEL_TO):
+ * one stop per chapter, where its card has come up against the portrait and
+ * its background is at its brightest. Measured by the rail; HeroCity's
+ * passages stop the scroll on them (scroll/glide.ts).
+ */
+export const railStops: { current: number[] } = { current: [] };
+/** How far short of the touch the rail rests, as a share of the way to the
+    next card: a few pixels clear of the portrait. */
+const REST_BEFORE = 0.06;
 
 /** The night sky of an astronomy olympiad: orbits round a star (in focus or
     under the pointer it takes its colours: a warm star, coloured planets). */
@@ -284,14 +298,30 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
       });
       track.style.transform = `translate3d(${x + (1 - enter) * 80}px, 0, 0)`;
       // the backgrounds follow the cards, measured from the portrait: a
-      // chapter's background is all there while its card is the first one
-      // beside the portrait, and it has turned into the next one's by the
-      // time the card slips behind (the first card starts at the portrait,
-      // so OBA's sky is the opening). They slide at a third of the cards'
-      // speed and settle as they come in; the last one lands with the end.
-      const step = spans.current.length > 1 ? spans.current[1].left - spans.current[0].left : window.innerWidth / 3;
-      const lead = spans.current.length ? railLeft + spans.current[0].left - edge : 0;
-      const geo = (-x - lead) / step + 0.5;
+      // chapter's background is at its brightest when its card has come up
+      // against the portrait (where the rail rests, see railStops), and turns
+      // into the next one's as the card slips behind it (the first card
+      // starts at the portrait, so OBA's sky is the opening). They slide at
+      // a third of the cards' speed and settle as they come in; the last one
+      // lands with the end.
+      // card j comes up against the portrait when the track has moved by
+      // touch[j] (the cards are not all the same width: measured, each one)
+      const touch = spans.current.map((c) => railLeft + c.left - edge);
+      // the backgrounds' own slide, per chapter of way
+      const step = touch.length > 1 ? (touch[touch.length - 1] - touch[0]) / (touch.length - 1) : window.innerWidth / 3;
+      let geo = 0;
+      if (touch.length > 1) {
+        const k = Math.max(0, Math.min(touch.length - 2, touch.findIndex((t, i) => i === touch.length - 1 || -x < touch[i + 1])));
+        geo = k + (-x - touch[k]) / (touch[k + 1] - touch[k]);
+      }
+      if (ring && ring.width > 0 && distance.current > 0 && enter >= 1 && touch.length > 1) {
+        // rest a hair before the touch: the card is beside the portrait, not
+        // yet counted as gone behind it, and its background is fully up
+        railStops.current = touch.map((t, j) => {
+          const gap = (touch[Math.min(j + 1, touch.length - 1)] - touch[Math.max(j - 1, 0)]) / 2 || 1;
+          return Math.min(1, Math.max(0, (t - REST_BEFORE * gap) / distance.current));
+        });
+      }
       const at = Math.min(STORY.length - 1, Math.max(0, geo, span(p, TRAVEL_FROM, TRAVEL_TO) * (STORY.length - 1)));
       bgRefs.current.forEach((el, i) => {
         if (!el) return;

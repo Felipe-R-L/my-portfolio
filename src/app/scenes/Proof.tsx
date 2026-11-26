@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { pageTop, registerBeats } from "../journey/beats";
 import { InlineFrame } from "../journey/InlineFrame";
+import { registerPassages } from "../scroll/glide";
 import type { Box } from "../journey/director";
 import { useJourneyMode } from "../journey/useJourneyMode";
 import { SCROLL } from "../motion/tokens";
@@ -37,6 +38,26 @@ export function Proof() {
   // T4 begins as the stage lets go: its words leave before the frame crosses them
   useLeave(trackRef, stageRef, mode === "scroll");
   const slotRef = useRef<HTMLDivElement>(null);
+
+  // T3 is never left half done (scroll/glide.ts): the light changes and the
+  // frame settles beside the facts.
+  useLayoutEffect(() => {
+    if (mode !== "scroll") return;
+    return registerPassages("telemetria", () => {
+      const track = trackRef.current;
+      const dest = document.querySelector(".dest-track");
+      if (!track) return [];
+      const vh = window.innerHeight;
+      const stuck = pageTop(track);
+      const from = dest ? pageTop(dest) + dest.getBoundingClientRect().height - vh : stuck - vh;
+      // then the facts are read on a still stage, until it lets go (T4)
+      const leaves = stuck + track.getBoundingClientRect().height - vh;
+      return [
+        { from, to: stuck, duration: 1.4 },
+        { from: stuck, to: leaves, hold: true },
+      ];
+    });
+  }, [mode]);
 
   useLayoutEffect(() => {
     // a phone has the picture in its slot (InlineFrame)
