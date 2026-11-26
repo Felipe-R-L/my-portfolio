@@ -190,6 +190,8 @@
 
 /* Where the frame sits: a 16:10 box, centred on the right. */
 .dest-slot {
+  position: relative;
+  cursor: pointer;
   grid-column: 2;
   grid-row: 1 / -1;
   align-self: center;
@@ -284,4 +286,33 @@
   border-radius: 14px;
   border: 1.5px solid rgb(159 195 214 / 0.4);
   margin-bottom: 1.25rem;
+}
+
+/* The picture opens the case: a hint where the pointer is. */
+.dest-slot::after {
+  content: attr(data-hint);
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgb(6 8 11 / 0.82);
+  border: 1px solid rgb(159 195 214 / 0.4);
+  color: var(--ink);
+  font-size: 0.85rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s var(--ease-arrive), transform 0.25s var(--ease-arrive);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .dest-slot:hover::after {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dest-still {
+  cursor: pointer;
 }

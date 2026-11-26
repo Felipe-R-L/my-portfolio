@@ -293,7 +293,8 @@
       "context": "Context",
       "decision": "The decision",
       "result": "The result",
-      "back": "Back to the projects"
+      "back": "Back to the projects",
+      "open_hint": "See details"
     }
   },
   "talk": {
