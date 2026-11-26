@@ -6,8 +6,8 @@ import { center, type ClipMeta, type Rect } from "../components/motion/clip";
  *
  * camera  every project: the screen sits tilted like a device on a desk, the
  *         camera dives into each gesture where the hand clicks (Dallas Sync:
- *         the plate, the confirm, the room whose clock starts; the shop: the
- *         variant and its price, the cart, Pix; the motel: from the hero down
+ *         the plate, the confirm, the room whose clock starts; the shop: its
+ *         opening screen, the carousel, a product into the cart; the motel: from the hero down
  *         its page, the day's tabs, the story, the menu) and settles back for the loop. Felipe, after
  *         seeing a crops version for the shop and the motel: the camera
  *         everywhere, the crops read far and small.
@@ -66,35 +66,31 @@ export const MOTION: Record<string, MotionSpec> = {
 
   "secret-detail": {
     mode: "camera",
-    // product, its variant and price, into the cart, then Pix (from where the hand clicked)
-    camera: ({ marks: M, boxes: B, clicks: C, duration: end }) => {
-      const cart = center(B.cartItem);
-      const pickup = center(B.pickup);
-      const pix = center(B.pixOption);
-      const name = center(B.name);
+    // the opening screen, its carousel, the catalogue, a product into the
+    // cart: few keys, far apart, one smooth curve through them
+    camera: ({ marks: M, boxes: B, duration: end }) => {
+      const show = center(B.showcase);
+      const card = center(B.card);
+      const toast = center(B.toast);
+      const near = (p: { x: number; y: number }, s: number) => ({ rx: 0, ry: 0, s, x: p.x, y: p.y });
       return [
         { t: 0, ...HOME },
-        { t: C[0] - 0.45, rx: 0, ry: 0, s: 1.25, x: 229, y: 457 },
-        { t: C[0] + 0.5, ...FLAT },
-        { t: C[1] - 0.6, rx: 0, ry: 0, s: 1.5, x: 1116, y: 330 },
-        { t: M.variant + 0.2, rx: 0, ry: 0, s: 1.5, x: 1116, y: 330 },
-        { t: C[2] - 0.2, rx: 0, ry: 0, s: 1.4, x: 1001, y: 560 },
-        { t: C[2] + 0.7, ...FLAT },
-        { t: C[3] - 0.3, rx: 0, ry: 0, s: 1.3, x: 1312, y: 120 },
-        { t: C[3] + 1.0, ...FLAT },
-        { t: M.cart - 0.2, rx: 0, ry: 0, s: 1.45, x: (cart.x + pickup.x) / 2, y: (cart.y + pickup.y) / 2 + 40 },
-        { t: C[4] + 0.6, rx: 0, ry: 0, s: 1.45, x: (cart.x + pickup.x) / 2, y: (cart.y + pickup.y) / 2 + 40 },
-        { t: C[5] - 0.2, rx: 0, ry: 0, s: 1.4, x: 1090, y: 480 },
-        { t: C[6] - 0.4, rx: 0, ry: 0, s: 1.55, ...pix },
-        { t: C[7] - 0.4, rx: 0, ry: 0, s: 1.6, x: name.x + 120, y: name.y - 60 },
-        { t: end - 0.3, rx: 0, ry: 0, s: 1.6, x: name.x + 120, y: name.y - 60 },
+        { t: M.hero, ...FLAT },
+        { t: M.hero + 1.0, ...near(show, 1.3) },
+        { t: M.carousel, ...near(show, 1.3) },
+        { t: M.carousel + 1.4, ...FLAT },
+        { t: M.hover - 1.2, ...FLAT },
+        { t: M.hover, ...near({ x: card.x + 120, y: card.y + 90 }, 1.35) },
+        { t: M.added - 0.3, ...near({ x: (card.x + toast.x) / 2 + 60, y: (card.y + toast.y) / 2 + 40 }, 1.3) },
+        { t: end, ...near({ x: (card.x + toast.x) / 2 + 60, y: (card.y + toast.y) / 2 + 40 }, 1.3) },
         { t: end + 1.2, ...HOME },
       ];
     },
-    captions: ({ marks: M, clicks: C, duration: end }) => [
-      { from: C[1] - 0.4, to: C[2] - 0.1, key: "variant" },
-      { from: M.cart, to: C[5], key: "cart" },
-      { from: C[6] - 0.2, to: end + 0.6, key: "pix" },
+    captions: ({ marks: M, duration: end }) => [
+      { from: 0.3, to: M.hero + 0.6, key: "front" },
+      { from: M.hero + 1.0, to: M.carousel + 0.6, key: "carousel" },
+      { from: M.hover - 0.8, to: M.added - 0.5, key: "catalogue" },
+      { from: M.added - 0.2, to: end + 0.6, key: "cart" },
     ],
   },
 

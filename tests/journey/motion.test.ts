@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
-import { cursorAt, clickAt, type ClipMeta } from "../../src/app/components/motion/clip";
+import { cameraAt, cursorAt, clickAt, type ClipMeta, type Pose } from "../../src/app/components/motion/clip";
 import { MOTION } from "../../src/app/data/motion";
 import { WORK } from "../../src/app/data/work";
 
@@ -25,6 +25,39 @@ describe("the drawn hand", () => {
   it("presses for a moment on each click", () => {
     expect(clickAt(m, 1.9)).toBe(-1);
     expect(clickAt(m, 2.3)).toBeCloseTo(0.5);
+  });
+});
+
+describe("the camera's curve", () => {
+  const at = (t: number, s: number, x = 720): Pose => ({ t, rx: 0, ry: 0, s, x, y: 450 });
+  const keys = [at(0, 1), at(1, 1.2), at(2, 1.6), at(3, 1.6), at(4, 1)];
+
+  it("goes through every key and never past one", () => {
+    for (const k of keys) expect(cameraAt(keys, k.t).s).toBeCloseTo(k.s);
+    for (let t = 0; t <= 4; t += 0.01) {
+      const s = cameraAt(keys, t).s;
+      expect(s).toBeGreaterThanOrEqual(1 - 1e-9);
+      expect(s).toBeLessThanOrEqual(1.6 + 1e-9);
+    }
+  });
+
+  it("keeps moving through a key on the way, instead of stopping at it", () => {
+    const v = (cameraAt(keys, 1.01).s - cameraAt(keys, 0.99).s) / 0.02;
+    expect(v).toBeGreaterThan(0.2);
+  });
+
+  it("holds perfectly still between two equal keys", () => {
+    expect(cameraAt(keys, 2.3).s).toBeCloseTo(1.6, 9);
+    expect(cameraAt(keys, 2.7).s).toBeCloseTo(1.6, 9);
+  });
+
+  it("changes smoothly, without a jump from one frame to the next", () => {
+    let prev = cameraAt(keys, 0).s;
+    for (let t = 1 / 60; t <= 4; t += 1 / 60) {
+      const s = cameraAt(keys, t).s;
+      expect(Math.abs(s - prev)).toBeLessThan(0.02);
+      prev = s;
+    }
   });
 });
 

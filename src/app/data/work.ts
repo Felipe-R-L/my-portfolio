@@ -79,7 +79,7 @@ export const WORK: readonly WorkItem[] = [
     stack: ["Next.js 16", "Supabase", "Mercado Pago"],
     parts: ["context", "problem", "decision", "result"],
     // the open (SFW) catalogue; the detail stops at the Pix form, never submitted
-    video: { card: clip("secret-detail"), detail: clip("secret-detail") },
+    video: { card: clip("secret-detail", true), detail: clip("secret-detail", true) },
     motion: "secret-detail",
   },
   {

@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { MOTION, type CameraKey } from "../../data/motion";
+import { MOTION } from "../../data/motion";
 import type { ProjectVideoSources } from "../../data/work";
-import { CLIP_DIR, clickAt, cursorAt, loadClip, type ClipMeta } from "./clip";
+import { CLIP_DIR, cameraAt, clickAt, cursorAt, loadClip, type ClipMeta } from "./clip";
 import "./MotionShot.css";
 
 const W = 1440;
@@ -16,20 +16,6 @@ const out = (u: number) => 1 - (1 - u) ** 3;
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const seg = (t: number, a: number, b: number, f = ease) => f(clamp01((t - a) / (b - a)));
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k;
-
-/** The camera between its keys, eased. */
-function cameraAt(keys: CameraKey[], t: number): CameraKey {
-  if (t <= keys[0].t) return keys[0];
-  for (let i = 1; i < keys.length; i++) {
-    const a = keys[i - 1];
-    const b = keys[i];
-    if (t <= b.t) {
-      const k = ease(clamp01((t - a.t) / Math.max(0.001, b.t - a.t)));
-      return { t, rx: lerp(a.rx, b.rx, k), ry: lerp(a.ry, b.ry, k), s: lerp(a.s, b.s, k), x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k) };
-    }
-  }
-  return keys[keys.length - 1];
-}
 
 /**
  * Creating a <video> costs a dropped frame or two (the element and its
@@ -215,7 +201,25 @@ export function MotionShot({
     }
     let raf = 0;
     let holdFrom = 0;
-    const tick = () => {
+    // A clock of our own, anchored to the video: currentTime moves in uneven
+    // steps (the decoder's frames, ~30 a second, against a 60 Hz screen), and
+    // a camera driven by it stutters. Between anchors it runs on the frame
+    // time; it re-anchors when the video seeks, stalls or drifts.
+    let anchor = { media: v.currentTime, at: performance.now() };
+    const clock = (now: number) => {
+      const media = v.currentTime;
+      if (v.paused || v.seeking || v.readyState < 3) {
+        anchor = { media, at: now };
+        return media;
+      }
+      const guess = anchor.media + ((now - anchor.at) / 1000) * v.playbackRate;
+      if (Math.abs(guess - media) > 0.12) {
+        anchor = { media, at: now };
+        return media;
+      }
+      return Math.min(guess, meta.duration);
+    };
+    const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
       if (v.ended || holdFrom) {
         if (!holdFrom) holdFrom = performance.now();
@@ -224,11 +228,12 @@ export function MotionShot({
         if (held >= HOLD) {
           holdFrom = 0;
           v.currentTime = 0;
+          anchor = { media: 0, at: now };
           void v.play()?.catch(() => {});
         }
         return;
       }
-      render(v.currentTime);
+      render(clock(now));
     };
     if (active) {
       v.muted = true;

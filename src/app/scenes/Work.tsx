@@ -98,6 +98,8 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
     if (!track || !list) return;
     const items = [...list.querySelectorAll<HTMLElement>("[data-dest]")];
     const curtains = [...(slotRef.current?.querySelectorAll<HTMLElement>("[data-curtain]") ?? [])];
+    const ghosts = [...(slotRef.current?.querySelectorAll<HTMLElement>("[data-ghost]") ?? [])];
+    const ease = (u: number) => (u < 0.5 ? 4 * u * u * u : 1 - (-2 * u + 2) ** 3 / 2);
     const marks = [...(sectionRef.current?.querySelectorAll<HTMLElement>("[data-index]") ?? [])];
     const st = ScrollTrigger.create({
       trigger: track,
@@ -117,18 +119,28 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
           el.style.setProperty("--in", v.toFixed(4));
           el.style.setProperty("--dir", k < i ? "-1" : "1");
         });
-        // The curtain: on the way to a new destination its name sweeps across
-        // the picture from the left, holds, and opens on the new screen, so
-        // even a hurried scroll sees which project it is now.
+        // The change, as cards in space (Felipe, after a sliding curtain: a 3D
+        // card changing places). The screen that leaves turns and falls back
+        // to the left; the next one's title card comes out of the depth on
+        // the right to the front, holds, and carries on towards the reader as
+        // it opens on the new screen. Even a hurried scroll sees the name.
+        const moving = i > 0 && arrive > 0 && arrive < 1;
+        const swap = ease(clamp01(arrive / 0.55));
+        const pass = ease(clamp01((arrive - 0.68) / 0.32));
+        ghosts.forEach((el, k) => {
+          const on = moving && k === i - 1 && arrive < 0.6;
+          el.style.visibility = on ? "visible" : "hidden";
+          if (!on) return;
+          el.style.opacity = (1 - clamp01((arrive - 0.2) / 0.35)).toFixed(3);
+          el.style.transform = `translate3d(${(-36 * swap).toFixed(2)}%, 0, ${(-560 * swap).toFixed(1)}px) rotateY(${(30 * swap).toFixed(2)}deg)`;
+        });
         curtains.forEach((el, k) => {
-          let right = 100;
-          let left = 0;
-          if (k === i && i > 0 && arrive > 0 && arrive < 1) {
-            right = (1 - clamp01(arrive / 0.32)) * 100;
-            left = clamp01((arrive - 0.6) / 0.38) * 100;
-          }
-          el.style.clipPath = `inset(0 ${right.toFixed(2)}% 0 ${left.toFixed(2)}%)`;
-          el.style.visibility = right >= 100 || left >= 100 ? "hidden" : "visible";
+          const on = moving && k === i;
+          el.style.visibility = on ? "visible" : "hidden";
+          if (!on) return;
+          const back = 1 - swap;
+          el.style.opacity = (clamp01(arrive / 0.18) * (1 - pass)).toFixed(3);
+          el.style.transform = `translate3d(${(36 * back).toFixed(2)}%, 0, ${(-560 * back + 260 * pass).toFixed(1)}px) rotateY(${(-30 * back).toFixed(2)}deg)`;
         });
         // The index over the picture: where we are among the projects.
         marks.forEach((el, k) => {
@@ -241,6 +253,11 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
                   </li>
                 ))}
               </ol>
+              {WORK.map((w) => (
+                <div key={w.id} className="dest-ghost" data-ghost={w.id} aria-hidden="true">
+                  <img src={w.video?.card?.poster ?? w.image.src} alt="" loading="lazy" decoding="async" />
+                </div>
+              ))}
               {WORK.map((w, i) => (
                 <div key={w.id} className="dest-curtain" data-curtain={w.id} aria-hidden="true">
                   <span className="dest-curtain-count">

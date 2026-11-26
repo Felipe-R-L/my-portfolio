@@ -273,9 +273,10 @@
           "result": "O cliente compra sem expor quem é, com verificação de idade na entrada, avaliações anônimas e pedidos rastreáveis por código, e eu acompanho cada pedido do pagamento à entrega num painel só."
         },
         "motion": {
-          "variant": "Cada variante com o seu preço",
-          "cart": "Carrinho sem criar conta",
-          "pix": "Pix pelo Mercado Pago"
+          "front": "A loja abre na vitrine",
+          "carousel": "Os destaques passam no carrossel",
+          "catalogue": "Sob o cursor, o produto mostra outra foto",
+          "cart": "Um toque e o produto está no carrinho"
         }
       }
     },

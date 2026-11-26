@@ -374,12 +374,39 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* The curtain: the next project's name, sweeping across the picture. Its
-   clip-path is set from the scroll (Work.tsx). */
-.dest-curtain {
+/* The change in space: the slot is the stage's depth. The leaving screen
+   (its poster, a ghost over the frame) falls back to the left, the next
+   project's title card comes forward from the right; transforms and
+   opacity set from the scroll (Work.tsx). */
+.dest-slot {
+  perspective: 1800px;
+}
+
+.dest-ghost {
   position: absolute;
   inset: 0;
   z-index: 1;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #05070a;
+  box-shadow: 0 30px 80px rgb(0 0 0 / 0.55), inset 0 0 0 1px rgb(159 195 214 / 0.25);
+  visibility: hidden;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.dest-ghost img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* The title card (the project's cover page). */
+.dest-curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   display: grid;
   align-content: center;
   justify-items: start;
@@ -389,10 +416,10 @@
   background:
     radial-gradient(ellipse at 20% 50%, rgb(159 195 214 / 0.16), transparent 60%),
     #06080b;
-  box-shadow: inset 0 0 0 1px rgb(159 195 214 / 0.3);
-  clip-path: inset(0 100% 0 0);
+  box-shadow: 0 30px 90px rgb(0 0 0 / 0.6), inset 0 0 0 1px rgb(159 195 214 / 0.3);
   visibility: hidden;
   pointer-events: none;
+  will-change: transform, opacity;
 }
 
 .dest-curtain-count {

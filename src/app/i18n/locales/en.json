@@ -273,9 +273,10 @@
           "result": "Customers buy without exposing who they are, with age verification at the door, anonymous reviews and orders tracked by a code, and I follow each order from payment to delivery in a single panel."
         },
         "motion": {
-          "variant": "Each variant with its own price",
-          "cart": "A cart with no account to create",
-          "pix": "Pix through Mercado Pago"
+          "front": "The shop opens on its showcase",
+          "carousel": "The featured products, in a carousel",
+          "catalogue": "Under the pointer, the product shows another picture",
+          "cart": "One tap and it is in the cart"
         }
       }
     },
