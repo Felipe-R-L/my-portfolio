@@ -184,29 +184,6 @@
     "close": "Fechar",
     "back": "Voltar ao blog"
   },
-  "process": {
-    "lead": "Sem surpresa no meio do caminho: você sabe o que vai receber antes de fechar.",
-    "gate": "Nada começa sem o seu ok.",
-    "steps": {
-      "talk": {
-        "title": "Conversa",
-        "description": "Você me conta o que precisa, pelo WhatsApp ou numa call. Sem compromisso."
-      },
-      "draft": {
-        "title": "Rascunho",
-        "description": "Você vê uma prévia e o orçamento antes de decidir qualquer coisa."
-      },
-      "build": {
-        "title": "Desenvolvimento",
-        "description": "Construo em etapas, e você acompanha e ajusta no caminho."
-      },
-      "launch": {
-        "title": "No ar e suporte",
-        "description": "Coloco no ar no seu domínio e continuo por perto pra ajustes."
-      }
-    },
-    "title": "Como funciona"
-  },
   "story": {
     "title": "Quem sou",
     "label": "Minha história",

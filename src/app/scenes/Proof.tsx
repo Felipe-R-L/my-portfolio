@@ -40,8 +40,8 @@ export function Proof() {
       const slot = slotRef.current;
       if (!slot) return [];
       const vh = window.innerHeight;
-      const live = () => boxOf(slotRef.current);
       if (mode === "swipe") {
+        const live = () => boxOf(slotRef.current);
         const top = pageTop(slot);
         return [{ content: "offline", start: top - vh, end: top + slot.offsetHeight, arrive: 0, gesture: "cut" as const, slot: live }];
       }
@@ -60,8 +60,8 @@ export function Proof() {
       const hold = SCROLL.light * vh;
       return [
         { content: "offline", start: from, end: stuck, arrive: 1, gesture: "cut" as const, travel: false, slot: () => held },
-        // then the facts are read, and the frame follows the stage off the screen
-        { content: "offline", start: stuck, end: stuck + hold + vh, arrive: 0, gesture: "cut" as const, slot: live },
+        // then the facts are read; Como funciona takes the frame from the held box (T4)
+        { content: "offline", start: stuck, end: stuck + hold, arrive: 0, gesture: "cut" as const, slot: () => held },
       ];
     });
   }, [mode]);

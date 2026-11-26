@@ -60,6 +60,9 @@ export function JourneyFrame() {
       const x = s.box.x + (s.box.w * (1 - s.approach)) / 2;
       const y = s.box.y + (s.box.h * (1 - s.approach)) / 2;
       box.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+      // edge and corner hold their size on screen, down to the marker's
+      const inv = (1 / Math.max(scale, 0.02)).toFixed(3);
+      if (box.style.getPropertyValue("--inv") !== inv) box.style.setProperty("--inv", inv);
 
       const m = layerMix(s.gesture, s.mix);
       layerRefs.current.forEach((el, id) => {

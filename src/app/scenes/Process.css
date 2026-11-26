@@ -1,234 +1,170 @@
-/* How it works: one line, four stops. */
+/*
+ * Como funciona. The marker that rides the line is the journey's frame,
+ * pulled all the way back (journey/JourneyFrame); the scene draws the line,
+ * its stops and the words. Transparent, like every scene of the journey.
+ */
 
-.process {
-  --line: rgb(255 255 255 / 0.14);
-  --lit: #9fc3d6;
-  --step-gap: clamp(1.5rem, 3vw, 3rem);
+.plano {
   position: relative;
-  z-index: 10;
-  padding: clamp(6rem, 16vh, 10rem) var(--gutter);
-  background: #050608;
-  color: #eef1f6;
+  color: var(--ink);
 }
 
-.process-head {
+.plano-track {
+  position: relative;
+  /* the travel along the line, a short wait at the last stop, and the screen itself */
+  height: calc(var(--travel) + 50svh + 100svh);
+}
+
+.plano-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
   display: grid;
-  gap: 0.9rem;
-  max-width: 48rem;
-  margin-bottom: clamp(3rem, 8vh, 5rem);
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(5.5rem, 12vh, 8rem) var(--gutter) clamp(2rem, 6vh, 4rem);
+  padding-left: calc(var(--gutter) + 1.5rem);
 }
 
-.process-title {
+.plano-title {
   margin: 0;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(3.5rem, 9vw, 8.5rem);
+  font-family: var(--serif);
   font-weight: 400;
-  line-height: 0.92;
-  letter-spacing: -0.01em;
+  font-size: clamp(2.5rem, 4.2vw, 4rem);
+  line-height: 1;
 }
 
-.process-lead {
-  margin: 0;
-  max-width: 46ch;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: rgb(178 186 199);
-}
-
-.process-track {
-  position: relative;
-}
-
-/* The line runs along the tops of the four steps. */
-.process-line {
-  position: relative;
-  height: 2px;
-  /* ends at the last step's marker, not past it */
-  margin-right: calc((100% - 3 * var(--step-gap)) / 4);
-  background: var(--line);
-}
-
-.process-fill {
-  position: absolute;
-  inset: 0;
-  background: var(--lit);
-  transform-origin: 0 50%;
-  transform: scaleX(0);
-}
-
-.process[data-done="true"] .process-fill {
-  transform: none;
-}
-
-.process-steps {
+.plano-route {
+  align-self: center;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--step-gap);
+  gap: 2.5rem;
+}
+
+/* The line: a hairline across, with a stop under each step. */
+.plano-line {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--stops), minmax(0, 1fr));
+  height: 1px;
+  margin: 0 calc(100% / var(--stops) / 2);
+  background: var(--hairline);
+}
+
+.plano-stop {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: #23292f;
+  transition: background-color 0.4s var(--ease-travel);
+}
+
+.plano-stop:nth-child(1) { left: 0; }
+.plano-stop:nth-child(2) { left: 50%; }
+.plano-stop:nth-child(3) { left: 100%; }
+
+.plano-stop[data-reached="true"] {
+  background: var(--diamante);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(var(--stops), minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.process-step {
-  position: relative;
-  padding-top: 1.75rem;
-  perspective: 900px;
+.step {
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  text-align: center;
+  justify-items: center;
 }
 
-/* Each step is a card that stands up out of the page, in 3D, when the line
-   reaches it, and leans towards the pointer after that. */
-.process-card {
-  position: relative;
-  height: 100%;
-  padding: clamp(1.25rem, 2vw, 1.75rem);
-  border-radius: 16px;
-  border: 1px solid rgb(159 195 214 / 0.18);
-  background:
-    radial-gradient(circle at var(--gx, 30%) var(--gy, 0%), rgb(159 195 214 / 0.12), transparent 60%),
-    linear-gradient(160deg, #0d1219, #07090d);
-  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.9);
-  transform-origin: 50% 100%;
-  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease, border-color 0.6s ease;
+.step-n {
+  color: var(--ink-faint);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.4s var(--ease-travel);
 }
 
-.process-card[data-tilting="true"] {
-  transition: transform 0.12s linear, opacity 0.6s ease, border-color 0.6s ease;
+.step[data-reached="true"] .step-n {
+  color: var(--diamante);
 }
 
-.process-step[data-lit="false"] .process-card {
-  opacity: 0.25;
-  transform: rotateX(62deg) translateY(1.5rem);
-}
-
-.process-step[data-lit="true"] .process-card {
-  border-color: rgb(159 195 214 / 0.32);
-}
-
-/* the step's number, large and faint, behind its drawing */
-.process-num {
-  position: absolute;
-  top: 0.75rem;
-  right: 1rem;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(3rem, 5vw, 4.5rem);
-  line-height: 1;
-  color: rgb(159 195 214 / 0.14);
-}
-
-.process-marker {
-  position: absolute;
-  top: -7px;
-  left: 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: #050608;
-  border: 2px solid var(--line);
-  transition: background-color 0.4s ease, border-color 0.4s ease;
-}
-
-.process-step[data-lit="true"] .process-marker {
-  background: var(--lit);
-  border-color: var(--lit);
-}
-
-/* The step's drawing traces itself, stroke by stroke, once the step lights. */
-.process-icon {
-  display: block;
-  width: clamp(3rem, 4.5vw, 4.25rem);
-  height: auto;
-  margin: 0 0 1.25rem;
-  overflow: visible;
-}
-
-.process-icon path {
-  fill: none;
-  stroke: #9fc3d6;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition: stroke-dashoffset 0.9s cubic-bezier(0.65, 0, 0.35, 1);
-  transition-delay: calc(var(--k) * 140ms);
-}
-
-.process-step[data-lit="true"] .process-icon path {
-  stroke-dashoffset: 0;
-}
-
-.process-step-title {
-  margin: 0 0 0.6rem;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(1.75rem, 2.4vw, 2.25rem);
-  font-weight: 400;
-  letter-spacing: 0;
-}
-
-.process-step-text {
+.step-title {
   margin: 0;
-  max-width: 30ch;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+  line-height: 1.1;
+}
+
+.step-text {
+  margin: 0;
+  max-width: 32ch;
+  color: var(--ink-soft);
   font-size: 1rem;
   line-height: 1.55;
-  color: rgb(196 203 214);
 }
 
-.process-gate {
-  margin: 1rem 0 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #eef1f6;
+
+/* ---------- phone and reduced motion: the line runs down the screen ---------- */
+
+.plano[data-mode="swipe"] .plano-track,
+.plano[data-mode="list"] .plano-track {
+  height: auto;
 }
 
-/* On a wide screen every lower scene owns a whole screen, so two of them
-   never share the view. */
-@media (min-width: 768px) {
-  .process {
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+.plano[data-mode="swipe"] .plano-stage,
+.plano[data-mode="list"] .plano-stage {
+  position: relative;
+  height: auto;
+  gap: 2.5rem;
+  padding: 5rem var(--gutter) 4rem;
 }
 
-@media (max-width: 767px) {
-  .process-line {
-    position: absolute;
-    left: 5px;
-    top: 0.75rem;
-    /* stops at the last step's marker, never under its text */
-    bottom: var(--line-tail, 4rem);
-    width: 2px;
-    height: auto;
-  }
-
-  .process-fill {
-    transform-origin: 50% 0;
-    transform: scaleY(0);
-  }
-
-  .process-steps {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    padding-left: 2rem;
-  }
-
-  .process-step {
-    padding-top: 0;
-  }
-
-  .process-marker {
-    top: 0.45rem;
-    left: -2rem;
-  }
+.plano[data-mode="swipe"] .plano-route,
+.plano[data-mode="list"] .plano-route {
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 0 1rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .process-card,
-  .process-icon path,
-  .process-step,
-  .process-marker {
-    transition: none;
-  }
+.plano[data-mode="swipe"] .plano-line,
+.plano[data-mode="list"] .plano-line {
+  width: 1px;
+  height: auto;
+  margin: 1.1rem 0 1.1rem calc(1.25rem - 0.5px);
+  grid-template-columns: none;
 }
+
+.plano[data-mode="swipe"] .plano-stop,
+.plano[data-mode="list"] .plano-stop {
+  left: 50%;
+}
+
+.plano[data-mode="swipe"] .plano-stop:nth-child(1),
+.plano[data-mode="list"] .plano-stop:nth-child(1) { top: 0; }
+.plano[data-mode="swipe"] .plano-stop:nth-child(2),
+.plano[data-mode="list"] .plano-stop:nth-child(2) { top: 50%; }
+.plano[data-mode="swipe"] .plano-stop:nth-child(3),
+.plano[data-mode="list"] .plano-stop:nth-child(3) { top: 100%; }
+
+.plano[data-mode="swipe"] .steps,
+.plano[data-mode="list"] .steps {
+  grid-template-columns: none;
+  gap: 2.75rem;
+}
+
+.plano[data-mode="swipe"] .step,
+.plano[data-mode="list"] .step {
+  text-align: left;
+  justify-items: start;
+}
+
