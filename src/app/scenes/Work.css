@@ -1,396 +1,286 @@
 /*
- * The work: the revelation language. Space Grotesk only, no accent colour;
- * the only colour on screen is the work itself, given back to the piece in
- * focus.
+ * Destinos. The scene draws words only; the picture is the journey's frame,
+ * which sits in .dest-slot (see journey/JourneyFrame). The section stays
+ * transparent so the frame, painted below the page, shows through.
  */
 
-.work {
+.dest {
   position: relative;
-  z-index: 10;
-  padding: clamp(5rem, 14vh, 9rem) 0 clamp(1.5rem, 4vh, 3rem);
-  background: #050608;
-  color: #eef1f6;
+  color: var(--ink);
 }
 
-.work-head {
+/* ---------- wide: a tall track, a sticky stage ---------- */
+
+.dest-track {
+  position: relative;
+  /* every destination's beat, plus the screen the stage itself occupies */
+  height: calc(var(--beats) * var(--beat-h) + 100svh);
+}
+
+.dest-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: 0.75rem 2rem;
-  padding: 0 var(--gutter);
-  margin-bottom: clamp(2rem, 5vh, 3.25rem);
+  grid-template-columns: minmax(0, 34fr) minmax(0, 60fr);
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(2rem, 4vw, 4.5rem);
+  padding: clamp(5.5rem, 12vh, 8rem) var(--gutter) clamp(2rem, 6vh, 4rem);
+  padding-left: calc(var(--gutter) + 1.5rem); /* clear of the chapter rail */
 }
 
-.work-title {
+.dest-head {
   grid-column: 1;
+  grid-row: 1;
+  max-width: 30ch;
+}
+
+.dest-title {
   margin: 0;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(3.5rem, 9vw, 8.5rem);
+  font-family: var(--serif);
   font-weight: 400;
-  line-height: 0.92;
-  letter-spacing: -0.01em;
+  font-size: clamp(2.5rem, 4.2vw, 4rem);
+  line-height: 1;
 }
 
-.work-lead {
-  grid-column: 1;
+.dest-lead {
   margin: 0.75rem 0 0;
-  max-width: 44ch;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: rgb(178 186 199);
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.55;
 }
 
-.work-nav {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  display: flex;
-  gap: 0.5rem;
+.dest-list {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-self: center;
+  min-height: 22rem;
 }
 
-.work-arrow {
-  display: grid;
-  place-items: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 999px;
-  border: 1px solid rgb(255 255 255 / 0.22);
-  color: #eef1f6;
-  background: transparent;
-  transition: background-color 0.25s ease, opacity 0.25s ease;
+/* Every destination's words occupy the same place; only the current one is
+   unmasked. --in runs 0..1 as it arrives (set from the scroll), --dir says
+   which way it travels: up and out when the next one comes. */
+.dest-item {
+  position: absolute;
+  inset: 0 0 auto;
+  --in: 0;
+  --dir: 1;
 }
 
-.work-arrow:hover:not(:disabled) {
-  background: rgb(255 255 255 / 0.08);
+.dest-item:first-child {
+  --in: 1;
 }
 
-.work-arrow:disabled {
-  opacity: 0.3;
-}
-
-.work-arrow:focus-visible,
-.work-link:focus-visible {
-  outline: 2px solid #eef1f6;
-  outline-offset: 3px;
-}
-
-.work-viewport {
+.dest-mask {
+  display: block;
   overflow: hidden;
-  padding-left: var(--gutter);
-  touch-action: pan-y;
-  /* a card dragged past the left edge fades out in the gutter, never leaving
-     a stray letter behind */
-  mask-image: linear-gradient(to right, transparent 0, transparent calc(var(--gutter) * 0.6), #000 var(--gutter), #000 calc(100% - var(--gutter)), transparent 100%);
+  padding-bottom: 0.08em;
 }
 
-/* only the phone carousel is dragged */
-@media (max-width: 767px) {
-  .work-viewport {
-    cursor: grab;
-  }
-
-  .work-viewport:active {
-    cursor: grabbing;
-  }
-}
-
-
-.work-track {
-  display: flex;
-  gap: clamp(1rem, 2.4vw, 2.25rem);
-  width: max-content;
-  padding-right: var(--gutter);
+.dest-mask > span {
+  display: block;
+  transform: translateY(calc((1 - var(--in)) * 110% * var(--dir)));
   will-change: transform;
 }
 
-.work-card {
-  width: min(62vw, 64rem);
-  user-select: none;
+/* The longer lines are wiped rather than moved, from the top down. */
+.dest-item .dest-result,
+.dest-item .dest-note,
+.dest-item .dest-actions {
+  clip-path: inset(0 0 calc((1 - var(--in)) * 100%) 0);
 }
 
-.work-shot {
+.dest-count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin: 0 0 1.25rem;
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.dest-of {
+  font-size: 0.32em;
+  color: var(--ink-faint);
+}
+
+.dest-kind {
   margin: 0;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  border-radius: 14px;
-  background: #0c0f16;
+  color: var(--diamante);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.work-open {
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  perspective: 1200px;
+.dest-name {
+  margin: 0.35rem 0 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 3vw, 2.9rem);
+  line-height: 1.05;
 }
 
-.work-open:focus-visible {
-  outline: 2px solid #9fc3d6;
-  outline-offset: 4px;
-  border-radius: 14px;
+.dest-result {
+  margin: 1rem 0 0;
+  max-width: 40ch;
+  color: var(--ink-soft);
+  font-size: 1.0625rem;
+  line-height: 1.55;
 }
 
-.work-shot {
-  position: relative;
-  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+.dest-note {
+  margin: 0.6rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
 }
 
-.work-shot[data-tilting="true"] {
-  transition: transform 0.12s linear;
+.dest-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1.75rem;
 }
 
-/* "See details" appears on the piece in focus */
-.work-open-hint {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  padding: 0.45rem 0.9rem;
+.dest-open {
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border: 1px solid rgb(159 195 214 / 0.5);
   border-radius: 999px;
-  background: rgb(8 10 15 / 0.82);
-  border: 1px solid rgb(159 195 214 / 0.4);
-  font-size: 0.875rem;
-  color: #eef1f6;
-  opacity: 0;
-  transform: translateY(0.5rem);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-arrive), border-color 0.25s var(--ease-arrive);
 }
 
-.work-card[data-focus="true"] .work-open-hint {
-  opacity: 1;
-  transform: none;
+.dest-open:hover {
+  background: rgb(159 195 214 / 0.12);
+  border-color: var(--diamante);
 }
 
-/* The piece in focus is never a still: the camera drifts slowly across it,
-   and a product with more screens shows them in turn. */
-.work-card[data-focus="true"] .work-shot:not(.work-shot--lockup) img {
-  animation: work-drift 16s ease-in-out infinite alternate;
+.dest-open:focus-visible,
+.dest-link:focus-visible {
+  outline: 2px solid var(--diamante);
+  outline-offset: 3px;
 }
 
-@keyframes work-drift {
-  from {
-    transform: scale(1.02) translate(0, 0);
-  }
-  to {
-    transform: scale(1.1) translate(-2%, -3%);
-  }
+.dest-link {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  text-decoration: underline;
+  text-decoration-color: var(--hairline);
+  text-underline-offset: 4px;
 }
 
-.work-shot--cycle img {
-  position: absolute;
-  inset: 0;
+.dest-link:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink);
 }
 
-.work-shot--cycle img:first-child {
-  position: relative;
-}
-
-.work-card[data-focus="true"] .work-shot--cycle img:not(:first-child) {
-  animation:
-    work-drift 16s ease-in-out infinite alternate,
-    work-cycle 10s ease-in-out infinite;
-}
-
-.work-shot--cycle img:not(:first-child) {
-  opacity: 0;
-}
-
-@keyframes work-cycle {
-  0%,
-  40% {
-    opacity: 0;
-  }
-  50%,
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.work-shot img {
+/* Where the frame sits: a 16:10 box, centred on the right. */
+.dest-slot {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: center;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: calc(100svh - 9rem);
+  justify-self: end;
+}
+
+/* ---------- phone: the frame on top, a swipe below ---------- */
+
+.dest-phone {
+  padding: 5rem 0 3rem;
+}
+
+.dest-phone .dest-head {
+  padding: 0 var(--gutter);
+}
+
+.dest-phone .dest-slot {
+  width: calc(100% - 2 * var(--gutter));
+  margin: 1.75rem auto 0;
+}
+
+.dest-swipe {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 0 var(--gutter) 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.dest-swipe::-webkit-scrollbar {
+  display: none;
+}
+
+.dest-card {
+  flex: 0 0 86%;
+  scroll-snap-align: start;
+  --in: 1;
+  --dir: 1;
+}
+
+.dest-swipe .dest-card[data-current="false"] {
+  opacity: 0.45;
+  transition: opacity 0.35s var(--ease-travel);
+}
+
+.dest-swipe .dest-card[data-current="true"] {
+  opacity: 1;
+  transition: opacity 0.35s var(--ease-travel);
+}
+
+.dest-phone .dest-count {
+  font-size: 2.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.dest-phone .dest-name {
+  font-size: 1.85rem;
+}
+
+.dest-phone .dest-result {
+  font-size: 1rem;
+}
+
+/* ---------- reduced motion: a plain list ---------- */
+
+.dest-plain {
+  display: grid;
+  gap: 3.5rem;
+  padding: 6rem var(--gutter) 4rem;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.dest-plain .dest-card {
+  --in: 1;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.dest-still {
+  width: 100%;
+  aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: top center;
-  display: block;
-  pointer-events: none;
-  filter: grayscale(1) brightness(0.82);
-  transform: scale(1.02);
-  transition: filter 0.7s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-/* The Eco360 mark is drawn for a dark ground: white letters, glowing 360. */
-.work-shot--lockup {
-  display: grid;
-  place-items: center;
-  background: radial-gradient(ellipse at 50% 55%, #14201b 0%, #0a0f0d 70%);
-}
-
-.work-shot--lockup img {
-  width: 46%;
-  height: auto;
-  object-fit: contain;
-}
-
-/* the Dallas Sync screens are wider than the card: anchored on the brand,
-   top left, so the crop only ever takes the far right edge */
-.work-card[data-work="dallas_sync"] .work-shot img {
-  object-position: left top;
-}
-
-.work-card[data-focus="true"] .work-shot img {
-  filter: none;
-  transform: scale(1);
-}
-
-.work[data-out="true"] .work-card .work-shot img {
-  filter: grayscale(1) brightness(0.82);
-}
-
-.work-meta {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: 0.35rem 1.5rem;
-  padding-top: 1.1rem;
-  transition: opacity 0.5s ease;
-}
-
-.work-card[data-focus="false"] .work-meta {
-  opacity: 0.45;
-}
-
-.work-kind {
-  grid-column: 1 / -1;
-  font-size: 0.875rem;
-  color: #9fc3d6;
-}
-
-.work-name {
-  grid-column: 1;
-  margin: 0;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: clamp(1.875rem, 2.8vw, 2.75rem);
-  font-weight: 400;
-  letter-spacing: -0.005em;
-}
-
-.work-result {
-  grid-column: 1;
-  margin: 0;
-  max-width: 52ch;
-  font-size: 1rem;
-  line-height: 1.55;
-  color: rgb(196 203 214);
-}
-
-.work-note {
-  grid-column: 1;
-  margin: 0;
-  font-size: 0.875rem;
-  color: rgb(160 168 182);
-}
-
-.work-link {
-  grid-column: 2;
-  grid-row: 2;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: #eef1f6;
-  text-decoration: underline;
-  text-underline-offset: 0.3em;
-  text-decoration-color: rgb(255 255 255 / 0.4);
-  white-space: nowrap;
-}
-
-.work-link:hover {
-  text-decoration-color: #eef1f6;
-}
-
-@media (max-width: 767px) {
-  .work-head {
-    grid-template-columns: 1fr;
-  }
-
-  .work-nav {
-    display: none;
-  }
-
-  .work-card {
-    width: 82vw;
-  }
-
-  .work-meta {
-    grid-template-columns: 1fr;
-  }
-
-  .work-link {
-    grid-column: 1;
-    grid-row: auto;
-    justify-self: start;
-    margin-top: 0.35rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .work-card[data-focus="true"] .work-shot img {
-    animation: none !important;
-  }
-
-  .work-shot img,
-  .work-meta {
-    transition: none;
-  }
-}
-
-/* Pinned on a wide screen: the whole scene fits one screen while the
-   cards pass, so the card's height is taken from what the screen has left. */
-@media (min-width: 768px) {
-  .work {
-    /* a breath of empty page after the story, before the work pins */
-    margin-top: 30svh;
-    height: 100svh;
-    padding: 5.5rem 0 1.25rem;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .work-head {
-    margin-bottom: 1.5rem;
-  }
-
-  .work-title {
-    font-size: clamp(3rem, 6vw, 6rem);
-  }
-
-  .work-lead {
-    margin-top: 0.4rem;
-  }
-
-  .work-viewport {
-    flex: 1;
-    min-height: 0;
-  }
-
-  /* the picture takes the height the heading and the captions leave
-     (measured in Work.tsx), and its width follows */
-  .work-card {
-    width: calc(var(--shot-h, 50svh) * 1.6);
-  }
-
-  .work-meta {
-    padding-top: 0.85rem;
-  }
-
-  .work-result {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+  border-radius: 14px;
+  border: 1.5px solid rgb(159 195 214 / 0.4);
+  margin-bottom: 1.25rem;
 }

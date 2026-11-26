@@ -14,7 +14,7 @@ vi.mock('react-i18next', () => ({
 
 const { draggableCreate, scrollCreate } = vi.hoisted(() => ({
   draggableCreate: vi.fn(() => [{ kill: vi.fn(), update: vi.fn(), applyBounds: vi.fn() }]),
-  scrollCreate: vi.fn(() => ({ start: 0, end: 1 })),
+  scrollCreate: vi.fn(() => ({ start: 0, end: 1, kill: vi.fn() })),
 }))
 vi.mock('../../src/app/scroll/gsap', () => ({
   gsap: {
@@ -38,10 +38,13 @@ afterEach(() => {
   container?.remove()
 })
 
-function render(phone = false) {
+function render(phone = false, reduced = false) {
   draggableCreate.mockClear()
   scrollCreate.mockClear()
-  window.matchMedia = ((q: string) => ({ matches: phone && q.includes('max-width'), media: q, addEventListener() {}, removeEventListener() {} })) as unknown as typeof window.matchMedia
+  window.matchMedia = ((q: string) => ({
+    matches: (phone && q.includes('max-width')) || (reduced && q.includes('reduced-motion')),
+    media: q, addEventListener() {}, removeEventListener() {},
+  })) as unknown as typeof window.matchMedia
   container = document.createElement('div')
   document.body.appendChild(container)
   root = createRoot(container)
@@ -49,38 +52,57 @@ function render(phone = false) {
   return container
 }
 
-describe('work carousel', () => {
-  it('shows the three destinations, Dallas Sync first and in focus', () => {
+describe('destinations', () => {
+  it('shows the three destinations, Dallas Sync first and current', () => {
     const c = render()
-    const ids = [...c.querySelectorAll('[data-work]')].map((n) => n.getAttribute('data-work'))
+    const ids = [...c.querySelectorAll('[data-dest]')].map((n) => n.getAttribute('data-dest'))
     // OMD's platforms are the employer's work: they live in the story, not here
     expect(ids).toEqual(['dallas_sync', 'secret', 'dallas_motel'])
     expect(ids).toEqual(WORK.map((w) => w.id))
-    expect(c.querySelector('[data-work="dallas_sync"]')?.getAttribute('data-focus')).toBe('true')
+    expect(c.querySelector('[data-dest="dallas_sync"]')?.getAttribute('data-current')).toBe('true')
     expect(c.querySelector('section#projects')).not.toBeNull()
   })
 
-  it('on a wide screen, pins the scene and lets the page scroll carry the cards', () => {
-    render(false)
+  it('on a wide screen, holds a sticky stage with a slot for the frame, and follows the scroll without a pin', () => {
+    const c = render(false)
+    expect(c.querySelector('section')?.getAttribute('data-mode')).toBe('scroll')
+    expect(c.querySelector('.dest-stage [data-frame-slot]')).not.toBeNull()
     expect(draggableCreate).not.toHaveBeenCalled()
-    const vars = scrollCreate.mock.calls.map((c) => (c as unknown[])[0] as Record<string, unknown>)
-    expect(vars.some((v) => v.pin === true && v.scrub === true)).toBe(true)
+    const vars = scrollCreate.mock.calls.map((call) => (call as unknown[])[0] as Record<string, unknown>)
+    expect(vars.length).toBeGreaterThan(0)
+    // the stage is sticky CSS: no GSAP pin, so the nav can jump anywhere
+    expect(vars.some((v) => v.pin)).toBe(false)
+    // only the current destination can take focus
+    expect(c.querySelectorAll('.dest-item[inert]').length).toBe(WORK.length - 1)
   })
 
-  it('on a phone, drags sideways only, leaving vertical scrolling to the page', () => {
-    render(true)
-    expect(draggableCreate).toHaveBeenCalled()
-    const vars = (draggableCreate.mock.calls[0] as unknown[])[1] as Record<string, unknown>
-    expect(vars.type).toBe('x')
-    expect(vars.lockAxis).toBe(true)
-    expect(vars.allowNativeTouchScrolling).toBe(true)
-    expect(vars.inertia).toBe(true)
+  it('on a phone, puts the frame on top and the destinations in a native swipe', () => {
+    const c = render(true)
+    expect(c.querySelector('section')?.getAttribute('data-mode')).toBe('swipe')
+    expect(c.querySelector('.dest-phone [data-frame-slot]')).not.toBeNull()
+    expect(c.querySelectorAll('.dest-swipe [data-dest]').length).toBe(WORK.length)
+    expect(draggableCreate).not.toHaveBeenCalled()
   })
 
-  it('never shows the old OMD figures', () => {
+  it('with reduced motion, is a plain list with each picture and no frame', () => {
+    const c = render(false, true)
+    expect(c.querySelector('section')?.getAttribute('data-mode')).toBe('list')
+    expect(c.querySelector('[data-frame-slot]')).toBeNull()
+    expect(c.querySelectorAll('.dest-plain img.dest-still').length).toBe(WORK.length)
+  })
+
+  it('says, for the illustrative screen, that it is in training mode', () => {
+    const c = render()
+    expect(c.querySelector('[data-dest="dallas_sync"]')?.textContent).toContain('work.items.dallas_sync.note')
+  })
+
+  it('has the copy in both languages', () => {
     for (const bundle of [pt, en]) {
-      const all = JSON.stringify(bundle.work)
-      expect(all).not.toMatch(/\b87\b|40M|\b274\b/)
+      for (const w of WORK) {
+        const item = (bundle.work.items as Record<string, { title?: string; result?: string }>)[w.id]
+        expect(item?.title, w.id).toBeTruthy()
+        expect(item?.result, w.id).toBeTruthy()
+      }
     }
   })
 })

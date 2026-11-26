@@ -1,0 +1,88 @@
+/*
+ * The journey's frame. Fixed above the light and below the page's text
+ * (main is z-index 10), so scenes lay their words out around its slot.
+ */
+.jf {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  contain: strict;
+}
+
+.jf[data-visible="false"] {
+  visibility: hidden;
+}
+
+/* A 16:10 panel the width of the viewport, placed and scaled by one
+   transform from its top-left corner. */
+.jf-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  aspect-ratio: 16 / 10;
+  transform-origin: 0 0;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #05070a;
+  will-change: transform;
+  /* the screen's own light falling on the page around it */
+  box-shadow: 0 30px 120px -20px rgb(159 195 214 / 0.16);
+}
+
+.jf-layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+.jf-layer[data-on="false"] {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.jf-layer > img,
+.jf-layer > video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* Rack focus: the sharp picture rises over its blurred copy. */
+.jf-sharp {
+  opacity: var(--sharp, 1);
+}
+
+/* Receding: a dark veil drawn over the outgoing picture. */
+.jf-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: var(--dim, 0);
+}
+
+/* The hairline: the same edge the hero's portrait frame has. */
+.jf-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid rgb(159 195 214 / 0.55);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Phone: content changes come from a swipe, not from the scroll, so the
+   change itself is timed: the new picture racks in over the old one. */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .jf-layer {
+    transition:
+      opacity 0.45s var(--ease-travel),
+      transform 0.45s var(--ease-arrive);
+  }
+}
