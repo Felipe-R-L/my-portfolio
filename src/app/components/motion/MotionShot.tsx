@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { MOTION, type CameraKey, type Crop } from "../../data/motion";
+import { MOTION, type CameraKey } from "../../data/motion";
 import type { ProjectVideoSources } from "../../data/work";
 import { CLIP_DIR, clickAt, cursorAt, loadClip, type ClipMeta } from "./clip";
 import "./MotionShot.css";
@@ -29,25 +29,6 @@ function cameraAt(keys: CameraKey[], t: number): CameraKey {
     }
   }
   return keys[keys.length - 1];
-}
-
-/** Where the crops land: a column on the right, each at the scale that fits it. */
-function layoutCrops(crops: Crop[]) {
-  const colX = 880;
-  const colW = 520;
-  const gap = 34;
-  const label = 40;
-  const sized = crops.map((c) => {
-    const s = Math.min(1.35, colW / c.rect.w);
-    return { ...c, s, w: c.rect.w * s, h: c.rect.h * s };
-  });
-  const total = sized.reduce((sum, c) => sum + c.h + label, 0) + gap * (sized.length - 1);
-  let y = Math.max(40, (H - total) / 2);
-  return sized.map((c) => {
-    const at = { ...c, x: colX, y: y + label };
-    y += c.h + label + gap;
-    return at;
-  });
 }
 
 /**
@@ -93,7 +74,7 @@ function useStillOnly(): boolean {
  * A project's recorded screen, presented with motion (data/motion.ts): the
  * video plays inside a screen the camera moves, the hand is drawn over it
  * from its recorded path (smooth at the display's rate, whatever the video's),
- * and details come off it as crops. Everything is driven by the video's own
+ * with the caption of each moment. Everything is driven by the video's own
  * clock and moves by transform and opacity only.
  *
  * It fetches nothing heavy until `active`; it pauses when not. With reduced
@@ -110,7 +91,7 @@ export function MotionShot({
 }: {
   clip: string;
   sources: ProjectVideoSources;
-  /** i18n base for the captions and crop labels: `work.items.<id>.motion`. */
+  /** i18n base for the captions: `work.items.<id>.motion`. */
   textBase: string;
   active: boolean;
   /** Near: create the video ahead of time, while the page is still. */
@@ -131,7 +112,6 @@ export function MotionShot({
   const pulseRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const capRef = useRef<HTMLDivElement>(null);
-  const cropRefs = useRef<(HTMLDivElement | null)[]>([]);
   const playable = !still;
 
   useEffect(() => {
@@ -172,32 +152,10 @@ export function MotionShot({
     return () => ro?.disconnect();
   }, []);
 
-  // the crops' stills, decoded before they are shown: decoding a 1440 px image
-  // the moment a crop appears cost a dropped frame
-  const [stillsReady, setStillsReady] = useState(false);
-  useEffect(() => {
-    if (spec.mode !== "crops" || !meta || !(armed || !playable)) return;
-    let live = true;
-    const names = spec.crops(meta).map((c) => c.still);
-    Promise.all(
-      names.map((n) => {
-        const img = new Image();
-        img.src = `${CLIP_DIR}/${clip}-${n}.webp`;
-        return img.decode().catch(() => {});
-      }),
-    ).then(() => live && setStillsReady(true));
-    return () => {
-      live = false;
-    };
-  }, [spec, meta, armed, playable, clip]);
-
   const plan = useMemo(() => {
     if (!meta) return null;
-    if (spec.mode === "camera") {
-      return { keys: spec.camera(meta), captions: spec.captions(meta), ring: spec.ring?.(meta) ?? null, crops: [] as ReturnType<typeof layoutCrops> };
-    }
-    if (spec.mode === "crops") return { keys: null, captions: [], ring: null, crops: layoutCrops(spec.crops(meta)) };
-    return { keys: null, captions: [], ring: null, crops: [] as ReturnType<typeof layoutCrops> };
+    if (spec.mode === "camera") return { keys: spec.camera(meta), captions: spec.captions(meta), ring: spec.ring?.(meta) ?? null };
+    return { keys: null, captions: [], ring: null };
   }, [meta, spec]);
 
   // one frame of the composition at time `tm` (seconds on the video's clock)
@@ -206,21 +164,14 @@ export function MotionShot({
     if (!screen || !meta || !plan) return;
     const end = meta.duration;
     if (plan.keys) {
-      const c = rest ? { rx: 0, ry: 0, s: 1, x: W / 2, y: H / 2 } : cameraAt(plan.keys, tm);
+      const c = rest ? { rx: 0, ry: 0, s: 1, x: W / 2, y: H / 2 } : { ...cameraAt(plan.keys, tm) };
+      // zoomed in, the view never runs past the screen's edge
+      if (c.s >= 1) {
+        c.x = Math.min(Math.max(c.x, W / (2 * c.s)), W - W / (2 * c.s));
+        c.y = Math.min(Math.max(c.y, H / (2 * c.s)), H - H / (2 * c.s));
+      }
       screen.style.transform = `translate(${W / 2}px, ${H / 2}px) rotateX(${c.rx}deg) rotateY(${c.ry}deg) scale(${c.s}) translate(${-c.x}px, ${-c.y}px)`;
-    } else if (plan.crops.length) {
-      // the screen steps aside while the details come off it, and comes back for the loop
-      const side = rest ? 1 : seg(tm, 0.3, 1.3) * (1 - seg(tm, end + 0.2, end + HOLD));
-      screen.style.transform = `translate(${lerp(0, 40, side)}px, ${lerp(0, 198, side)}px) scale(${lerp(1, 0.56, side)})`;
     }
-    plan.crops.forEach((c, i) => {
-      const el = cropRefs.current[i];
-      if (!el) return;
-      const k = rest ? 1 : seg(tm, c.at, c.at + 0.55, out) * (1 - seg(tm, end + 0.1, end + 0.7));
-      el.style.opacity = String(k);
-      // translate and opacity only: a changing scale would re-raster the still
-      el.style.transform = `translate(${c.x + (1 - k) * -36}px, ${c.y}px)`;
-    });
     // the hand
     const cur = cursorRef.current;
     if (cur) {
@@ -324,23 +275,9 @@ export function MotionShot({
             </>
           ) : null}
         </div>
-        {plan?.crops.map((c, i) => (
-          <div
-            key={c.still}
-            ref={(el) => (cropRefs.current[i] = el)}
-            className="ms-crop"
-            style={{
-              width: c.w,
-              height: c.h,
-              backgroundImage: stillsReady ? `url(${CLIP_DIR}/${clip}-${c.still}.webp)` : undefined,
-              backgroundSize: `${W * c.s}px ${H * c.s}px`,
-              backgroundPosition: `${-c.rect.x * c.s}px ${-c.rect.y * c.s}px`,
-            }}
-          >
-            <span className="ms-label">{t(`${textBase}.${c.key}`)}</span>
-          </div>
-        ))}
-        {plan && plan.captions.length > 0 && <div ref={capRef} className="ms-cap" />}
+        {plan && plan.captions.length > 0 && (
+          <div ref={capRef} className="ms-cap" data-at={spec.mode === "camera" && spec.captionTop ? "top" : "bottom"} />
+        )}
       </div>
     </div>
   );

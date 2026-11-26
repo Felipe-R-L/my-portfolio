@@ -84,43 +84,22 @@
   opacity: 0;
 }
 
-/* A detail lifted off the screen. */
-.ms-crop {
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-radius: 14px;
-  background-color: #0c0f13;
-  background-repeat: no-repeat;
-  border: 2px solid rgb(159 195 214 / 0.55);
-  box-shadow: 0 30px 70px rgb(0 0 0 / 0.55);
-  transform-origin: 0 0;
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
-.ms-label {
-  position: absolute;
-  left: 2px;
-  bottom: calc(100% + 12px);
-  color: var(--diamante);
-  font: 600 calc(19px * var(--fs)) / 1 var(--font-sans, Inter, system-ui, sans-serif);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
 /* The caption of the moment, low on the left. */
 .ms-cap {
   position: absolute;
   left: 48px;
   bottom: 46px;
-  max-width: 820px;
+  max-width: 900px;
   padding: 14px 20px;
   border-radius: 14px;
   border: 1px solid rgb(159 195 214 / 0.35);
   background: rgb(6 8 11 / 0.88);
   color: var(--ink);
-  font: 400 calc(34px * var(--fs)) / 1.1 var(--serif);
+  font: 400 calc(42px * var(--fs)) / 1.1 var(--serif);
   opacity: 0;
+}
+
+.ms-cap[data-at="top"] {
+  top: 46px;
+  bottom: auto;
 }

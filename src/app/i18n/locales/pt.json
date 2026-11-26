@@ -256,6 +256,7 @@
           "result": "O motel passou a ter um endereço próprio, com o preço certo calculado na hora antes de qualquer conversa, reservas que chegam no WhatsApp já com a suíte e as horas escolhidas e um painel em que a equipe muda preços, feriados e cardápio sem chamar ninguém."
         },
         "motion": {
+          "days": "O preço muda com o dia da semana",
           "weekday": "Segunda a quinta",
           "weekend": "Fim de semana",
           "holiday": "Feriados"

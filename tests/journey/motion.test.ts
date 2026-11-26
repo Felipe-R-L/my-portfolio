@@ -37,7 +37,7 @@ describe("the motion of each clip", () => {
     }
   });
 
-  it("reads only marks, boxes and stills the take recorded, and keeps every moment inside the clip", () => {
+  it("reads only marks and boxes the take recorded, with every key a number and in order", () => {
     for (const [name, spec] of Object.entries(MOTION)) {
       const m = meta(name);
       if (spec.mode === "camera") {
@@ -45,13 +45,6 @@ describe("the motion of each clip", () => {
         for (const k of keys) for (const v of Object.values(k)) expect(Number.isFinite(v), `${name} camera`).toBe(true);
         for (let i = 1; i < keys.length; i++) expect(keys[i].t, `${name} keys in order`).toBeGreaterThanOrEqual(keys[i - 1].t);
         for (const c of spec.captions(m)) expect(c.from < c.to && c.from >= 0, `${name} caption ${c.key}`).toBe(true);
-      }
-      if (spec.mode === "crops") {
-        for (const c of spec.crops(m)) {
-          expect(Number.isFinite(c.at) && c.at >= 0 && c.at < m.duration, `${name} crop ${c.key} at ${c.at}`).toBe(true);
-          expect(existsSync(new URL(`${name}-${c.still}.webp`, DIR)), `${name} still ${c.still}`).toBe(true);
-          expect(c.rect.x >= 0 && c.rect.y >= 0 && c.rect.x + c.rect.w <= 1440 && c.rect.y + c.rect.h <= 900, `${name} rect`).toBe(true);
-        }
       }
     }
   });
@@ -62,7 +55,7 @@ describe("the motion of each clip", () => {
     for (const w of WORK) {
       const spec = MOTION[w.motion!];
       const m = meta(w.motion!);
-      const keys = spec.mode === "camera" ? spec.captions(m).map((c) => c.key) : spec.mode === "crops" ? spec.crops(m).map((c) => c.key) : [];
+      const keys = spec.mode === "camera" ? spec.captions(m).map((c) => c.key) : [];
       for (const bundle of [pt, en]) for (const k of keys) expect(bundle.work.items[w.id].motion?.[k], `${w.id}.motion.${k}`).toBeTruthy();
     }
   });

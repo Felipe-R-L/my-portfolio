@@ -97,7 +97,7 @@ if (which === "secret-detail" || which === "all") {
   await human.wait(900);
   take.mark("out");
   const t = await take.stop();
-  results["secret-detail"] = { ...encode(t, `${OUT}secret-detail`, { from: t.marks.in - 0.3, to: t.marks.out, stills: { variant: t.marks.variant, cart: t.marks.cart, pix: t.marks.pix } }), blocked: blocked() };
+  results["secret-detail"] = { ...encode(t, `${OUT}secret-detail`, { from: t.marks.in - 0.3, to: t.marks.out }), blocked: blocked() };
   discard(t);
   await browser.close();
 }
@@ -149,7 +149,7 @@ if (which === "motel-detail" || which === "all") {
   await human.wait(1400);
   take.mark("out");
   const t = await take.stop();
-  results["motel-detail"] = { ...encode(t, `${OUT}dallas-motel-detail`, { from: t.marks.in - 0.3, to: t.marks.out, stills: { weekday: t.marks.weekday, weekend: t.marks.weekend, holiday: t.marks.holiday } }), blocked: blocked() };
+  results["motel-detail"] = { ...encode(t, `${OUT}dallas-motel-detail`, { from: t.marks.in - 0.3, to: t.marks.out }), blocked: blocked() };
   discard(t);
   await browser.close();
 }
