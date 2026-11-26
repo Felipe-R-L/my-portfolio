@@ -6,27 +6,9 @@ import { boxOf, notify, pageTop, registerBeats } from "../journey/beats";
 import { SCROLL } from "../motion/tokens";
 import { ScrollTrigger } from "../scroll/gsap";
 import { clamp01 } from "../scroll/math";
-import { PHONE_QUERY } from "../scroll/useScene";
+import { useJourneyMode } from "../journey/useJourneyMode";
 import { WorkCase } from "./WorkCase";
 import "./Work.css";
-
-type Mode = "scroll" | "swipe" | "list";
-
-function useMode(): Mode {
-  const get = (): Mode => {
-    if (typeof window === "undefined" || !window.matchMedia) return "scroll";
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return "list";
-    return window.matchMedia(PHONE_QUERY).matches ? "swipe" : "scroll";
-  };
-  const [mode, setMode] = useState<Mode>(get);
-  useEffect(() => {
-    const queries = [window.matchMedia?.("(prefers-reduced-motion: reduce)"), window.matchMedia?.(PHONE_QUERY)];
-    const update = () => setMode(get());
-    queries.forEach((q) => q?.addEventListener?.("change", update));
-    return () => queries.forEach((q) => q?.removeEventListener?.("change", update));
-  }, []);
-  return mode;
-}
 
 /** Share of a destination's scroll spent arriving; the rest holds still. */
 const ARRIVE = SCROLL.destination.approach / (SCROLL.destination.approach + SCROLL.destination.hold);
@@ -44,7 +26,7 @@ const ARRIVE = SCROLL.destination.approach / (SCROLL.destination.approach + SCRO
  */
 export function Work() {
   const { t } = useTranslation();
-  const mode = useMode();
+  const mode = useJourneyMode();
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const slotRef = useRef<HTMLDivElement>(null);
@@ -81,13 +63,13 @@ export function Work() {
       const vh = window.innerHeight;
       const beatPx = (SCROLL.destination.approach + SCROLL.destination.hold) * vh;
       const top = pageTop(track);
-      const last = WORK.length - 1;
       return WORK.map((w, i) => ({
         content: w.id,
         // the first destination starts arriving while the stage is still
-        // rising into view; the last one follows its slot off the screen
+        // rising into view
         start: i === 0 ? top - 0.5 * vh : top + i * beatPx,
-        end: i === last ? top + (i + 1) * beatPx + vh : top + (i + 1) * beatPx,
+        // the last one ends as the stage lets go: Em uso takes the frame from there (T3)
+        end: top + (i + 1) * beatPx,
         arrive: i === 0 ? (0.5 * vh + ARRIVE * beatPx) / (0.5 * vh + beatPx) : ARRIVE,
         gesture: "rack" as const,
         slot,

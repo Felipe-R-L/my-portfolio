@@ -35,6 +35,9 @@ export type Beat = {
   gesture: Gesture;
   /** Where the frame sits, read live so a slot that scrolls is followed. */
   slot: () => Box;
+  /** false: the frame does not travel from the previous beat's slot, it is
+      already where this beat holds it (a locked-off camera). */
+  travel?: boolean;
 };
 
 export type FrameState =
@@ -64,6 +67,11 @@ export function lerpBox(a: Box, b: Box, t: number): Box {
 /** How far the first destination starts, as a fraction of its final size. */
 export const FIRST_APPROACH_FROM = 0.72;
 
+/** Two beats measured from different elements (a scene's track, the next
+    scene's stage, svh against rounded heights) can miss each other by a
+    pixel or two; within this they count as touching. */
+export const TOUCH_PX = 4;
+
 export function frameAt(scroll: number, beats: readonly Beat[]): FrameState {
   if (beats.length === 0 || scroll < beats[0].start) return { visible: false };
   // the beat in effect: the last one that has started
@@ -78,10 +86,10 @@ export function frameAt(scroll: number, beats: readonly Beat[]): FrameState {
   // a beat only comes *from* the previous one when they touch; after a gap
   // the frame arrives fresh, out of the distance
   const before = i > 0 ? beats[i - 1] : null;
-  const prev = before && Math.abs(before.end - beat.start) < 1 ? before : null;
+  const prev = before && Math.abs(before.end - beat.start) <= TOUCH_PX ? before : null;
   const here = beat.slot();
   const e = easeInOut(mix);
-  const box = prev && mix < 1 ? lerpBox(prev.slot(), here, e) : here;
+  const box = prev && mix < 1 && beat.travel !== false ? lerpBox(prev.slot(), here, e) : here;
   return {
     visible: true,
     box,

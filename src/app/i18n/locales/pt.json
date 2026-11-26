@@ -310,16 +310,6 @@
       "result": "O resultado"
     }
   },
-  "proof": {
-    "title": "OMD do Brasil",
-    "lead": "Desde 2024 sou desenvolvedor na OMD do Brasil, construindo as plataformas que empresas usam para acompanhar suas máquinas e veículos em tempo real.",
-    "items": {
-      "empresas": "empresas usam as plataformas",
-      "maquinas": "máquinas conectadas",
-      "consulta": "para abrir um relatório que levava 30 s"
-    },
-    "agrishow": "O OMDfarm, uma dessas plataformas, foi apresentado na Agrishow."
-  },
   "talk": {
     "blog_label": "Último artigo no blog",
     "email_label": "Ou por e-mail",
@@ -365,14 +355,15 @@
       },
       "offline": {
         "label": "sem internet",
-        "text": "Quando a internet cai, a recepção continua lançando, enxerga a fila do que ainda não subiu e o sistema sincroniza sozinho quando a rede volta, que é exatamente o que o vídeo ao lado mostra."
+        "text": "Quando a internet cai, a recepção continua lançando, enxerga a fila do que ainda não subiu e o sistema sincroniza sozinho quando a rede volta."
       },
       "training": {
         "label": "modo treino",
         "text": "Quem entra na equipe aprende num modo treino separado, que tem as mesmas telas e nenhum dado real, então um erro cometido ali não muda o caixa de ninguém."
       }
     },
-    "video_note": "Gravado em modo treino, com dados fictícios."
+    "video_note": "O vídeo mostra isso acontecendo, gravado em modo treino, com dados fictícios.",
+    "still_note": "Tela do sistema em modo treino, sem dados reais."
   },
   "plano": {
     "title": "Como funciona",

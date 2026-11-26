@@ -71,6 +71,14 @@ describe("the director", () => {
     expect(s.approach).toBeCloseTo(FIRST_APPROACH_FROM)
   });
 
+  it("treats beats a couple of pixels apart as touching (rounding between scenes)", () => {
+    const near = [beat("a", 0, 1000, slotA), { ...beat("b", 1002.5, 2000, slotA), travel: false }]
+    const s = frameAt(1100, near)
+    expect(s.visible && s.prev).toBe("a")
+    expect(s.visible && s.approach).toBe(1)
+    expect(s.visible && s.box).toEqual(slotA)
+  });
+
   it("racks focus smoothly and cuts cleanly", () => {
     const r0 = layerMix("rack", 0);
     const r1 = layerMix("rack", 1);

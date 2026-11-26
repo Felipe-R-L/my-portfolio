@@ -1,98 +1,130 @@
-import { useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ScrollTrigger, gsap } from "../scroll/gsap";
-import { countAt, span } from "../scroll/math";
-import { useScene } from "../scroll/useScene";
-import { useTilt } from "../scroll/useTilt";
+import { boxOf, pageTop, registerBeats } from "../journey/beats";
+import type { Box } from "../journey/director";
+import { useJourneyMode } from "../journey/useJourneyMode";
+import { SCROLL } from "../motion/tokens";
+import { WORK } from "../data/work";
 import "./Proof.css";
 
-/** The OMD figures (LinkedIn, confirmed by Felipe on 2026-11-24). */
-export const PROOF = [
-  { id: "empresas", value: 31, prefix: "", suffix: "" },
-  { id: "maquinas", value: 92, prefix: "", suffix: "" },
-  { id: "consulta", value: 2, prefix: "<\u2009", suffix: "\u2009s" },
-] as const;
+/** The three facts, in the order they are read. Prose: `telemetria.entries.<id>`. */
+export const ENTRIES = ["since", "offline", "training"] as const;
+
+const STILL = {
+  src: "/assets/projects/dallas-sync-op-1440.webp",
+  srcSet: "/assets/projects/dallas-sync-op-720.webp 720w, /assets/projects/dallas-sync-op-1440.webp 1440w",
+};
 
 /**
- * Scene 5, the proof: once the figures are well inside the screen, they
- * count up on their own, once, at their own pace, never tied to the scroll
- * (tied to it, they ran before anyone was looking). With reduced motion they
- * simply show their final values.
+ * Em uso: does it really work? Facts, not counters: Dallas Sync in
+ * production at the Dallas Motel since September 2026, the front desk working
+ * with no internet, and a training mode apart from the real data, with the
+ * recording as the proof.
+ *
+ * T3, from the destinations: a change of light with the camera locked off.
+ * The frame does not move (it holds the exact box both stages give it) while
+ * the last destination's words leave, this chapter's come in, the cold light
+ * of the screens goes out and the picture cuts to the front desk.
  */
 export function Proof() {
   const { t } = useTranslation();
-  const sectionRef = useRef<HTMLElement>(null);
-  useTilt(sectionRef, 5);
+  const mode = useJourneyMode();
+  const trackRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const slotRef = useRef<HTMLDivElement>(null);
 
-  useScene(sectionRef, ({ reduced }) => {
-    if (reduced) return;
-    const root = sectionRef.current!;
-    const nums = [...root.querySelectorAll<HTMLElement>("[data-count]")];
-    const show = (p: number) =>
-      nums.forEach((el, i) => {
-        // each figure starts a little after the previous one
-        const local = span(p, i * 0.08, 0.6 + i * 0.08);
-        const n = countAt(local, Number(el.dataset.count));
-        el.textContent = String(n);
-        const fig = el.closest<HTMLElement>(".proof-figure")!;
-        // one square per company, one dot per machine, lit as the count climbs
-        fig.querySelectorAll<HTMLElement>(".proof-unit").forEach((u, k) => {
-          u.dataset.on = k < n ? "true" : "false";
-        });
-        // the report: a 30 s bar that shrinks to the 2 s it takes now
-        const bar = fig.querySelector<HTMLElement>(".proof-bar-now");
-        if (bar) bar.style.transform = `scaleX(${1 - local * (1 - 2 / 30)})`;
-      });
-    show(0);
-    const clock = { p: 0 };
-    ScrollTrigger.create({
-      trigger: root.querySelector(".proof-figures"),
-      // the whole row of figures on screen, a little above the middle
-      start: "bottom 85%",
-      once: true,
-      onEnter: () =>
-        gsap.to(clock, { p: 1, duration: 2.4, ease: "none", onUpdate: () => show(clock.p) }),
+  useLayoutEffect(() => {
+    if (mode === "list") return;
+    return registerBeats("telemetria", () => {
+      const slot = slotRef.current;
+      if (!slot) return [];
+      const vh = window.innerHeight;
+      const live = () => boxOf(slotRef.current);
+      if (mode === "swipe") {
+        const top = pageTop(slot);
+        return [{ content: "offline", start: top - vh, end: top + slot.offsetHeight, arrive: 0, gesture: "cut" as const, slot: live }];
+      }
+      const track = trackRef.current;
+      const stage = stageRef.current;
+      const dest = document.querySelector(".dest-track");
+      if (!track || !stage) return [];
+      const stuck = pageTop(track);
+      // where the slot sits once the stage is stuck: the same box the
+      // destinations' stage gives the frame, so nothing moves across T3
+      const s = slot.getBoundingClientRect();
+      const st = stage.getBoundingClientRect();
+      const held: Box = { x: s.left, y: s.top - st.top, w: s.width, h: s.height };
+      // T3 starts where the destinations let the frame go
+      const from = dest ? pageTop(dest) + dest.getBoundingClientRect().height - vh : stuck - vh;
+      const hold = SCROLL.light * vh;
+      return [
+        { content: "offline", start: from, end: stuck, arrive: 1, gesture: "cut" as const, travel: false, slot: () => held },
+        // then the facts are read, and the frame follows the stage off the screen
+        { content: "offline", start: stuck, end: stuck + hold + vh, arrive: 0, gesture: "cut" as const, slot: live },
+      ];
     });
-  });
+  }, [mode]);
+
+  const log = (
+    <dl className="log">
+      {ENTRIES.map((id) => (
+        <div key={id} className="log-entry">
+          <dt className="log-label">{t(`telemetria.entries.${id}.label`)}</dt>
+          <dd className="log-text">{t(`telemetria.entries.${id}.text`)}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+  const head = (
+    <h2 id="proof-title" className="proof-title">
+      {t("telemetria.title")}
+    </h2>
+  );
+  // The note says what the frame really shows: the recording once it exists,
+  // until then a still of the system in training mode.
+  const recorded = !!WORK.find((w) => w.id === "dallas_sync")?.video?.detail;
+  const note = <p className="proof-note">{t(recorded ? "telemetria.video_note" : "telemetria.still_note")}</p>;
 
   return (
-    <section ref={sectionRef} id="proof" className="proof" data-journey="telemetria" aria-labelledby="proof-title">
-      <div className="proof-head">
-        <h2 id="proof-title" className="proof-title">
-          {t("proof.title")}
-        </h2>
-        <p className="proof-lead">{t("proof.lead")}</p>
-      </div>
-      <dl className="proof-figures">
-        {PROOF.map((f) => (
-          <div key={f.id} className="proof-figure" data-tilt="">
-            <dt className="proof-label">{t(`proof.items.${f.id}`)}</dt>
-            <dd className="proof-value">
-              {f.prefix && <span className="proof-affix">{f.prefix}</span>}
-              <span data-count={f.value}>{f.value}</span>
-              {f.suffix && <span className="proof-affix">{f.suffix}</span>}
-            </dd>
-            <dd className={`proof-viz proof-viz--${f.id}`} aria-hidden="true">
-              {f.id === "consulta" ? (
-                <>
-                  <span className="proof-bar">
-                    <span className="proof-bar-was" />
-                    <span className="proof-bar-tag">30 s</span>
-                  </span>
-                  <span className="proof-bar">
-                    <span className="proof-bar-now" />
-                    <span className="proof-bar-tag">2 s</span>
-                  </span>
-                </>
-              ) : (
-                Array.from({ length: f.value }, (_, k) => <span key={k} className="proof-unit" data-on="true" />)
-              )}
-            </dd>
+    <section
+      id="proof"
+      className="proof"
+      data-journey="telemetria"
+      data-mode={mode}
+      aria-labelledby="proof-title"
+      style={{ ["--hold" as string]: `${SCROLL.light * 100}svh` }}
+    >
+      {mode === "scroll" && (
+        <div ref={trackRef} className="proof-track">
+          <div ref={stageRef} className="proof-stage">
+            <div className="proof-words">
+              {head}
+              {log}
+            </div>
+            <div className="proof-side">
+              <div ref={slotRef} className="proof-slot" data-frame-slot="telemetria" />
+              {note}
+            </div>
           </div>
-        ))}
-      </dl>
-      <p className="proof-foot">{t("proof.agrishow")}</p>
+        </div>
+      )}
+      {mode === "swipe" && (
+        <div className="proof-phone">
+          {head}
+          <div ref={slotRef} className="proof-slot" data-frame-slot="telemetria" />
+          {note}
+          {log}
+        </div>
+      )}
+      {mode === "list" && (
+        <div className="proof-plain">
+          {head}
+          <img className="proof-still" src={STILL.src} srcSet={STILL.srcSet} sizes="(max-width: 767px) 92vw, 60vw" alt="" loading="lazy" decoding="async" />
+          {note}
+          {log}
+        </div>
+      )}
     </section>
   );
 }

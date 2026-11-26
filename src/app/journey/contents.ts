@@ -50,6 +50,18 @@ const ORIGIN: readonly FrameContent[] = [
   },
 ];
 
+/**
+ * Em uso: the front desk working with no internet. Until the offline loop is
+ * recorded (scripts/capture), the operation screen stands in, in training
+ * mode like every Dallas Sync picture on the site.
+ */
+const OFFLINE: FrameContent = {
+  id: "offline",
+  image: { src: `${P}/dallas-sync-op-1440.webp`, srcSet: `${P}/dallas-sync-op-720.webp 720w, ${P}/dallas-sync-op-1440.webp 1440w` },
+  blur: `${P}/dallas-sync-op-blur.webp`,
+  video: WORK.find((w) => w.id === "dallas_sync")?.video?.detail,
+};
+
 export const FRAME_CONTENTS: readonly FrameContent[] = [
   ...ORIGIN,
   ...WORK.map((w) => ({
@@ -58,4 +70,5 @@ export const FRAME_CONTENTS: readonly FrameContent[] = [
     blur: BLUR[w.id],
     video: w.video?.card,
   })),
+  OFFLINE,
 ];

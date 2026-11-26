@@ -52,6 +52,8 @@ export function JourneyFrame() {
         return;
       }
       root.dataset.visible = "true";
+      // what is showing, for the light the frame casts (see the CSS)
+      if (root.dataset.content !== s.content) root.dataset.content = s.content;
       const vw = window.innerWidth;
       const scale = (s.box.w / vw) * s.approach;
       // scale about the slot's centre during the first approach

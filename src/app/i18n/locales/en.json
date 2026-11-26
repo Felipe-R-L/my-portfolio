@@ -310,16 +310,6 @@
       "result": "The result"
     }
   },
-  "proof": {
-    "title": "OMD do Brasil",
-    "lead": "Since 2024 I have been a developer at OMD do Brasil, building the platforms companies use to follow their machines and vehicles in real time.",
-    "items": {
-      "empresas": "companies use the platforms",
-      "maquinas": "connected machines",
-      "consulta": "to open a report that took 30 s"
-    },
-    "agrishow": "OMDfarm, one of these platforms, was presented at Agrishow."
-  },
   "talk": {
     "blog_label": "Latest article on the blog",
     "email_label": "Or by email",
@@ -365,14 +355,15 @@
       },
       "offline": {
         "label": "offline",
-        "text": "When the internet drops, the front desk keeps recording, sees the queue of what has not gone up yet and the system syncs on its own once the network is back, which is exactly what the video beside this shows."
+        "text": "When the internet drops, the front desk keeps recording, sees the queue of what has not gone up yet and the system syncs on its own once the network is back."
       },
       "training": {
         "label": "training mode",
         "text": "New staff learn in a separate training mode that has the same screens and no real data, so a mistake made there does not change anyone's till."
       }
     },
-    "video_note": "Recorded in training mode, with made-up data."
+    "video_note": "The video shows it happening, recorded in training mode with made-up data.",
+    "still_note": "The system in training mode, with no real data."
   },
   "plano": {
     "title": "How it works",
