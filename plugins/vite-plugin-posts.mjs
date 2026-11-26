@@ -117,6 +117,26 @@ export default function postsPlugin({ repoRoot = process.cwd() } = {}) {
       )
     },
     configureServer(server) {
+      // The build writes /blog and /blog/<slug> from blog.html (scripts/fan-out.mjs).
+      // In dev the same render runs per request, so the blog works on the dev
+      // server too instead of serving the template with its placeholders.
+      server.middlewares.use(async (req, res, next) => {
+        const path = (req.url ?? '').split('?')[0].replace(/\/+$/, '')
+        const match = path.match(/^\/blog(?:\/([a-z0-9-]+))?(?:\/index\.html)?$/)
+        if (!match || req.method !== 'GET') return next()
+        try {
+          const { renderRoute } = await import('../scripts/fan-out.mjs')
+          const posts = await loadPosts({ repoRoot })
+          const post = match[1] ? posts.find((p) => p.slug === match[1]) : null
+          if (match[1] && !post) return next()
+          const template = readFileSync(join(repoRoot, 'blog.html'), 'utf8')
+          const html = renderRoute({ template, kind: post ? 'article' : 'index', post, posts })
+          res.setHeader('Content-Type', 'text/html; charset=utf-8')
+          res.end(await server.transformIndexHtml(req.url ?? '/blog', html))
+        } catch (error) {
+          next(error)
+        }
+      })
       const dir = join(repoRoot, 'src', 'content', 'posts')
       server.watcher.add(dir)
       server.watcher.on('all', (_event, file) => {
