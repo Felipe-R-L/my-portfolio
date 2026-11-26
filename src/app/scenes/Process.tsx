@@ -90,7 +90,7 @@ export function Process() {
   });
 
   return (
-    <section ref={sectionRef} id="process" className="process" data-done={done ? "true" : "false"} aria-labelledby="process-title">
+    <section ref={sectionRef} id="process" className="process" data-journey="plano" data-done={done ? "true" : "false"} aria-labelledby="process-title">
       <div className="process-head">
         <h2 id="process-title" className="process-title">
           {t("process.title")}

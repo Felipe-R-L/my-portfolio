@@ -16,7 +16,7 @@ export function Talk() {
   const linkedin = socialLinks.find((s) => s.label === "LinkedIn");
 
   return (
-    <section id="contact" className="talk" aria-labelledby="talk-title">
+    <section id="contact" className="talk" data-journey="retorno" aria-labelledby="talk-title">
       {/* The close answers the opening: the city from the hero, now in
           colour, seen through the letters. */}
       <h2 id="talk-title" className="talk-title">

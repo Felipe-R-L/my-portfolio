@@ -6,7 +6,8 @@
     "menu_open": "Menu",
     "menu_close": "Close menu",
     "process": "How it works",
-    "contact": "Contact"
+    "contact": "Contact",
+    "proof": "In use"
   },
   "hero": {
     "description": "I build websites, online stores and custom systems for small and mid-sized businesses. You talk to me directly, from the first draft to support after launch.",
@@ -331,5 +332,15 @@
     "email_label": "Or by email",
     "rights": "All rights reserved.",
     "credits": "Photos of Diamante (Eugenio Magurno) and IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons."
+  },
+  "journey": {
+    "chapters": {
+      "partida": "About",
+      "destinos": "Projects",
+      "telemetria": "In use",
+      "plano": "How it works",
+      "retorno": "Contact"
+    },
+    "where": "Chapter {{n}} of {{total}}: {{name}}"
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { cn } from "../../utils/cn";
@@ -37,6 +37,11 @@ export interface GlassNavProps {
   /** Visible + accessible label for the expanded toggle, e.g. "Close". */
   closeLabel: string;
   entrance?: GlassNavEntrance;
+  /** The item for the part of the page in view: marked as the current location. */
+  activeId?: string;
+  /** Phone: shown in the closed pill where the open label would be (e.g. the
+      chapter rail). The toggle keeps `openLabel` as its accessible name. */
+  status?: ReactNode;
 }
 
 // Reused verbatim from the original floating pill: a cheap backdrop blur
@@ -88,6 +93,8 @@ export function GlassNav({
   openLabel,
   closeLabel,
   entrance = DEFAULT_ENTRANCE,
+  activeId,
+  status,
 }: GlassNavProps) {
   const [open, setOpen] = useState(false);
   const prefersReducedMotion = useReducedMotion();
@@ -144,7 +151,7 @@ export function GlassNav({
   };
 
   const underline = (
-    <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-[var(--zone-a-1)] to-[var(--zone-a-2)] group-hover:w-full transition-all duration-300" />
+    <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--diamante)] group-hover:w-full group-aria-[current=location]:w-full transition-all duration-300" />
   );
 
   const linkClassName =
@@ -172,7 +179,8 @@ export function GlassNav({
                   <motion.a
                     key={item.id}
                     href={item.href}
-                    className={linkClassName}
+                    aria-current={item.id === activeId ? "location" : undefined}
+                    className={cn(linkClassName, item.id === activeId && "text-white")}
                     whileHover={{ y: -1 }}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     onClick={(event) => item.onSelect?.(event)}
@@ -181,7 +189,7 @@ export function GlassNav({
                     {underline}
                   </motion.a>
                 ) : (
-                  <a key={item.id} href={item.href} className={linkClassName}>
+                  <a key={item.id} href={item.href} aria-current={item.id === activeId ? "location" : undefined} className={cn(linkClassName, item.id === activeId && "text-white")}>
                     {item.label}
                     {underline}
                   </a>
@@ -245,7 +253,11 @@ export function GlassNav({
                   ref={index === 0 ? firstLinkRef : undefined}
                   href={item.href}
                   onClick={handleItemClick(item)}
-                  className="flex h-11 shrink-0 items-center rounded-2xl px-3 text-[17px] font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white"
+                  aria-current={item.id === activeId ? "location" : undefined}
+                  className={cn(
+                    "flex h-11 shrink-0 items-center rounded-2xl px-3 text-[17px] font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white",
+                    item.id === activeId && "bg-white/[0.06] text-white",
+                  )}
                 >
                   {item.label}
                 </a>
@@ -287,7 +299,7 @@ export function GlassNav({
             >
               <span className="flex items-center gap-2 text-[17px] font-medium text-white">
                 {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
-                {open ? closeLabel : openLabel}
+                {open ? closeLabel : (status ?? openLabel)}
               </span>
               <span className="text-[13px] font-bold uppercase tracking-widest text-white/50" aria-hidden="true">
                 {activeLanguage.slice(0, 2)}

@@ -153,7 +153,7 @@ export function Work() {
   });
 
   return (
-    <section ref={sectionRef} id="projects" className="work" data-out={out ? "true" : "false"} aria-labelledby="work-title">
+    <section ref={sectionRef} id="projects" className="work" data-journey="destinos" data-out={out ? "true" : "false"} aria-labelledby="work-title">
       <header className="work-head">
         <h2 id="work-title" className="work-title">
           {t("work.title")}

@@ -57,7 +57,7 @@ export function Proof() {
   });
 
   return (
-    <section ref={sectionRef} className="proof" aria-labelledby="proof-title">
+    <section ref={sectionRef} id="proof" className="proof" data-journey="telemetria" aria-labelledby="proof-title">
       <div className="proof-head">
         <h2 id="proof-title" className="proof-title">
           {t("proof.title")}
