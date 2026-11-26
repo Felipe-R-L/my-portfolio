@@ -255,7 +255,7 @@ export function MotionShot({
               <source src={file.mp4} type="video/mp4" />
             </video>
           ) : (
-            <img src={sources.poster} alt="" decoding="async" loading="lazy" draggable={false} />
+            <img src={sources.poster} alt="" decoding="async" draggable={false} />
           )}
           {plan?.ring && (
             <div

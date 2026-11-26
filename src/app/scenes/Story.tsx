@@ -34,22 +34,38 @@ function ChapterImage({ chapter }: { chapter: StoryChapter }) {
       <figure className={`story-media story-media--${img.figure}`} aria-hidden="true">
         {img.figure === "orbit" ? (
           // the night sky of an astronomy olympiad: orbits round a star
+          // (in focus or under the pointer the sky takes its colours: a warm star,
+          // a blue, a red and an ochre planet)
           <svg viewBox="0 0 320 200">
+            <circle className="story-glow" cx="160" cy="100" r="34" />
             <ellipse cx="160" cy="100" rx="140" ry="52" />
             <ellipse cx="160" cy="100" rx="96" ry="36" />
             <ellipse cx="160" cy="100" rx="52" ry="20" />
             <circle className="story-star" cx="160" cy="100" r="7" />
-            <circle className="story-planet" cx="300" cy="100" r="5" />
-            <circle className="story-planet" cx="112" cy="75" r="4" />
-            <circle className="story-planet" cx="190" cy="118" r="3" />
+            <circle className="story-planet story-planet--a" cx="300" cy="100" r="5" />
+            <circle className="story-planet story-planet--b" cx="112" cy="75" r="4" />
+            <circle className="story-planet story-planet--c" cx="190" cy="118" r="3" />
+            <circle className="story-planet story-planet--d" cx="40" cy="78" r="2.5" />
           </svg>
         ) : (
           // the first program everyone writes
+          // (in focus or under the pointer it takes an editor's colours)
           <pre className="story-code">
-            <span>{"int main() {"}</span>
-            <span>{'  printf("Hello, world");'}</span>
-            <span>{"  return 0;"}</span>
-            <span>{"}"}</span>
+            <span>
+              <b className="tk-type">int</b> <b className="tk-fn">main</b>() {"{"}
+            </span>
+            <span>
+              {"  "}
+              <b className="tk-fn">printf</b>(<b className="tk-str">"Hello, world"</b>);
+            </span>
+            <span>
+              {"  "}
+              <b className="tk-key">return</b> <b className="tk-num">0</b>;
+            </span>
+            <span>
+              {"}"}
+              <i className="story-caret" />
+            </span>
           </pre>
         )}
       </figure>
@@ -69,7 +85,7 @@ function ChapterImage({ chapter }: { chapter: StoryChapter }) {
   );
 }
 
-function Chapters({ focus }: { focus: number }) {
+function Chapters({ focus, past = focus }: { focus: number; past?: number }) {
   const { t } = useTranslation();
   return (
     <>
@@ -79,7 +95,7 @@ function Chapters({ focus }: { focus: number }) {
           className={`story-chapter${c.seal ? " story-chapter--seal" : ""}`}
           data-chapter={c.id}
           data-focus={i === focus ? "true" : "false"}
-          data-past={i < focus ? "true" : "false"}
+          data-past={i < past ? "true" : "false"}
         >
           {/* "Today" is its own title; a year label would only repeat it. */}
           {c.id !== "hoje" ? (
@@ -103,7 +119,10 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
   const railRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [focus, setFocus] = useState(0);
+  const [past, setPast] = useState(0);
   const distance = useRef(0);
+  // where each chapter starts and how wide it is, inside the track (measured)
+  const spans = useRef<{ left: number; width: number }[]>([]);
 
   useLayoutEffect(() => {
     const rail = railRef.current;
@@ -116,10 +135,40 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
       rail.style.opacity = String(enter);
       rail.style.visibility = p <= 0 ? "hidden" : "visible";
       const x = -distance.current * span(p, TRAVEL_FROM, TRAVEL_TO);
+      // By where the chapters are, not by their index: a chapter steps out of
+      // the way once its left edge reaches the portrait, and the one in focus
+      // is the nearest to the middle of the space beside it. (Reads first,
+      // writes after: no layout is forced.)
+      const ring = document.querySelector(".city-ring")?.getBoundingClientRect();
+      const railLeft = rail.getBoundingClientRect().left;
+      const edge = (ring && ring.width > 0 ? ring.right : railLeft) + 24;
+      const mid = (edge + window.innerWidth) / 2;
+      const shift = railLeft + x + (1 - enter) * 80;
+      let firstIn = spans.current.length;
+      let nearest = 0;
+      let best = Infinity;
+      spans.current.forEach((c, i) => {
+        const left = shift + c.left;
+        if (left >= edge && firstIn === spans.current.length) firstIn = i;
+        const d = Math.abs(left + c.width / 2 - mid);
+        if (left >= edge && d < best) {
+          best = d;
+          nearest = i;
+        }
+      });
       track.style.transform = `translate3d(${x + (1 - enter) * 80}px, 0, 0)`;
-      setFocus(chapterAt(span(p, TRAVEL_FROM, TRAVEL_TO), STORY.length));
+      // before anything is laid out (or with no layout at all) the index rules
+      if (spans.current.some((c) => c.width > 0)) {
+        setPast(firstIn);
+        setFocus(nearest);
+      } else {
+        const i = chapterAt(span(p, TRAVEL_FROM, TRAVEL_TO), STORY.length);
+        setPast(i);
+        setFocus(i);
+      }
     };
     const measure = () => {
+      spans.current = Array.from(track.querySelectorAll<HTMLElement>(".story-chapter")).map((el) => ({ left: el.offsetLeft, width: el.offsetWidth }));
       distance.current = timelineDistance(track.scrollWidth, rail.clientWidth);
       apply(progress.get());
     };
@@ -138,7 +187,7 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
     <div ref={railRef} className="story-rail" data-no-reveal="">
       <h2 className="sr-only">{t("story.title")}</h2>
       <div ref={trackRef} className="story-track">
-        <Chapters focus={focus} />
+        <Chapters focus={focus} past={past} />
       </div>
     </div>
   );

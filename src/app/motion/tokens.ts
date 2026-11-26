@@ -43,7 +43,7 @@ export const SCROLL = {
   /** Desktop: the story plays on in the hero's pinned stage. */
   story: 4.0,
   /** T1, Partida → Destinos: the tilt up into the night. */
-  tilt: 0.7,
+  tilt: 0.35,
   /** Each destination: its approach, then a still stretch to read it. */
   destination: { approach: 0.7, hold: 0.3 },
   /** T3, Destinos → Telemetria: the light change, camera locked off. */
