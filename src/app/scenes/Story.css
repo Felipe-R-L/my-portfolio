@@ -343,7 +343,7 @@
 
 /* his sketch is line on dark already: a lighter veil, so the notes below the
    card read too (the words keep their halo) */
-.story-bg-layer[data-bg="ifsp"]::after {
+.story-bg-layer:is([data-bg="ifsp"], [data-bg="etec"])::after {
   background:
     linear-gradient(180deg, rgb(5 6 8 / 0.05) 0%, rgb(5 6 8 / 0.2) 38%, rgb(5 6 8 / 0.5) 52%, rgb(5 6 8 / 0.35) 100%),
     linear-gradient(90deg, rgb(5 6 8 / 0.5) 0%, transparent 40%);
@@ -388,21 +388,30 @@
 .story-bg-figure--orbit .story-planet--c { fill: #e7c36a; }
 .story-bg-figure--orbit .story-planet--d { fill: #b48cff; }
 
-/* the code, large, in an editor's colours, laid back in perspective */
-.story-bg-figure--code .story-code {
-  font-size: clamp(2rem, 4.2vw, 4.4rem);
-  gap: 0.6rem;
-  opacity: 0.3;
-  color: #c9d3dc;
-  transform: perspective(1200px) rotateY(-16deg) rotateX(6deg);
+/* the program, run: a terminal, large, laid back in perspective */
+.story-bg-figure--terminal .story-term {
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: clamp(1.2rem, 2.2vw, 2.4rem);
+  line-height: 1.2;
+  color: #8a96a3;
+  opacity: 0.4;
+  transform: perspective(1200px) rotateY(-12deg) rotateX(6deg) translateY(37vh);
 }
 
-.story-bg-figure--code .tk-type,
-.story-bg-figure--code .tk-key { color: #ff7ab6; }
-.story-bg-figure--code .tk-fn { color: #7cc7ff; }
-.story-bg-figure--code .tk-str { color: #a6e3a1; }
-.story-bg-figure--code .tk-num { color: #f9b46b; }
-.story-bg-figure--code .story-caret { opacity: 0.8; }
+.story-bg-figure--terminal b {
+  font-weight: inherit;
+}
+
+.story-bg-figure--terminal .tm-prompt { color: #a6e3a1; }
+.story-bg-figure--terminal .tm-out {
+  color: #f2f5f8;
+  font-size: 2.4em;
+  text-shadow: 0 0 24px rgb(166 227 161 / 0.35);
+}
+.story-bg-figure--terminal .story-caret { opacity: 0.8; }
 
 /* ---------- the medal ---------- */
 

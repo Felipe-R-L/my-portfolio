@@ -18,7 +18,7 @@ export type StoryChapter = {
    * (desktop): it slides slower than the cards and turns into the next
    * chapter's as the focus moves. A picture, or one of the drawn figures.
    */
-  bg: { src: string; srcSet?: string } | { figure: "orbit" | "code" };
+  bg: { src: string; srcSet?: string } | { figure: "orbit" | "terminal" };
 };
 
 const S = "/assets/story";
@@ -30,7 +30,7 @@ const P = "/assets/projects";
 // hero of the site he built; "today" is the system's own screen, blurred.
 export const STORY: readonly StoryChapter[] = [
   { id: "oba", year: "2017", seal: true, image: { figure: "medal" }, bg: { figure: "orbit" } },
-  { id: "etec", year: "2020", image: { figure: "code" }, bg: { figure: "code" } },
+  { id: "etec", year: "2020", image: { figure: "code" }, bg: { figure: "terminal" } },
   {
     id: "ifsp",
     year: "2022",

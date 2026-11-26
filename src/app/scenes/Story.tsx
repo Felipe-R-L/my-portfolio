@@ -135,11 +135,27 @@ function ChapterImage({ chapter }: { chapter: StoryChapter }) {
   );
 }
 
+/** The same program, run: the card shows the code, the background what it
+    printed (the terminal of a first class). */
+function Terminal() {
+  return (
+    <pre className="story-term">
+      <span>
+        <b className="tm-prompt">$</b> ./hello
+      </span>
+      <span className="tm-out">Hello, world</span>
+      <span>
+        <b className="tm-prompt">$</b> <i className="story-caret" />
+      </span>
+    </pre>
+  );
+}
+
 /** What fills the space behind the rail for one chapter. */
 function ChapterBackground({ chapter }: { chapter: StoryChapter }) {
   const bg = chapter.bg;
   if ("figure" in bg) {
-    return <div className={`story-bg-figure story-bg-figure--${bg.figure}`}>{bg.figure === "orbit" ? <Orbit /> : <Code />}</div>;
+    return <div className={`story-bg-figure story-bg-figure--${bg.figure}`}>{bg.figure === "orbit" ? <Orbit /> : <Terminal />}</div>;
   }
   return <img className="story-bg-img" src={bg.src} srcSet={bg.srcSet} sizes="80vw" alt="" loading="lazy" decoding="async" />;
 }
