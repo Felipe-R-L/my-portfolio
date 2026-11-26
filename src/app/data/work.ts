@@ -76,7 +76,7 @@ export const WORK: readonly WorkItem[] = [
     stack: ["Next.js 16", "Supabase", "Mercado Pago"],
     parts: ["context", "problem", "decision", "result"],
     // the open (SFW) catalogue; the detail stops at the Pix form, never submitted
-    video: { card: clip("secret-card", true), detail: clip("secret-detail") },
+    video: { card: clip("secret-detail"), detail: clip("secret-detail") },
   },
   {
     id: "dallas_motel",
@@ -86,7 +86,7 @@ export const WORK: readonly WorkItem[] = [
     href: "https://jrdallasmotel.com.br",
     stack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase", "Vercel"],
     parts: ["context", "problem", "decision", "result"],
-    video: { card: clip("dallas-motel-card", true), detail: clip("dallas-motel-detail") },
+    video: { card: clip("dallas-motel-detail"), detail: clip("dallas-motel-detail") },
   },
 ];
 

@@ -30,7 +30,10 @@ export function rng(seed) {
   };
 }
 
-// A cursor drawn in the page: the screencast does not show the system one.
+// A cursor drawn in the page, for looking at a take while writing it only. The
+// takes are recorded WITHOUT it: drawn in the page it vanished on every
+// navigation and blinked on clicks. The mouse path is saved beside the video
+// instead (encode → <name>.json) and the site draws the cursor over it.
 const CURSOR = `(() => {
   const draw = () => {
     if (document.getElementById("__cap-cursor")) return;
@@ -47,7 +50,7 @@ const CURSOR = `(() => {
   if (document.readyState === "loading") addEventListener("DOMContentLoaded", draw); else draw();
 })();`;
 
-export async function open({ seed = 1, viewport = VIEWPORT, scale = 2, cursor = true, storageState } = {}) {
+export async function open({ seed = 1, viewport = VIEWPORT, scale = 2, cursor = false, storageState } = {}) {
   const browser = await chromium.launch({
     executablePath: "/usr/bin/google-chrome",
     args: ["--ignore-gpu-blocklist", "--enable-gpu-rasterization", "--use-angle=gl", "--hide-scrollbars"],
@@ -57,6 +60,9 @@ export async function open({ seed = 1, viewport = VIEWPORT, scale = 2, cursor = 
   const page = await context.newPage();
   const random = rng(seed);
   const at = { x: viewport.width * 0.62, y: viewport.height * 0.7 };
+  // everything the hand did, on the same clock as the screencast frames
+  const trace = { moves: [], clicks: [] };
+  const now = () => Date.now() / 1000;
 
   const human = {
     random,
@@ -81,6 +87,7 @@ export async function open({ seed = 1, viewport = VIEWPORT, scale = 2, cursor = 
         const px = m * m * m * from.x + 3 * m * m * t * c1.x + 3 * m * t * t * c2.x + t * t * t * x;
         const py = m * m * m * from.y + 3 * m * m * t * c1.y + 3 * m * t * t * c2.y + t * t * t * y;
         await page.mouse.move(px, py);
+        trace.moves.push([now(), px, py]);
         await page.waitForTimeout(9 + Math.round(random() * 6));
       }
       at.x = x;
@@ -93,6 +100,7 @@ export async function open({ seed = 1, viewport = VIEWPORT, scale = 2, cursor = 
       if (!b) throw new Error(`no box for ${locator}`);
       await human.move(b.x + b.width * (0.42 + random() * 0.16), b.y + b.height * (0.4 + random() * 0.2));
       await human.wait(rest);
+      trace.clicks.push(now());
       await page.mouse.down();
       await page.waitForTimeout(70 + Math.round(random() * 40));
       await page.mouse.up();
@@ -153,13 +161,22 @@ export async function open({ seed = 1, viewport = VIEWPORT, scale = 2, cursor = 
     });
     await cdp.send("Page.startScreencast", { format: "jpeg", quality: 92, maxWidth: viewport.width * scale, maxHeight: viewport.height * scale });
     const marks = {};
+    const boxes = {};
+    // the hand's position when the take starts, so the drawn cursor has one
+    trace.moves.push([now(), at.x, at.y]);
     return {
       /** Name the current moment, to cut the take there later. */
-      mark: (name) => (marks[name] = Date.now() / 1000),
+      mark: (name) => (marks[name] = now()),
+      /** Where an element is on screen now (the motion layer frames and crops by it). */
+      async box(name, locator) {
+        const b = await locator.boundingBox({ timeout: 3000 }).catch(() => null);
+        if (!b) console.warn(`box "${name}": not found`);
+        if (b) boxes[name] = { t: now(), x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.width), h: Math.round(b.height) };
+      },
       async stop() {
         stopped = true;
         await cdp.send("Page.stopScreencast").catch(() => {});
-        return { dir, frames, marks };
+        return { dir, frames, marks, boxes, trace };
       },
     };
   }
@@ -172,7 +189,7 @@ export async function open({ seed = 1, viewport = VIEWPORT, scale = 2, cursor = 
  * poster from its first frame. `from`/`to` are epoch seconds (marks).
  * Returns the sizes, to keep every file under its budget.
  */
-export function encode(take, outBase, { from, to, fps = 30, crf = { mp4: 27, webm: 38 } } = {}) {
+export function encode(take, outBase, { from, to, fps = 30, crf = { mp4: 27, webm: 38 }, stills = {} } = {}) {
   const frames = take.frames.filter((f) => (from === undefined || f.t >= from) && (to === undefined || f.t <= to));
   if (frames.length < 2) throw new Error(`${outBase}: no frames in the cut`);
   // the concat list: each frame held until the next one arrived
@@ -196,10 +213,45 @@ export function encode(take, outBase, { from, to, fps = 30, crf = { mp4: 27, web
       "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", String(crf.webm + (w === 720 ? 2 : 0)), "-row-mt", "1", "-deadline", "good", "-cpu-used", "2", webm]);
     out[w] = { mp4: statSync(mp4).size, webm: statSync(webm).size };
   }
+  // VP9 only where it came out smaller (the long scrolls; flat UI favours H.264)
+  out.webm = out[1440].webm < out[1440].mp4 && out[720].webm < out[720].mp4;
+  if (!out.webm) for (const w of [1440, 720]) rmSync(`${outBase}-${w}.webm`, { force: true });
   const poster = `${outBase}-poster.webp`;
   execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-i", frames[0].file, "-vf", "scale=1440:-2:flags=lanczos", "-quality", "82", poster]);
   out.poster = statSync(poster).size;
-  out.seconds = +(frames[frames.length - 1].t - frames[0].t).toFixed(1);
+  const t0 = frames[0].t;
+  const t1 = frames[frames.length - 1].t;
+  out.seconds = +(t1 - t0).toFixed(1);
+  const rel = (t) => +(t - t0).toFixed(3);
+  // stills at named moments, for the crops of the motion layer
+  for (const [name, t] of Object.entries(stills)) {
+    const f = frames.reduce((a, b) => (Math.abs(b.t - t) < Math.abs(a.t - t) ? b : a));
+    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-i", f.file, "-vf", "scale=1440:-2:flags=lanczos", "-quality", "82", `${outBase}-${name}.webp`]);
+  }
+  // the hand and the marks, on the video's own clock (seconds from its start)
+  const inCut = (t) => t >= t0 - 0.5 && t <= t1;
+  const cursor = [];
+  let lastT = -1;
+  const moves = take.trace?.moves ?? [];
+  // where the hand already was when the cut starts
+  const before = moves.filter((m) => m[0] < t0).at(-1);
+  if (before) cursor.push([0, Math.round(before[1]), Math.round(before[2])]);
+  for (const [t, x, y] of moves.filter((m) => inCut(m[0]))) {
+    if (t - lastT < 1 / 30) continue;
+    lastT = t;
+    cursor.push([Math.max(0, rel(t)), Math.round(x), Math.round(y)]);
+  }
+  const meta = {
+    duration: out.seconds,
+    size: [1440, 900],
+    webm: out.webm,
+    stills: Object.keys(stills),
+    cursor,
+    clicks: (take.trace?.clicks ?? []).filter(inCut).map(rel),
+    marks: Object.fromEntries(Object.entries(take.marks ?? {}).filter(([, t]) => inCut(t)).map(([k, t]) => [k, rel(t)])),
+    boxes: Object.fromEntries(Object.entries(take.boxes ?? {}).map(([k, b]) => [k, { ...b, t: rel(b.t) }])),
+  };
+  writeFileSync(`${outBase}.json`, JSON.stringify(meta));
   return out;
 }
 
