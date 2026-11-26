@@ -19,6 +19,17 @@ function coverBox(vw: number, vh: number): Box {
   return { x: (vw - w) / 2, y: (vh - h) / 2, w, h };
 }
 
+/**
+ * Where the frame comes to rest on a wide screen: a framed photo on the right,
+ * clear of the invitation on the left, so Diamante (the chapter's light,
+ * AmbientLight) shows around it.
+ */
+function restBox(vw: number, vh: number): Box {
+  const w = Math.min(vw * 0.38, vh * 0.6 * 1.6);
+  const h = w / 1.6;
+  return { x: vw - w - vw * 0.06, y: (vh - h) / 2, w, h };
+}
+
 /** The frame in the middle of the screen, at the size the hero left it. */
 function middleBox(vw: number, vh: number): Box {
   const w = Math.min(vw * 0.46, vh * 0.62 * 1.6);
@@ -78,7 +89,7 @@ export function Talk() {
       const to = pageTop(runway) + runway.offsetHeight - vh * 0.35;
       const len = Math.max(1, to - from);
       const middle = middleBox(vw, vh);
-      const cover = coverBox(vw, vh);
+      const rest = restBox(vw, vh);
       return [
         {
           content: "city",
@@ -87,11 +98,11 @@ export function Talk() {
           // the marker grows into the middle frame over the first quarter
           arrive: 0.25,
           gesture: "rack" as const,
-          // then holds while the camera pulls back, and the corners open at the end
-          slot: () => lerpBox(middle, cover, easeInOut(span((window.scrollY - from) / len, 0.72, 1))),
+          // then holds while the camera pulls back, and moves aside to rest at the end
+          slot: () => lerpBox(middle, rest, easeInOut(span((window.scrollY - from) / len, 0.72, 1))),
         },
-        // and the city stays behind the page to its end
-        { content: "city", start: to, end, arrive: 0, gesture: "cut" as const, still: true, slot: () => cover },
+        // and the photo stays beside the invitation to the page's end
+        { content: "city", start: to, end, arrive: 0, gesture: "cut" as const, still: true, slot: () => rest },
       ];
     });
   }, [mode]);
