@@ -180,9 +180,17 @@
     "published": "Publicado em",
     "revised": "Revisado em",
     "read_time": "{{count}} min de leitura",
-    "contents": "Conteúdo",
+    "contents": "Sumário",
     "close": "Fechar",
-    "back": "Voltar ao blog"
+    "back": "Voltar ao blog",
+    "home": "Voltar ao portfólio",
+    "eyebrow": "Escritos",
+    "intro": "Textos técnicos sobre otimização, roteirização e software aplicado, escritos a partir do que eu construo.",
+    "next": "Próximo texto",
+    "contact": "Falar comigo",
+    "theme_dark": "Usar tema escuro",
+    "theme_light": "Usar tema claro",
+    "language": "Idioma"
   },
   "story": {
     "title": "Quem sou",

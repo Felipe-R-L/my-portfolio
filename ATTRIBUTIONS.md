@@ -19,3 +19,28 @@ Copyright (c) 2020, Florian Karsten (https://floriankarsten.com), with
 Reserved Font Name "Space Grotesk". This Font Software is licensed under the
 SIL Open Font License, Version 1.1. This license is available with a FAQ at
 https://openfontlicense.org
+
+## Cormorant Garamond
+
+- **Typeface:** Cormorant Garamond
+- **Designer:** Christian Thalmann (Catharsis Fonts)
+- **License:** SIL Open Font License, Version 1.1
+- **License text:** https://openfontlicense.org
+
+Files committed to this repository (latin subset, from Google Fonts):
+
+- `public/assets/fonts/cormorant-garamond-latin.woff2` — variable weight, used
+  for the blog's headings.
+
+## EB Garamond
+
+- **Typeface:** EB Garamond
+- **Designers:** Georg Duffner and Octavio Pardo
+- **License:** SIL Open Font License, Version 1.1
+- **License text:** https://openfontlicense.org
+
+Files committed to this repository (latin subset, from Google Fonts):
+
+- `public/assets/fonts/eb-garamond-latin.woff2`
+- `public/assets/fonts/eb-garamond-latin-italic.woff2` — variable weight, used
+  for the blog's running text.

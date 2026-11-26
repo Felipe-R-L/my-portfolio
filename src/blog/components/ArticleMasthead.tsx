@@ -10,42 +10,27 @@ import type { PostSummary } from '../main'
 // exercise in tests/ui/masthead.test.tsx. Keep the two in sync by hand.
 
 const timecode = (iso: string) => iso.replaceAll('-', '.')
+const AUTHOR = 'Felipe Rodrigues Leone'
 
 export function ArticleMasthead({ post }: { post: PostSummary }) {
   const { t } = useTranslation()
 
   return (
-    <header className="px-[var(--gutter)] pb-10 pt-2 max-w-[62ch] mx-auto">
-      {post.tags[0] && (
-        <p className="text-[11px] font-medium uppercase tracking-[0.25em] text-white/40 mb-5">
-          {post.tags[0]}
-        </p>
-      )}
-
-      <h1 className="text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.1] tracking-tighter text-white">
-        {post.title}
-      </h1>
-
-      <div
-        aria-hidden="true"
-        className="mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-[var(--zone-a-1)] to-[var(--zone-a-2)]"
-      />
-
-      <p className="mt-6 text-[21px] font-light leading-[1.6] text-white/60">{post.summary}</p>
-
-      <p className="mt-7 text-[11px] font-medium uppercase tracking-[0.2em] text-white/40">
-        {t('blog.published')}{' '}
-        <time dateTime={post.date}>{timecode(post.date)}</time>
+    <header className="article__masthead">
+      {post.tags[0] && <p className="article__kicker">{post.tags[0]}</p>}
+      <h1 className="article__title">{post.title}</h1>
+      <p className="article__lead">{post.summary}</p>
+      <p className="article__dateline">
+        <span>
+          {t('blog.published')} <time dateTime={post.date}>{timecode(post.date)}</time>
+        </span>
         {post.updated && (
-          <>
-            {' · '}
-            <span className="text-[var(--zone-a-1)]">
-              {t('blog.revised')} <time dateTime={post.updated}>{timecode(post.updated)}</time>
-            </span>
-          </>
+          <span className="article__revised">
+            {t('blog.revised')} <time dateTime={post.updated}>{timecode(post.updated)}</time>
+          </span>
         )}
-        {' · '}
-        {t('blog.read_time', { count: post.readingTimeMinutes })}
+        <span>{t('blog.read_time', { count: post.readingTimeMinutes })}</span>
+        <span>{AUTHOR}</span>
       </p>
     </header>
   )

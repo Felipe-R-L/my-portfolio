@@ -1,5 +1,6 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import { join, basename } from 'node:path'
+import { pathToFileURL } from 'node:url'
 import { parsePost, validateFrontmatter, slugify } from '../scripts/lib/frontmatter.mjs'
 import { findEmbeds, loadManifest, hashFile } from '../scripts/lib/assets.mjs'
 import { renderMarkdown } from './markdown-pipeline.mjs'
@@ -125,7 +126,8 @@ export default function postsPlugin({ repoRoot = process.cwd() } = {}) {
         const match = path.match(/^\/blog(?:\/([a-z0-9-]+))?(?:\/index\.html)?$/)
         if (!match || req.method !== 'GET') return next()
         try {
-          const { renderRoute } = await import('../scripts/fan-out.mjs')
+          // a runtime path, so bundling the Vite config never pulls the script (and its shebang) in
+          const { renderRoute } = await import(pathToFileURL(join(repoRoot, 'scripts', 'fan-out.mjs')).href)
           const posts = await loadPosts({ repoRoot })
           const post = match[1] ? posts.find((p) => p.slug === match[1]) : null
           if (match[1] && !post) return next()

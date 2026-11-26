@@ -103,3 +103,22 @@ describe('renderCase', async () => {
     expect(html).not.toContain('do rascunho ao suporte')
   })
 })
+
+describe('the article page', () => {
+  const OLDER = { ...POST, slug: 'older', title: 'An Older Text', date: '2026-01-01' }
+  const html = renderRoute({ template: TEMPLATE, kind: 'article', post: POST, posts: [POST, OLDER] })
+
+  it('leaves a column for the contents beside the text', () => {
+    expect(html).toContain('<aside class="article__toc" id="blog-toc"></aside>')
+  })
+
+  it('points to the next text and to the contact', () => {
+    expect(html).toContain('href="/blog/older"')
+    expect(html).toContain('href="/#contact"')
+  })
+
+  it('marks its labels for the reader\'s language', () => {
+    expect(html).toContain('data-i18n="blog.published"')
+    expect(html).toContain('data-i18n="blog.read_time" data-count="9"')
+  })
+})

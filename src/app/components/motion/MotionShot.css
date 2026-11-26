@@ -95,7 +95,8 @@
   border: 1px solid rgb(159 195 214 / 0.35);
   background: rgb(6 8 11 / 0.88);
   color: var(--ink);
-  font: 400 calc(42px * var(--fs)) / 1.1 var(--serif);
+  font: var(--serif-sub-weight) calc(42px * var(--fs) * var(--serif-scale)) / 1.1 var(--serif);
+  letter-spacing: var(--serif-sub-track);
   opacity: 0;
 }
 

@@ -87,23 +87,43 @@ const summarise = (p) => ({
 
 const timecode = (iso) => iso.replaceAll('-', '.')
 
+/*
+ * The article's static words. The page ships in English (the posts are
+ * written in English); the chrome island swaps each [data-i18n] label for the
+ * reader's language on mount, so the labels follow the language switch while
+ * the article itself stays as written.
+ */
+const label = (key, text, count) =>
+  `<span data-i18n="${key}"${count === undefined ? '' : ` data-count="${count}"`}>${escapeAttr(text)}</span>`
+
 function mastheadHtml(post) {
   const revised = post.updated
-    ? ` · <span style="color:var(--zone-a-1)">REVISED <time datetime="${post.updated}">${timecode(post.updated)}</time></span>`
+    ? `<span class="article__revised">${label('blog.revised', 'Revised')} <time datetime="${post.updated}">${timecode(post.updated)}</time></span>`
     : ''
   return `<header class="article__masthead">
   ${post.tags[0] ? `<p class="article__kicker">${escapeAttr(post.tags[0])}</p>` : ''}
   <h1 class="article__title">${escapeAttr(post.title)}</h1>
-  <div class="article__rule" aria-hidden="true"></div>
   <p class="article__lead">${escapeAttr(post.summary)}</p>
-  <p class="article__dateline">PUBLISHED <time datetime="${post.date}">${timecode(post.date)}</time>${revised} · ${post.readingTimeMinutes} MIN</p>
+  <p class="article__dateline"><span>${label('blog.published', 'Published')} <time datetime="${post.date}">${timecode(post.date)}</time></span>${revised}<span>${label('blog.read_time', `${post.readingTimeMinutes} min read`, post.readingTimeMinutes)}</span><span>${escapeAttr(AUTHOR)}</span></p>
 </header>`
+}
+
+/* The way on: the next (older) text, or the newest once the list runs out, and the contact. */
+function footHtml(post, posts) {
+  const others = posts.filter((p) => p.slug !== post.slug)
+  const at = posts.findIndex((p) => p.slug === post.slug)
+  const next = others.length ? posts[at + 1] ?? others[0] : null
+  return `<footer class="article__foot">
+  ${next ? `<div><p class="article__foot-label">${label('blog.next', 'Next')}</p><a class="article__next" href="/blog/${next.slug}">${escapeAttr(next.title)}</a></div>` : '<div></div>'}
+  <a class="article__contact" href="/#contact">${label('blog.contact', 'Talk to me')}</a>
+</footer>`
 }
 
 export function renderRoute({ template, kind, post, posts }) {
   const head = kind === 'article' ? articleHead(post) : indexHead()
+  // the contents sit beside the text in their own column; the chrome island mounts there
   const content = kind === 'article'
-    ? `<article class="article" lang="en"><div class="article__slab">${mastheadHtml(post)}<div class="article__body" id="article-body" tabindex="-1">${post.html}</div></div></article>`
+    ? `<article class="article" lang="en">${mastheadHtml(post)}<div class="article__grid"><aside class="article__toc" id="blog-toc"></aside><div class="article__main"><div class="article__body" id="article-body" tabindex="-1">${post.html}</div>${footHtml(post, posts)}</div></div></article>`
     : ''
   const data = kind === 'article'
     ? { kind, post: { ...summarise(post), toc: post.toc } }

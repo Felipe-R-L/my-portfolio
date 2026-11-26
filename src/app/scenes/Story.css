@@ -1,5 +1,5 @@
 /*
- * The story: editorial, set in Instrument Serif, with the sea blue of
+ * The story: editorial, set in the journey's serif (Cormorant Garamond), with the sea blue of
  * Diamante as its only accent. The rest of the page never uses either.
  */
 
@@ -20,19 +20,23 @@
 }
 
 .story-year {
-  font-family: "Instrument Serif", Georgia, serif;
-  font-size: 1.5rem;
+  font-family: var(--serif);
+  letter-spacing: var(--serif-sub-track);
+  font-weight: var(--serif-sub-weight);
+  font-size: calc(1.5rem * var(--serif-scale));
   line-height: 1;
   color: var(--story-accent);
+  /* the serif's figures are old-style by default; a count reads level */
+  font-variant-numeric: lining-nums;
 }
 
 .story-title {
   margin: 0;
-  font-family: "Instrument Serif", Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(2.25rem, 3.4vw, 3.5rem);
+  font-family: var(--serif);
+  font-weight: var(--serif-weight);
+  font-size: calc(clamp(2.25rem, 3.4vw, 3.5rem) * var(--serif-scale));
   line-height: 1.02;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--serif-track);
   color: var(--story-ink);
   text-wrap: balance;
 }

@@ -2,6 +2,8 @@ import { createRoot } from 'react-dom/client'
 import type { Post, TocEntry } from 'virtual:posts'
 import '../app/i18n/config'
 import '../styles/index.css'
+// the blog's own sheet, kept out of the home page's bundle
+import './article.css'
 import { BlogChrome } from './BlogChrome'
 
 export type PostSummary = Pick<

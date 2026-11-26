@@ -12,33 +12,34 @@ const POST = {
 describe('PostCard', () => {
   it('links to the article', async () => {
     const { PostCard } = await import('../../src/blog/components/PostCard')
-    const html = renderToStaticMarkup(<PostCard post={POST} index={0} />)
+    const html = renderToStaticMarkup(<PostCard post={POST} />)
     expect(html).toContain('href="/blog/arc"')
   })
 
   it('shows the title, month timecode and reading time', async () => {
     const { PostCard } = await import('../../src/blog/components/PostCard')
-    const html = renderToStaticMarkup(<PostCard post={POST} index={0} />)
+    const html = renderToStaticMarkup(<PostCard post={POST} />)
     expect(html).toContain('Arc Routing for Waste Collection')
     expect(html).toContain('2026.09')
     expect(html).toContain('9')
   })
 
-  it('marks a revised post', async () => {
+  it('marks a revised post with the revision month', async () => {
     const { PostCard } = await import('../../src/blog/components/PostCard')
-    const html = renderToStaticMarkup(<PostCard post={POST} index={0} />)
-    expect(html).toContain('REV')
+    const html = renderToStaticMarkup(<PostCard post={POST} />)
+    expect(html).toContain('blog-post__rev')
+    expect(html).toContain('2026.10')
   })
 
   it('does not mark an unrevised post', async () => {
     const { PostCard } = await import('../../src/blog/components/PostCard')
-    const html = renderToStaticMarkup(<PostCard post={{ ...POST, updated: null }} index={0} />)
-    expect(html).not.toContain('REV')
+    const html = renderToStaticMarkup(<PostCard post={{ ...POST, updated: null }} />)
+    expect(html).not.toContain('blog-post__rev')
   })
 
-  it('numbers the entry', async () => {
+  it('lists the tags', async () => {
     const { PostCard } = await import('../../src/blog/components/PostCard')
-    const html = renderToStaticMarkup(<PostCard post={POST} index={0} />)
-    expect(html).toContain('01')
+    const html = renderToStaticMarkup(<PostCard post={POST} />)
+    expect(html).toContain('<li>pyvrp</li>')
   })
 })

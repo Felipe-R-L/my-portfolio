@@ -10,7 +10,15 @@
   --ink-soft: rgb(222 226 235);
   --ink-faint: rgb(245 247 255 / 0.45);
   --hairline: rgb(245 247 255 / 0.16);
-  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  /* The headings' serif: Cormorant Garamond (Felipe, 2026-11-26), closed up to
+     Fraunces' density (measured 2.3-5%), a touch larger than the Instrument it
+     replaced since its letters sit lower; the subtitles a weight up. */
+  --serif: "Cormorant Garamond", Garamond, Georgia, "Times New Roman", serif;
+  --serif-weight: 500;
+  --serif-sub-weight: 600;
+  --serif-track: -0.035em;
+  --serif-sub-track: -0.02em;
+  --serif-scale: 1.1;
   --ease-arrive: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-leave: cubic-bezier(0.55, 0, 1, 0.45);
   --ease-travel: cubic-bezier(0.65, 0, 0.35, 1);

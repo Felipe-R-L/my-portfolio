@@ -45,8 +45,9 @@
 .talk-title {
   margin: 0 0 1.25rem;
   font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(3.25rem, 6vw, 6rem);
+  letter-spacing: var(--serif-track);
+  font-weight: var(--serif-weight);
+  font-size: calc(clamp(3.25rem, 6vw, 6rem) * var(--serif-scale));
   line-height: 0.95;
   text-wrap: balance;
 }

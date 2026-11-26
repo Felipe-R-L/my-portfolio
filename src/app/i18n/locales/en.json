@@ -182,7 +182,15 @@
     "read_time": "{{count}} min read",
     "contents": "Contents",
     "close": "Close",
-    "back": "Back to blog"
+    "back": "Back to blog",
+    "home": "Back to the portfolio",
+    "eyebrow": "Writing",
+    "intro": "Technical writing on optimization, routing and applied software, drawn from what I build.",
+    "next": "Next",
+    "contact": "Talk to me",
+    "theme_dark": "Use the dark theme",
+    "theme_light": "Use the light theme",
+    "language": "Language"
   },
   "story": {
     "title": "Who I am",

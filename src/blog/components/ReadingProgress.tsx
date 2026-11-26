@@ -1,28 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
+/** A thin line at the top that fills as the article is read. */
 export function ReadingProgress() {
-  const [progress, setProgress] = useState(0)
+  const barRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
+    let raf = 0
     const update = () => {
+      raf = 0
       const scrollable = document.documentElement.scrollHeight - window.innerHeight
-      setProgress(scrollable <= 0 ? 0 : Math.min(100, (window.scrollY / scrollable) * 100))
+      const p = scrollable <= 0 ? 0 : Math.min(1, window.scrollY / scrollable)
+      if (barRef.current) barRef.current.style.transform = `scaleX(${p.toFixed(4)})`
+    }
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(update)
     }
     update()
-    window.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
     return () => {
-      window.removeEventListener('scroll', update)
-      window.removeEventListener('resize', update)
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
     }
   }, [])
 
   return (
-    <div className="fixed top-0 inset-x-0 z-[60] h-[2px]" aria-hidden="true">
-      <div
-        className="h-full bg-gradient-to-r from-[var(--zone-a-1)] to-[var(--zone-a-2)]"
-        style={{ width: `${progress}%` }}
-      />
+    <div className="blog-progress" aria-hidden="true">
+      <i ref={barRef} style={{ transform: 'scaleX(0)' }} />
     </div>
   )
 }

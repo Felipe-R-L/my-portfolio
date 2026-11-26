@@ -34,8 +34,9 @@
 .proof-title {
   margin: 0 0 2rem;
   font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(2.5rem, 4.2vw, 4rem);
+  letter-spacing: var(--serif-track);
+  font-weight: var(--serif-weight);
+  font-size: calc(clamp(2.5rem, 4.2vw, 4rem) * var(--serif-scale));
   line-height: 1;
 }
 

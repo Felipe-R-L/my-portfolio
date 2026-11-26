@@ -1,11 +1,25 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="blog">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- the reader's theme before the first paint, so a dark choice never flashes the paper -->
+    <script>
+      try {
+        var theme = localStorage.getItem('blog-theme')
+        if (theme === 'dark' || theme === 'light') document.documentElement.dataset.theme = theme
+      } catch (e) {}
+    </script>
     <link
       rel="preload"
-      href="/assets/fonts/space-grotesk-latin.woff2"
+      href="/assets/fonts/cormorant-garamond-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/assets/fonts/eb-garamond-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin

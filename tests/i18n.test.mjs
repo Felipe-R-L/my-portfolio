@@ -19,6 +19,7 @@ const flatten = (obj, prefix = '') =>
 const REQUIRED = [
   'nav.blog', 'blog.title', 'blog.entries_one', 'blog.entries_other', 'blog.empty',
   'blog.published', 'blog.revised', 'blog.read_time', 'blog.contents', 'blog.close', 'blog.back',
+  'blog.home', 'blog.eyebrow', 'blog.intro', 'blog.next', 'blog.contact', 'blog.theme_dark', 'blog.theme_light', 'blog.language',
 ]
 
 describe('locales', () => {

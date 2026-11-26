@@ -21,7 +21,7 @@ describe('ArticleMasthead', () => {
     const html = renderToStaticMarkup(
       <ArticleMasthead post={{ ...base, date: '2026-09-02', updated: null }} />,
     )
-    expect(html.toUpperCase()).not.toContain('REVISED')
+    expect(html).not.toContain('article__revised')
   })
 
   it('states the revision rather than replacing the publish date', () => {

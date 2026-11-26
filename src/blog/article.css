@@ -1,317 +1,760 @@
-/**
- * The article is the largest frosted object on the site: a lit document
- * suspended over the same galaxy as everything else.
- *
- * The nav pill can be `bg-white/[0.06]` because it holds six words. A reading
- * surface cannot — stars moving behind body text is the one thing that makes
- * a nine-minute article unreadable. So the slab is a dense #080810 at 80%,
- * and the galaxy stays visible at the margins and through the blur instead.
+/*
+ * The blog: the case page's paper, for reading. Cormorant Garamond for the
+ * headings, EB Garamond for the running text, the system sans for the small
+ * labels (Cormorant is declared with the site, styles/fonts.css). Two themes: the paper by day, the journey's night by dark; the
+ * reader's choice (html[data-theme]) wins over the system's.
  */
+
+@font-face {
+  font-family: "EB Garamond";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/assets/fonts/eb-garamond-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "EB Garamond";
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/assets/fonts/eb-garamond-latin-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+html.blog {
+  --b-paper: #e8edef;
+  --b-ink: #11161a;
+  --b-soft: #3b464e;
+  --b-faint: #66727b;
+  --b-accent: #2f6f8f;
+  --b-line: rgb(17 22 26 / 0.14);
+  --b-code: rgb(17 22 26 / 0.06);
+  --b-pre: #0d1217;
+  --b-pre-ink: #e6edf2;
+  --b-display: "Cormorant Garamond", Garamond, Georgia, serif;
+  --b-text: "EB Garamond", Garamond, Georgia, serif;
+  --b-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --b-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Cormorant is drawn loose: closed up to Fraunces' density (measured, 2.3-5%) */
+  --b-track: -0.035em;
+  --b-sub-track: -0.02em;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  html.blog:not([data-theme="light"]) {
+    --b-paper: #0a0e12;
+    --b-ink: #eef2f6;
+    --b-soft: #b9c3cb;
+    --b-faint: #7f8b94;
+    --b-accent: #9fc3d6;
+    --b-line: rgb(238 242 246 / 0.13);
+    --b-code: rgb(238 242 246 / 0.07);
+    --b-pre: #05070a;
+    color-scheme: dark;
+  }
+}
+
+html.blog[data-theme="dark"] {
+  --b-paper: #0a0e12;
+  --b-ink: #eef2f6;
+  --b-soft: #b9c3cb;
+  --b-faint: #7f8b94;
+  --b-accent: #9fc3d6;
+  --b-line: rgb(238 242 246 / 0.13);
+  --b-code: rgb(238 242 246 / 0.07);
+  --b-pre: #05070a;
+  color-scheme: dark;
+}
+
+html.blog body {
+  background: var(--b-paper);
+  color: var(--b-ink);
+  font-family: var(--b-sans);
+  transition: background-color 0.35s, color 0.35s;
+}
+
+html.blog ::selection {
+  background: color-mix(in srgb, var(--b-accent) 30%, transparent);
+}
+
+/* ---------- the page's frame: one column, the case page's width ---------- */
+
+.blog-page,
 .article {
-  --article-measure: 62ch;
-  --article-wide: var(--measure);
-  --article-ink: rgba(255, 255, 255, 0.9);
-  --article-dim: rgba(255, 255, 255, 0.6);
-  --article-faint: rgba(255, 255, 255, 0.4);
-  --article-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  /* The inset between the slab's edge and the prose. Tightens on a phone,
-     where the slab goes full-bleed and every pixel is measure. */
-  --article-gutter: var(--gutter);
-
+  max-width: 64rem;
+  margin-inline: auto;
   padding-inline: var(--gutter);
-  padding-block: calc(var(--rhythm-section) * 1.5) var(--rhythm-section);
 }
 
-/*
- * BlogChrome renders a fixed full-screen gradient tint at z-[1] (same
- * treatment as AppLayout's overlay). #blog-content in blog.html is otherwise
- * unpositioned, so it paints in normal flow *underneath* that tint. AppLayout's
- * <main> uses z-10 for exactly this reason — mirror it here.
- */
-#blog-content {
-  position: relative;
-  z-index: 10;
-}
-
-.article__slab {
-  max-width: var(--article-wide);
+.blog-top {
+  max-width: 64rem;
   margin-inline: auto;
-  background: rgb(8 8 16 / 0.8);
-  /* Through a custom property so the optimizer keeps the unprefixed
-     property — see the note on .glass-dark in styles/layout.css. */
-  --glass-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: var(--glass-filter);
-  backdrop-filter: var(--glass-filter);
-  border: 1px solid rgb(255 255 255 / 0.1);
-  border-radius: 2rem;
-  box-shadow:
-    inset 0 1px 0 0 rgb(255 255 255 / 0.08),
-    0 24px 80px rgb(0 0 0 / 0.5);
-  padding: clamp(1.75rem, 5vw, 4rem) 0;
+  padding: clamp(1.25rem, 4vh, 2.5rem) var(--gutter) 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-/*
- * On a phone the floating card was costing the article twice: the page gutter
- * outside the slab and the prose gutter inside it, ~40px of a 375px screen
- * spent on framing a frame. Below 48rem the slab goes full-bleed instead, so
- * the whole width is measure and the reading surface is simply the page.
- *
- * The card stays on desktop, where there is width to spare and the galaxy at
- * the margins is the point.
- */
-@media (max-width: 48rem) {
-  .article {
-    --article-gutter: 1.25rem;
-    padding-inline: 0;
-    /* The slab now carries the bottom clearance itself (below). */
-    padding-block: var(--rhythm-section) 0;
-  }
-
-  .article__slab {
-    border-inline: none;
-    border-radius: 0;
-    /* A full-bleed slab has no side shadow to cast, only depth below. */
-    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.08);
-    /* The docked nav and contents pills sit over the article's last lines.
-       The slab carries the clearance so the glass reaches under them and
-       they never float over the bare galaxy. */
-    padding-bottom: calc(var(--dock-stacked) + var(--dock-height));
-  }
+.blog-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0 1rem 0 0.75rem;
+  border: 1px solid var(--b-line);
+  border-radius: 999px;
+  color: var(--b-ink);
+  font-size: 0.95rem;
+  text-decoration: none;
 }
 
-/*
- * The masthead is emitted as plain HTML by scripts/fan-out.mjs's
- * mastheadHtml() (never as a mounted React island — see
- * src/blog/components/ArticleMasthead.tsx). Keep these classes in sync with
- * that component's Tailwind classes; both express the same design.
- */
+.blog-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.blog-lang {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.blog-lang button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  background: none;
+  color: var(--b-faint);
+  font: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.blog-lang button[aria-pressed="true"] {
+  color: var(--b-ink);
+  font-weight: 600;
+}
+
+.blog-theme {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--b-line);
+  border-radius: 999px;
+  background: none;
+  color: var(--b-ink);
+  cursor: pointer;
+}
+
+.blog-back:hover,
+.blog-theme:hover {
+  border-color: var(--b-accent);
+}
+
+.blog-back:focus-visible,
+.blog-theme:focus-visible,
+.blog-lang button:focus-visible,
+.blog-post a:focus-visible,
+.article a:focus-visible,
+.article__toc a:focus-visible,
+.article__toc button:focus-visible {
+  outline: 2px solid var(--b-accent);
+  outline-offset: 3px;
+}
+
+.blog-eyebrow,
+.article__kicker {
+  color: var(--b-accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---------- the index: a reading list ---------- */
+
+.blog-page {
+  padding-block: clamp(2.5rem, 8vh, 5rem) clamp(4rem, 10vh, 6rem);
+}
+
+.blog-mast {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+  gap: 2rem;
+  align-items: end;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--b-line);
+}
+
+.blog-mast h1 {
+  margin: 0.4rem 0 0;
+  font-family: var(--b-display);
+  font-weight: 500;
+  font-size: clamp(4rem, 11vw, 8.5rem);
+  line-height: 0.9;
+  letter-spacing: var(--b-track);
+}
+
+.blog-mast p {
+  margin: 0;
+  color: var(--b-soft);
+  font-family: var(--b-text);
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.blog-posts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.blog-post {
+  border-bottom: 1px solid var(--b-line);
+}
+
+.blog-post a {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr) auto;
+  gap: 1.5rem 2rem;
+  padding: 2.25rem 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.blog-post__date,
+.blog-post__mins {
+  padding-top: 0.75rem;
+  color: var(--b-faint);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.blog-post__rev {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.blog-post h2 {
+  margin: 0;
+  font-family: var(--b-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  line-height: 1.04;
+  letter-spacing: var(--b-sub-track);
+  text-wrap: balance;
+  transition: color 0.25s;
+}
+
+.blog-post p {
+  max-width: 40rem;
+  margin: 0.8rem 0 0;
+  color: var(--b-soft);
+  font-family: var(--b-text);
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.blog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.blog-tags li {
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--b-line);
+  border-radius: 999px;
+  color: var(--b-soft);
+  font-size: 0.8rem;
+}
+
+.blog-post__arrow {
+  display: inline-block;
+  margin-left: 0.25rem;
+  transition: transform 0.3s var(--ease-arrive, ease);
+}
+
+.blog-post a:hover h2 {
+  color: var(--b-accent);
+}
+
+.blog-post a:hover .blog-post__arrow {
+  transform: translateX(4px);
+}
+
+.blog-empty {
+  padding-top: 2rem;
+  color: var(--b-soft);
+  font-family: var(--b-text);
+  font-size: 1.25rem;
+}
+
+/* ---------- the article ---------- */
+
+.article {
+  padding-block: clamp(2.5rem, 8vh, 5rem) clamp(4rem, 10vh, 6rem);
+}
+
 .article__masthead {
-  max-width: var(--article-measure);
-  margin-inline: auto;
-  padding-inline: var(--article-gutter);
-  padding-block: 0.5rem 2.5rem;
+  max-width: 52rem;
 }
 
 .article__kicker {
-  margin: 0 0 1.25rem;
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: var(--article-dim);
-}
-
-/* Title case, not shouted: article titles run long, unlike section headings. */
-.article__title {
   margin: 0;
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: #fff;
 }
 
-.article__rule {
-  margin-top: 1.5rem;
-  height: 0.25rem;
-  width: 6rem;
-  border-radius: 9999px;
-  background: linear-gradient(to right, var(--zone-a-1), var(--zone-a-2));
+.article__title {
+  margin: 0.5rem 0 0;
+  font-family: var(--b-display);
+  font-weight: 500;
+  font-size: clamp(3rem, 7vw, 5.75rem);
+  line-height: 0.98;
+  letter-spacing: var(--b-track);
+  text-wrap: balance;
 }
 
 .article__lead {
-  margin-top: 1.5rem;
-  font-size: 21px;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--article-dim);
+  max-width: 44rem;
+  margin: 1.75rem 0 0;
+  color: var(--b-soft);
+  font-family: var(--b-text);
+  font-style: italic;
+  font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+  line-height: 1.38;
 }
 
 .article__dateline {
-  margin-top: 1.75rem;
-  font-size: 11px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  margin: 1.75rem 0 0;
+  color: var(--b-faint);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.article__revised {
+  color: var(--b-accent);
+}
+
+.article__grid {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: 3rem;
+  margin-top: 3.5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--b-line);
+}
+
+/* The contents: beside the text, held in view while it scrolls. */
+.article__toc {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+.article__toc-label {
+  display: block;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--b-faint);
+  font: inherit;
+  font-size: 0.72rem;
   font-weight: 500;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--article-dim);
+}
+
+.article__toc ol {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.article__toc a {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  color: var(--b-faint);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+
+.article__toc a:hover {
+  color: var(--b-ink);
+}
+
+.article__toc a span {
+  font-variant-numeric: tabular-nums;
+}
+
+.article__toc a[aria-current="true"] {
+  color: var(--b-ink);
+}
+
+.article__toc a[aria-current="true"] span {
+  color: var(--b-accent);
+}
+
+.article__toc li[data-depth="3"] a {
+  padding-left: 1rem;
+}
+
+.article__main {
+  min-width: 0;
 }
 
 /*
- * The skip link targets this element via tabindex="-1" so keyboard focus
- * actually lands somewhere (see scripts/fan-out.mjs). Programmatic focus on
- * a non-interactive container doesn't need the browser's default focus ring.
+ * The skip link targets the body through tabindex="-1" so keyboard focus
+ * lands somewhere (see scripts/fan-out.mjs); it needs no focus ring.
  */
-.article [tabindex="-1"]:focus { outline: none; }
-
-/* Two tracks: prose locks to the measure, figures and code break out wider. */
-.article__body {
-  display: grid;
-  /*
-   * `100%` in a grid track resolves against the container's width, not against
-   * the space left over once the gutter tracks have taken theirs. Written as
-   * plain `min(measure, 100%)` the text track claimed the slab's full width on
-   * a phone, the two gutters were then added on top of it, and the row
-   * overflowed its own slab to the right by exactly one gutter. Subtracting
-   * both gutters here is what keeps the prose inside the glass.
-   */
-  grid-template-columns:
-    [full-start] minmax(var(--article-gutter), 1fr)
-    [wide-start] minmax(0, calc((var(--article-wide) - var(--article-measure)) / 2))
-    [text-start] min(var(--article-measure), 100% - var(--article-gutter) * 2) [text-end]
-    minmax(0, calc((var(--article-wide) - var(--article-measure)) / 2)) [wide-end]
-    minmax(var(--article-gutter), 1fr) [full-end];
-
-  font-size: 18px;
-  line-height: 1.8;
-  font-weight: 400;
-  color: var(--article-ink);
+.article [tabindex="-1"]:focus {
+  outline: none;
 }
 
-.article__body > * { grid-column: text; }
+/* Prose holds the measure; figures, code, tables and callouts take the column. */
+.article__body {
+  color: var(--b-soft);
+  font-family: var(--b-text);
+  font-size: 1.25rem;
+  line-height: 1.65;
+}
+
+.article__body > * {
+  max-width: 40rem;
+}
+
 .article__body > figure,
 .article__body > pre,
 .article__body > .table-scroll,
-.article__body > .callout { grid-column: wide; }
+.article__body > .callout,
+.article__body > .katex-display {
+  max-width: none;
+}
 
-.article__body > p { margin: 0 0 1.4em; }
+.article__body > p {
+  margin: 0 0 1.15em;
+}
 
-/* Headings echo SectionHeading: uppercase, tight tracking, bold. */
+.article__body h2,
+.article__body h3 {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  color: var(--b-ink);
+  font-family: var(--b-display);
+  font-weight: 600;
+  letter-spacing: var(--b-sub-track);
+  scroll-margin-top: 2rem;
+}
+
 .article__body h2 {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
-  margin: 2.5em 0 0.6em;
-  position: relative;
+  margin: 2.6em 0 0.6em;
+  font-size: clamp(2rem, 3.2vw, 2.5rem);
+  line-height: 1.05;
+}
+
+.article__body > h2:first-child {
+  margin-top: 0;
 }
 
 .article__body h3 {
-  font-size: 1.375rem;
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  margin: 2em 0 0.5em;
+  margin: 1.8em 0 0.45em;
+  font-size: 1.65rem;
+  line-height: 1.1;
 }
 
-/* Section numerals sit in the margin as slate marks. */
-.article__body h2[data-numeral]::before {
+.article__body h2[data-numeral]::before,
+.article__body h3[data-numeral]::before {
   content: attr(data-numeral);
-  position: absolute;
-  left: -2.75rem;
-  top: 0.35em;
-  font-family: var(--article-mono);
+  flex: none;
+  color: var(--b-accent);
+  font-family: var(--b-sans);
   font-size: 0.8rem;
-  color: var(--article-faint);
-}
-
-@media (max-width: 1200px) {
-  .article__body h2[data-numeral]::before {
-    position: static;
-    display: block;
-    margin-bottom: 0.4rem;
-  }
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
 }
 
 .article__body a {
-  color: var(--article-ink);
+  color: var(--b-ink);
   text-decoration: underline;
-  text-decoration-color: var(--zone-a-1);
-  text-underline-offset: 4px;
+  text-decoration-color: var(--b-accent);
   text-decoration-thickness: 1px;
-  transition: color 0.3s;
+  text-underline-offset: 4px;
+  transition: color 0.25s;
 }
-.article__body a:hover { color: var(--zone-a-1); }
 
-.article__body strong { font-weight: 700; color: #fff; }
-.article__body ul, .article__body ol { margin: 0 0 1.4em; padding-left: 1.4em; }
-.article__body li { margin-bottom: 0.5em; }
+.article__body a:hover {
+  color: var(--b-accent);
+}
+
+.article__body strong {
+  color: var(--b-ink);
+  font-weight: 600;
+}
+
+.article__body ul,
+.article__body ol {
+  margin: 0 0 1.15em;
+  padding-left: 1.3em;
+}
+
+.article__body li {
+  margin-bottom: 0.4em;
+}
 
 .article__body code {
-  font-family: var(--article-mono);
-  font-size: 0.9em;
-  background: rgb(255 255 255 / 0.07);
+  padding: 0.1em 0.35em;
   border-radius: 4px;
-  padding: 0.12em 0.4em;
+  background: var(--b-code);
+  font-family: var(--b-mono);
+  font-size: 0.78em;
 }
 
 .article__body pre {
-  background: rgb(0 0 0 / 0.4);
-  border: 1px solid rgb(255 255 255 / 0.08);
-  border-radius: 1rem;
+  margin: 2em 0;
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
-  margin: 2em 0;
+  border-radius: 14px;
+  background: var(--b-pre) !important;
+  color: var(--b-pre-ink);
 }
+
 .article__body pre code {
-  background: none;
   padding: 0;
-  font-size: 14px;
+  background: none;
+  font-size: 0.875rem;
   line-height: 1.7;
 }
 
-/* Wide content scrolls inside its own box; the page body never scrolls sideways. */
-.table-scroll { overflow-x: auto; margin: 2em 0; }
-.article__body table { border-collapse: collapse; width: 100%; font-size: 15px; }
-.article__body th, .article__body td {
-  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+/* Wide content scrolls inside its own box; the page never scrolls sideways. */
+.table-scroll {
+  margin: 2em 0;
+  overflow-x: auto;
+}
+
+.article__body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--b-sans);
+  font-size: 0.95rem;
+}
+
+.article__body th,
+.article__body td {
   padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--b-line);
   text-align: left;
 }
+
 .article__body th {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  color: var(--b-faint);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--article-dim);
 }
 
 /* Callouts are operator notes, not decoration. */
 .callout {
-  background: rgb(255 255 255 / 0.04);
-  border: 1px solid rgb(255 255 255 / 0.08);
-  border-left: 2px solid var(--zone-a-1);
-  border-radius: 0 1rem 1rem 0;
-  padding: 1.25rem 1.5rem;
   margin: 2em 0;
+  padding: 1.25rem 1.5rem;
+  border-left: 2px solid var(--b-accent);
+  background: var(--b-code);
+  border-radius: 0 12px 12px 0;
 }
-.callout__label {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--article-dim);
-  margin: 0 0 0.6rem;
-}
-.callout > p:last-child { margin-bottom: 0; }
 
-.figure { margin: 2.5em 0; }
-.figure img, .figure__svg { width: 100%; height: auto; display: block; border-radius: 1rem; }
-.figure figcaption {
-  font-size: 12px;
-  letter-spacing: 0.15em;
+.callout__label {
+  margin: 0 0 0.5rem;
+  color: var(--b-faint);
+  font-family: var(--b-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--article-dim);
+}
+
+.callout > p:last-child {
+  margin-bottom: 0;
+}
+
+.figure {
+  margin: 2.5em 0;
+}
+
+.figure img,
+.figure__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.figure figcaption {
   margin-top: 0.75rem;
+  color: var(--b-faint);
+  font-family: var(--b-sans);
+  font-size: 0.85rem;
 }
 
 .heading-anchor {
+  margin-left: 0.3em;
+  color: var(--b-accent);
+  font-size: 0.55em;
+  text-decoration: none !important;
   opacity: 0;
-  margin-left: 0.4em;
-  color: var(--zone-a-1);
-  text-decoration: none;
-  font-size: 0.6em;
-  vertical-align: middle;
 }
-h2:hover .heading-anchor, h3:hover .heading-anchor, .heading-anchor:focus { opacity: 1; }
 
-.article__body .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5em 0; }
+h2:hover .heading-anchor,
+h3:hover .heading-anchor,
+.heading-anchor:focus {
+  opacity: 1;
+}
+
+.article__body .katex-display {
+  padding: 0.5em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.article__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 40rem;
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--b-line);
+}
+
+.article__foot-label {
+  margin: 0 0 0.4rem;
+  color: var(--b-faint);
+  font-size: 0.85rem;
+}
+
+.article__next {
+  color: var(--b-ink);
+  font-family: var(--b-display);
+  font-weight: 600;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  letter-spacing: var(--b-sub-track);
+  text-decoration: none;
+}
+
+.article__next:hover {
+  color: var(--b-accent);
+}
+
+.article__contact {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  background: var(--b-ink);
+  color: var(--b-paper);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.blog-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: 3px;
+  pointer-events: none;
+}
+
+.blog-progress > i {
+  display: block;
+  height: 100%;
+  background: var(--b-accent);
+  transform-origin: 0 50%;
+}
+
+/* Phone and narrow windows: one column, the contents fold above the text. */
+@media (max-width: 860px) {
+  .blog-mast,
+  .article__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .article__grid {
+    gap: 2rem;
+  }
+
+  .article__toc {
+    position: static;
+    max-height: none;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--b-line);
+  }
+
+  .article__toc-label {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    min-height: 44px;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .blog-post a {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .blog-post__date,
+  .blog-post__mins {
+    padding-top: 0;
+  }
+
+  .blog-post__mins {
+    order: 3;
+    margin-top: 0.75rem;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .article *, .article *::before { animation: none !important; transition: none !important; }
+  html.blog body,
+  .blog-post h2,
+  .blog-post__arrow,
+  .article__toc a,
+  .article__body a {
+    transition: none;
+  }
 }
 
-/* Visually hidden until keyboard focus reaches it; sits above BlogNav (z-50). */
+/* Visually hidden until keyboard focus reaches it. */
 .skip-link {
   position: absolute;
   top: -3rem;
@@ -319,12 +762,10 @@ h2:hover .heading-anchor, h3:hover .heading-anchor, .heading-anchor:focus { opac
   z-index: 100;
   padding: 0.6rem 1rem;
   border-radius: 0.5rem;
-  background: #030305;
-  color: #fff;
-  font-size: 12px;
+  background: var(--b-ink);
+  color: var(--b-paper);
+  font-size: 0.8rem;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
   transition: top 0.2s ease;
 }
 

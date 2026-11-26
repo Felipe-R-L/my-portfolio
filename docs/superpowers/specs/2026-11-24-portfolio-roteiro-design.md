@@ -235,3 +235,8 @@ Pedido do Felipe em 2026-11-25: a home vira uma jornada em capítulos, com um ú
 - **Movimento reduzido:** o site continua legível.
 - **Clichês espaciais:** nenhum (foguete, astronauta e afins).
 - **Deploy:** nunca.
+
+## Adendo 5 (2026-11-26): Cormorant Garamond e o blog editorial
+
+- **Tipografia.** Felipe comparou seis pares serifados numa prévia (https://claude.ai/artifact/GihAbtWNMxYSqpVPdRGsmf) e escolheu Cormorant Garamond, com a densidade da Fraunces. Ela substitui a Instrument Serif em todos os títulos da jornada e do blog. Tokens em `src/styles/journey.css`: peso 500 nos títulos e 600 nos subtítulos, espaçamento -0,035em e -0,02em (medido contra a Fraunces, entre 2,3% e 5%), escala 1,1 porque o x dela é mais baixo. Contadores e anos usam algarismos alinhados. Todo texto em serifa foi medido antes e depois em 1440, 1280 e 390 px: nenhuma linha a mais e nada passando da caixa. O texto corrido do portfólio segue no sans.
+- **Blog.** O papel claro da tela de detalhes, com tema escuro (a noite da jornada) que segue o sistema e guarda a escolha do leitor. Índice como lista de leitura; artigo em uma coluna, com o sumário fixo ao lado e o texto em EB Garamond. O dev renderiza `/blog` como o build (`plugins/vite-plugin-posts.mjs`). A galáxia e o menu antigo saíram do blog.
