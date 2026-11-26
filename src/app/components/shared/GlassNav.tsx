@@ -226,7 +226,10 @@ export function GlassNav({
           transition={{ duration: entrance.duration, delay: entrance.delay, ease: "easeOut" }}
           className="shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
         >
+          {/* initial={false}: mount already closed. Animating down from the
+              panel's natural height moved the pill's top edge on load (CLS). */}
           <motion.div
+            initial={false}
             animate={{ height: open ? openHeight : CLOSED_HEIGHT, borderRadius: open ? OPEN_RADIUS : CLOSED_RADIUS }}
             transition={panelTransition}
             className="glass-dark flex flex-col justify-end overflow-hidden"

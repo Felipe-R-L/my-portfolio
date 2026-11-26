@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { WORK, type WorkItem } from "../data/work";
 import { Draggable, ScrollTrigger, gsap } from "../scroll/gsap";
 import { span } from "../scroll/math";
+import { SCROLL_PER_PX } from "../motion/tokens";
 import { useScene } from "../scroll/useScene";
 import { useTilt } from "../scroll/useTilt";
 import { WorkCase } from "./WorkCase";
@@ -18,9 +19,6 @@ import "./Work.css";
  * a carousel you drag, which never fights the vertical scroll. Scrolling past
  * it turns everything back to black and white.
  */
-/** Scroll pixels per pixel of sideways travel: the same rate as the story
-    rail (HeroCity STORY_TRACK), so every scene resists the wheel alike. */
-const SCROLL_PER_PX = 1.5;
 
 export function Work() {
   const { t } = useTranslation();

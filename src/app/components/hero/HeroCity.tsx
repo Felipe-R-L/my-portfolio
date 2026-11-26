@@ -9,6 +9,7 @@ import { Story } from "../../scenes/Story";
 import { LiquidReveal } from "./LiquidReveal";
 import { Credits, Letters, NAME } from "./HeroParts";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
+import { FRAME_RADIUS, SCROLL } from "../../motion/tokens";
 import "./HeroCity.css";
 
 /**
@@ -39,12 +40,12 @@ import "./HeroCity.css";
  */
 
 /** Scroll length of the scene, as a multiple of the viewport height. */
-const TRACK_DESKTOP = 2.8;
-const TRACK_PHONE = 3.15;
-const TRACK_REDUCED = 1.2;
+const TRACK_DESKTOP = SCROLL.hero.desktop;
+const TRACK_PHONE = SCROLL.hero.phone;
+const TRACK_REDUCED = SCROLL.hero.reduced;
 /** Desktop only: the story plays on in the same pinned stage, for this many
     more screens, with the framed photo moved aside. */
-const STORY_TRACK = 6.4;
+const STORY_TRACK = SCROLL.story;
 /** Story beat, over story progress: the frame moves aside, and stays there
     until the released stage carries it off the top. */
 const ASIDE_TO = 0.05;
@@ -75,8 +76,6 @@ const EXIT_FROM = 0.8;
 const EXIT_TO = 0.95;
 const FRAME_DESKTOP = 0.46;
 const FRAME_PHONE = 0.66;
-/** Corner radius of the finished frame, in screen pixels. */
-const FRAME_RADIUS = 18;
 
 const REDUCED_QUERY = "(prefers-reduced-motion: reduce)";
 

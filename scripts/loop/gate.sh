@@ -6,7 +6,9 @@ set -euo pipefail
 cd "$(dirname "$0")/../.."
 pnpm test
 pnpm build
-DET=/home/felipe/.claude/plugins/cache/impeccable/impeccable/4.3.1/skills/impeccable/scripts/impeccable
+# The newest installed version of the detector (the plugin updates itself).
+DET=$(ls -d "$HOME"/.claude/plugins/cache/impeccable/impeccable/*/skills/impeccable/scripts/impeccable | sort -V | tail -1)
+[ -x "$DET" ] || { echo "design detector not found"; exit 1; }
 # detect exits non-zero whenever it finds anything; the baseline decides.
 FINDINGS=$("$DET" detect --json src 2>/dev/null || true)
 printf '%s' "$FINDINGS" | python3 -c "
