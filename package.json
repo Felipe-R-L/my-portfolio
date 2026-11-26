@@ -42,6 +42,7 @@
     "js-yaml": "4.1.0",
     "jsdom": "25.0.1",
     "katex": "0.16.11",
+    "playwright-core": "^1.65.1",
     "rehype-autolink-headings": "7.1.0",
     "rehype-katex": "7.0.1",
     "rehype-raw": "7.0.0",

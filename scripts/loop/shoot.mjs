@@ -1,7 +1,7 @@
 // Screenshots every scene position in scenes.json, desktop (d-), phone (m-)
 // and reduced motion (r-). Usage: node scripts/loop/shoot.mjs <outDir> [url]
 import { mkdirSync, readFileSync } from "node:fs";
-import { chromium } from "/home/felipe/.npm/_npx/e41f203b7505f1fb/node_modules/playwright-core/index.mjs";
+import { chromium } from "playwright-core";
 
 const out = process.argv[2];
 const url = process.argv[3] ?? "http://localhost:5199/";
