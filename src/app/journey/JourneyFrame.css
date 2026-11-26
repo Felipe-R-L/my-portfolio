@@ -43,8 +43,14 @@
   opacity: 0;
 }
 
-.jf-layer > img,
-.jf-layer > video {
+.jf-shot {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.jf-shot > img,
+.jf-shot > video {
   position: absolute;
   inset: 0;
   width: 100%;

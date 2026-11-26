@@ -29,7 +29,9 @@ describe("the director", () => {
   it("holds still once arrived", () => {
     const a = frameAt(1600, beats);
     const b = frameAt(1999, beats);
-    expect(a).toEqual(b);
+    // the frame and its picture hold; only the shot's own camera (t) moves on
+    const still = (s: typeof a) => (s.visible ? { ...s, t: 0 } : s);
+    expect(still(a)).toEqual(still(b));
     expect(a.visible && a.prev).toBeNull();
   });
 
@@ -56,6 +58,17 @@ describe("the director", () => {
     const fwd = path.map((y) => frameAt(y, beats));
     const back = [...path].reverse().map((y) => frameAt(y, beats)).reverse();
     expect(fwd).toEqual(back);
+  });
+
+  it("is off between scenes, and arrives fresh after a gap", () => {
+    const gapped = [beat("a", 0, 1000, slotB), beat("ds", 3000, 4000, slotA)]
+    expect(frameAt(2000, gapped).visible).toBe(false)
+    const s = frameAt(3000, gapped)
+    if (!s.visible) throw new Error("hidden")
+    // no flight from a slot that has long left the screen
+    expect(s.prev).toBeNull()
+    expect(s.box).toEqual(slotA)
+    expect(s.approach).toBeCloseTo(FIRST_APPROACH_FROM)
   });
 
   it("racks focus smoothly and cuts cleanly", () => {

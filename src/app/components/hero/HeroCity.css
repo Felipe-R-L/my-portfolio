@@ -123,3 +123,76 @@
   }
 
 }
+
+/* ---------- T1: the night the camera tilts up into ---------- */
+
+.city-night {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #020309 0%, #04060b 55%, rgb(4 6 11 / 0.82) 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The chapters leave to the left as the portrait returns to the middle. */
+.story-rail {
+  --out: 0;
+  translate: calc(var(--out) * -12vw) 0;
+  clip-path: inset(0 0 0 calc(var(--out) * 100%));
+}
+
+/* ---------- the origin: Diamante, in the journey's frame ---------- */
+
+.origin {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  justify-items: center;
+  align-items: center;
+  padding: clamp(4.5rem, 10vh, 6rem) var(--gutter) clamp(1.5rem, 4vh, 2.5rem);
+  pointer-events: none;
+  --in: 0;
+}
+
+/* Where the frame sits: 16:10, about 80% of the screen. */
+.origin-slot {
+  width: min(80vw, calc((100svh - 15rem) * 1.6));
+  aspect-ratio: 16 / 10;
+}
+
+.origin-caption {
+  display: grid;
+  gap: 0.4rem;
+  width: min(80vw, calc((100svh - 15rem) * 1.6));
+  margin: 0;
+}
+
+.origin-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.origin-mask > span {
+  display: block;
+  transform: translateY(calc((1 - var(--in)) * 110%));
+}
+
+.origin-place {
+  color: var(--diamante);
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1.1;
+}
+
+.origin-text {
+  max-width: 62ch;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* While Diamante plays, the journey's frame (beneath the page) shows through. */
+.city-stage[data-origin="true"] {
+  background: transparent;
+}

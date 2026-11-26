@@ -210,3 +210,32 @@
     opacity: 1;
   }
 }
+
+/* ---------- origin: Diamante, before the first chapter (phone, reduced) ---------- */
+
+.story-origin {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0 0 3.5rem;
+}
+
+.story-origin img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1.5px solid rgb(159 195 214 / 0.4);
+}
+
+.story-origin figcaption {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.story-origin-caption {
+  color: var(--diamante);
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  line-height: 1.1;
+}

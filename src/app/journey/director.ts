@@ -47,6 +47,9 @@ export type FrameState =
       prev: string | null;
       /** Arrival progress of `content` over `prev`, 0..1 (1 = settled). */
       mix: number;
+      /** Progress through the whole beat, 0..1: drives a shot's own camera
+          move inside the frame (see contents.ts `drift`). */
+      t: number;
       gesture: Gesture;
       /** The frame's own scale for the very first arrival, out of the
           distance (1 otherwise). */
@@ -63,15 +66,19 @@ export const FIRST_APPROACH_FROM = 0.72;
 
 export function frameAt(scroll: number, beats: readonly Beat[]): FrameState {
   if (beats.length === 0 || scroll < beats[0].start) return { visible: false };
-  // the beat in effect: the last one that has started (a gap holds the previous beat)
+  // the beat in effect: the last one that has started
   let i = 0;
   for (let k = 0; k < beats.length; k++) if (scroll >= beats[k].start) i = k;
   const beat = beats[i];
-  if (i === beats.length - 1 && scroll >= beat.end) return { visible: false };
+  // past its end with no beat following on: the frame is off between scenes
+  if (scroll >= beat.end) return { visible: false };
 
   const t = clamp01((scroll - beat.start) / Math.max(1, beat.end - beat.start));
   const mix = beat.arrive > 0 ? clamp01(t / beat.arrive) : 1;
-  const prev = i > 0 ? beats[i - 1] : null;
+  // a beat only comes *from* the previous one when they touch; after a gap
+  // the frame arrives fresh, out of the distance
+  const before = i > 0 ? beats[i - 1] : null;
+  const prev = before && Math.abs(before.end - beat.start) < 1 ? before : null;
   const here = beat.slot();
   const e = easeInOut(mix);
   const box = prev && mix < 1 ? lerpBox(prev.slot(), here, e) : here;
@@ -81,6 +88,7 @@ export function frameAt(scroll: number, beats: readonly Beat[]): FrameState {
     content: beat.content,
     prev: prev && mix < 1 && prev.content !== beat.content ? prev.content : null,
     mix,
+    t,
     gesture: beat.gesture,
     approach: prev ? 1 : FIRST_APPROACH_FROM + (1 - FIRST_APPROACH_FROM) * e,
   };

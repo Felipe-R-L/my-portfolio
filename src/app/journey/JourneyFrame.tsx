@@ -7,6 +7,8 @@ import { FRAME_CONTENTS } from "./contents";
 import { frameAt, layerMix, type Beat, type FrameState } from "./director";
 import "./JourneyFrame.css";
 
+const DRIFT = new Map(FRAME_CONTENTS.filter((c) => c.drift).map((c) => [c.id, c.drift!]));
+
 /**
  * The journey's frame: one fixed box, on screen from the first destination
  * on, which every scene places through its beats (see director.ts). The box
@@ -19,19 +21,29 @@ export function JourneyFrame() {
   const rootRef = useRef<HTMLDivElement>(null);
   const boxRef = useRef<HTMLDivElement>(null);
   const layerRefs = useRef(new Map<string, HTMLDivElement>());
+  const shotRefs = useRef(new Map<string, HTMLDivElement>());
   const [shown, setShown] = useState<string | null>(null);
+  // The layers sit inside the viewport, so lazy loading would fetch every
+  // picture with the page and compete with the hero (LCP). Nothing is
+  // fetched until the visitor is two screens from the first beat.
+  const [near, setNear] = useState(false);
 
   useLayoutEffect(() => {
     let beats: Beat[] = [];
     let raf = 0;
     let last: FrameState | null = null;
     let lastShown: string | null = null;
+    let nearRef = false;
 
     const apply = () => {
       raf = 0;
       const root = rootRef.current;
       const box = boxRef.current;
       if (!root || !box) return;
+      if (!nearRef && beats.length && window.scrollY >= beats[0].start - 2 * window.innerHeight) {
+        nearRef = true;
+        setNear(true);
+      }
       const s = frameAt(window.scrollY, beats);
       if (!s.visible) {
         if (last?.visible !== false) root.dataset.visible = "false";
@@ -61,6 +73,13 @@ export function JourneyFrame() {
         el.style.transform = `scale(${isIn ? (s.prev ? m.inScale : 1) : m.outScale})`;
         el.style.setProperty("--sharp", String(isIn ? (s.prev ? m.inSharp : 1) : 1));
         el.style.setProperty("--dim", String(isOut ? m.outDim : 0));
+        // the shot's own camera move, inside the frame
+        const drift = DRIFT.get(id);
+        const shot = shotRefs.current.get(id);
+        if (drift && shot) {
+          const d = drift(isIn ? s.t : 1);
+          shot.style.transform = `translate3d(${d.x}%, ${d.y}%, 0) scale(${d.s})`;
+        }
       });
       if (lastShown !== s.content) setShown((lastShown = s.content));
       last = s;
@@ -105,8 +124,20 @@ export function JourneyFrame() {
               else layerRefs.current.delete(c.id);
             }}
           >
-            <img className="jf-blur" src={c.blur} alt="" decoding="async" />
-            <ProjectVideo className="jf-sharp" sources={c.video} image={c.image} active={shown === c.id} wide />
+            <div
+              className="jf-shot"
+              ref={(el) => {
+                if (el) shotRefs.current.set(c.id, el);
+                else shotRefs.current.delete(c.id);
+              }}
+            >
+              {near && (
+                <>
+                  <img className="jf-blur" src={c.blur} alt="" decoding="async" />
+                  <ProjectVideo className="jf-sharp" sources={c.video} image={c.image} active={shown === c.id} wide />
+                </>
+              )}
+            </div>
           </div>
         ))}
         <span className="jf-ring" />
