@@ -38,6 +38,9 @@ export type Beat = {
   /** false: the frame does not travel from the previous beat's slot, it is
       already where this beat holds it (a locked-off camera). */
   travel?: boolean;
+  /** true: the shot's own camera has finished its move; it holds at its end
+      (a later beat of the same shot, e.g. the city behind the last page). */
+  still?: boolean;
 };
 
 export type FrameState =
@@ -96,7 +99,7 @@ export function frameAt(scroll: number, beats: readonly Beat[]): FrameState {
     content: beat.content,
     prev: prev && mix < 1 && prev.content !== beat.content ? prev.content : null,
     mix,
-    t,
+    t: beat.still ? 1 : t,
     gesture: beat.gesture,
     approach: prev ? 1 : FIRST_APPROACH_FROM + (1 - FIRST_APPROACH_FROM) * e,
   };

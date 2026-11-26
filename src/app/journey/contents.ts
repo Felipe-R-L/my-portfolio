@@ -62,6 +62,32 @@ const OFFLINE: FrameContent = {
   video: WORK.find((w) => w.id === "dallas_sync")?.video?.detail,
 };
 
+/**
+ * Retorno: the city of the opening, now in colour. The shot starts close on
+ * the lower-left corner of the skyline (where the opening starts too) and
+ * pulls back to the whole frame: the scale shrinks geometrically, which reads
+ * as a constant speed, while the centre drifts back to the middle.
+ */
+// close on the buildings-only corner, left of the person: at scale 2.6 a
+// half-width of 0.19 of the photo shows, so the centre can sit at 0.2
+const CITY_FROM = { s: 2.6, fx: 0.2, fy: 0.68 };
+// and it settles a little closer than the whole photo, with him in the
+// right-hand third: the invitation is set on the left, clear of his face
+const CITY_TO = { s: 1.25, fx: 0.41, fy: 0.5 };
+const ease = (v: number) => (v < 0.5 ? 4 * v * v * v : 1 - (-2 * v + 2) ** 3 / 2);
+const CITY: FrameContent = {
+  id: "city",
+  image: { src: "/assets/profile/scene-wide-color.webp" },
+  blur: "/assets/profile/scene-wide-color-blur.webp",
+  drift: (t) => {
+    const e = ease(Math.min(1, Math.max(0, (t - 0.08) / 0.62)));
+    const s = Math.pow(CITY_FROM.s, 1 - e) * Math.pow(CITY_TO.s, e);
+    const fx = CITY_FROM.fx + (CITY_TO.fx - CITY_FROM.fx) * e;
+    const fy = CITY_FROM.fy + (CITY_TO.fy - CITY_FROM.fy) * e;
+    return { s, x: -(fx - 0.5) * s * 100, y: -(fy - 0.5) * s * 100 };
+  },
+};
+
 export const FRAME_CONTENTS: readonly FrameContent[] = [
   ...ORIGIN,
   ...WORK.map((w) => ({
@@ -71,4 +97,5 @@ export const FRAME_CONTENTS: readonly FrameContent[] = [
     video: w.video?.card,
   })),
   OFFLINE,
+  CITY,
 ];
