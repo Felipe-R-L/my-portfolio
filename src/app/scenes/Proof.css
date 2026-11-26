@@ -129,3 +129,9 @@
 .proof-plain .log {
   margin-top: 2rem;
 }
+
+/* T4: the words leave as the stage lets go, before the frame crosses them */
+.proof-stage .proof-words,
+.proof-stage .proof-note {
+  opacity: calc(1 - var(--leave, 0));
+}

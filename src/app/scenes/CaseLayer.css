@@ -66,6 +66,7 @@
 
 /* The opening picture, the frame grown to the width of the column. */
 .case-media {
+  position: relative;
   aspect-ratio: 16 / 10;
   overflow: hidden;
   border-radius: 18px;

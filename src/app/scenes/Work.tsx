@@ -140,6 +140,18 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
   const count = (i: number) => `${String(i + 1).padStart(2, "0")}`;
   const total = String(WORK.length).padStart(2, "0");
 
+  // the picture opens the case too (a pointer convenience: the "see details"
+  // button is the way in for the keyboard and for assistive tech)
+  const openOnClick = {
+    onClick: () => {
+      // what the frame shows, which between two destinations can lag the text
+      const showing = document.querySelector<HTMLElement>(".jf")?.dataset.content;
+      const w = WORK.find((x) => x.id === showing) ?? WORK[currentRef.current];
+      if (w) onOpenCase?.(w, frameBox(w.id));
+    },
+    "data-hint": t("work.case.open_hint"),
+  };
+
   const text = (w: WorkItem, i: number) => {
     const name = t(`work.items.${w.id}.title`);
     return (
@@ -200,7 +212,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
                 </li>
               ))}
             </ol>
-            <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" />
+            <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" {...openOnClick} />
           </div>
         </div>
       )}
@@ -213,7 +225,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
             </h2>
             <p className="dest-lead">{t("work.lead")}</p>
           </header>
-          <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" />
+          <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" {...openOnClick} />
           <div ref={swipeRef} className="dest-swipe">
             {WORK.map((w, i) => (
               <article key={w.id} className="dest-card" data-dest={w.id} data-current={i === current ? "true" : "false"}>
@@ -234,7 +246,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
           </header>
           {WORK.map((w, i) => (
             <article key={w.id} className="dest-card" data-dest={w.id}>
-              <img className="dest-still" src={w.image.src} srcSet={w.image.srcSet} sizes="(max-width: 767px) 92vw, 60vw" alt="" loading="lazy" decoding="async" />
+              <img className="dest-still" onClick={() => onOpenCase?.(w, null)} src={w.image.src} srcSet={w.image.srcSet} sizes="(max-width: 767px) 92vw, 60vw" alt="" loading="lazy" decoding="async" />
               {text(w, i)}
             </article>
           ))}

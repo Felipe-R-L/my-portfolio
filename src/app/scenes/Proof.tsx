@@ -6,6 +6,7 @@ import type { Box } from "../journey/director";
 import { useJourneyMode } from "../journey/useJourneyMode";
 import { SCROLL } from "../motion/tokens";
 import { WORK } from "../data/work";
+import { useLeave } from "../journey/useLeave";
 import "./Proof.css";
 
 /** The three facts, in the order they are read. Prose: `telemetria.entries.<id>`. */
@@ -32,6 +33,8 @@ export function Proof() {
   const mode = useJourneyMode();
   const trackRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  // T4 begins as the stage lets go: its words leave before the frame crosses them
+  useLeave(trackRef, stageRef, mode === "scroll");
   const slotRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
