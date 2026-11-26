@@ -37,7 +37,7 @@ for (const run of runs) {
       const heroLen = (reduced ? 1.2 : phone ? 2.3 : 1.9) * vh;
       if (hero !== undefined) return Math.round(cityTop + hero * heroLen);
       if (story !== undefined) {
-        if (!phone && !reduced) return Math.round(cityTop + heroLen + story * 4.7 * vh);
+        if (!phone && !reduced) return Math.round(cityTop + heroLen + story * 4.35 * vh);
         const list = document.querySelector(".story-list");
         if (!list) return null;
         const r = list.getBoundingClientRect();

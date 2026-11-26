@@ -270,17 +270,18 @@ export function HeroCity() {
           return;
         }
 
-        // T1: the portrait comes back to the middle and the camera tilts up,
-        // off the rooftops and into the night, where the first destination waits.
+        // T1: the portrait comes back to the middle and the stage, released,
+        // carries it off the top while the first destination comes in below.
+        // (A tilt up into the night used to follow; on screen it read as an
+        // empty dark box and a screen of nothing before Destinos.)
         const k = span(ps, CHAPTERS_END, 1);
         storyProgress.set(1);
-        placeAside(1 - easeInOut(span(k, 0, 0.35)));
-        const tilt = easeInOut(span(k, 0.2, 0.85));
-        gsap.set(photo, { y: cEnd.y + tilt * vh * 0.95 });
-        if (night) night.style.opacity = String(tilt);
+        placeAside(1 - easeInOut(span(k, 0, 0.6)));
+        gsap.set(photo, { y: cEnd.y });
+        if (night) night.style.opacity = "0";
         // the chapters slide off to the left as the portrait leaves its place
-        if (rail) rail.style.setProperty("--out", String(easeInOut(span(k, 0, 0.3))));
-        gsap.set(frame, { opacity: 1 - span(k, 0.86, 1) });
+        if (rail) rail.style.setProperty("--out", String(easeInOut(span(k, 0, 0.4))));
+        gsap.set(frame, { opacity: 1 });
       };
 
       const heroLength = () =>
