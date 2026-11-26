@@ -30,14 +30,3 @@ export function chapterAt(p: number, n: number): number {
   return Math.min(n - 1, Math.max(0, Math.round(p * (n - 1))));
 }
 
-/**
- * Where the story starts, before the first chapter: Diamante, in Calabria,
- * where the surname comes from. On a wide screen it plays in the journey's
- * frame (journey/contents.ts); on a phone and with reduced motion these two
- * photos open the list. Prose: `story.origin.caption` and
- * `story.chapters.diamante.text`.
- */
-export const ORIGIN_SHOTS = [
-  { src: `${S}/diamante-a-1200.webp`, srcSet: `${S}/diamante-a-1200.webp 1200w, ${S}/diamante-a-2400.webp 2400w` },
-  { src: `${S}/diamante-c-1200.webp`, srcSet: `${S}/diamante-c-1200.webp 1200w, ${S}/diamante-c-2400.webp 2400w` },
-] as const;

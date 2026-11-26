@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ORIGIN_SHOTS, STORY, chapterAt, type StoryChapter } from "../data/story";
+import { STORY, chapterAt, type StoryChapter } from "../data/story";
 import { span, timelineDistance } from "../scroll/math";
 import type { Signal } from "../scroll/signal";
 import "./Story.css";
@@ -169,16 +169,6 @@ function StoryList() {
       <h2 id="story-title" className="sr-only">
         {t("story.title")}
       </h2>
-      {/* Where it starts: Diamante, from above, before the first chapter. */}
-      <figure className="story-origin">
-        {ORIGIN_SHOTS.map((s, i) => (
-          <img key={s.src} src={s.src} srcSet={s.srcSet} sizes="92vw" alt={i === 0 ? t("story.chapters.diamante.alt") : ""} loading="lazy" decoding="async" />
-        ))}
-        <figcaption>
-          <span className="story-origin-caption">{t("story.origin.caption")}</span>
-          <span className="story-text">{t("story.chapters.diamante.text")}</span>
-        </figcaption>
-      </figure>
       <div ref={listRef} className="story-list-items">
         <Chapters focus={focus} />
       </div>

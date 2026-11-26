@@ -11,6 +11,17 @@ import "./Process.css";
 /** The three steps, in order. Prose: `plano.steps.<id>`; no step promises a deadline. */
 export const STEPS = ["talk", "proposal", "start"] as const;
 
+/**
+ * The scenery behind the line: Diamante, a white town on the Calabrian coast
+ * (Eugenio Magurno, CC BY-SA 3.0, via Wikimedia Commons; credited in the
+ * footer). Dimmed under the words, it pans sideways with the scroll, so the
+ * travel along the line reads as a travel along the coast.
+ */
+const SCENERY = {
+  src: "/assets/story/diamante-c-1200.webp",
+  srcSet: "/assets/story/diamante-c-1200.webp 1200w, /assets/story/diamante-c-2400.webp 2400w",
+};
+
 /** The frame, pulled all the way back: the "you are here" marker. 16:10. */
 const MARKER = { w: 56, h: 35 };
 
@@ -159,6 +170,29 @@ export function Process() {
     };
   }, [mode]);
 
+  // the pan: 0 as the stage arrives, 1 as it leaves (desktop only)
+  useLayoutEffect(() => {
+    if (mode !== "scroll") return;
+    const track = trackRef.current;
+    if (!track) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const r = track.getBoundingClientRect();
+      const vh = window.innerHeight;
+      track.style.setProperty("--pan", clamp01((vh - r.top) / (r.height + vh)).toFixed(4));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [mode]);
+
   const steps = (
     <ol ref={stepsRef} className="steps">
       {STEPS.map((id, i) => (
@@ -184,6 +218,10 @@ export function Process() {
     >
       <div ref={trackRef} className="plano-track">
         <div ref={stageRef} className="plano-stage">
+          {/* the scenery: Diamante's coast, panned as the marker travels */}
+          <div className="plano-scenery" aria-hidden="true">
+            <img src={SCENERY.src} srcSet={SCENERY.srcSet} sizes="130vw" alt="" loading="lazy" decoding="async" />
+          </div>
           <h2 id="process-title" className="plano-title">
             {t("plano.title")}
           </h2>

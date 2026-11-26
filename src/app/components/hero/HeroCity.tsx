@@ -10,7 +10,6 @@ import { LiquidReveal } from "./LiquidReveal";
 import { Credits, Letters, NAME } from "./HeroParts";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
 import { FRAME_RADIUS, SCROLL } from "../../motion/tokens";
-import { boxOf, pageTop, registerBeats } from "../../journey/beats";
 import { useTranslation } from "react-i18next";
 import "./HeroCity.css";
 
@@ -48,16 +47,13 @@ const TRACK_REDUCED = SCROLL.hero.reduced;
 /** Desktop only: the story plays on in the same pinned stage, for this many
     more screens, with the framed photo moved aside. */
 const STORY_TRACK = SCROLL.story;
-/** Desktop: the stretch after the hero, in screens. It opens on Diamante
-    (the origin, played in the journey's frame), runs the chapters beside
-    the portrait, and ends with T1: the portrait back in the middle, the
+/** Desktop: the stretch after the hero, in screens. It runs the chapters
+    beside the portrait, and ends with T1: the portrait back in the middle, the
     camera tilting up off the city into the night. */
-const ORIGIN_TRACK = SCROLL.origin;
 const TILT_TRACK = SCROLL.tilt;
-const AFTER_HERO = ORIGIN_TRACK + STORY_TRACK + TILT_TRACK;
+const AFTER_HERO = STORY_TRACK + TILT_TRACK;
 /** Where each phase ends, as story progress. */
-const ORIGIN_END = ORIGIN_TRACK / AFTER_HERO;
-const CHAPTERS_END = (ORIGIN_TRACK + STORY_TRACK) / AFTER_HERO;
+const CHAPTERS_END = STORY_TRACK / AFTER_HERO;
 /** Story beat, over story progress: the frame moves aside, and stays there
     until the released stage carries it off the top. */
 const ASIDE_TO = 0.05;
@@ -163,38 +159,7 @@ export function HeroCity() {
   const storyInStage = !isMobile && !reduce;
   // Reduced motion: nothing plays, so the scene is barely longer than a screen.
   const trackDesktop = reduce ? TRACK_REDUCED : TRACK_DESKTOP + (storyInStage ? AFTER_HERO : 0);
-  const originSlotRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
-
-  // The origin's two shots, as beats of the journey's frame.
-  useLayoutEffect(() => {
-    if (!storyInStage) return;
-    return registerBeats("origin", () => {
-      const sec = sectionRef.current;
-      if (!sec || !originSlotRef.current) return [];
-      const vh = window.innerHeight;
-      const start = pageTop(sec) + TRACK_DESKTOP * vh;
-      const len = ORIGIN_TRACK * vh;
-      const cut = start + len * 0.5;
-      const back = start + len * 0.8;
-      const slot = () => boxOf(originSlotRef.current);
-      // where the hero left the framed portrait: the middle, at FRAME_DESKTOP
-      const portrait = () => {
-        const vw = window.innerWidth;
-        const w = vw * FRAME_DESKTOP;
-        const h = w / 1.6;
-        return { x: (vw - w) / 2, y: (vh - h) / 2, w, h };
-      };
-      return [
-        // a cut from the portrait to the coast, the frame opening out of the distance
-        { content: "diamante-a", start, end: cut, arrive: 0.3, gesture: "rack" as const, slot },
-        // and a straight cut to the town
-        { content: "diamante-c", start: cut, end: back, arrive: 0.06, gesture: "cut" as const, slot },
-        // the town draws back to where the portrait was, and dissolves into it
-        { content: "diamante-c", start: back, end: start + len, arrive: 0.6, gesture: "cut" as const, slot: portrait },
-      ];
-    });
-  }, [storyInStage]);
 
   useScene(
     sectionRef,
@@ -261,7 +226,6 @@ export function HeroCity() {
       document.fonts?.ready.then(measure);
 
       const night = stage.querySelector<HTMLDivElement>(".city-night");
-      const origin = stage.querySelector<HTMLDivElement>(".origin");
 
       // The framed photo moved aside to the left, cropped to a portrait, by
       // `a` (0 = the framed picture in the middle, 1 = the portrait aside).
@@ -293,29 +257,11 @@ export function HeroCity() {
 
       const renderStory = (ps: number) => {
         const rail = stage.querySelector<HTMLDivElement>(".story-rail");
-        // Origin: the journey's frame plays Diamante; the portrait is cut away.
-        // the stage's own ground would hide the journey's frame, which is
-        // painted beneath the page: it clears for as long as the origin plays
-        stage.dataset.origin = ps > 0 && ps < ORIGIN_END ? "true" : "false";
-        if (ps < ORIGIN_END) {
-          storyProgress.set(0);
-          const k = span(ps, 0, ORIGIN_END);
-          // T0.5, the town to the portrait: once the journey's frame has drawn
-          // the town back to the portrait's place, the portrait dissolves in
-          // over it, a century and a half in one frame, and only then moves aside
-          placeAside(0);
-          gsap.set(frame, { opacity: easeInOut(span(k, 0.9, 0.99)) });
-          if (ring) ring.style.opacity = "0";
-          // the caption comes in after the first shot has settled and leaves before the town draws back
-          origin?.style.setProperty("--in", String(easeInOut(span(k, 0.12, 0.26)) * (1 - span(k, 0.7, 0.8))));
-          return;
-        }
-        origin?.style.setProperty("--in", "0");
         const cEnd = cameraAt(1, shot, vw, vh);
 
         // The chapters, beside the portrait.
         if (ps < CHAPTERS_END) {
-          const p2 = span(ps, ORIGIN_END, CHAPTERS_END);
+          const p2 = span(ps, 0, CHAPTERS_END);
           storyProgress.set(p2);
           placeAside(easeInOut(span(p2, 0, ASIDE_TO)));
           gsap.set(photo, { y: cEnd.y });
@@ -442,30 +388,15 @@ export function HeroCity() {
         </div>
 
         {storyInStage && <Story mode="rail" progress={storyProgress} />}
-
-        {/* The origin: where the journey's frame shows Diamante, and its caption. */}
-        {storyInStage && (
-          <div className="origin">
-            <div ref={originSlotRef} className="origin-slot" data-frame-slot="origin" />
-            <p className="origin-caption">
-              <span className="origin-mask">
-                <span className="origin-place">{t("story.origin.caption")}</span>
-              </span>
-              <span className="origin-mask">
-                <span className="origin-text">{t("story.chapters.diamante.text")}</span>
-              </span>
-            </p>
-          </div>
-        )}
       </div>
 
       <div className="city-track" aria-hidden="true">
-        {/* Where the nav's "Sobre" lands: the story's opening, Diamante on screen. */}
+        {/* Where the nav's "Sobre" lands: the story's opening. */}
         {storyInStage && (
           <span
             id="about"
             className="city-anchor"
-            style={{ top: `calc(${TRACK_DESKTOP * 100 + ORIGIN_TRACK * 100 * 0.3}svh)` }}
+            style={{ top: `calc(${TRACK_DESKTOP * 100}svh)` }}
           />
         )}
       </div>

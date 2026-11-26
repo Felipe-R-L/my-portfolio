@@ -24,31 +24,6 @@ const BLUR: Record<string, string> = {
   dallas_motel: `${P}/dallas-blur.webp`,
 };
 
-const S = "/assets/story";
-
-/**
- * Diamante, where the surname comes from (Eugenio Magurno, CC BY-SA 3.0, via
- * Wikimedia Commons; credited in the footer). Two shots and a cut: high over
- * the beach towards the island of Cirella, the camera coming down; then the
- * town on its headland, the camera drifting along the coast. The photos are
- * 3008 px wide, which is why the frame holds them at about 80% of the screen
- * and the moves stay under 1.15x.
- */
-const ORIGIN: readonly FrameContent[] = [
-  {
-    id: "diamante-a",
-    image: { src: `${S}/diamante-a-2400.webp`, srcSet: `${S}/diamante-a-1200.webp 1200w, ${S}/diamante-a-2400.webp 2400w` },
-    blur: `${S}/diamante-a-blur.webp`,
-    // always more picture than frame: at scale s the margin per side is (s - 1) / 2
-    drift: (t) => ({ s: 1.06 + 0.08 * t, x: 0, y: 2 - 4 * t }),
-  },
-  {
-    id: "diamante-c",
-    image: { src: `${S}/diamante-c-2400.webp`, srcSet: `${S}/diamante-c-1200.webp 1200w, ${S}/diamante-c-2400.webp 2400w` },
-    blur: `${S}/diamante-c-blur.webp`,
-    drift: (t) => ({ s: 1.08, x: 3 - 6 * t, y: 0 }),
-  },
-];
 
 /**
  * Em uso: the front desk working with no internet. Until the offline loop is
@@ -88,7 +63,6 @@ const CITY: FrameContent = {
 };
 
 export const FRAME_CONTENTS: readonly FrameContent[] = [
-  ...ORIGIN,
   ...WORK.map((w) => ({
     id: w.id,
     image: w.image,
