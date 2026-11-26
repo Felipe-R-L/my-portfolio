@@ -1,248 +1,256 @@
-import { useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { WORK, type WorkItem } from "../data/work";
-import { Draggable, ScrollTrigger, gsap } from "../scroll/gsap";
-import { span } from "../scroll/math";
-import { SCROLL_PER_PX } from "../motion/tokens";
-import { useScene } from "../scroll/useScene";
-import { useTilt } from "../scroll/useTilt";
+import { boxOf, notify, pageTop, registerBeats } from "../journey/beats";
+import { SCROLL } from "../motion/tokens";
+import { ScrollTrigger } from "../scroll/gsap";
+import { clamp01 } from "../scroll/math";
+import { PHONE_QUERY } from "../scroll/useScene";
 import { WorkCase } from "./WorkCase";
 import "./Work.css";
 
-/**
- * Scene 4, the work, in black and white, where the piece in focus takes its
- * colour back, the same gesture as the hero's reveal. On a wide screen the
- * section is pinned and the page's own scroll carries the cards sideways; the
- * arrows scroll the page to a card. On a phone (and with reduced motion) it is
- * a carousel you drag, which never fights the vertical scroll. Scrolling past
- * it turns everything back to black and white.
- */
+type Mode = "scroll" | "swipe" | "list";
 
+function useMode(): Mode {
+  const get = (): Mode => {
+    if (typeof window === "undefined" || !window.matchMedia) return "scroll";
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return "list";
+    return window.matchMedia(PHONE_QUERY).matches ? "swipe" : "scroll";
+  };
+  const [mode, setMode] = useState<Mode>(get);
+  useEffect(() => {
+    const queries = [window.matchMedia?.("(prefers-reduced-motion: reduce)"), window.matchMedia?.(PHONE_QUERY)];
+    const update = () => setMode(get());
+    queries.forEach((q) => q?.addEventListener?.("change", update));
+    return () => queries.forEach((q) => q?.removeEventListener?.("change", update));
+  }, []);
+  return mode;
+}
+
+/** Share of a destination's scroll spent arriving; the rest holds still. */
+const ARRIVE = SCROLL.destination.approach / (SCROLL.destination.approach + SCROLL.destination.hold);
+
+/**
+ * Destinos: what Felipe has built, one destination at a time.
+ *
+ * - Wide screens: a tall track with a sticky stage. Each destination is a
+ *   beat of the journey's frame (see journey/director.ts): it arrives out of
+ *   the depth of the previous one, racking into focus, then holds while its
+ *   words are read. The words change through a mask, line by line.
+ * - Phones: the frame sits at the top of the scene and the destinations
+ *   are a native horizontal swipe; swiping changes what the frame shows.
+ * - Reduced motion: a plain list, each with its own picture, no frame.
+ */
 export function Work() {
   const { t } = useTranslation();
+  const mode = useMode();
   const sectionRef = useRef<HTMLElement>(null);
-  const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const [focus, setFocus] = useState(0);
-  const [out, setOut] = useState(false);
-  const goTo = useRef<(i: number) => void>(() => {});
+  const slotRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLOListElement>(null);
+  const swipeRef = useRef<HTMLDivElement>(null);
+  const [current, setCurrent] = useState(0);
   const [open, setOpen] = useState<WorkItem | null>(null);
-  const pressAt = useRef<[number, number] | null>(null);
-  useTilt(sectionRef, 4);
+  const currentRef = useRef(0);
+  currentRef.current = current;
 
-  useScene(sectionRef, ({ reduced, isPhone }) => {
-    const viewport = viewportRef.current!;
-    const track = trackRef.current!;
-    const cards = () => [...track.querySelectorAll<HTMLElement>("[data-work]")];
-
-    // x that puts card i at the start of the viewport, clamped to the track
-    const minX = () => Math.min(0, viewport.clientWidth - track.scrollWidth);
-    const xFor = (i: number) => Math.max(minX(), -(cards()[i]?.offsetLeft ?? 0) + (cards()[0]?.offsetLeft ?? 0));
-    const nearest = (x: number) => {
-      let best = 0;
-      cards().forEach((_, i) => {
-        if (Math.abs(xFor(i) - x) < Math.abs(xFor(best) - x)) best = i;
-      });
-      return best;
-    };
-
-    // The scene is one screen tall: the picture gets the height the
-    // heading and the tallest caption leave, so no caption is ever cut.
-    const fit = () => {
-      for (let pass = 0; pass < 2; pass++) {
-        const metas = [...track.querySelectorAll<HTMLElement>(".work-meta")];
-        const meta = Math.max(0, ...metas.map((m) => m.offsetHeight));
-        const room = viewport.clientHeight - meta - 12;
-        const h = Math.max(140, Math.min(room, (window.innerWidth * 0.62) / 1.6));
-        track.style.setProperty("--shot-h", `${Math.round(h)}px`);
+  // The frame's beats: one per destination on a wide screen, one for the
+  // whole scene on a phone (its content follows the swipe).
+  useLayoutEffect(() => {
+    if (mode === "list") return;
+    return registerBeats("destinos", () => {
+      const slot = () => boxOf(slotRef.current);
+      if (mode === "swipe") {
+        const s = slotRef.current;
+        if (!s) return [];
+        const top = pageTop(s);
+        return [
+          {
+            content: WORK[currentRef.current].id,
+            start: top - window.innerHeight,
+            end: top + s.offsetHeight,
+            arrive: 0,
+            gesture: "rack",
+            slot,
+          },
+        ];
       }
-    };
-    // only the wide layout is one screen tall
-    if (!isPhone) {
-      fit();
-      ScrollTrigger.addEventListener("refreshInit", fit);
-    }
-    const offFit = () => ScrollTrigger.removeEventListener("refreshInit", fit);
+      const track = trackRef.current;
+      if (!track) return [];
+      const vh = window.innerHeight;
+      const beatPx = (SCROLL.destination.approach + SCROLL.destination.hold) * vh;
+      const top = pageTop(track);
+      const last = WORK.length - 1;
+      return WORK.map((w, i) => ({
+        content: w.id,
+        // the first destination starts arriving while the stage is still
+        // rising into view; the last one follows its slot off the screen
+        start: i === 0 ? top - 0.5 * vh : top + i * beatPx,
+        end: i === last ? top + (i + 1) * beatPx + vh : top + (i + 1) * beatPx,
+        arrive: i === 0 ? (0.5 * vh + ARRIVE * beatPx) / (0.5 * vh + beatPx) : ARRIVE,
+        gesture: "rack" as const,
+        slot,
+      }));
+    });
+  }, [mode]);
 
-    // Wide screens: the page scroll drives the cards.
-    if (!isPhone && !reduced) {
-      // a card's width of scroll per card, so each one has time to be read
-      // a stretch of scroll before the first card moves and after the last
-      // one arrives, so the scene never starts or ends mid-motion
-      const holdPx = () => window.innerHeight * 0.7;
-      const travel = () => -minX() * SCROLL_PER_PX + 2 * holdPx();
-      const hold = () => holdPx() / Math.max(1, travel());
-      const at = (p: number) => span(p, hold(), 1 - hold());
-      const st = ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        end: () => `+=${travel()}`,
-        pin: true,
-        scrub: true,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const x = minX() * at(self.progress);
-          gsap.set(track, { x });
-          setFocus(nearest(x));
-        },
-        onRefresh: (self) => gsap.set(track, { x: minX() * at(self.progress) }),
-      });
-      goTo.current = (i: number) => {
-        const target = Math.max(0, Math.min(WORK.length - 1, i));
-        const m = minX();
-        const p = m === 0 ? 0 : hold() + (xFor(target) / m) * (1 - 2 * hold());
-        window.scrollTo({ top: st.start + p * (st.end - st.start), behavior: "smooth" });
-      };
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: () => `top+=${travel()} top`,
-        end: "+=1",
-        onEnter: () => setOut(true),
-        onLeaveBack: () => setOut(false),
-      });
-      return offFit;
-    }
+  // Phone: a swipe changes the frame's content.
+  useEffect(() => {
+    if (mode === "swipe") notify();
+  }, [mode, current]);
 
-    const [drag] = Draggable.create(track, {
-      type: "x",
-      lockAxis: true,
-      allowNativeTouchScrolling: true,
-      inertia: true,
-      edgeResistance: 0.85,
-      bounds: { minX: minX(), maxX: 0 },
-      snap: (x: number) => xFor(nearest(x)),
-      onDrag() {
-        setFocus(nearest(this.x));
-      },
-      onThrowUpdate() {
-        setFocus(nearest(this.x));
+  // Wide: the words follow the scroll through the track.
+  useLayoutEffect(() => {
+    if (mode !== "scroll") return;
+    const track = trackRef.current;
+    const list = listRef.current;
+    if (!track || !list) return;
+    const items = [...list.querySelectorAll<HTMLElement>("[data-dest]")];
+    const st = ScrollTrigger.create({
+      trigger: track,
+      start: "top top",
+      end: () => `+=${WORK.length * (SCROLL.destination.approach + SCROLL.destination.hold) * window.innerHeight}`,
+      onUpdate: (self) => {
+        const at = self.progress * WORK.length;
+        const i = Math.min(WORK.length - 1, Math.floor(at));
+        const local = at - i;
+        const arrive = clamp01(local / ARRIVE);
+        // A cut, not a dissolve: the previous words leave in the first half
+        // of the arrival, the new ones come in the second.
+        const leave = clamp01(arrive * 2);
+        const enter = clamp01(arrive * 2 - 1);
+        items.forEach((el, k) => {
+          const v = k === i ? (i === 0 ? 1 : enter) : k === i - 1 ? 1 - leave : 0;
+          el.style.setProperty("--in", v.toFixed(4));
+          el.style.setProperty("--dir", k < i ? "-1" : "1");
+        });
+        if (i !== currentRef.current) setCurrent(i);
       },
     });
+    return () => st.kill();
+  }, [mode]);
 
-    goTo.current = (i: number) => {
-      const target = Math.max(0, Math.min(WORK.length - 1, i));
-      setFocus(target);
-      gsap.to(track, {
-        x: xFor(target),
-        duration: reduced ? 0 : 0.7,
-        ease: "power3.out",
-        onUpdate: () => drag.update(),
-      });
-    };
+  // Phone: which card is centred in the swipe.
+  useEffect(() => {
+    if (mode !== "swipe") return;
+    const sc = swipeRef.current;
+    if (!sc || typeof IntersectionObserver === "undefined") return;
+    const cards = [...sc.querySelectorAll<HTMLElement>("[data-dest]")];
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setCurrent(cards.indexOf(e.target as HTMLElement));
+      },
+      { root: sc, threshold: 0.6 },
+    );
+    cards.forEach((c) => io.observe(c));
+    return () => io.disconnect();
+  }, [mode]);
 
-    const onResize = () => {
-      drag.applyBounds({ minX: minX(), maxX: 0 });
-    };
-    window.addEventListener("resize", onResize);
+  const count = (i: number) => `${String(i + 1).padStart(2, "0")}`;
+  const total = String(WORK.length).padStart(2, "0");
 
-    // Leaving the scene: everything returns to black and white.
-    ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "bottom 55%",
-      onEnter: () => setOut(true),
-      onLeaveBack: () => setOut(false),
-    });
-
-    return () => {
-      window.removeEventListener("resize", onResize);
-      drag.kill();
-      offFit();
-    };
-  });
+  const text = (w: WorkItem, i: number) => {
+    const name = t(`work.items.${w.id}.title`);
+    return (
+      <>
+        <p className="dest-count" aria-hidden="true">
+          <span className="dest-mask">
+            <span>{count(i)}</span>
+          </span>
+          <span className="dest-of">/{total}</span>
+        </p>
+        <p className="dest-kind">
+          <span className="dest-mask">
+            <span>{t(`work.kind.${w.kind}`)}</span>
+          </span>
+        </p>
+        <h3 className="dest-name">
+          <span className="dest-mask">
+            <span>{name}</span>
+          </span>
+        </h3>
+        <p className="dest-result">{t(`work.items.${w.id}.result`)}</p>
+        {w.illustrative && <p className="dest-note">{t(`work.items.${w.id}.note`)}</p>}
+        <div className="dest-actions">
+          <button type="button" className="dest-open" onClick={() => setOpen(w)} aria-label={t("work.case.open_aria", { name })}>
+            {t("work.case.open")}
+          </button>
+          <a className="dest-link" href={w.href} target="_blank" rel="noreferrer" aria-label={t("work.visit_aria", { name })}>
+            {w.loginRequired ? t("work.visit_login") : t("work.visit")}
+          </a>
+        </div>
+      </>
+    );
+  };
 
   return (
-    <section ref={sectionRef} id="projects" className="work" data-journey="destinos" data-out={out ? "true" : "false"} aria-labelledby="work-title">
-      <header className="work-head">
-        <h2 id="work-title" className="work-title">
-          {t("work.title")}
-        </h2>
-        <p className="work-lead">{t("work.lead")}</p>
-        <div className="work-nav">
-          <button type="button" className="work-arrow" onClick={() => goTo.current(focus - 1)} disabled={focus === 0} aria-label={t("work.prev")}>
-            <ArrowLeft size={18} aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            className="work-arrow"
-            onClick={() => goTo.current(focus + 1)}
-            disabled={focus === WORK.length - 1}
-            aria-label={t("work.next")}
-          >
-            <ArrowRight size={18} aria-hidden="true" />
-          </button>
+    <section
+      ref={sectionRef}
+      id="projects"
+      className="dest"
+      data-journey="destinos"
+      data-mode={mode}
+      aria-labelledby="work-title"
+      style={{ ["--beats" as string]: WORK.length, ["--beat-h" as string]: `${(SCROLL.destination.approach + SCROLL.destination.hold) * 100}svh` }}
+    >
+      {mode === "scroll" && (
+        <div ref={trackRef} className="dest-track">
+          <div className="dest-stage">
+            <header className="dest-head">
+              <h2 id="work-title" className="dest-title">
+                {t("work.title")}
+              </h2>
+              <p className="dest-lead">{t("work.lead")}</p>
+            </header>
+            <ol ref={listRef} className="dest-list">
+              {WORK.map((w, i) => (
+                <li key={w.id} className="dest-item" data-dest={w.id} data-current={i === current ? "true" : "false"} {...(i !== current ? { inert: "" } : {})}>
+                  {text(w, i)}
+                </li>
+              ))}
+            </ol>
+            <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" />
+          </div>
         </div>
-      </header>
+      )}
 
-      <div ref={viewportRef} className="work-viewport">
-        <div ref={trackRef} className="work-track">
-          {WORK.map((w, i) => {
-            const name = t(`work.items.${w.id}.title`);
-            return (
-              <article
-                key={w.id}
-                className="work-card"
-                data-work={w.id}
-                data-focus={i === focus ? "true" : "false"}
-                onPointerEnter={(e) => e.pointerType === "mouse" && setFocus(i)}
-              >
-                {/* The picture opens the details. A tap that was really a drag
-                    (it moved) does not. */}
-                <button
-                  type="button"
-                  className="work-open"
-                  aria-label={t("work.case.open_aria", { name })}
-                  onPointerDown={(e) => (pressAt.current = [e.clientX, e.clientY])}
-                  onClick={(e) => {
-                    const [x, y] = pressAt.current ?? [e.clientX, e.clientY];
-                    if (Math.hypot(e.clientX - x, e.clientY - y) > 8) return;
-                    setOpen(w);
-                  }}
-                >
-                  <figure
-                    className={`work-shot${w.image.lockup ? " work-shot--lockup" : ""}${w.gallery ? " work-shot--cycle" : ""}`}
-                    data-tilt=""
-                  >
-                    {[w.image, ...(w.gallery ?? [])].map((s, k) => (
-                      <img
-                        key={s.src}
-                        src={s.src}
-                        srcSet={s.srcSet}
-                        sizes="(max-width: 767px) 82vw, 62vw"
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                        draggable={false}
-                        style={{ ["--k" as string]: k }}
-                      />
-                    ))}
-                    <span className="work-open-hint" aria-hidden="true">
-                      {t("work.case.open")}
-                    </span>
-                  </figure>
-                </button>
-                <div className="work-meta">
-                  <span className="work-kind">{t(`work.kind.${w.kind}`)}</span>
-                  <h3 className="work-name">{name}</h3>
-                  <p className="work-result">{t(`work.items.${w.id}.result`)}</p>
-                  {w.illustrative && <p className="work-note">{t(`work.items.${w.id}.note`)}</p>}
-                  <a
-                    className="work-link"
-                    href={w.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={t("work.visit_aria", { name })}
-                    onFocus={() => goTo.current(i)}
-                  >
-                    {w.loginRequired ? t("work.visit_login") : t("work.visit")}
-                  </a>
-                </div>
+      {mode === "swipe" && (
+        <div className="dest-phone">
+          <header className="dest-head">
+            <h2 id="work-title" className="dest-title">
+              {t("work.title")}
+            </h2>
+            <p className="dest-lead">{t("work.lead")}</p>
+          </header>
+          <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" />
+          <div ref={swipeRef} className="dest-swipe">
+            {WORK.map((w, i) => (
+              <article key={w.id} className="dest-card" data-dest={w.id} data-current={i === current ? "true" : "false"}>
+                {text(w, i)}
               </article>
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {mode === "list" && (
+        <div className="dest-plain">
+          <header className="dest-head">
+            <h2 id="work-title" className="dest-title">
+              {t("work.title")}
+            </h2>
+            <p className="dest-lead">{t("work.lead")}</p>
+          </header>
+          {WORK.map((w, i) => (
+            <article key={w.id} className="dest-card" data-dest={w.id}>
+              <img className="dest-still" src={w.image.src} srcSet={w.image.srcSet} sizes="(max-width: 767px) 92vw, 60vw" alt="" loading="lazy" decoding="async" />
+              {text(w, i)}
+            </article>
+          ))}
+        </div>
+      )}
+
       <WorkCase item={open} onClose={() => setOpen(null)} />
     </section>
   );

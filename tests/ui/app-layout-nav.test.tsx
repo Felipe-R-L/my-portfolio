@@ -44,7 +44,15 @@ vi.mock('../../src/app/components/Hero', () => ({ Hero: stub('hero') }))
 vi.mock('../../src/app/scenes/Work', () => ({ Work: stub('work') }))
 vi.mock('../../src/app/scenes/Proof', () => ({ Proof: stub('proof') }))
 vi.mock('../../src/app/scenes/Talk', () => ({ Talk: stub('talk') }))
-vi.mock('../../src/app/scroll/gsap', () => ({ ScrollTrigger: { refresh: vi.fn() }, gsap: {} }))
+vi.mock('../../src/app/scroll/gsap', () => ({
+  ScrollTrigger: {
+    refresh: vi.fn(),
+    create: vi.fn(() => ({ kill: vi.fn() })),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  },
+  gsap: {},
+}))
 vi.mock('../../src/app/scenes/Process', () => ({ Process: stub('process') }))
 vi.mock('../../src/app/components/shared/StarField', () => ({ StarField: stub('starfield') }))
 

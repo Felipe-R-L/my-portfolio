@@ -13,6 +13,7 @@ import { CHAPTERS } from "./journey/chapters";
 import { useJourney } from "./journey/useJourney";
 import { AmbientLight } from "./journey/AmbientLight";
 import { ChapterRail } from "./journey/ChapterRail";
+import { JourneyFrame } from "./journey/JourneyFrame";
 import { DURATION } from "./motion/tokens";
 
 /**
@@ -56,6 +57,9 @@ export default function AppLayout() {
       <div className="fixed inset-0 z-0" aria-hidden="true">
         <AmbientLight active={journey.active} />
       </div>
+
+      {/* The thread of the journey: one frame that every chapter places. */}
+      <JourneyFrame />
 
       {/* Where you are and how much is left (desktop; the phone shows it in the nav pill). */}
       <ChapterRail variant="desk" active={journey.active} progress={journey.progress} />
