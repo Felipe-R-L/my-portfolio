@@ -1,0 +1,212 @@
+/*
+ * The surface: the journey's one light chapter, for reading. A single column
+ * of prose, the picture on top, the stack last.
+ */
+
+.caselayer {
+  --paper: #e8edef;
+  --paper-ink: #11161a;
+  --paper-soft: #3b464e;
+  --paper-faint: #66727b;
+  --paper-accent: #2f6f8f;
+  --paper-line: rgb(17 22 26 / 0.14);
+
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: var(--paper-ink);
+}
+
+/* The light floor, on its own so it can rise under the picture (T2). */
+.case-ground {
+  position: fixed;
+  inset: 0;
+  background: var(--paper);
+}
+
+.case-sheet {
+  position: relative;
+  z-index: 1;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vh, 2.5rem) var(--gutter) clamp(4rem, 10vh, 6rem);
+}
+
+.case-handle {
+  display: none;
+}
+
+.case-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  margin-bottom: 1.25rem;
+  padding: 0 1rem 0 0.75rem;
+  border: 1px solid var(--paper-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--paper-ink);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.case-back:hover {
+  border-color: var(--paper-accent);
+}
+
+.case-back:focus-visible,
+.case-live:focus-visible {
+  outline: 2px solid var(--paper-accent);
+  outline-offset: 3px;
+}
+
+/* The opening picture, the frame grown to the width of the column. */
+.case-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1.5px solid rgb(47 111 143 / 0.35);
+  background: #05070a;
+  transform-origin: 0 0;
+}
+
+.case-media > img,
+.case-media > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.case-note {
+  margin: 0.6rem 0 0;
+  color: var(--paper-faint);
+  font-size: 0.85rem;
+}
+
+.case-head {
+  margin: clamp(2rem, 5vh, 3rem) 0 1.5rem;
+}
+
+.case-kind {
+  color: var(--paper-accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.case-title {
+  margin: 0.4rem 0 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 5vw, 4.25rem);
+  line-height: 1;
+}
+
+/* One reading column, in order: context, problem, decision, result, today. */
+.case-parts {
+  display: grid;
+  gap: 2rem;
+  max-width: 44rem;
+  margin: 0;
+}
+
+.case-part dt {
+  margin-bottom: 0.5rem;
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  line-height: 1.1;
+}
+
+.case-part dd {
+  margin: 0;
+  color: var(--paper-soft);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+.case-gallery {
+  display: grid;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.case-gallery img {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--paper-line);
+}
+
+/* The stack is a supporting detail, at the end. */
+.case-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--paper-line);
+}
+
+.case-stack-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: var(--paper-faint);
+  font-size: 0.85rem;
+}
+
+.case-stack ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.case-stack li {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--paper-line);
+  border-radius: 999px;
+  color: var(--paper-soft);
+  font-size: 0.85rem;
+}
+
+.case-live {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  background: var(--paper-ink);
+  color: var(--paper);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Phone: a sheet risen from the bottom, a handle to swipe it away. */
+@media (max-width: 767px) {
+  .caselayer[data-mode="swipe"] {
+    top: 1.25rem;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -20px 60px rgb(0 0 0 / 0.5);
+  }
+
+  .case-handle {
+    display: block;
+    width: 3rem;
+    height: 5px;
+    margin: 0 auto 1rem;
+    border-radius: 99px;
+    background: var(--paper-line);
+    touch-action: none;
+  }
+}

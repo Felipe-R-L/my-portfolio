@@ -1,0 +1,137 @@
+/*
+ * Em uso. Like the destinations, the scene draws words only and leaves the
+ * picture to the journey's frame; its stage uses the same grid, so the slot
+ * lands on the exact box the destinations gave the frame (T3 does not move it).
+ * Transparent: the frame is painted beneath the page.
+ */
+
+.proof {
+  position: relative;
+  color: var(--ink);
+}
+
+.proof-track {
+  position: relative;
+  height: calc(var(--hold) + 100svh);
+}
+
+.proof-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 34fr) minmax(0, 60fr);
+  column-gap: clamp(2rem, 4vw, 4.5rem);
+  padding: clamp(5.5rem, 12vh, 8rem) var(--gutter) clamp(2rem, 6vh, 4rem);
+  padding-left: calc(var(--gutter) + 1.5rem);
+}
+
+.proof-words {
+  align-self: center;
+  max-width: 34rem;
+}
+
+.proof-title {
+  margin: 0 0 2rem;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 4.2vw, 4rem);
+  line-height: 1;
+}
+
+/* The log: a date or a state, then the fact. */
+.log {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0;
+}
+
+.log-entry {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.log-label {
+  color: var(--diamante);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.log-text {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+/* The same column and the same 16:10 box as the destinations' slot. */
+.proof-side {
+  align-self: center;
+  justify-self: end;
+  width: 100%;
+  position: relative;
+}
+
+.proof-slot {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: calc(100svh - 9rem);
+}
+
+.proof-note {
+  margin: 0.75rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.proof-side .proof-note {
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+/* ---------- phone ---------- */
+
+.proof-phone {
+  padding: 5rem var(--gutter) 3rem;
+}
+
+.proof-phone .proof-slot {
+  margin-top: 0.5rem;
+}
+
+.proof-phone .log {
+  margin-top: 2rem;
+}
+
+/* ---------- reduced motion ---------- */
+
+.proof-plain {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 6rem var(--gutter) 4rem;
+}
+
+.proof-still {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 14px;
+  border: 1.5px solid rgb(159 195 214 / 0.4);
+}
+
+.proof-plain .log {
+  margin-top: 2rem;
+}
+
+/* T4: the words leave as the stage lets go, before the frame crosses them */
+.proof-stage .proof-words,
+.proof-stage .proof-note {
+  opacity: calc(1 - var(--leave, 0));
+}

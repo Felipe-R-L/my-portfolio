@@ -1,0 +1,318 @@
+/*
+ * Destinos. The scene draws words only; the picture is the journey's frame,
+ * which sits in .dest-slot (see journey/JourneyFrame). The section stays
+ * transparent so the frame, painted below the page, shows through.
+ */
+
+.dest {
+  position: relative;
+  color: var(--ink);
+}
+
+/* ---------- wide: a tall track, a sticky stage ---------- */
+
+.dest-track {
+  position: relative;
+  /* every destination's beat, plus the screen the stage itself occupies */
+  height: calc(var(--beats) * var(--beat-h) + 100svh);
+}
+
+.dest-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 34fr) minmax(0, 60fr);
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(2rem, 4vw, 4.5rem);
+  padding: clamp(5.5rem, 12vh, 8rem) var(--gutter) clamp(2rem, 6vh, 4rem);
+  padding-left: calc(var(--gutter) + 1.5rem); /* clear of the chapter rail */
+}
+
+.dest-head {
+  grid-column: 1;
+  grid-row: 1;
+  max-width: 30ch;
+}
+
+.dest-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 4.2vw, 4rem);
+  line-height: 1;
+}
+
+.dest-lead {
+  margin: 0.75rem 0 0;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.dest-list {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-self: center;
+  min-height: 22rem;
+}
+
+/* Every destination's words occupy the same place; only the current one is
+   unmasked. --in runs 0..1 as it arrives (set from the scroll), --dir says
+   which way it travels: up and out when the next one comes. */
+.dest-item {
+  position: absolute;
+  inset: 0 0 auto;
+  --in: 0;
+  --dir: 1;
+}
+
+.dest-item:first-child {
+  --in: 1;
+}
+
+.dest-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.dest-mask > span {
+  display: block;
+  transform: translateY(calc((1 - var(--in)) * 110% * var(--dir)));
+  will-change: transform;
+}
+
+/* The longer lines are wiped rather than moved, from the top down. */
+.dest-item .dest-of,
+.dest-item .dest-result,
+.dest-item .dest-note,
+.dest-item .dest-actions {
+  clip-path: inset(0 0 calc((1 - var(--in)) * 100%) 0);
+}
+
+.dest-count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin: 0 0 1.25rem;
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.dest-of {
+  font-size: 0.32em;
+  color: var(--ink-faint);
+}
+
+.dest-kind {
+  margin: 0;
+  color: var(--diamante);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dest-name {
+  margin: 0.35rem 0 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 3vw, 2.9rem);
+  line-height: 1.05;
+}
+
+.dest-result {
+  margin: 1rem 0 0;
+  max-width: 40ch;
+  color: var(--ink-soft);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+.dest-note {
+  margin: 0.6rem 0 0;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.dest-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1.75rem;
+}
+
+.dest-open {
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border: 1px solid rgb(159 195 214 / 0.5);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-arrive), border-color 0.25s var(--ease-arrive);
+}
+
+.dest-open:hover {
+  background: rgb(159 195 214 / 0.12);
+  border-color: var(--diamante);
+}
+
+.dest-open:focus-visible,
+.dest-link:focus-visible {
+  outline: 2px solid var(--diamante);
+  outline-offset: 3px;
+}
+
+.dest-link {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  text-decoration: underline;
+  text-decoration-color: var(--hairline);
+  text-underline-offset: 4px;
+}
+
+.dest-link:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink);
+}
+
+/* Where the frame sits: a 16:10 box, centred on the right. */
+.dest-slot {
+  position: relative;
+  cursor: pointer;
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: center;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: calc(100svh - 9rem);
+  justify-self: end;
+}
+
+/* ---------- phone: the frame on top, a swipe below ---------- */
+
+.dest-phone {
+  padding: 5rem 0 3rem;
+}
+
+.dest-phone .dest-head {
+  padding: 0 var(--gutter);
+}
+
+.dest-phone .dest-slot {
+  width: calc(100% - 2 * var(--gutter));
+  margin: 1.75rem auto 0;
+}
+
+.dest-swipe {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 0 var(--gutter) 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.dest-swipe::-webkit-scrollbar {
+  display: none;
+}
+
+.dest-card {
+  flex: 0 0 86%;
+  scroll-snap-align: start;
+  --in: 1;
+  --dir: 1;
+}
+
+.dest-swipe .dest-card[data-current="false"] {
+  opacity: 0.45;
+  transition: opacity 0.35s var(--ease-travel);
+}
+
+.dest-swipe .dest-card[data-current="true"] {
+  opacity: 1;
+  transition: opacity 0.35s var(--ease-travel);
+}
+
+.dest-phone .dest-count {
+  font-size: 2.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.dest-phone .dest-name {
+  font-size: 1.85rem;
+}
+
+.dest-phone .dest-result {
+  font-size: 1rem;
+}
+
+/* ---------- reduced motion: a plain list ---------- */
+
+.dest-plain {
+  display: grid;
+  gap: 3.5rem;
+  padding: 6rem var(--gutter) 4rem;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.dest-plain .dest-card {
+  --in: 1;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.dest-still {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 14px;
+  border: 1.5px solid rgb(159 195 214 / 0.4);
+  margin-bottom: 1.25rem;
+}
+
+/* The picture opens the case: a hint where the pointer is. */
+.dest-slot::after {
+  content: attr(data-hint);
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgb(6 8 11 / 0.82);
+  border: 1px solid rgb(159 195 214 / 0.4);
+  color: var(--ink);
+  font-size: 0.85rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s var(--ease-arrive), transform 0.25s var(--ease-arrive);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .dest-slot:hover::after {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dest-still {
+  cursor: pointer;
+}

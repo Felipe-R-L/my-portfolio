@@ -2,89 +2,45 @@
   "nav": {
     "about": "About",
     "projects": "Projects",
-    "experience": "Experience",
-    "services": "Services",
     "blog": "Blog",
     "menu_open": "Menu",
-    "menu_close": "Close menu"
+    "menu_close": "Close menu",
+    "process": "How it works",
+    "contact": "Contact",
+    "proof": "In use"
   },
   "hero": {
-    "badge": "Available for new projects",
-    "title_part1": "Engineering",
-    "title_part2_variants": [
-      "Solutions",
-      "Experiences",
-      "Ideas"
-    ],
-    "description": "Building scalable, high-performance web applications with a premium aesthetic.",
-    "cta_projects": "View Projects",
-    "cta_contact": "Get in Touch",
-    "role": "Fullstack Developer"
-  },
-  "about": {
-    "title_part1": "Strategy",
-    "title_part2": "Identity.",
-    "bio_p1": "Specialized in high-impact SaaS engineering, currently driving technological evolution at OMD do Brasil. I bridge the gap between complex technical strategies and exceptional user experiences.",
-    "bio_p2": "My approach integrates Domain-Driven Design and Clean Architecture to build robust, scalable software. More than just writing code, I design systems that evolve with your vision.",
-    "revealed": {
-      "trustworthy": "TRUSTWORTHY",
-      "collaborative": "COLLABORATIVE",
-      "dedicated": "DEDICATED"
-    },
-    "skills_title": "Capabilities",
-    "skills": {
-      "clean_arch": {
-        "title": "Clean Architecture",
-        "proof": "Domain-Driven Design and Clean Architecture across Nx and Turborepo monorepos."
-      },
-      "devops": {
-        "title": "DevOps & Cloud",
-        "proof": "Infrastructure as code with Terraform, containers and CI/CD in production."
-      },
-      "fullstack": {
-        "title": "Fullstack, end to end",
-        "proof": "Java, TypeScript, NestJS, Angular, React, Prisma, Drizzle and PostgreSQL."
-      },
-      "english": {
-        "title": "English (C2)",
-        "proof": "I read, write and present in English without a middleman."
-      }
-    }
+    "description": "I build websites, online stores and custom systems for small and mid-sized businesses. You talk to me directly, from the first draft to support after launch.",
+    "cta_projects": "View projects"
   },
   "contact": {
-    "title_part1": "Connection",
-    "title_part2": "Let's Talk.",
-    "cta_title": "Let's turn your vision into reality.",
-    "cta_desc": "I'm always open to discussing new projects, creative ideas, or opportunities to integrate innovative visions.",
-    "social_title": "Social Presence",
-    "form": {
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "placeholder_name": "Your name here",
-      "placeholder_email": "your@email.com",
-      "placeholder_message": "Tell me a bit about your project...",
-      "send": "Send Message",
-      "sending": "Sending...",
-      "sent": "Message Ready in your Mail App!"
-    }
+    "title_part2": "Let's talk.",
+    "cta_title": "Have a project in mind?",
+    "cta_desc": "Tell me the idea, even if it's still rough. I reply fast and will tell you honestly whether and how I can help.",
+    "whatsapp_cta": "Message on WhatsApp",
+    "whatsapp_message": "Hi Felipe! I saw your portfolio and would like to talk about a project.",
+    "network_title": "Developer, designer or founder?",
+    "network_desc": "I'm always up for swapping ideas, referring work and building partnerships. Find me on LinkedIn or right here."
   },
   "projects": {
-    "title_part1": "Personal",
-    "title_part2": "And Freelance.",
-    "lead": "Projects where I built everything — from the database schema to the checkout.",
+    "title_part1": "Projects",
+    "title_part2": "Live.",
+    "lead": "Real work, running today. From the database to the checkout, I built it.",
     "labels": {
       "live": "Visit site",
       "code": "Code",
       "private_no_deploy": "Private repo · no deploy",
       "live_aria": "Visit the {{name}} website, opens in a new tab",
-      "code_aria": "View the {{name}} source code on GitHub, opens in a new tab"
+      "code_aria": "View the {{name}} source code on GitHub, opens in a new tab",
+      "live_login": "Open the app · login required",
+      "live_login_aria": "Open {{name}}, login required, opens in a new tab",
+      "private_repo": "Private repository"
     },
     "dallas_sync": {
       "title": "Dallas Sync",
-      "category": "PMS / ERP",
-      "status": "In progress, with a real client",
-      "description": "A motel ERP that keeps running when the internet drops. Multi-tenant, co-developed with a real client, with FIFO inventory costing, a rate engine that handles public holidays, and row-level security across every table.",
+      "category": "Motel management system",
+      "status": "In production · SaaS",
+      "description": "Complete motel management, in production since September 2026 and sold on subscription to other motels. Front desk, inventory, finance and BI in one system.",
       "arch": {
         "offline": "Connection lost",
         "caption": "The front desk keeps working",
@@ -96,19 +52,86 @@
         "link2": "network returns",
         "step3_title": "Server reconciles",
         "step3_note": "idempotent, dead-letter with retry"
+      },
+      "metrics": {
+        "history": "years of history",
+        "tests": "tests",
+        "live_since": "live since"
+      },
+      "showcase": {
+        "label": "What Dallas Sync does",
+        "illustrative": "Illustrative screens, no real data.",
+        "tabs": {
+          "offline": "No internet",
+          "invoice": "Invoice by photo",
+          "bi": "Owner's panel",
+          "tenants": "Many motels"
+        },
+        "captions": {
+          "offline": "The internet drops and the front desk keeps checking guests in, adding orders and taking payments. When it's back, everything syncs on its own, with nothing duplicated.",
+          "invoice": "Snap the supplier's invoice and AI fills in the entry. Someone checks it, and it becomes an expense and a stock entry at once.",
+          "bi": "The owner sees when the motel fills up and which suites earn the most, without building a spreadsheet.",
+          "tenants": "Many motels run on the same system, and one never sees another's data."
+        },
+        "offline": {
+          "screen": "Front desk",
+          "offline": "No internet",
+          "online": "Synced",
+          "action_checkin": "Check-in, suite 102",
+          "action_order": "Suite 204 order: 2 waters, 1 snack",
+          "action_payment": "Suite 101 paid by Pix",
+          "busy": "Occupied",
+          "free": "Free",
+          "cleaning": "Cleaning"
+        },
+        "invoice": {
+          "supplier": "Boa Vista Supply Co.",
+          "receipt_kind": "Purchase invoice",
+          "items": [
+            "Still water 500 ml × 48",
+            "Soda can × 24",
+            "Hand towel × 30"
+          ],
+          "supplier_label": "Supplier",
+          "total_label": "Total",
+          "total": "R$ 842.30",
+          "due_label": "Due",
+          "due": "Dec 12",
+          "entry_title": "New expense",
+          "to_stock": "3 items go to stock",
+          "confirm": "Confirm"
+        },
+        "bi": {
+          "screen": "Owner's panel",
+          "heatmap": "Occupancy by day and hour",
+          "suites": "Top-earning suites",
+          "days": [
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+            "Sun"
+          ]
+        },
+        "tenants": {
+          "motel": "Motel",
+          "shield": "Each motel sees only its own"
+        }
       }
     },
     "secret": {
       "title": "Secret Boutique",
-      "category": "E-commerce",
-      "status": "Personal project",
-      "description": "A store built entirely around discretion: age verification at the door, anonymous reviews, a panic button, and orders traceable by room without identifying the guest."
+      "category": "Online store",
+      "status": "Store live",
+      "description": "An online store with Mercado Pago checkout, built entirely around discretion: age check at the door, anonymous reviews and trackable orders that never expose the customer."
     },
     "dallas_motel": {
       "title": "Dallas Motel",
-      "category": "Landing + menu",
-      "status": "Freelance",
-      "description": "Institutional site with a digital menu and an admin panel so management can edit suites, prices and holidays without a developer."
+      "category": "Website + digital menu",
+      "status": "Site live",
+      "description": "A business website with a digital menu and a panel where management updates suites, prices and holidays on their own, without calling a developer."
     }
   },
   "experience": {
@@ -126,11 +149,10 @@
         "contribution": "Project author",
         "description": "Real-time telemetry for agricultural machinery: operational map, field logs, productivity BI and an external API for third-party integration. I wrote the initial project and defined the architecture — Nx, clean architecture on the server, standalone Angular on the front — plus the Terraform infrastructure. Presented at Agrishow.",
         "metrics": {
-          "points": "telemetry points",
-          "machines": "machines served",
-          "days": "days of telemetry"
+          "companies": "companies served",
+          "machines": "connected machines"
         },
-        "metrics_source": "Figures published on the OMDfarm landing page.",
+        "metrics_source": "Figures for OMD's telemetry platform.",
         "visit": "View the platform",
         "visit_aria": "Visit the OMDfarm landing page, opens in a new tab",
         "private": "Private repository"
@@ -147,43 +169,6 @@
       }
     }
   },
-  "services": {
-    "title_part1": "How I can",
-    "title_part2": "Help you.",
-    "description": "From initial concept to production-ready scale, I deliver high-end technical solutions tailored to your business goals.",
-    "items": {
-      "landing_pages": {
-        "title": "Landing Pages & Websites",
-        "description": "High-performance, visually stunning digital experiences designed to convert visitors into customers."
-      },
-      "ecommerce": {
-        "title": "Custom E-commerce",
-        "description": "Scalable online stores with a focus on checkout fluidity and conversion architecture."
-      },
-      "ai": {
-        "title": "AI & Chatbots",
-        "description": "Intelligent automation using custom AI agents and LLMs to streamline processes and scale support."
-      },
-      "api": {
-        "title": "Systems & APIs",
-        "description": "Complex integrations and scalable backend systems to automate workflows and connect your tools."
-      }
-    },
-    "learn_more": "Learn More"
-  },
-  "home": {
-    "writing": {
-      "title_part1": "From the",
-      "title_part2": "Blog.",
-      "lead": "A recent, technical look at a real problem — the clearest evidence of how I think.",
-      "read_more": "Continue reading",
-      "card_aria": "Read the full article: {{title}}",
-      "see_all": "See all articles"
-    }
-  },
-  "footer": {
-    "built_for_future": "Built for the future."
-  },
   "common": {
     "loading": "Loading..."
   },
@@ -198,5 +183,190 @@
     "contents": "Contents",
     "close": "Close",
     "back": "Back to blog"
+  },
+  "story": {
+    "title": "Who I am",
+    "label": "My story",
+    "today": "today",
+    "chapters": {
+      "oba": {
+        "title": "Silver at the OBA",
+        "text": "While still in school, I won the silver medal at the 19th Brazilian Astronomy and Astronautics Olympiad."
+      },
+      "etec": {
+        "title": "Technical school at ETEC",
+        "text": "I started a technical course in Systems Analysis and Development at ETEC during the pandemic and ended up pausing it, but that was my first real contact with programming."
+      },
+      "ifsp": {
+        "title": "Engineering at IFSP",
+        "text": "After high school I went on to study mechanical engineering at IFSP, and it was the programming classes in that course that brought me back to technology.",
+        "alt": "The entrance of IFSP, Sertãozinho campus"
+      },
+      "dallas": {
+        "title": "Dallas Motel",
+        "text": "I built the website and the digital menu for Dallas Motel, and from that work came Dallas Sync, the management system the motel now uses as a subscription.",
+        "alt": "The Dallas Motel website"
+      },
+      "omd": {
+        "title": "OMD do Brasil",
+        "text": "I joined OMD do Brasil in 2024 as a developer, and I currently look after three platforms in production that serve 31 companies and 92 connected machines, where a report that took 30 seconds to open now opens in under 2.",
+        "alt": "An OMDfarm screen"
+      },
+      "hoje": {
+        "title": "Today",
+        "text": "I split my time between OMD, Dallas Sync and projects for businesses that need a website, an online store or a system built around the way they work. Outside code I take photographs and film, which is where the care for framing and light that I try to bring to every screen I build comes from.",
+        "alt": "The Dallas Sync suite map"
+      }
+    }
+  },
+  "work": {
+    "title": "Work",
+    "lead": "Each one is live and solves a real problem for whoever hired me.",
+    "drag": "Drag",
+    "kind": {
+      "sistema": "System",
+      "site": "Website",
+      "loja": "Online store"
+    },
+    "items": {
+      "dallas_sync": {
+        "title": "Dallas Sync",
+        "result": "The motel's front desk keeps working when the internet drops, and the owner follows occupancy, stock and finances on a single panel.",
+        "note": "The system in training mode, with no real data.",
+        "case": {
+          "context": "Dallas Sync is the management system I build and sell to motels as a subscription, and Dallas Motel, in Pitangueiras, is the first client running it at the front desk, in production since September 2026.",
+          "problem": "Motels usually run on systems that only record what already happened, so when the internet drops the front desk stops, which in the middle of a shift means a queue at the gate and bills closed on paper.",
+          "decision": "I chose to build it offline-first, with check-in, tabs and payments saved on the front desk's own computer and placed in a queue that the server reconciles once the network is back, and I ruled out the more common system that only works while connected, since the motel's internet does drop and a shift cannot wait for it. For the same reason, whoever is learning works in a training mode that is a separate organization, with the same screens and no real data, so a practice mistake never turns into wrong money in the till.",
+          "result": "The front desk keeps recording check-ins, tabs and payments with no internet, sees the queue of what has not gone up yet and syncs once the network returns, while new receptionists learn in training mode without touching any of the motel's data.",
+          "now": "The layer I am building now is management and intelligence, starting with an owner's dashboard in which every indicator is made only of measured metrics and opens down to the transaction behind it, while projections and suggestions live in a layer above that never enters the number."
+        },
+        "motion": {
+          "map": "Check-in straight from the room map",
+          "plate": "The plate becomes the stay's identifier",
+          "clock": "The room's clock is already running"
+        }
+      },
+      "dallas_motel": {
+        "title": "Dallas Motel",
+        "result": "A website with a digital menu and a panel where management updates suites, prices and holidays on their own, without calling a developer.",
+        "case": {
+          "context": "Dallas Motel opened in 2007, in the countryside of Pitangueiras, and spent almost twenty years with loyal customers and no page on the internet.",
+          "problem": "People looking for a motel decide on their phone before leaving home, and since the price changes with the suite, the day of the week, holidays and the hours of the stay, every question became a WhatsApp message, the front desk spent the day answering the same question and many people gave up before asking.",
+          "decision": "I built the site with pages generated with prices and the menu already written into the HTML, and I ruled out the usual React site that only draws its content in the browser, since the AI assistants that already answer much of local search do not run JavaScript and would find a blank page. If the database does not answer during the build, publishing stops and the previous site stays up, which is better than a home page without prices.",
+          "result": "The motel now has an address of its own, with the right price calculated on the spot before any conversation, bookings that arrive on WhatsApp with the suite and the hours already chosen, and a panel in which the staff change prices, holidays and the menu without calling anyone."
+        },
+        "motion": {
+          "days": "The price changes with the day of the week",
+          "weekday": "Monday to Thursday",
+          "weekend": "Weekend",
+          "holiday": "Holidays"
+        }
+      },
+      "secret": {
+        "title": "Secret Boutique",
+        "result": "An online store with Mercado Pago checkout, an age check at the door and trackable orders that never expose the customer.",
+        "case": {
+          "context": "Secret Boutique is my own intimate products store, which I built from scratch, from the storefront to the panel where I follow the orders.",
+          "problem": "An intimate products store sells better when customers feel nobody will know about the order, so discretion had to be part of every step of the purchase.",
+          "decision": "I chose Mercado Pago, with Pix and card, plus the option to pay on delivery by card or cash, and I did not let the payment confirmation depend only on the notice Mercado Pago sends, since a lost notice would leave a paid order stuck as pending, so the store also checks the payment until it settles.",
+          "result": "Customers buy without exposing who they are, with age verification at the door, anonymous reviews and orders tracked by a code, and I follow each order from payment to delivery in a single panel."
+        },
+        "motion": {
+          "variant": "Each variant with its own price",
+          "cart": "A cart with no account to create",
+          "pix": "Pix through Mercado Pago"
+        }
+      }
+    },
+    "visit": "See it live",
+    "visit_login": "Open the system, login required",
+    "visit_aria": "Open {{name}} in a new tab",
+    "prev": "Previous work",
+    "next": "Next work",
+    "case": {
+      "problem": "The problem",
+      "now": "Today",
+      "stack": "Built with",
+      "close": "Close",
+      "open": "See details",
+      "open_aria": "See the details of {{name}}",
+      "context": "Context",
+      "decision": "The decision",
+      "result": "The result",
+      "back": "Back to the projects",
+      "open_hint": "See details"
+    }
+  },
+  "talk": {
+    "blog_label": "Latest article on the blog",
+    "email_label": "Or by email",
+    "rights": "All rights reserved.",
+    "credits": "Photos of Diamante (Eugenio Magurno) and IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons.",
+    "chips": {
+      "prompt": "What do you need?",
+      "site": {
+        "label": "Website",
+        "message": "Hi Felipe! I saw your portfolio and I want a website for my business."
+      },
+      "loja": {
+        "label": "Online store",
+        "message": "Hi Felipe! I saw your portfolio and I want to set up an online store."
+      },
+      "sistema": {
+        "label": "System",
+        "message": "Hi Felipe! I saw your portfolio and I need a custom system for my business."
+      },
+      "outro": {
+        "label": "Something else",
+        "message": "Hi Felipe! I saw your portfolio and would like to talk about a project."
+      }
+    },
+    "proof_link": "See Dallas Sync working without internet"
+  },
+  "journey": {
+    "chapters": {
+      "partida": "About",
+      "destinos": "Projects",
+      "telemetria": "In use",
+      "plano": "How it works",
+      "retorno": "Contact"
+    },
+    "where": "Chapter {{n}} of {{total}}: {{name}}"
+  },
+  "telemetria": {
+    "title": "In use",
+    "entries": {
+      "since": {
+        "label": "since Sep 2026",
+        "text": "Since September 2026 Dallas Sync has been in production at the front desk of Dallas Motel, which is where you can tell whether it really works."
+      },
+      "offline": {
+        "label": "offline",
+        "text": "When the internet drops, the front desk keeps recording, sees the queue of what has not gone up yet and the system syncs on its own once the network is back."
+      },
+      "training": {
+        "label": "training mode",
+        "text": "New staff learn in a separate training mode that has the same screens and no real data, so a mistake made there does not change anyone's till."
+      }
+    },
+    "video_note": "The video was recorded with the internet actually switched off, in training mode with made-up data, and the check-in made there reached the server on its own once the network was back.",
+    "still_note": "The system in training mode, with no real data."
+  },
+  "plano": {
+    "title": "How it works",
+    "steps": {
+      "talk": {
+        "title": "Conversation",
+        "text": "You tell me what you need on WhatsApp or on a call, and I ask enough to understand the problem before we talk about a solution."
+      },
+      "proposal": {
+        "title": "Proposal",
+        "text": "I send in writing what I will build, what stays out and what it costs, and nothing starts until you say yes."
+      },
+      "start": {
+        "title": "Start",
+        "text": "I start with the part that solves the main problem and show you each stage working, so you can adjust along the way with the system already in front of you."
+      }
+    }
   }
 }

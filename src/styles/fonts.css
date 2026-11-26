@@ -31,6 +31,24 @@
     U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
+/* Instrument Serif: only the story chapter and the closing line, the voice
+ * that opens and closes the page. Self-hosted for the same reason. */
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/instrument-serif-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/instrument-serif-latin-italic.woff2") format("woff2");
+}
+
 /* Só fonte. A paleta pertence a theme.css, e enquanto este arquivo também
  * declarava --background em :root a cor do site dependia da ordem de import
  * em index.css, que é como o body acabou branco sob um layout escuro. */

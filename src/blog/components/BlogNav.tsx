@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { GlassNav, type GlassNavItem } from '../../app/components/shared/GlassNav'
 
-const SECTION_IDS = ['about', 'projects', 'experience', 'services'] as const
+const SECTION_IDS = ['about', 'projects', 'process', 'contact'] as const
 
 const LANGUAGES = [
   { code: 'en', label: 'English' },

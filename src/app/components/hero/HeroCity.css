@@ -1,0 +1,143 @@
+/*
+ * The city scene. One section holds the pinned stage and an empty track the
+ * scene plays over; the stage unpins when the track has scrolled through.
+ */
+
+.city {
+  --bg: #050608;
+  --track: var(--track-desktop, 340svh);
+  position: relative;
+  z-index: 10;
+}
+
+.city-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  /* the multiply layer blends with the photos only, never with the page */
+  isolation: isolate;
+  background: var(--bg);
+  /* The name layers are text, even when invisible: without this the photo
+     shows a text caret instead of the normal arrow. Links keep their hand. */
+  cursor: default;
+  user-select: none;
+}
+
+.city-track {
+  position: relative;
+  height: var(--track);
+  /* it lies over the pinned stage; the stage's pointer is what matters */
+  pointer-events: none;
+}
+
+/* The nav's "Sobre" lands when the about caption is in (progress 0.7). The
+   track starts one screen below the scene's top. */
+.city-anchor {
+  position: absolute;
+  left: 0;
+  top: calc(var(--track) * 0.7 - 100svh);
+}
+
+/* Layers that draw the name keep its layout but hide what they don't draw. */
+.city-ghost {
+  visibility: hidden;
+}
+
+/* ---------- the photo ---------- */
+
+/* Laid out at its own pixel size from the top-left corner; the camera in
+   HeroCity.tsx places it with translate and scale. */
+.city-photo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  max-width: none;
+  display: block;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* The colour reveal, drawn over the photo. */
+.city-reveal {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Everything that makes up the picture, scaled as one on the way out. */
+.city-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform-origin: 50% 50%;
+  box-shadow: 0 40px 90px -40px rgb(0 0 0 / 0.9);
+}
+
+/* The portrait's edge beside the story (placed by HeroCity). */
+.city-ring {
+  position: absolute;
+  z-index: 1;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 18px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ---------- the windows ---------- */
+
+/*
+ * A sheet of the page's dark with white letters, multiplied over the photo:
+ * white shows the photo, dark hides it. Scaling the sheet flies through a
+ * letter while the photo beneath stays where it is.
+ *
+ * No will-change: the sheet scales to 90x, and a promoted layer would be
+ * rasterised once and stretched, leaving stair-stepped letter edges.
+ */
+.city-sheet {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  mix-blend-mode: multiply;
+}
+
+.city-sheet .hero-name {
+  color: #fff;
+}
+
+/* ---------- front: FELIPE and the credits ---------- */
+
+.city-front {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+/* ---------- phones ---------- */
+
+@media (max-width: 767px) {
+  .city {
+    --track: var(--track-phone, 315svh);
+  }
+
+}
+
+/* ---------- T1: the night the camera tilts up into ---------- */
+
+.city-night {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #020309 0%, #04060b 55%, rgb(4 6 11 / 0.82) 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The chapters leave to the left as the portrait returns to the middle. */
+.story-rail {
+  --out: 0;
+  translate: calc(var(--out) * -12vw) 0;
+  clip-path: inset(0 0 0 calc(var(--out) * 100%));
+}
+

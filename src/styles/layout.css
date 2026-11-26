@@ -85,10 +85,13 @@
  * immune for exactly this reason: they pass their value through a custom
  * property, which the optimizer cannot rewrite. So do these.
  */
+/* Tinted dark with only a slight lift: over the hero's bright sky a strong
+   brightness boost and a white tint turned the dock into a white pill with
+   white labels. This reads as glass over both the sky and the dark page. */
 .glass-dark {
-  --glass-filter: blur(20px) saturate(180%) brightness(1.55);
+  --glass-filter: blur(20px) saturate(160%) brightness(1.12);
   border: 1px solid rgb(255 255 255 / 0.16);
-  background: linear-gradient(rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.035));
+  background: linear-gradient(rgb(22 24 32 / 0.62), rgb(12 14 20 / 0.72));
   -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
   box-shadow:

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { cn } from "../../utils/cn";
@@ -37,6 +37,11 @@ export interface GlassNavProps {
   /** Visible + accessible label for the expanded toggle, e.g. "Close". */
   closeLabel: string;
   entrance?: GlassNavEntrance;
+  /** The item for the part of the page in view: marked as the current location. */
+  activeId?: string;
+  /** Phone: shown in the closed pill where the open label would be (e.g. the
+      chapter rail). The toggle keeps `openLabel` as its accessible name. */
+  status?: ReactNode;
 }
 
 // Reused verbatim from the original floating pill: a cheap backdrop blur
@@ -47,12 +52,13 @@ export interface GlassNavProps {
 // whose height would now be animating, which is exactly what produced a
 // rendering glitch.
 //
-// This is the *desktop* recipe and it stays as it is. The pill floats over
-// the galaxy up there, so there is real light behind it to blur. The mobile
-// dock sits over the article slab instead, where a blur of near-black returns
-// near-black — see `.glass-dark` in styles/layout.css for what that needs.
+// The desktop recipe. The glass is tinted dark, not white: the hero's photo
+// puts a bright sky behind the pill, and white text on a white-tinted blur of
+// white sky disappears. Dark tint keeps the labels legible over the sky and
+// still reads as glass over the dark page. The mobile dock sits over the
+// article slab instead — see `.glass-dark` in styles/layout.css.
 const GLASS =
-  "border border-white/[0.14] bg-white/[0.06] backdrop-blur-2xl backdrop-saturate-150 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.16)]";
+  "border border-white/[0.14] bg-[rgb(8_10_16/0.78)] backdrop-blur-2xl backdrop-saturate-150 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_10px_30px_-10px_rgba(0,0,0,0.75)]";
 
 const DEFAULT_ENTRANCE: GlassNavEntrance = { duration: 0.8, delay: 1.5 };
 
@@ -87,6 +93,8 @@ export function GlassNav({
   openLabel,
   closeLabel,
   entrance = DEFAULT_ENTRANCE,
+  activeId,
+  status,
 }: GlassNavProps) {
   const [open, setOpen] = useState(false);
   const prefersReducedMotion = useReducedMotion();
@@ -143,11 +151,11 @@ export function GlassNav({
   };
 
   const underline = (
-    <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-[var(--zone-a-1)] to-[var(--zone-a-2)] group-hover:w-full transition-all duration-300" />
+    <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--diamante)] group-hover:w-full group-aria-[current=location]:w-full transition-all duration-300" />
   );
 
   const linkClassName =
-    "text-[9px] md:text-xs font-medium uppercase tracking-[0.05em] md:tracking-[0.2em] text-white/60 hover:text-white transition-colors relative group whitespace-nowrap";
+    "text-[9px] md:text-xs font-medium uppercase tracking-[0.05em] md:tracking-[0.2em] text-white/75 hover:text-white transition-colors relative group whitespace-nowrap";
 
   const openHeight = openHeightFor(items.length);
   const panelTransition = prefersReducedMotion
@@ -171,7 +179,8 @@ export function GlassNav({
                   <motion.a
                     key={item.id}
                     href={item.href}
-                    className={linkClassName}
+                    aria-current={item.id === activeId ? "location" : undefined}
+                    className={cn(linkClassName, item.id === activeId && "text-white")}
                     whileHover={{ y: -1 }}
                     transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     onClick={(event) => item.onSelect?.(event)}
@@ -180,7 +189,7 @@ export function GlassNav({
                     {underline}
                   </motion.a>
                 ) : (
-                  <a key={item.id} href={item.href} className={linkClassName}>
+                  <a key={item.id} href={item.href} aria-current={item.id === activeId ? "location" : undefined} className={cn(linkClassName, item.id === activeId && "text-white")}>
                     {item.label}
                     {underline}
                   </a>
@@ -199,8 +208,8 @@ export function GlassNav({
                     lang={lang.code}
                     title={lang.label}
                     aria-pressed={isActive}
-                    className={`text-[10px] font-bold uppercase tracking-widest transition-all duration-300 ${
-                      isActive ? "text-[var(--zone-a-1)]" : "text-white/50 hover:text-white/80"
+                    className={`text-[11px] font-bold uppercase tracking-widest transition-all duration-300 ${
+                      isActive ? "text-white underline underline-offset-4 decoration-white/50" : "text-white/60 hover:text-white/90"
                     }`}
                   >
                     {lang.code}
@@ -225,7 +234,10 @@ export function GlassNav({
           transition={{ duration: entrance.duration, delay: entrance.delay, ease: "easeOut" }}
           className="shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
         >
+          {/* initial={false}: mount already closed. Animating down from the
+              panel's natural height moved the pill's top edge on load (CLS). */}
           <motion.div
+            initial={false}
             animate={{ height: open ? openHeight : CLOSED_HEIGHT, borderRadius: open ? OPEN_RADIUS : CLOSED_RADIUS }}
             transition={panelTransition}
             className="glass-dark flex flex-col justify-end overflow-hidden"
@@ -241,7 +253,11 @@ export function GlassNav({
                   ref={index === 0 ? firstLinkRef : undefined}
                   href={item.href}
                   onClick={handleItemClick(item)}
-                  className="flex h-11 shrink-0 items-center rounded-2xl px-3 text-[17px] font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white"
+                  aria-current={item.id === activeId ? "location" : undefined}
+                  className={cn(
+                    "flex h-11 shrink-0 items-center rounded-2xl px-3 text-[17px] font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white",
+                    item.id === activeId && "bg-white/[0.06] text-white",
+                  )}
                 >
                   {item.label}
                 </a>
@@ -283,7 +299,7 @@ export function GlassNav({
             >
               <span className="flex items-center gap-2 text-[17px] font-medium text-white">
                 {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
-                {open ? closeLabel : openLabel}
+                {open ? closeLabel : (status ?? openLabel)}
               </span>
               <span className="text-[13px] font-bold uppercase tracking-widest text-white/50" aria-hidden="true">
                 {activeLanguage.slice(0, 2)}

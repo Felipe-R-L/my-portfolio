@@ -41,18 +41,21 @@ vi.mock('lucide-react', () => ({
 
 const stub = (label: string) => () => React.createElement('div', { 'data-stub': label })
 vi.mock('../../src/app/components/Hero', () => ({ Hero: stub('hero') }))
-vi.mock('../../src/app/components/TechMarquee', () => ({ default: stub('marquee') }))
-vi.mock('../../src/app/components/About', () => ({ About: stub('about') }))
-vi.mock('../../src/app/components/Experience', () => ({ Experience: stub('experience') }))
-vi.mock('../../src/app/components/Services', () => ({ Services: stub('services') }))
-vi.mock('../../src/app/components/Projects', () => ({ Projects: stub('projects') }))
-vi.mock('../../src/app/components/LatestWriting', () => ({ LatestWriting: stub('latest-writing') }))
-vi.mock('../../src/app/components/Contact', () => ({ Contact: stub('contact') }))
+vi.mock('../../src/app/scenes/Work', () => ({ Work: stub('work') }))
+vi.mock('../../src/app/scenes/Proof', () => ({ Proof: stub('proof') }))
+vi.mock('../../src/app/scenes/Talk', () => ({ Talk: stub('talk') }))
+vi.mock('../../src/app/scroll/gsap', () => ({
+  ScrollTrigger: {
+    refresh: vi.fn(),
+    defaults: vi.fn(),
+    create: vi.fn(() => ({ kill: vi.fn() })),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  },
+  gsap: {},
+}))
+vi.mock('../../src/app/scenes/Process', () => ({ Process: stub('process') }))
 vi.mock('../../src/app/components/shared/StarField', () => ({ StarField: stub('starfield') }))
-vi.mock('../../src/app/components/shared/SocialLinks', () => ({ SocialLinks: stub('social') }))
-vi.mock('../../src/app/components/react-bits/GradientText', () => ({ default: stub('gradient-text') }))
-vi.mock('../../src/app/components/react-bits/Galaxy', () => ({ default: stub('galaxy') }))
-vi.mock('../../src/app/components/react-bits/FluidGlass', () => ({ default: stub('fluid-glass') }))
 
 let container: HTMLDivElement | null = null
 let root: Root | null = null
@@ -81,6 +84,14 @@ async function mountAppLayout() {
 }
 
 describe('AppLayout nav pill click handler', () => {
+  it('lists the chapters in journey order', async () => {
+    lenisRef.current = null
+    const el = await mountAppLayout()
+    const hrefs = [...el.querySelectorAll<HTMLAnchorElement>('nav a[href^="#"]')].map((a) => a.getAttribute('href'))
+    // one item per chapter, landing on the anchors the blog already links to
+    expect([...new Set(hrefs)]).toEqual(['#about', '#projects', '#proof', '#process', '#contact'])
+  })
+
   it('does not call preventDefault when Lenis is unavailable (mobile), letting the anchor jump natively', async () => {
     lenisRef.current = null
     const el = await mountAppLayout()

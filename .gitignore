@@ -4,3 +4,6 @@ build
 guidelines/*
 .superpowers
 .blog.local.json
+.loop/
+design-src/
+.claude/*.local.md

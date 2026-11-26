@@ -29,7 +29,13 @@ export interface Project {
   id: string;
   visual: { kind: "shot"; src: string; srcSet: string } | { kind: "arch" };
   url?: string;
+  /** The live URL is an app behind a login, so the link says so. */
+  loginRequired?: boolean;
   repo?: string;
+  /** Figures shown on the featured card; labels live under `projects.<id>.metrics`. */
+  metrics?: Metric[];
+  /** Replaces the static visual with a tabbed set of diagrams (Dallas Sync). */
+  showcase?: boolean;
   stack: readonly string[];
   stackMore?: string;
   /** The lead project gets the wide layout; the rest sit in the compact row. */
@@ -49,9 +55,8 @@ export const OMD_PRODUCTS: readonly Product[] = [
     visual: shot("omdfarm"),
     url: "https://www.omdfarm.com.br",
     metrics: [
-      { value: "40M+", labelKey: "points" },
-      { value: "87", labelKey: "machines" },
-      { value: "274", labelKey: "days" },
+      { value: "31", labelKey: "companies" },
+      { value: "92", labelKey: "machines" },
     ],
     stack: ["Nx", "NestJS", "Prisma", "Angular 21", "MQTT", "BullMQ"],
     stackMore: "Terraform · Redis · ECharts",
@@ -70,8 +75,15 @@ export const PROJECTS: readonly Project[] = [
   {
     id: "dallas_sync",
     visual: { kind: "arch" },
-    stack: ["Turborepo", "NestJS 11", "Drizzle", "React 19", "Dexie"],
-    stackMore: "CASL · Better Auth · RLS",
+    url: "https://dallassync.com.br",
+    loginRequired: true,
+    metrics: [
+      { value: "16", labelKey: "history" },
+      { value: "2.000+", labelKey: "tests" },
+      { value: "2026", labelKey: "live_since" },
+    ],
+    showcase: true,
+    stack: ["React 19", "NestJS 11", "PostgreSQL", "Dexie", "Gemini"],
     featured: true,
   },
   {

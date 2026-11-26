@@ -1,0 +1,68 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/1643456-1795564303/content/roteiro.html"
+        ],
+        "createdAt": "2026-11-24T23:52:22.410Z",
+        "reason": "Claude: throwaway storyboard wireframe in gitignored .superpowers; gradient stands in for photo-in-letters, tiny labels are thumbnail miniatures, clipping frames the thumbnails"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/1643456-1795564303/content/roteiro.html"
+        ],
+        "createdAt": "2026-11-24T23:52:22.426Z",
+        "reason": "Claude: throwaway storyboard wireframe in gitignored .superpowers; gradient stands in for photo-in-letters, tiny labels are thumbnail miniatures, clipping frames the thumbnails"
+      },
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/1643456-1795564303/content/roteiro.html"
+        ],
+        "createdAt": "2026-11-24T23:52:22.440Z",
+        "reason": "Claude: throwaway storyboard wireframe in gitignored .superpowers; gradient stands in for photo-in-letters, tiny labels are thumbnail miniatures, clipping frames the thumbnails"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/1643456-1795564303/content/roteiro.html"
+        ],
+        "createdAt": "2026-11-24T23:52:33.829Z",
+        "reason": "Claude: throwaway storyboard wireframe in gitignored .superpowers; miniature thumbnails, not shipped UI"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/1643456-1795564303/content/roteiro.html"
+        ],
+        "createdAt": "2026-11-24T23:52:33.844Z",
+        "reason": "Claude: throwaway storyboard wireframe in gitignored .superpowers; miniature thumbnails, not shipped UI"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/1643456-1795564303/content/direcao.html"
+        ],
+        "createdAt": "2026-11-24T23:54:52.424Z",
+        "reason": "Claude: throwaway direction mockup in gitignored .superpowers; rail intentionally bleeds off the stage edge like a carousel"
+      },
+      {
+        "rule": "overused-font",
+        "value": "instrument serif",
+        "createdAt": "2026-11-25T00:58:41.451Z",
+        "reason": "user confirmed: Felipe escolheu a direção Editorial (mock com Instrument Serif) em 2026-11-24"
+      }
+    ]
+  }
+}

@@ -1,0 +1,117 @@
+[
+  {
+    "name": "01-abertura-00",
+    "hero": 0
+  },
+  {
+    "name": "01-abertura-10",
+    "hero": 0.1
+  },
+  {
+    "name": "01-mergulho-25",
+    "hero": 0.25
+  },
+  {
+    "name": "02-encontro-50",
+    "hero": 0.5
+  },
+  {
+    "name": "02-encontro-70",
+    "hero": 0.7
+  },
+  {
+    "name": "02-quadro-88",
+    "hero": 0.88
+  },
+  {
+    "name": "02-quadro-100",
+    "hero": 1
+  },
+  {
+    "name": "03-historia-05",
+    "story": 0.05
+  },
+  {
+    "name": "03-historia-15",
+    "story": 0.15
+  },
+  {
+    "name": "03-historia-50",
+    "story": 0.5
+  },
+  {
+    "name": "03-historia-85",
+    "story": 0.85
+  },
+  {
+    "name": "03-historia-97",
+    "story": 0.97
+  },
+  {
+    "name": "04-destinos-00",
+    "sel": ".dest-track",
+    "p": 0
+  },
+  {
+    "name": "04-destinos-50",
+    "sel": ".dest-track",
+    "p": 0.5
+  },
+  {
+    "name": "04-destinos-100",
+    "sel": ".dest-track",
+    "p": 1
+  },
+  {
+    "name": "05-emuso-00",
+    "sel": ".proof-track",
+    "p": 0
+  },
+  {
+    "name": "05-emuso-60",
+    "sel": ".proof-track",
+    "p": 0.6
+  },
+  {
+    "name": "06-t4-recuo",
+    "sel": ".plano-track",
+    "p": 0,
+    "offset": -0.5
+  },
+  {
+    "name": "06-plano-00",
+    "sel": ".plano-track",
+    "p": 0
+  },
+  {
+    "name": "06-plano-50",
+    "sel": ".plano-track",
+    "p": 0.5
+  },
+  {
+    "name": "06-plano-100",
+    "sel": ".plano-track",
+    "p": 1
+  },
+  {
+    "name": "07-t5-cidade",
+    "sel": ".talk-runway",
+    "p": 0,
+    "offset": 0.3
+  },
+  {
+    "name": "07-t5-aberto",
+    "sel": ".talk-runway",
+    "p": 1
+  },
+  {
+    "name": "07-convite",
+    "sel": ".talk-body",
+    "p": 0
+  },
+  {
+    "name": "99-fim",
+    "sel": "body",
+    "p": 1
+  }
+]
