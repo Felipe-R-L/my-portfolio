@@ -14,14 +14,17 @@ export type FrameContent = {
   image: { src: string; srcSet?: string };
   blur: string;
   video?: ProjectVideoSources;
+  /** Presented with motion: the clip and the i18n base of its words. */
+  motion?: { clip: string; text: string };
   drift?: Drift;
 };
 
 const P = "/assets/projects";
+// the rack focus starts on the clip's own first frame, blurred
 const BLUR: Record<string, string> = {
-  dallas_sync: `${P}/dallas-sync-blur.webp`,
-  secret: `${P}/secret-blur.webp`,
-  dallas_motel: `${P}/dallas-blur.webp`,
+  dallas_sync: `${P}/video/dallas-sync-card-blur.webp`,
+  secret: `${P}/video/secret-detail-blur.webp`,
+  dallas_motel: `${P}/video/dallas-motel-detail-blur.webp`,
 };
 
 
@@ -33,8 +36,10 @@ const BLUR: Record<string, string> = {
 const OFFLINE: FrameContent = {
   id: "offline",
   image: { src: `${P}/dallas-sync-op-1440.webp`, srcSet: `${P}/dallas-sync-op-720.webp 720w, ${P}/dallas-sync-op-1440.webp 1440w` },
-  blur: `${P}/dallas-sync-op-blur.webp`,
+  blur: `${P}/video/dallas-sync-offline-blur.webp`,
   video: WORK.find((w) => w.id === "dallas_sync")?.video?.detail,
+  // the camera holds still here (the chapter's idea): only the hand is drawn
+  motion: { clip: "dallas-sync-offline", text: "work.items.dallas_sync.motion" },
 };
 
 /**
@@ -68,6 +73,7 @@ export const FRAME_CONTENTS: readonly FrameContent[] = [
     image: w.image,
     blur: BLUR[w.id],
     video: w.video?.card,
+    motion: w.motion ? { clip: w.motion, text: `work.items.${w.id}.motion` } : undefined,
   })),
   OFFLINE,
   CITY,

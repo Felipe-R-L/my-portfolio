@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { ProjectVideo } from "../components/ProjectVideo";
+import { MotionShot } from "../components/motion/MotionShot";
 import { ScrollTrigger } from "../scroll/gsap";
 import { collectBeats, onBeatsChange } from "./beats";
 import { FRAME_CONTENTS } from "./contents";
@@ -139,7 +140,11 @@ export function JourneyFrame() {
               {near && (
                 <>
                   <img className="jf-blur" src={c.blur} alt="" decoding="async" />
-                  <ProjectVideo className="jf-sharp" sources={c.video} image={c.image} active={shown === c.id} wide />
+                  {c.motion && c.video ? (
+                    <MotionShot className="jf-sharp" clip={c.motion.clip} textBase={c.motion.text} sources={c.video} active={shown === c.id} warm wide />
+                  ) : (
+                    <ProjectVideo className="jf-sharp" sources={c.video} image={c.image} active={shown === c.id} wide />
+                  )}
                 </>
               )}
             </div>

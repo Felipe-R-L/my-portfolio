@@ -1,0 +1,126 @@
+/*
+ * The motion layer of a project's screen (MotionShot). The world is the
+ * video's own 1440 × 900 pixels, scaled to the box; --fs keeps the words at
+ * a readable size when the box is small (a phone, a far frame).
+ */
+.ms {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 40%, #121922 0%, #06080b 72%);
+  --fs: 1;
+}
+
+.ms-world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1440px;
+  height: 900px;
+  transform-origin: 0 0;
+  perspective: 2000px;
+}
+
+.ms-screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1440px;
+  height: 900px;
+  transform-origin: 0 0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 60px 140px rgb(0 0 0 / 0.55);
+  will-change: transform;
+}
+
+.ms-screen > video,
+.ms-screen > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The hand, drawn from its recorded path. */
+.ms-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.ms-cursor svg {
+  width: 30px;
+  height: 30px;
+  fill: #fff;
+  stroke: #0b0d10;
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.5));
+}
+
+.ms-pulse {
+  position: absolute;
+  left: -34px;
+  top: -34px;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 3px solid var(--diamante);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* What the camera points at, once the gesture is done. */
+.ms-ring {
+  position: absolute;
+  border: 4px solid var(--diamante);
+  border-radius: 20px;
+  box-shadow: 0 0 0 8px rgb(159 195 214 / 0.16);
+  opacity: 0;
+}
+
+/* A detail lifted off the screen. */
+.ms-crop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 14px;
+  background-color: #0c0f13;
+  background-repeat: no-repeat;
+  border: 2px solid rgb(159 195 214 / 0.55);
+  box-shadow: 0 30px 70px rgb(0 0 0 / 0.55);
+  transform-origin: 0 0;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.ms-label {
+  position: absolute;
+  left: 2px;
+  bottom: calc(100% + 12px);
+  color: var(--diamante);
+  font: 600 calc(19px * var(--fs)) / 1 var(--font-sans, Inter, system-ui, sans-serif);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* The caption of the moment, low on the left. */
+.ms-cap {
+  position: absolute;
+  left: 48px;
+  bottom: 46px;
+  max-width: 820px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 1px solid rgb(159 195 214 / 0.35);
+  background: rgb(6 8 11 / 0.88);
+  color: var(--ink);
+  font: 400 calc(34px * var(--fs)) / 1.1 var(--serif);
+  opacity: 0;
+}
