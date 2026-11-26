@@ -109,6 +109,13 @@ function Medal() {
 function ChapterImage({ chapter }: { chapter: StoryChapter }) {
   const { t } = useTranslation();
   const img = chapter.image!;
+  if ("figure" in img && img.figure === "platforms") {
+    return (
+      <figure className="story-media story-media--platforms" aria-label={t(`story.chapters.${chapter.id}.alt`)}>
+        <Platforms />
+      </figure>
+    );
+  }
   if ("figure" in img) {
     return (
       <figure className={`story-media story-media--${img.figure}`} aria-hidden="true">
@@ -132,6 +139,59 @@ function ChapterImage({ chapter }: { chapter: StoryChapter }) {
         </span>
       )}
     </figure>
+  );
+}
+
+/** The systems he looks after today, the real screens of the recorded takes.
+    The one under the pointer (or the finger) comes to the front, the others
+    step aside to its sides. */
+const PLATFORMS = [
+  { id: "dallas-sync", name: "Dallas Sync", src: "/assets/projects/video/dallas-sync-card-poster.webp" },
+  { id: "secret", name: "Secret Boutique", src: "/assets/projects/video/secret-detail-poster.webp" },
+  { id: "motel", name: "Dallas Motel", src: "/assets/projects/video/dallas-motel-detail-poster.webp" },
+] as const;
+
+function Platforms() {
+  const [front, setFront] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const held = useRef(false);
+  const n = PLATFORMS.length;
+  // a carousel: while it is on screen it turns on its own, one place every
+  // few seconds; the pointer holds it, and reduced motion leaves it still
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    let timer = 0;
+    const run = (on: boolean) => {
+      window.clearInterval(timer);
+      if (on) timer = window.setInterval(() => !held.current && setFront((f) => (f + 1) % n), 3200);
+    };
+    const io = typeof IntersectionObserver === "undefined" ? null : new IntersectionObserver(([e]) => run(e.isIntersecting));
+    io?.observe(el);
+    return () => {
+      io?.disconnect();
+      window.clearInterval(timer);
+    };
+  }, [n]);
+  return (
+    <div
+      ref={ref}
+      className="platforms"
+      aria-hidden="true"
+      onPointerEnter={() => (held.current = true)}
+      onPointerLeave={() => (held.current = false)}
+    >
+      {PLATFORMS.map((p, i) => {
+        // 0: in front, 1: to the right, 2: to the left
+        const slot = (i - front + n) % n;
+        return (
+          <div key={p.id} className="platform" data-slot={slot} onPointerEnter={() => setFront(i)}>
+            <img src={p.src} alt="" loading="lazy" decoding="async" />
+            <span className="platform-name">{p.name}</span>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 

@@ -68,7 +68,6 @@
 }
 
 /* a product screen is shown whole, never cropped */
-.story-chapter[data-chapter="hoje"] .story-media img,
 .story-chapter[data-chapter="omd"] .story-media img {
   object-fit: contain;
 }
@@ -341,6 +340,16 @@
     linear-gradient(90deg, rgb(5 6 8 / 0.55) 0%, transparent 40%);
 }
 
+/* the stand and the city, a little nearer: they are photographs of his own */
+.story-bg-layer[data-bg="omd"] .story-bg-img {
+  opacity: 0.48;
+}
+
+/* the last one, his photograph, a little nearer: it closes the story */
+.story-bg-layer[data-bg="hoje"] .story-bg-img {
+  opacity: 0.5;
+}
+
 /* his sketch is line on dark already: a lighter veil, so the notes below the
    card read too (the words keep their halo) */
 .story-bg-layer:is([data-bg="ifsp"], [data-bg="etec"])::after {
@@ -357,7 +366,7 @@
 }
 
 /* the photos (not the drawn textures) stay further back */
-.story-bg-layer:is([data-bg="dallas"], [data-bg="hoje"]) .story-bg-img {
+.story-bg-layer[data-bg="dallas"] .story-bg-img {
   opacity: 0.34;
 }
 
@@ -412,6 +421,80 @@
   text-shadow: 0 0 24px rgb(166 227 161 / 0.35);
 }
 .story-bg-figure--terminal .story-caret { opacity: 0.8; }
+
+/* ---------- today: the platforms, cards in space ---------- */
+
+.story-media--platforms {
+  border: 1px solid rgb(159 195 214 / 0.2);
+  background: radial-gradient(ellipse at 50% 55%, rgb(159 195 214 / 0.12), transparent 70%), #0a0d12;
+}
+
+.platforms {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 900px;
+  transform-style: preserve-3d;
+}
+
+.platform {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 56%;
+  aspect-ratio: 16 / 10;
+  margin: calc(-0.5 * 56% * 10 / 16) 0 0 -28%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 14px 36px rgb(0 0 0 / 0.6), 0 0 0 1px rgb(159 195 214 / 0.25);
+  transition: transform 0.7s var(--ease-arrive), opacity 0.7s ease, filter 0.7s ease;
+  cursor: default;
+}
+
+.story-media .platform img {
+  transform: none;
+}
+
+.platform[data-slot="0"] {
+  z-index: 3;
+  transform: translate3d(0, 0, 40px) rotateY(0deg);
+}
+
+.platform[data-slot="1"] {
+  z-index: 2;
+  transform: translate3d(58%, 0, -180px) rotateY(-32deg);
+  filter: brightness(0.6);
+}
+
+.platform[data-slot="2"] {
+  z-index: 1;
+  transform: translate3d(-58%, 0, -180px) rotateY(32deg);
+  filter: brightness(0.6);
+}
+
+.platform-name {
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.45rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgb(5 6 8 / 0.75);
+  color: #e6edf3;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.platform[data-slot="0"] .platform-name {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .platform {
+    transition: none;
+  }
+}
 
 /* ---------- the medal ---------- */
 

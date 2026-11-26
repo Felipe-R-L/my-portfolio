@@ -10,7 +10,7 @@ export type StoryChapter = {
   seal?: boolean;
   /** A photo (alt text in i18n under `story.chapters.<id>.alt`) or one of
       the drawn figures, for chapters no photo can honestly show. */
-  image?: { src: string; srcSet?: string } | { figure: "orbit" | "code" | "medal" };
+  image?: { src: string; srcSet?: string } | { figure: "orbit" | "code" | "medal" | "platforms" };
   /** A mark over the picture (the institution's logo), alt in `story.chapters.<id>.badge`. */
   badge?: string;
   /**
@@ -25,9 +25,9 @@ const S = "/assets/story";
 const P = "/assets/projects";
 
 // The photos of Felipe are his own (Mídia/Fotos, metadata stripped). The
-// backgrounds: the night sky and the code are drawn; the gears and the
-// centre pivots are generated (scripts/assets/textures.mjs); the motel is the
-// hero of the site he built; "today" is the system's own screen, blurred.
+// backgrounds: the night sky and the terminal are drawn; IFSP is his own
+// notebook sketch, OMD his photo of the company's stand at Agrishow, the motel
+// the hero of the site he built, and "today" a city he photographed.
 export const STORY: readonly StoryChapter[] = [
   { id: "oba", year: "2017", seal: true, image: { figure: "medal" }, bg: { figure: "orbit" } },
   { id: "etec", year: "2020", image: { figure: "code" }, bg: { figure: "terminal" } },
@@ -49,14 +49,16 @@ export const STORY: readonly StoryChapter[] = [
     id: "omd",
     year: "2024",
     image: { src: `${S}/omd-felipe-1280.webp`, srcSet: `${S}/omd-felipe-640.webp 640w, ${S}/omd-felipe-1280.webp 1280w` },
-    bg: { src: `${S}/bg-pivots-1200.webp`, srcSet: `${S}/bg-pivots-1200.webp 1200w, ${S}/bg-pivots-2400.webp 2400w` },
+    // the OMD do Brasil stand at Agrishow (his own photo)
+    bg: { src: `${S}/bg-omd-800.webp`, srcSet: `${S}/bg-omd-800.webp 800w, ${S}/bg-omd-1600.webp 1600w` },
   },
   {
     id: "hoje",
     year: "hoje",
-    // the three systems he looks after, side by side (scripts/assets/today.mjs)
-    image: { src: `${S}/hoje-720.webp`, srcSet: `${S}/hoje-720.webp 720w, ${S}/hoje-1440.webp 1440w` },
-    bg: { src: `${S}/bg-hoje-1440.webp` },
+    // the three systems he looks after, as cards that change places
+    image: { figure: "platforms" },
+    // the city from above, one of his own photographs (outside code he shoots)
+    bg: { src: `${S}/bg-hoje-1200.webp`, srcSet: `${S}/bg-hoje-1200.webp 1200w, ${S}/bg-hoje-2400.webp 2400w` },
   },
 ];
 
