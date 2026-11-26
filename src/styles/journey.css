@@ -1,0 +1,17 @@
+/*
+ * Tokens of the journey, shared by every scene. The easings mirror
+ * src/app/motion/tokens.ts (EASE.*.css), so CSS transitions and GSAP
+ * timelines move alike.
+ */
+:root {
+  /* "Azul de Diamante": the page's one accent. */
+  --diamante: #9fc3d6;
+  --ink: #f5f7ff;
+  --ink-soft: rgb(222 226 235);
+  --ink-faint: rgb(245 247 255 / 0.45);
+  --hairline: rgb(245 247 255 / 0.16);
+  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --ease-arrive: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-leave: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-travel: cubic-bezier(0.65, 0, 0.35, 1);
+}

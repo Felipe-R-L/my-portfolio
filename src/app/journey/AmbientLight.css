@@ -1,0 +1,67 @@
+/*
+ * One light per chapter. Every layer is a still gradient over the same
+ * near-black; only opacity changes, so a chapter change costs a crossfade on
+ * the compositor and nothing after it.
+ */
+.ambient {
+  position: absolute;
+  inset: 0;
+  background: #050608;
+}
+
+.ambient-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s var(--ease-travel);
+}
+
+.ambient-layer[data-on="true"] {
+  opacity: 1;
+}
+
+/* Partida: the page's original light, cold from above the hero, a low warm
+   one near the bottom. */
+.ambient--partida {
+  background-image:
+    radial-gradient(80% 55% at 50% -10%, rgb(76 141 255 / 0.13), transparent 70%),
+    radial-gradient(60% 40% at 85% 110%, rgb(240 166 60 / 0.06), transparent 70%),
+    linear-gradient(180deg, #07090e 0%, #050608 45%, #040406 100%);
+}
+
+/* Destinos: open night. The only light comes from where the lit screen of
+   each destination sits, centre right. */
+.ambient--destinos {
+  background-image:
+    radial-gradient(38% 46% at 66% 48%, rgb(159 195 214 / 0.11), transparent 72%),
+    linear-gradient(180deg, #04060a 0%, #030407 100%);
+}
+
+/* Telemetria (in use): low, neutral light from below, an instrument room. */
+.ambient--telemetria {
+  background-image:
+    radial-gradient(90% 45% at 50% 112%, rgb(214 218 222 / 0.07), transparent 70%),
+    linear-gradient(180deg, #08090a 0%, #0a0b0b 100%);
+}
+
+/* Plano (how it works): even and wide, a faint horizon a little below the middle. */
+.ambient--plano {
+  background-image:
+    linear-gradient(180deg, transparent 52%, rgb(159 195 214 / 0.045) 58%, transparent 64%),
+    linear-gradient(180deg, #06070a 0%, #07080b 100%);
+}
+
+/* Retorno: the dusk of the opening, warm and low, over the city. */
+.ambient--retorno {
+  background-image:
+    radial-gradient(75% 50% at 50% 112%, rgb(240 166 60 / 0.1), transparent 72%),
+    radial-gradient(70% 45% at 50% -12%, rgb(76 141 255 / 0.08), transparent 70%),
+    linear-gradient(180deg, #07080b 0%, #0a0806 100%);
+}
+
+/* Reduced motion: chapters change by a short cut, not a crossfade. */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-layer {
+    transition-duration: 0.15s;
+  }
+}

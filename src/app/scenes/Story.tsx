@@ -165,7 +165,7 @@ function StoryList() {
   }, []);
 
   return (
-    <section id="about" className="story-list" aria-labelledby="story-title">
+    <section id="about" className="story-list" data-journey="partida" aria-labelledby="story-title">
       <h2 id="story-title" className="sr-only">
         {t("story.title")}
       </h2>

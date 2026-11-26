@@ -1,0 +1,152 @@
+/* The chapter rail: where you are and how much is left. */
+
+.rail {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "count name"
+    "track track";
+  align-items: baseline;
+  column-gap: 0.6rem;
+  row-gap: 0.45rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.rail-count {
+  grid-area: count;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.rail-of {
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+
+.rail-name {
+  grid-area: name;
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  line-height: 1;
+  white-space: nowrap;
+  animation: rail-name-in 0.5s var(--ease-arrive) both;
+}
+
+/* A new chapter's name slides in a few pixels from below; nothing fades from 0. */
+@keyframes rail-name-in {
+  from {
+    transform: translateY(0.35em);
+    opacity: 0.35;
+  }
+}
+
+.rail-track {
+  grid-area: track;
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  height: 2px;
+}
+
+.rail-tick {
+  background: var(--hairline);
+  transition: background-color 0.4s var(--ease-travel);
+}
+
+.rail-tick[data-on="true"] {
+  background: rgb(159 195 214 / 0.35);
+}
+
+/* The continuous fill over the ticks, scaled by the scroll. */
+.rail-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--diamante);
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+}
+
+/* Desktop: standing in the left margin, outside the content column (the
+   gutter is 3rem there), read bottom to top. The ticks stack vertically and
+   the fill grows upward. */
+.rail--desk {
+  position: fixed;
+  left: 0.9rem;
+  top: 50%;
+  z-index: 40;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 0.75rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.rail--desk .rail-count {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.rail--desk .rail-name {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 1.05rem;
+  animation-name: rail-name-in-side;
+}
+
+@keyframes rail-name-in-side {
+  from {
+    transform: rotate(180deg) translateY(-0.35em);
+    opacity: 0.35;
+  }
+}
+
+.rail--desk .rail-track {
+  grid-auto-flow: row;
+  width: 2px;
+  height: 9rem;
+}
+
+.rail--desk .rail-fill {
+  transform-origin: center bottom;
+  transform: scaleY(0);
+}
+
+/* Ticks are listed first to last; standing, the first one sits at the bottom. */
+.rail--desk .rail-track {
+  direction: ltr;
+}
+
+.rail--desk .rail-tick {
+  order: calc(0 - var(--k));
+}
+
+@media (max-width: 767px) {
+  .rail--desk {
+    display: none;
+  }
+}
+
+/* Phone: inside the closed nav pill, where "Menu" used to be. */
+.rail--pill {
+  width: min(52vw, 13rem);
+  text-align: left;
+}
+
+.rail--pill .rail-name {
+  font-size: 1.05rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-name {
+    animation: none;
+  }
+
+  .rail-tick {
+    transition: none;
+  }
+}

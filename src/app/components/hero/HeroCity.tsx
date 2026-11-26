@@ -300,6 +300,7 @@ export function HeroCity() {
     <section
       ref={sectionRef}
       className="city"
+      data-journey="partida"
       aria-label={NAME.full}
       style={{
         ["--track-desktop" as string]: `${trackDesktop * 100}svh`,

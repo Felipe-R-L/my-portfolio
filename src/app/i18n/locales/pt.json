@@ -6,7 +6,8 @@
     "menu_open": "Menu",
     "menu_close": "Fechar menu",
     "process": "Como funciona",
-    "contact": "Contato"
+    "contact": "Contato",
+    "proof": "Em uso"
   },
   "hero": {
     "description": "Crio sites, lojas virtuais e sistemas sob medida para pequenos e médios negócios. Você fala direto comigo, do primeiro rascunho ao suporte depois que está no ar.",
@@ -331,5 +332,15 @@
     "email_label": "Ou por e-mail",
     "rights": "Todos os direitos reservados.",
     "credits": "Fotos de Diamante (Eugenio Magurno) e do IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons."
+  },
+  "journey": {
+    "chapters": {
+      "partida": "Sobre",
+      "destinos": "Projetos",
+      "telemetria": "Em uso",
+      "plano": "Como funciona",
+      "retorno": "Contato"
+    },
+    "where": "Capítulo {{n}} de {{total}}: {{name}}"
   }
 }

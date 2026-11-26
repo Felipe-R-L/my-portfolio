@@ -75,11 +75,12 @@ async function mountAppLayout() {
 }
 
 describe('AppLayout nav pill click handler', () => {
-  it('lists the scenes in page order', async () => {
+  it('lists the chapters in journey order', async () => {
     lenisRef.current = null
     const el = await mountAppLayout()
     const hrefs = [...el.querySelectorAll<HTMLAnchorElement>('nav a[href^="#"]')].map((a) => a.getAttribute('href'))
-    expect([...new Set(hrefs)]).toEqual(['#about', '#projects', '#process', '#contact'])
+    // one item per chapter, landing on the anchors the blog already links to
+    expect([...new Set(hrefs)]).toEqual(['#about', '#projects', '#proof', '#process', '#contact'])
   })
 
   it('does not call preventDefault when Lenis is unavailable (mobile), letting the anchor jump natively', async () => {

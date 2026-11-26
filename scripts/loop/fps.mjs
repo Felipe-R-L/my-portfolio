@@ -44,7 +44,7 @@ await page.evaluate(() => {
   const w = window;
   w.__frames = [];
   const sections = () =>
-    [...document.querySelectorAll("main section, [data-chapter]")].filter((el) => !el.parentElement.closest("main section")).map((el) => {
+    [...document.querySelectorAll("main section, [data-journey]")].filter((el) => !el.parentElement.closest("main section")).map((el) => {
       // a pinned section's scroll range is its pin spacer's
       const r = (el.closest(".pin-spacer") ?? el).getBoundingClientRect();
       return { name: el.dataset.chapter || el.id || el.className.split(" ")[0] || el.tagName, top: r.top + scrollY, bottom: r.bottom + scrollY };
