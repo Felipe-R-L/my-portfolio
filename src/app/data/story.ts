@@ -1,6 +1,6 @@
 /** The chapters of the story scene, in order. Prose lives in i18n under `story.chapters.<id>`. */
 
-export type ChapterId = "diamante" | "oba" | "etec" | "ifsp" | "dallas" | "omd" | "hoje";
+export type ChapterId = "oba" | "etec" | "ifsp" | "dallas" | "omd" | "hoje";
 
 export type StoryChapter = {
   id: ChapterId;
@@ -17,7 +17,6 @@ const S = "/assets/story";
 const P = "/assets/projects";
 
 export const STORY: readonly StoryChapter[] = [
-  { id: "diamante", year: "1867", image: { src: `${S}/diamante-1280.webp`, srcSet: `${S}/diamante-640.webp 640w, ${S}/diamante-1280.webp 1280w` } },
   { id: "oba", year: "2017", seal: true, image: { figure: "orbit" } },
   { id: "etec", year: "2020", image: { figure: "code" } },
   { id: "ifsp", year: "2022", image: { src: `${S}/ifsp-1280.webp`, srcSet: `${S}/ifsp-640.webp 640w, ${S}/ifsp-1280.webp 1280w` } },
@@ -30,3 +29,15 @@ export const STORY: readonly StoryChapter[] = [
 export function chapterAt(p: number, n: number): number {
   return Math.min(n - 1, Math.max(0, Math.round(p * (n - 1))));
 }
+
+/**
+ * Where the story starts, before the first chapter: Diamante, in Calabria,
+ * where the surname comes from. On a wide screen it plays in the journey's
+ * frame (journey/contents.ts); on a phone and with reduced motion these two
+ * photos open the list. Prose: `story.origin.caption` and
+ * `story.chapters.diamante.text`.
+ */
+export const ORIGIN_SHOTS = [
+  { src: `${S}/diamante-a-1200.webp`, srcSet: `${S}/diamante-a-1200.webp 1200w, ${S}/diamante-a-2400.webp 2400w` },
+  { src: `${S}/diamante-c-1200.webp`, srcSet: `${S}/diamante-c-1200.webp 1200w, ${S}/diamante-c-2400.webp 2400w` },
+] as const;
