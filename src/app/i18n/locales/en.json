@@ -237,14 +237,17 @@
       },
       "omd": {
         "title": "OMD do Brasil",
-        "text": "I joined OMD do Brasil in 2024 as a developer, and I currently look after three production platforms that serve 31 companies.",
+        "text": "I joined OMD do Brasil in 2024 as a developer, and I currently look after three platforms in production that serve 31 companies and 92 connected machines, where a report that took 30 seconds to open now opens in under 2.",
         "alt": "An OMDfarm screen"
       },
       "hoje": {
         "title": "Today",
-        "text": "I split my time between OMD, Dallas Sync and projects for businesses that need a website, an online store or a system built around the way they work.",
+        "text": "I split my time between OMD, Dallas Sync and projects for businesses that need a website, an online store or a system built around the way they work. Outside code I take photographs and film, which is where the care for framing and light that I try to bring to every screen I build comes from.",
         "alt": "The Dallas Sync suite map"
       }
+    },
+    "origin": {
+      "caption": "1867 · Diamante, Calabria"
     }
   },
   "work": {
@@ -254,8 +257,7 @@
     "kind": {
       "sistema": "System",
       "site": "Website",
-      "loja": "Online store",
-      "omd": "Built at OMD"
+      "loja": "Online store"
     },
     "items": {
       "dallas_sync": {
@@ -263,42 +265,31 @@
         "result": "The motel's front desk keeps working when the internet drops, and the owner follows occupancy, stock and finances on a single panel.",
         "note": "The system in training mode, with no real data.",
         "case": {
-          "problem": "Motels usually run on systems that only record what happened, and when the internet drops the front desk stops, which in the middle of a shift means a queue at the gate and bills closed on paper.",
-          "built": "I built Dallas Sync as an offline-first PMS, where check-in, orders, payment and checkout are saved on the front desk computer itself and go into a queue the server reconciles when the network comes back, with money always kept in cents and every customer isolated by RLS in the database.",
-          "now": "The system has been in production since September 2026, with Dallas Motel as a customer, and the layer I am building now is the intelligence one, starting with reading invoices through AI with a mandatory human confirmation before anything is recorded."
+          "context": "Dallas Sync is the management system I build and sell to motels as a subscription, and Dallas Motel, in Pitangueiras, is the first client running it at the front desk, in production since September 2026.",
+          "problem": "Motels usually run on systems that only record what already happened, so when the internet drops the front desk stops, which in the middle of a shift means a queue at the gate and bills closed on paper.",
+          "decision": "I chose to build it offline-first, with check-in, tabs and payments saved on the front desk's own computer and placed in a queue that the server reconciles once the network is back, and I ruled out the more common system that only works while connected, since the motel's internet does drop and a shift cannot wait for it. For the same reason, whoever is learning works in a training mode that is a separate organization, with the same screens and no real data, so a practice mistake never turns into wrong money in the till.",
+          "result": "The front desk keeps recording check-ins, tabs and payments with no internet, sees the queue of what has not gone up yet and syncs once the network returns, while new receptionists learn in training mode without touching any of the motel's data.",
+          "now": "The layer I am building now is management and intelligence, starting with an owner's dashboard in which every indicator is made only of measured metrics and opens down to the transaction behind it, while projections and suggestions live in a layer above that never enters the number."
         }
       },
       "dallas_motel": {
         "title": "Dallas Motel",
         "result": "A website with a digital menu and a panel where management updates suites, prices and holidays on their own, without calling a developer.",
         "case": {
-          "problem": "Dallas Motel needed a website that showed its suites and its menu without depending on someone outside every time a price or a holiday changed.",
-          "built": "I built the website with a digital menu and a panel where management updates suites, prices and holidays on their own, without calling a developer."
+          "context": "Dallas Motel opened in 2007, in the countryside of Pitangueiras, and spent almost twenty years with loyal customers and no page on the internet.",
+          "problem": "People looking for a motel decide on their phone before leaving home, and since the price changes with the suite, the day of the week, holidays and the hours of the stay, every question became a WhatsApp message, the front desk spent the day answering the same question and many people gave up before asking.",
+          "decision": "I built the site with pages generated with prices and the menu already written into the HTML, and I ruled out the usual React site that only draws its content in the browser, since the AI assistants that already answer much of local search do not run JavaScript and would find a blank page. If the database does not answer during the build, publishing stops and the previous site stays up, which is better than a home page without prices.",
+          "result": "The motel now has an address of its own, with the right price calculated on the spot before any conversation, bookings that arrive on WhatsApp with the suite and the hours already chosen, and a panel in which the staff change prices, holidays and the menu without calling anyone."
         }
       },
       "secret": {
         "title": "Secret Boutique",
         "result": "An online store with Mercado Pago checkout, an age check at the door and trackable orders that never expose the customer.",
         "case": {
-          "problem": "A store for intimate products sells better when customers feel nobody will ever know about the order, so discretion had to be part of every step of the purchase.",
-          "built": "I built the store with Mercado Pago checkout, an age check at the door, anonymous reviews and trackable orders that never expose who bought."
-        }
-      },
-      "omdfarm": {
-        "title": "OMDfarm",
-        "result": "Real-time telemetry for agricultural machinery, with an operational map and productivity BI.",
-        "case": {
-          "problem": "People running agricultural machinery need to know in real time where each machine is and how much it produced, without waiting for the end-of-day report.",
-          "built": "I wrote the initial OMDfarm project and defined its architecture, with Nx, clean architecture on the server and standalone Angular on the front, plus the Terraform infrastructure, and the platform delivers an operational map, field logs, productivity BI and an external API for third-party integration.",
-          "now": "OMD platforms serve 31 companies and 92 connected machines today, and OMDfarm was presented at Agrishow."
-        }
-      },
-      "eco360": {
-        "title": "Gestão Eco 360",
-        "result": "Waste-collection logistics with video telemetry and a routing module that standardises the drivers' work.",
-        "case": {
-          "problem": "Waste collection depends on routes followed to the letter, and the company needed to follow its fleet live and measure route coverage in each neighbourhood.",
-          "built": "I built the whole infrastructure and deploy layer of the multi-tenant platform from scratch and delivered its riskiest subsystems, such as sharing assets between customers, RLS isolation and telemetry with snap-to-road."
+          "context": "Secret Boutique is my own intimate products store, which I built from scratch, from the storefront to the panel where I follow the orders.",
+          "problem": "An intimate products store sells better when customers feel nobody will know about the order, so discretion had to be part of every step of the purchase.",
+          "decision": "I chose Mercado Pago, with Pix and card, plus the option to pay on delivery by card or cash, and I did not let the payment confirmation depend only on the notice Mercado Pago sends, since a lost notice would leave a paid order stuck as pending, so the store also checks the payment until it settles.",
+          "result": "Customers buy without exposing who they are, with age verification at the door, anonymous reviews and orders tracked by a code, and I follow each order from payment to delivery in a single panel."
         }
       }
     },
@@ -309,12 +300,14 @@
     "next": "Next work",
     "case": {
       "problem": "The problem",
-      "built": "What I built",
       "now": "Today",
       "stack": "Built with",
       "close": "Close",
       "open": "See details",
-      "open_aria": "See the details of {{name}}"
+      "open_aria": "See the details of {{name}}",
+      "context": "Context",
+      "decision": "The decision",
+      "result": "The result"
     }
   },
   "proof": {
@@ -331,7 +324,27 @@
     "blog_label": "Latest article on the blog",
     "email_label": "Or by email",
     "rights": "All rights reserved.",
-    "credits": "Photos of Diamante (Eugenio Magurno) and IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons."
+    "credits": "Photos of Diamante (Eugenio Magurno) and IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons.",
+    "chips": {
+      "prompt": "What do you need?",
+      "site": {
+        "label": "Website",
+        "message": "Hi Felipe! I saw your portfolio and I want a website for my business."
+      },
+      "loja": {
+        "label": "Online store",
+        "message": "Hi Felipe! I saw your portfolio and I want to set up an online store."
+      },
+      "sistema": {
+        "label": "System",
+        "message": "Hi Felipe! I saw your portfolio and I need a custom system for my business."
+      },
+      "outro": {
+        "label": "Something else",
+        "message": "Hi Felipe! I saw your portfolio and would like to talk about a project."
+      }
+    },
+    "proof_link": "See Dallas Sync working without internet"
   },
   "journey": {
     "chapters": {
@@ -342,5 +355,40 @@
       "retorno": "Contact"
     },
     "where": "Chapter {{n}} of {{total}}: {{name}}"
+  },
+  "telemetria": {
+    "title": "In use",
+    "entries": {
+      "since": {
+        "label": "since Sep 2026",
+        "text": "Since September 2026 Dallas Sync has been in production at the front desk of Dallas Motel, which is where you can tell whether it really works."
+      },
+      "offline": {
+        "label": "offline",
+        "text": "When the internet drops, the front desk keeps recording, sees the queue of what has not gone up yet and the system syncs on its own once the network is back, which is exactly what the video beside this shows."
+      },
+      "training": {
+        "label": "training mode",
+        "text": "New staff learn in a separate training mode that has the same screens and no real data, so a mistake made there does not change anyone's till."
+      }
+    },
+    "video_note": "Recorded in training mode, with made-up data."
+  },
+  "plano": {
+    "title": "How it works",
+    "steps": {
+      "talk": {
+        "title": "Conversation",
+        "text": "You tell me what you need on WhatsApp or on a call, and I ask enough to understand the problem before we talk about a solution."
+      },
+      "proposal": {
+        "title": "Proposal",
+        "text": "I send in writing what I will build, what stays out and what it costs, and nothing starts until you say yes."
+      },
+      "start": {
+        "title": "Start",
+        "text": "I start with the part that solves the main problem and show you each stage working, so you can adjust along the way with the system already in front of you."
+      }
+    }
   }
 }

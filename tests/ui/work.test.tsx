@@ -50,20 +50,14 @@ function render(phone = false) {
 }
 
 describe('work carousel', () => {
-  it('shows the five pieces of work, Dallas Sync first and in focus', () => {
+  it('shows the three destinations, Dallas Sync first and in focus', () => {
     const c = render()
     const ids = [...c.querySelectorAll('[data-work]')].map((n) => n.getAttribute('data-work'))
-    expect(ids).toEqual(['dallas_sync', 'dallas_motel', 'secret', 'omdfarm', 'eco360'])
+    // OMD's platforms are the employer's work: they live in the story, not here
+    expect(ids).toEqual(['dallas_sync', 'secret', 'dallas_motel'])
     expect(ids).toEqual(WORK.map((w) => w.id))
     expect(c.querySelector('[data-work="dallas_sync"]')?.getAttribute('data-focus')).toBe('true')
     expect(c.querySelector('section#projects')).not.toBeNull()
-  })
-
-  it('labels OMD work as built at OMD', () => {
-    const c = render()
-    for (const id of ['omdfarm', 'eco360']) {
-      expect(c.querySelector(`[data-work="${id}"]`)?.textContent).toContain('work.kind.omd')
-    }
   })
 
   it('on a wide screen, pins the scene and lets the page scroll carry the cards', () => {
