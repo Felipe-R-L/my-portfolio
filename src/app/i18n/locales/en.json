@@ -200,7 +200,8 @@
       "ifsp": {
         "title": "Engineering at IFSP",
         "text": "After high school I went on to study mechanical engineering at IFSP, and it was the programming classes in that course that brought me back to technology.",
-        "alt": "The entrance of IFSP, Sertãozinho campus"
+        "alt": "Felipe in his IFSP years, long-haired, by a lake",
+        "badge": "Instituto Federal de São Paulo logo"
       },
       "dallas": {
         "title": "Dallas Motel",
@@ -210,7 +211,7 @@
       "omd": {
         "title": "OMD do Brasil",
         "text": "I joined OMD do Brasil in 2024 as a developer, and I currently look after three platforms in production that serve 31 companies and 92 connected machines, where a report that took 30 seconds to open now opens in under 2.",
-        "alt": "An OMDfarm screen"
+        "alt": "Felipe at OMD do Brasil, in front of the company logo"
       },
       "hoje": {
         "title": "Today",
@@ -301,7 +302,7 @@
     "blog_label": "Latest article on the blog",
     "email_label": "Or by email",
     "rights": "All rights reserved.",
-    "credits": "Photos of Diamante (Eugenio Magurno) and IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons.",
+    "credits": "Photos of Diamante by Eugenio Magurno, CC BY-SA 3.0, via Wikimedia Commons. IFSP logo in the public domain.",
     "chips": {
       "prompt": "What do you need?",
       "site": {

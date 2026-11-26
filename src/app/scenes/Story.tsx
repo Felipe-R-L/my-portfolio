@@ -25,49 +25,94 @@ const ENTER_TO = 0.08;
 const TRAVEL_FROM = 0.19;
 const TRAVEL_TO = 0.85;
 
-/** The chapter's picture: a photo, or a drawing where no photo fits. */
+/** The night sky of an astronomy olympiad: orbits round a star (in focus or
+    under the pointer it takes its colours: a warm star, coloured planets). */
+function Orbit() {
+  return (
+    <svg viewBox="0 0 320 200">
+      <circle className="story-glow" cx="160" cy="100" r="34" />
+      <ellipse cx="160" cy="100" rx="140" ry="52" />
+      <ellipse cx="160" cy="100" rx="96" ry="36" />
+      <ellipse cx="160" cy="100" rx="52" ry="20" />
+      <circle className="story-star" cx="160" cy="100" r="7" />
+      <circle className="story-planet story-planet--a" cx="300" cy="100" r="5" />
+      <circle className="story-planet story-planet--b" cx="112" cy="75" r="4" />
+      <circle className="story-planet story-planet--c" cx="190" cy="118" r="3" />
+      <circle className="story-planet story-planet--d" cx="40" cy="78" r="2.5" />
+    </svg>
+  );
+}
+
+/** The first program everyone writes (it takes an editor's colours). */
+function Code() {
+  return (
+    <pre className="story-code">
+      <span>
+        <b className="tk-type">int</b> <b className="tk-fn">main</b>() {"{"}
+      </span>
+      <span>
+        {"  "}
+        <b className="tk-fn">printf</b>(<b className="tk-str">"Hello, world"</b>);
+      </span>
+      <span>
+        {"  "}
+        <b className="tk-key">return</b> <b className="tk-num">0</b>;
+      </span>
+      <span>
+        {"}"}
+        <i className="story-caret" />
+      </span>
+    </pre>
+  );
+}
+
+/** A silver medal on its ribbon, drawn (no photo of the medal itself): it
+    catches the light when the chapter is in focus or under the pointer. */
+function Medal() {
+  return (
+    <svg viewBox="0 0 320 200">
+      <defs>
+        <linearGradient id="medal-silver" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#f2f5f8" />
+          <stop offset="0.5" stopColor="#a9b3bc" />
+          <stop offset="1" stopColor="#dfe5ea" />
+        </linearGradient>
+        <linearGradient id="medal-shine" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0.35" stopColor="#fff" stopOpacity="0" />
+          <stop offset="0.5" stopColor="#fff" stopOpacity="0.75" />
+          <stop offset="0.65" stopColor="#fff" stopOpacity="0" />
+        </linearGradient>
+        <clipPath id="medal-disc">
+          <circle cx="160" cy="124" r="52" />
+        </clipPath>
+      </defs>
+      <path className="story-ribbon story-ribbon--l" d="M118 0h34l26 82h-30z" />
+      <path className="story-ribbon story-ribbon--r" d="M202 0h-34l-26 82h30z" />
+      <circle className="story-medal" cx="160" cy="124" r="52" fill="url(#medal-silver)" />
+      <circle cx="160" cy="124" r="42" fill="none" stroke="#7d8892" strokeWidth="1.5" />
+      <path
+        d="M160 98l7.6 15.4 17 2.5-12.3 12 2.9 16.9-15.2-8-15.2 8 2.9-16.9-12.3-12 17-2.5z"
+        fill="#8c97a1"
+      />
+      <text x="160" y="162" textAnchor="middle" fontSize="10" letterSpacing="2" fill="#6b7680" fontFamily="ui-monospace, monospace">
+        OBA
+      </text>
+      <g clipPath="url(#medal-disc)">
+        <rect className="story-shine" x="60" y="60" width="200" height="130" fill="url(#medal-shine)" />
+      </g>
+    </svg>
+  );
+}
+
+/** The chapter's picture: a photo (with the institution's mark, where there
+    is one), or a drawing where no photo fits. */
 function ChapterImage({ chapter }: { chapter: StoryChapter }) {
   const { t } = useTranslation();
   const img = chapter.image!;
   if ("figure" in img) {
     return (
       <figure className={`story-media story-media--${img.figure}`} aria-hidden="true">
-        {img.figure === "orbit" ? (
-          // the night sky of an astronomy olympiad: orbits round a star
-          // (in focus or under the pointer the sky takes its colours: a warm star,
-          // a blue, a red and an ochre planet)
-          <svg viewBox="0 0 320 200">
-            <circle className="story-glow" cx="160" cy="100" r="34" />
-            <ellipse cx="160" cy="100" rx="140" ry="52" />
-            <ellipse cx="160" cy="100" rx="96" ry="36" />
-            <ellipse cx="160" cy="100" rx="52" ry="20" />
-            <circle className="story-star" cx="160" cy="100" r="7" />
-            <circle className="story-planet story-planet--a" cx="300" cy="100" r="5" />
-            <circle className="story-planet story-planet--b" cx="112" cy="75" r="4" />
-            <circle className="story-planet story-planet--c" cx="190" cy="118" r="3" />
-            <circle className="story-planet story-planet--d" cx="40" cy="78" r="2.5" />
-          </svg>
-        ) : (
-          // the first program everyone writes
-          // (in focus or under the pointer it takes an editor's colours)
-          <pre className="story-code">
-            <span>
-              <b className="tk-type">int</b> <b className="tk-fn">main</b>() {"{"}
-            </span>
-            <span>
-              {"  "}
-              <b className="tk-fn">printf</b>(<b className="tk-str">"Hello, world"</b>);
-            </span>
-            <span>
-              {"  "}
-              <b className="tk-key">return</b> <b className="tk-num">0</b>;
-            </span>
-            <span>
-              {"}"}
-              <i className="story-caret" />
-            </span>
-          </pre>
-        )}
+        {img.figure === "orbit" ? <Orbit /> : img.figure === "medal" ? <Medal /> : <Code />}
       </figure>
     );
   }
@@ -76,13 +121,27 @@ function ChapterImage({ chapter }: { chapter: StoryChapter }) {
       <img
         src={img.src}
         srcSet={img.srcSet}
-        sizes="(max-width: 767px) 90vw, 24vw"
+        sizes="(max-width: 767px) 90vw, 26vw"
         alt={t(`story.chapters.${chapter.id}.alt`)}
         loading="lazy"
         decoding="async"
       />
+      {chapter.badge && (
+        <span className="story-badge">
+          <img src={chapter.badge} alt={t(`story.chapters.${chapter.id}.badge`)} loading="lazy" decoding="async" />
+        </span>
+      )}
     </figure>
   );
+}
+
+/** What fills the space behind the rail for one chapter. */
+function ChapterBackground({ chapter }: { chapter: StoryChapter }) {
+  const bg = chapter.bg;
+  if ("figure" in bg) {
+    return <div className={`story-bg-figure story-bg-figure--${bg.figure}`}>{bg.figure === "orbit" ? <Orbit /> : <Code />}</div>;
+  }
+  return <img className="story-bg-img" src={bg.src} srcSet={bg.srcSet} sizes="80vw" alt="" loading="lazy" decoding="async" />;
 }
 
 function Chapters({ focus, past = focus }: { focus: number; past?: number }) {
@@ -123,6 +182,7 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
   const distance = useRef(0);
   // where each chapter starts and how wide it is, inside the track (measured)
   const spans = useRef<{ left: number; width: number }[]>([]);
+  const bgRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
     const rail = railRef.current;
@@ -157,6 +217,18 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
         }
       });
       track.style.transform = `translate3d(${x + (1 - enter) * 80}px, 0, 0)`;
+      // the backgrounds: each weighs by how near its chapter is to the middle,
+      // slides at a third of the cards' speed and settles as it comes in, so
+      // one turns into the next as the focus moves
+      const step = spans.current.length > 1 ? spans.current[1].left - spans.current[0].left : window.innerWidth / 3;
+      spans.current.forEach((c, i) => {
+        const el = bgRefs.current[i];
+        if (!el) return;
+        const off = shift + c.left + c.width / 2 - mid;
+        const w = Math.max(0, 1 - Math.abs(off) / step);
+        el.style.opacity = (w * enter).toFixed(3);
+        el.style.transform = `translate3d(${(off * 0.3).toFixed(1)}px, 0, 0) scale(${(1.08 - 0.08 * w).toFixed(4)})`;
+      });
       // before anything is laid out (or with no layout at all) the index rules
       if (spans.current.some((c) => c.width > 0)) {
         setPast(firstIn);
@@ -186,6 +258,13 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
   return (
     <div ref={railRef} className="story-rail" data-no-reveal="">
       <h2 className="sr-only">{t("story.title")}</h2>
+      <div className="story-bg" aria-hidden="true">
+        {STORY.map((c, i) => (
+          <div key={c.id} ref={(el) => (bgRefs.current[i] = el)} className="story-bg-layer" data-bg={c.id}>
+            <ChapterBackground chapter={c} />
+          </div>
+        ))}
+      </div>
       <div ref={trackRef} className="story-track">
         <Chapters focus={focus} past={past} />
       </div>

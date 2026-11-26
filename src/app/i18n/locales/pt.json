@@ -200,7 +200,8 @@
       "ifsp": {
         "title": "Engenharia no IFSP",
         "text": "Depois do ensino médio fui estudar engenharia mecânica no IFSP, e foram justamente as aulas de programação que me fizeram voltar para a tecnologia.",
-        "alt": "Entrada do IFSP, câmpus Sertãozinho"
+        "alt": "Felipe na época do IFSP, de cabelo comprido, à beira de um lago",
+        "badge": "Logo do Instituto Federal de São Paulo"
       },
       "dallas": {
         "title": "Dallas Motel",
@@ -210,7 +211,7 @@
       "omd": {
         "title": "OMD do Brasil",
         "text": "Entrei na OMD do Brasil em 2024 como desenvolvedor, e atualmente cuido de três plataformas em produção que atendem 31 empresas e 92 máquinas conectadas, nas quais um relatório que levava 30 segundos para abrir hoje abre em menos de 2.",
-        "alt": "Tela do OMDfarm"
+        "alt": "Felipe na OMD do Brasil, em frente ao logo da empresa"
       },
       "hoje": {
         "title": "Hoje",
@@ -301,7 +302,7 @@
     "blog_label": "Último artigo no blog",
     "email_label": "Ou por e-mail",
     "rights": "Todos os direitos reservados.",
-    "credits": "Fotos de Diamante (Eugenio Magurno) e do IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons.",
+    "credits": "Fotos de Diamante por Eugenio Magurno, CC BY-SA 3.0, via Wikimedia Commons. Logo do IFSP em domínio público.",
     "chips": {
       "prompt": "O que você precisa?",
       "site": {

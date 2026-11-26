@@ -308,3 +308,162 @@
     opacity: 1;
   }
 }
+
+/* ---------- the backgrounds behind the rail (desktop) ---------- */
+
+.story-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.story-rail .story-track {
+  position: relative;
+  z-index: 1;
+}
+
+/* one per chapter, weighed by how near its chapter is to the middle (Story.tsx
+   sets opacity and transform); dark under the words, clearer up and right */
+.story-bg-layer {
+  position: absolute;
+  inset: -4% -8%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.story-bg-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(5 6 8 / 0.05) 0%, rgb(5 6 8 / 0.3) 50%, rgb(5 6 8 / 0.85) 100%),
+    linear-gradient(90deg, rgb(5 6 8 / 0.55) 0%, transparent 40%);
+}
+
+.story-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+}
+
+/* the photos (not the drawn textures) stay further back */
+.story-bg-layer:is([data-bg="dallas"], [data-bg="hoje"]) .story-bg-img {
+  opacity: 0.42;
+}
+
+.story-bg-figure {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* the sky, large, in its colours */
+.story-bg-figure--orbit svg {
+  width: 120%;
+  height: auto;
+  opacity: 0.95;
+}
+
+.story-bg-figure--orbit ellipse {
+  fill: none;
+  stroke: rgb(159 195 214 / 0.5);
+  stroke-width: 0.6;
+}
+
+.story-bg-figure--orbit .story-star { fill: #ffd27a; }
+.story-bg-figure--orbit .story-glow { fill: rgb(255 196 110 / 0.2); opacity: 1; transform: none; }
+.story-bg-figure--orbit .story-planet--a { fill: #6fb6ff; }
+.story-bg-figure--orbit .story-planet--b { fill: #ff7a59; }
+.story-bg-figure--orbit .story-planet--c { fill: #e7c36a; }
+.story-bg-figure--orbit .story-planet--d { fill: #b48cff; }
+
+/* the code, large, in an editor's colours, laid back in perspective */
+.story-bg-figure--code .story-code {
+  font-size: clamp(2rem, 4.2vw, 4.4rem);
+  gap: 0.6rem;
+  opacity: 0.4;
+  color: #c9d3dc;
+  transform: perspective(1200px) rotateY(-16deg) rotateX(6deg);
+}
+
+.story-bg-figure--code .tk-type,
+.story-bg-figure--code .tk-key { color: #ff7ab6; }
+.story-bg-figure--code .tk-fn { color: #7cc7ff; }
+.story-bg-figure--code .tk-str { color: #a6e3a1; }
+.story-bg-figure--code .tk-num { color: #f9b46b; }
+.story-bg-figure--code .story-caret { opacity: 0.8; }
+
+/* ---------- the medal ---------- */
+
+.story-media--medal {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(159 195 214 / 0.25);
+  background: radial-gradient(ellipse at 50% 60%, rgb(200 210 220 / 0.1), transparent 70%);
+}
+
+.story-media--medal svg {
+  height: 92%;
+  width: auto;
+}
+
+.story-ribbon {
+  transition: fill 0.8s ease;
+}
+.story-ribbon--l { fill: #3d4a56; }
+.story-ribbon--r { fill: #2c3742; }
+
+.story-medal {
+  filter: saturate(0.4) brightness(0.8);
+  transition: filter 0.8s ease;
+}
+
+.story-shine {
+  transform: translateX(-220px);
+}
+
+.story-chapter:is([data-focus="true"], :hover) .story-ribbon--l { fill: #2f6fbf; }
+.story-chapter:is([data-focus="true"], :hover) .story-ribbon--r { fill: #f2c94c; }
+.story-chapter:is([data-focus="true"], :hover) .story-medal { filter: none; }
+.story-chapter:is([data-focus="true"], :hover) .story-shine {
+  animation: story-shine 1.6s var(--ease-travel) 0.2s 1 both;
+}
+
+@keyframes story-shine {
+  from { transform: translateX(-220px); }
+  to { transform: translateX(220px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-chapter:is([data-focus="true"], :hover) .story-shine {
+    animation: none;
+  }
+}
+
+/* ---------- the institution's mark over a photo ---------- */
+
+.story-media {
+  position: relative;
+}
+
+.story-badge {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.92);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.35);
+}
+
+.story-badge img {
+  height: 22px;
+  width: auto;
+  filter: none !important;
+  transform: none !important;
+}
