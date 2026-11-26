@@ -34,9 +34,10 @@ export const STORY: readonly StoryChapter[] = [
   {
     id: "ifsp",
     year: "2022",
-    image: { src: `${S}/ifsp-felipe-1280.webp`, srcSet: `${S}/ifsp-felipe-640.webp 640w, ${S}/ifsp-felipe-1280.webp 1280w` },
+    image: { src: `${S}/ifsp-turma-1280.webp`, srcSet: `${S}/ifsp-turma-640.webp 640w, ${S}/ifsp-turma-1280.webp 1280w` },
     badge: `${S}/ifsp-logo.svg`,
-    bg: { src: `${S}/bg-gears-1200.webp`, srcSet: `${S}/bg-gears-1200.webp 1200w, ${S}/bg-gears-2400.webp 2400w` },
+    // his notebook: the CD car of that class, ink lifted off the page
+    bg: { src: `${S}/bg-sketch-1200.webp`, srcSet: `${S}/bg-sketch-1200.webp 1200w, ${S}/bg-sketch-2400.webp 2400w` },
   },
   {
     id: "dallas",

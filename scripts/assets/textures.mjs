@@ -4,8 +4,8 @@
 //
 //   node scripts/assets/textures.mjs   →  public/assets/story/bg-<name>-{2400,1200}.webp
 //
-// gears   IFSP, mechanical engineering: a technical drawing of meshed gears,
-//         centre marks and dimension lines over a faint grid.
+// (IFSP's background is his own notebook sketch, not generated: the gears
+// that stood there were replaced on 2026-11-26.)
 // pivots  OMD do Brasil, agriculture seen from above: centre-pivot circles and
 //         fields of crop rows, like a satellite view, drawn in lines.
 import { mkdirSync } from "node:fs";
@@ -20,52 +20,6 @@ const line = (a) => LINE.replace("%a", a);
 
 let seed = 7;
 const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
-
-function gear(cx, cy, r, teeth, rot = 0) {
-  // a gear outline: teeth as trapezoids on the pitch circle
-  const pts = [];
-  const add = 0.09 * r;
-  for (let i = 0; i < teeth; i++) {
-    const a = rot + (i / teeth) * Math.PI * 2;
-    const w = (Math.PI * 2) / teeth;
-    const p = (ang, rad) => pts.push([cx + Math.cos(ang) * rad, cy + Math.sin(ang) * rad]);
-    p(a - w * 0.5, r - add);
-    p(a - w * 0.28, r - add);
-    p(a - w * 0.18, r + add);
-    p(a + w * 0.18, r + add);
-    p(a + w * 0.28, r - add);
-  }
-  const d = `M${pts.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join("L")}Z`;
-  let s = `<path d="${d}" fill="none" stroke="${line(0.55)}" stroke-width="2"/>`;
-  s += `<circle cx="${cx}" cy="${cy}" r="${(r * 0.62).toFixed(1)}" fill="none" stroke="${line(0.28)}" stroke-width="1.2"/>`;
-  s += `<circle cx="${cx}" cy="${cy}" r="${(r * 0.16).toFixed(1)}" fill="none" stroke="${line(0.55)}" stroke-width="1.6"/>`;
-  // pitch circle, dashed, and centre marks
-  s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${line(0.22)}" stroke-width="1" stroke-dasharray="14 8 3 8"/>`;
-  s += `<path d="M${cx - r * 1.25} ${cy}H${cx + r * 1.25}M${cx} ${cy - r * 1.25}V${cy + r * 1.25}" stroke="${line(0.22)}" stroke-width="1" stroke-dasharray="20 6 4 6"/>`;
-  return s;
-}
-
-function gears() {
-  let s = `<rect width="100%" height="100%" fill="#060a10"/>`;
-  // a draughtsman's grid
-  for (let x = 0; x <= W; x += 40) s += `<path d="M${x} 0V${H}" stroke="${line(x % 200 === 0 ? 0.08 : 0.035)}" stroke-width="1"/>`;
-  for (let y = 0; y <= H; y += 40) s += `<path d="M0 ${y}H${W}" stroke="${line(y % 200 === 0 ? 0.08 : 0.035)}" stroke-width="1"/>`;
-  // a train of meshed gears across the sheet
-  const train = [
-    [520, 620, 300, 24],
-    [520 + 300 + 190, 620 + 120, 190, 15],
-    [1010 + 190 + 120, 740 - 60, 120, 10],
-    [1320 + 120 + 260, 680 + 230, 260, 21],
-    [1960 + 0, 910 - 470, 190, 15],
-  ];
-  train.forEach(([cx, cy, r, t], i) => (s += gear(cx, cy, r, t, i * 0.13)));
-  // dimension lines with ticks, like a drawing's annotations
-  const dim = (x1, y1, x2, y2) => `<path d="M${x1} ${y1}L${x2} ${y2}M${x1} ${y1 - 12}V${y1 + 12}M${x2} ${y2 - 12}V${y2 + 12}" stroke="${line(0.35)}" stroke-width="1.2"/>`;
-  s += dim(220, 1080, 820, 1080) + dim(1440, 1260, 1960, 1260) + dim(1770, 200, 2150, 200);
-  // a title block, bottom right
-  s += `<rect x="1880" y="1330" width="460" height="120" fill="none" stroke="${line(0.35)}" stroke-width="1.4"/><path d="M1880 1370H2340M2110 1330V1450" stroke="${line(0.25)}" stroke-width="1"/>`;
-  return s;
-}
 
 function pivots() {
   let s = `<rect width="100%" height="100%" fill="#060a09"/>`;
@@ -97,7 +51,7 @@ function pivots() {
 mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch({ executablePath: "/usr/bin/google-chrome" });
 const page = await browser.newPage({ viewport: { width: W, height: H } });
-for (const [name, draw] of [["gears", gears], ["pivots", pivots]]) {
+for (const [name, draw] of [["pivots", pivots]]) {
   await page.setContent(`<html><body style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">${draw()}</svg></body></html>`);
   const png = `${OUT}bg-${name}.png`;
   await page.screenshot({ path: png });
