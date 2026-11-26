@@ -251,7 +251,7 @@
 }
 
 .talk[data-mode="list"] {
-  background: #05070a url("/assets/profile/scene-wide-color.webp") center / cover no-repeat;
+  background: #05070a url("/assets/profile/talk-side-2400.webp") center / cover no-repeat;
 }
 
 @media (max-width: 767px) {

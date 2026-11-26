@@ -196,43 +196,41 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
       rail.style.visibility = p <= 0 ? "hidden" : "visible";
       const x = -distance.current * span(p, TRAVEL_FROM, TRAVEL_TO);
       // By where the chapters are, not by their index: a chapter steps out of
-      // the way once its left edge reaches the portrait, and the one in focus
-      // is the nearest to the middle of the space beside it. (Reads first,
+      // the way once its left edge reaches the portrait. (Reads first,
       // writes after: no layout is forced.)
       const ring = document.querySelector(".city-ring")?.getBoundingClientRect();
       const railLeft = rail.getBoundingClientRect().left;
       const edge = (ring && ring.width > 0 ? ring.right : railLeft) + 24;
-      const mid = (edge + window.innerWidth) / 2;
       const shift = railLeft + x + (1 - enter) * 80;
       let firstIn = spans.current.length;
-      let nearest = 0;
-      let best = Infinity;
       spans.current.forEach((c, i) => {
-        const left = shift + c.left;
-        if (left >= edge && firstIn === spans.current.length) firstIn = i;
-        const d = Math.abs(left + c.width / 2 - mid);
-        if (left >= edge && d < best) {
-          best = d;
-          nearest = i;
-        }
+        if (shift + c.left >= edge && firstIn === spans.current.length) firstIn = i;
       });
       track.style.transform = `translate3d(${x + (1 - enter) * 80}px, 0, 0)`;
-      // the backgrounds: each weighs by how near its chapter is to the middle,
-      // slides at a third of the cards' speed and settles as it comes in, so
-      // one turns into the next as the focus moves
+      // the backgrounds follow the cards, measured from the portrait: a
+      // chapter's background is all there while its card is the first one
+      // beside the portrait, and it has turned into the next one's by the
+      // time the card slips behind (the first card starts at the portrait,
+      // so OBA's sky is the opening). They slide at a third of the cards'
+      // speed and settle as they come in; the last one lands with the end.
       const step = spans.current.length > 1 ? spans.current[1].left - spans.current[0].left : window.innerWidth / 3;
-      spans.current.forEach((c, i) => {
-        const el = bgRefs.current[i];
+      const lead = spans.current.length ? railLeft + spans.current[0].left - edge : 0;
+      const geo = (-x - lead) / step + 0.5;
+      const at = Math.min(STORY.length - 1, Math.max(0, geo, span(p, TRAVEL_FROM, TRAVEL_TO) * (STORY.length - 1)));
+      bgRefs.current.forEach((el, i) => {
         if (!el) return;
-        const off = shift + c.left + c.width / 2 - mid;
-        const w = Math.max(0, 1 - Math.abs(off) / step);
+        const off = (i - at) * step;
+        // a plateau, then the morph in the middle half of the way
+        const w = Math.min(1, Math.max(0, 1.5 - 2 * Math.abs(i - at)));
         el.style.opacity = (w * enter).toFixed(3);
         el.style.transform = `translate3d(${(off * 0.3).toFixed(1)}px, 0, 0) scale(${(1.08 - 0.08 * w).toFixed(4)})`;
       });
       // before anything is laid out (or with no layout at all) the index rules
       if (spans.current.some((c) => c.width > 0)) {
         setPast(firstIn);
-        setFocus(nearest);
+        // the card in focus is the one whose background is up, unless it
+        // has already slid behind the portrait
+        setFocus(Math.min(STORY.length - 1, Math.max(firstIn, Math.round(at))));
       } else {
         const i = chapterAt(span(p, TRAVEL_FROM, TRAVEL_TO), STORY.length);
         setPast(i);

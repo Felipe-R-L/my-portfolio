@@ -43,21 +43,22 @@ const OFFLINE: FrameContent = {
 };
 
 /**
- * Retorno: Felipe on the rooftop of the opening, now facing the visitor (his
- * own photo, chosen 2026-11-26: the hero's looks aside). The shot starts on
- * his face and eases back as the frame moves aside to rest beside the
- * invitation. EXIF and location stripped on export.
+ * Retorno: Felipe on the rooftop of the opening, now looking aside over the
+ * city (his own photo; the hero has the one facing the visitor, swapped on
+ * 2026-11-26). The shot starts on his face and eases back as the frame moves
+ * aside to rest beside the invitation. EXIF and location stripped on export.
  */
-// on the face: at scale 1.45 a half-height of 0.345 of the photo shows
-const CITY_FROM = { s: 1.45, fx: 0.51, fy: 0.36 };
+// on the face: at scale 1.45 a half-height of 0.345 of the photo shows, so
+// the face (at 0.26 of the height) is framed as high as the edge allows
+const CITY_FROM = { s: 1.45, fx: 0.53, fy: 0.35 };
 // and it settles a little closer than the whole photo, him in the middle of
 // the framed photo that rests beside the invitation
 const CITY_TO = { s: 1.06, fx: 0.5, fy: 0.48 };
 const ease = (v: number) => (v < 0.5 ? 4 * v * v * v : 1 - (-2 * v + 2) ** 3 / 2);
 const CITY: FrameContent = {
   id: "city",
-  image: { src: "/assets/profile/talk-front-1200.webp", srcSet: "/assets/profile/talk-front-1200.webp 1200w, /assets/profile/talk-front-2400.webp 2400w" },
-  blur: "/assets/profile/talk-front-blur.webp",
+  image: { src: "/assets/profile/talk-side-1200.webp", srcSet: "/assets/profile/talk-side-1200.webp 1200w, /assets/profile/talk-side-2400.webp 2400w" },
+  blur: "/assets/profile/talk-side-blur.webp",
   drift: (t) => {
     const e = ease(Math.min(1, Math.max(0, (t - 0.08) / 0.62)));
     const s = Math.pow(CITY_FROM.s, 1 - e) * Math.pow(CITY_TO.s, e);

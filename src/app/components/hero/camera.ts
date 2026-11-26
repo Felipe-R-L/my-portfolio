@@ -28,11 +28,12 @@ export const SHOT_WIDE: Shot = {
   matte: "/assets/profile/scene-wide-matte.webp",
   width: 3400,
   height: 2125,
-  face: { x: 1790, y: 543 },
-  // Lower left of the frame: the near blocks, which the phone photographed
-  // sharp. The distant skyline is haze in the original, and no upscaling
+  // Facing the camera (his photo 42EEEC6B, chosen 2026-11-26).
+  face: { x: 1743, y: 640 },
+  // Left of the frame, under the glass rail: the near blocks, clear of his
+  // arm. The distant skyline is haze in the original, and no upscaling
   // brings back detail that was never captured.
-  start: { x: 0, y: 1000, w: 1141, h: 900 },
+  start: { x: 0, y: 850, w: 918, h: 723 },
   end: () => ({ x: 0, y: 0, w: 3400, h: 2125 }),
 };
 
@@ -42,14 +43,14 @@ export const SHOT_TALL: Shot = {
   matte: "/assets/profile/scene-tall-matte.webp",
   width: 1800,
   height: 2185,
-  face: { x: 933, y: 1262 },
-  // Lower-left corner: blocks and the railing, clear of the arm.
-  start: { x: 0, y: 1075, w: 323, h: 1025 },
+  face: { x: 923, y: 1036 },
+  // Left edge: blocks under the railing, clear of the arm.
+  start: { x: 0, y: 1140, w: 330, h: 520 },
   // Centred on the person, head in the upper third.
   end: (vw, vh) => {
     const h = 1589;
     const w = (h * vw) / vh;
-    return { x: 826 - w / 2, y: 576, w, h };
+    return { x: 905 - w / 2, y: 353, w, h };
   },
 };
 
