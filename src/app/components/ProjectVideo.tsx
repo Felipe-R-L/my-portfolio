@@ -50,7 +50,8 @@ export function ProjectVideo({
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    if (active) v.play().catch(() => {});
+    // play() returns a promise in browsers today, nothing in older ones
+    if (active) void v.play()?.catch(() => {});
     else v.pause();
   }, [active, armed]);
 

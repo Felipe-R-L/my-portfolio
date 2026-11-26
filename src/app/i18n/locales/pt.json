@@ -332,7 +332,7 @@
         "text": "Quem entra na equipe aprende num modo treino separado, que tem as mesmas telas e nenhum dado real, então um erro cometido ali não muda o caixa de ninguém."
       }
     },
-    "video_note": "O vídeo mostra isso acontecendo, gravado em modo treino, com dados fictícios.",
+    "video_note": "O vídeo foi gravado com a internet desligada de verdade, em modo treino e com dados fictícios, e o check-in feito ali chegou ao servidor sozinho assim que a rede voltou.",
     "still_note": "Tela do sistema em modo treino, sem dados reais."
   },
   "plano": {

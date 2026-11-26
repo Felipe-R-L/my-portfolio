@@ -179,7 +179,7 @@ export function CaseLayer({
           {t("work.case.back")}
         </button>
 
-        <div ref={mediaRef} className="case-media" style={shown.image.ratio ? { aspectRatio: String(shown.image.ratio) } : undefined}>
+        <div ref={mediaRef} className="case-media" style={{ aspectRatio: String(shown.video?.detail || shown.video?.card ? 1.6 : (shown.image.ratio ?? 1.6)) }}>
           <ProjectVideo sources={shown.video?.detail ?? shown.video?.card} image={shown.image} active wide />
         </div>
         {shown.illustrative && <p className="case-note">{t(`${base}.note`)}</p>}

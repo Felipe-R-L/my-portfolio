@@ -18,6 +18,7 @@ vi.mock('react-i18next', () => ({
 }))
 
 import { Proof, ENTRIES } from '../../src/app/scenes/Proof'
+import { WORK } from '../../src/app/data/work'
 
 let root: Root | null = null
 let container: HTMLDivElement | null = null
@@ -57,8 +58,9 @@ describe('em uso (telemetria)', () => {
 
   it('never promises a video that has not been recorded', () => {
     const c = render()
-    // no recording yet: the note describes the still
-    expect(c.querySelector('.proof-note')?.textContent).toBe('telemetria.still_note')
+    // the note says what is on screen: the recording when there is one, else the still
+    const recorded = !!WORK.find((w) => w.id === 'dallas_sync')?.video?.detail
+    expect(c.querySelector('.proof-note')?.textContent).toBe(recorded ? 'telemetria.video_note' : 'telemetria.still_note')
     for (const bundle of [pt, en]) {
       for (const id of ENTRIES) expect(bundle.telemetria.entries[id].text).not.toMatch(/vídeo|video/i)
     }
