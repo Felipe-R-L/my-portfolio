@@ -21,7 +21,8 @@ export type WorkItem = {
   /** The case's address: /work/<slug>. */
   slug: string;
   kind: WorkKind;
-  image: { src: string; srcSet?: string; lockup?: boolean };
+  /** `ratio`: width / height of the screen, so the case shows it whole. */
+  image: { src: string; srcSet?: string; lockup?: boolean; ratio?: number };
   href: string;
   loginRequired?: boolean;
   /** The screens are illustrations, and the card says so. */
@@ -44,7 +45,7 @@ export const WORK: readonly WorkItem[] = [
     id: "dallas_sync",
     slug: "dallas-sync",
     kind: "sistema",
-    image: { src: `${P}/dallas-sync-1440.webp`, srcSet: `${P}/dallas-sync-720.webp 720w, ${P}/dallas-sync-1440.webp 1440w` },
+    image: { src: `${P}/dallas-sync-1440.webp`, srcSet: `${P}/dallas-sync-720.webp 720w, ${P}/dallas-sync-1440.webp 1440w`, ratio: 1440 / 780 },
     href: "https://dallassync.com.br",
     loginRequired: true,
     illustrative: true,
@@ -56,7 +57,7 @@ export const WORK: readonly WorkItem[] = [
     id: "secret",
     slug: "secret-boutique",
     kind: "loja",
-    image: { src: `${P}/secret.webp`, srcSet: `${P}/secret-720.webp 720w, ${P}/secret.webp 1919w` },
+    image: { src: `${P}/secret.webp`, srcSet: `${P}/secret-720.webp 720w, ${P}/secret.webp 1919w`, ratio: 1919 / 976 },
     href: "https://secret-boutique.com.br",
     stack: ["Next.js 16", "Supabase", "Mercado Pago"],
     parts: ["context", "problem", "decision", "result"],
@@ -65,7 +66,7 @@ export const WORK: readonly WorkItem[] = [
     id: "dallas_motel",
     slug: "dallas-motel",
     kind: "site",
-    image: { src: `${P}/dallas.webp`, srcSet: `${P}/dallas-720.webp 720w, ${P}/dallas.webp 1919w` },
+    image: { src: `${P}/dallas.webp`, srcSet: `${P}/dallas-720.webp 720w, ${P}/dallas.webp 1919w`, ratio: 1919 / 976 },
     href: "https://jrdallasmotel.com.br",
     stack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase", "Vercel"],
     parts: ["context", "problem", "decision", "result"],

@@ -19,11 +19,32 @@ function frameBoxFor(id: string): Box | null {
   return { x: r.left, y: r.top, w: r.width, h: r.height };
 }
 
-/** The transform that puts `to` exactly over `from` (uniform scale, 16:10). */
-function flipFrom(from: Box, to: DOMRect) {
-  const s = from.w / to.width;
-  return `translate(${from.x - to.left}px, ${from.y - to.top}px) scale(${s})`;
+/** Everything on the case's surface but its opening picture. */
+function words(root: HTMLElement): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>(".case-sheet > :not(.case-media)"));
 }
+
+/**
+ * The keyframe that puts the case's picture exactly where the frame shows it.
+ * The frame crops the screen to 16:10 (cover, from the top) and the case
+ * shows it whole, so the picture starts as large as the frame's crop implies
+ * and clipped to the frame, and both open out together.
+ */
+function flipFrom(from: Box, to: DOMRect): Keyframe {
+  const ratio = to.width / to.height;
+  const w = ratio > from.w / from.h ? from.h * ratio : from.w;
+  const h = w / ratio;
+  const s = w / to.width;
+  const side = (w - from.w) / 2 / s;
+  const bottom = (h - from.h) / s;
+  return {
+    transform: `translate(${from.x - (w - from.w) / 2 - to.left}px, ${from.y - to.top}px) scale(${s})`,
+    clipPath: `inset(0px ${side}px ${bottom}px ${side}px round ${18 / s}px)`,
+  };
+}
+
+/** The picture at rest in the case. */
+const AT_REST: Keyframe = { transform: "none", clipPath: "inset(0px 0px 0px 0px round 18px)" };
 
 /**
  * The surface: a destination's case, told as a problem solved. It opens over
@@ -74,11 +95,11 @@ export function CaseLayer({
     };
   }, [shown, lenisRef]);
 
-  // T2 in
+  // T2 in, once the case is on screen (it mounts a render after `item` arrives)
   useLayoutEffect(() => {
     const root = rootRef.current;
     const media = mediaRef.current;
-    if (!item || !root || !media) return;
+    if (!item || shown !== item || !root || !media) return;
     const opts = { duration: DURATION.flip * 1000, easing: EASE.arrive.css, fill: "backwards" as const };
     if (mode === "list") {
       root.animate([{ opacity: 0 }, { opacity: 1 }], { duration: DURATION.fade * 1000, fill: "backwards" });
@@ -88,9 +109,12 @@ export function CaseLayer({
       root.animate([{ transform: "translateY(100%)" }, { transform: "translateY(0)" }], opts);
       return;
     }
-    root.animate([{ clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0 0 0 0)" }], opts);
-    if (from) media.animate([{ transform: flipFrom(from, media.getBoundingClientRect()) }, { transform: "none" }], opts);
-  }, [item, from, mode]);
+    // the floor rises under the picture, which flies over it from the frame;
+    // the words come in once the floor is under them
+    root.querySelector(".case-ground")?.animate([{ clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0 0 0 0)" }], opts);
+    for (const el of words(root)) el.animate([{ opacity: 0 }, { opacity: 1 }], { ...opts, delay: opts.duration * 0.45, duration: opts.duration * 0.55 });
+    if (from) media.animate([flipFrom(from, media.getBoundingClientRect()), AT_REST], opts);
+  }, [item, shown, from, mode]);
 
   // T2 out: back into the frame, then gone
   useEffect(() => {
@@ -108,8 +132,10 @@ export function CaseLayer({
     else {
       // the frame is underneath again: the page did not move
       const back = frameBoxFor(shown.id);
-      const anims = [root.animate([{ clipPath: "inset(0 0 0 0)" }, { clipPath: "inset(100% 0 0 0)" }], opts)];
-      if (back) anims.push(media.animate([{ transform: "none" }, { transform: flipFrom(back, media.getBoundingClientRect()) }], opts));
+      const ground = root.querySelector(".case-ground");
+      const anims = words(root).map((el) => el.animate([{ opacity: 1 }, { opacity: 0 }], { ...opts, duration: opts.duration * 0.4 }));
+      if (ground) anims.push(ground.animate([{ clipPath: "inset(0 0 0 0)" }, { clipPath: "inset(100% 0 0 0)" }], opts));
+      if (back) anims.push(media.animate([AT_REST, flipFrom(back, media.getBoundingClientRect())], opts));
       done = Promise.all(anims.map((a) => a.finished));
     }
     done.then(() => setShown(null)).catch(() => setShown(null));
@@ -136,6 +162,7 @@ export function CaseLayer({
       aria-labelledby="case-title"
       data-lenis-prevent=""
     >
+      <div className="case-ground" aria-hidden="true" />
       <article className="case-sheet">
         {/* phone: a swipe down on the handle closes the sheet */}
         <div
@@ -152,7 +179,7 @@ export function CaseLayer({
           {t("work.case.back")}
         </button>
 
-        <div ref={mediaRef} className="case-media">
+        <div ref={mediaRef} className="case-media" style={shown.image.ratio ? { aspectRatio: String(shown.image.ratio) } : undefined}>
           <ProjectVideo sources={shown.video?.detail ?? shown.video?.card} image={shown.image} active wide />
         </div>
         {shown.illustrative && <p className="case-note">{t(`${base}.note`)}</p>}
