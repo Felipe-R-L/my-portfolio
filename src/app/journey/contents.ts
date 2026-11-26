@@ -50,9 +50,9 @@ const OFFLINE: FrameContent = {
  */
 // on the face: at scale 1.5 a half-width of 0.33 of the photo shows
 const CITY_FROM = { s: 1.5, fx: 0.5, fy: 0.44 };
-// and it settles a little closer than the whole photo, with him in the
-// right-hand third: the invitation is set on the left, clear of his face
-const CITY_TO = { s: 1.25, fx: 0.41, fy: 0.5 };
+// and it settles a little closer than the whole photo, him in the middle of
+// the framed photo that rests beside the invitation
+const CITY_TO = { s: 1.25, fx: 0.5, fy: 0.46 };
 const ease = (v: number) => (v < 0.5 ? 4 * v * v * v : 1 - (-2 * v + 2) ** 3 / 2);
 const CITY: FrameContent = {
   id: "city",
