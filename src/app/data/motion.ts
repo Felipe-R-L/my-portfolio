@@ -7,8 +7,8 @@ import { center, type ClipMeta, type Rect } from "../components/motion/clip";
  * camera  every project: the screen sits tilted like a device on a desk, the
  *         camera dives into each gesture where the hand clicks (Dallas Sync:
  *         the plate, the confirm, the room whose clock starts; the shop: the
- *         variant and its price, the cart, Pix; the motel: the day's tab and
- *         the suites' totals) and settles back for the loop. Felipe, after
+ *         variant and its price, the cart, Pix; the motel: from the hero down
+ *         its page, the day's tabs, the story, the menu) and settles back for the loop. Felipe, after
  *         seeing a crops version for the shop and the motel: the camera
  *         everywhere, the crops read far and small.
  * plain   Em uso: the camera holds still (the chapter's idea); only the hand.
@@ -100,33 +100,31 @@ export const MOTION: Record<string, MotionSpec> = {
 
   "dallas-motel-detail": {
     mode: "camera",
-    // the totals sit low on the screen
-    captionTop: true,
-    // the day's tab, then the totals of the suites, for each day
-    camera: ({ boxes: B, clicks: C, duration: end }) => {
+    // from the hero down the page: few keys, far apart, so the camera never
+    // stops and starts (each pair of keys eases in and out). It leans in on
+    // the day's tabs as the hand picks the weekend, rides the scroll flat
+    // through the story, and comes a little closer to the menu.
+    camera: ({ marks: M, boxes: B, duration: end }) => {
       const tabs = center(B.tabs);
-      const totals = { rx: 0, ry: 0, s: 1.15, x: 720, y: 790 };
-      const tab = { rx: 0, ry: 0, s: 1.7, x: tabs.x, y: tabs.y + 40 };
+      const menu = center(B.menu);
       return [
         { t: 0, ...HOME },
-        { t: C[0] - 0.5, ...tab },
-        { t: C[0] + 0.1, ...tab },
-        { t: C[0] + 0.8, ...totals },
-        { t: C[1] - 0.7, ...totals },
-        { t: C[1] - 0.1, ...tab },
-        { t: C[1] + 0.6, ...totals },
-        { t: C[2] - 0.7, ...totals },
-        { t: C[2] - 0.1, ...tab },
-        { t: C[2] + 0.6, ...totals },
-        { t: end + 0.2, ...totals },
+        { t: M.hero, ...FLAT },
+        { t: M.suites - 0.3, ...FLAT },
+        { t: M.suites + 0.6, rx: 0, ry: 0, s: 1.36, x: tabs.x - 250, y: tabs.y + 200 },
+        { t: M.weekend + 0.2, rx: 0, ry: 0, s: 1.36, x: tabs.x - 250, y: tabs.y + 200 },
+        { t: M.weekend + 1.6, ...FLAT },
+        { t: M.menu - 0.6, ...FLAT },
+        { t: M.menu + 0.6, rx: 0, ry: 0, s: 1.12, ...menu },
+        { t: end, rx: 0, ry: 0, s: 1.12, ...menu },
         { t: end + 1.2, ...HOME },
       ];
     },
-    captions: ({ clicks: C, duration: end }) => [
-      { from: 0.3, to: C[0] + 0.3, key: "days" },
-      { from: C[0] + 0.6, to: C[1] - 0.2, key: "weekend" },
-      { from: C[1] + 0.5, to: C[2] - 0.2, key: "holiday" },
-      { from: C[2] + 0.5, to: end + 0.6, key: "weekday" },
+    captions: ({ marks: M, duration: end }) => [
+      { from: 0.3, to: M.suites - 0.6, key: "hero" },
+      { from: M.suites - 0.1, to: M.weekend + 1.0, key: "days" },
+      { from: M.weekend + 2.6, to: M.legacy + 1.6, key: "legacy" },
+      { from: M.menu - 0.3, to: end + 0.6, key: "menu" },
     ],
   },
 

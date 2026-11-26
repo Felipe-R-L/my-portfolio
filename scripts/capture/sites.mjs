@@ -120,33 +120,42 @@ if (which === "motel-card" || which === "all") {
 }
 
 if (which === "motel-detail" || which === "all") {
+  // From the hero down the page (Felipe, 2026-11-26): the site as a visitor
+  // meets it, the suites and the day's price, the motel's story, the menu.
+  // Slow eased glides, so the take has no wheel jolts.
   const { browser, page, human, record, blocked } = await session(22);
   await page.goto(MOTEL, { waitUntil: "networkidle" });
-  await page.waitForTimeout(1500);
-  // the prices: they change with the day, which is what the site answers
-  const weekend = page.getByRole("button", { name: /Fim de semana/ }).first();
-  // the tabs near the top, the prices of the first row in view under them
-  await weekend.scrollIntoViewIfNeeded();
-  await page.evaluate((y) => scrollBy(0, y), (await weekend.boundingBox()).y - 150);
-  await page.waitForTimeout(1200);
-  await human.move(900, 520);
+  await page.waitForTimeout(1800);
+  const top = async (sel) => page.evaluate((s) => document.querySelector(s).getBoundingClientRect().top, sel);
+  await human.move(980, 640);
   const take = await record();
   await human.wait(900);
   take.mark("in");
-  // the first row of suites, whose prices change with the day
-  const price = page.getByText(/^R\$\s?\d/).first();
+  await human.wait(1700);
+  take.mark("hero");
+  // the suites, with the tabs of the day near the top
+  await human.glide((await top("#suites")) - 70, 2.4);
+  await human.wait(700);
+  const weekend = page.getByRole("button", { name: /Fim de semana/ }).first();
   await take.box("tabs", weekend.locator(".."));
-  await take.box("price", price);
-  await take.box("card", price.locator("xpath=ancestor::*[.//img][1]"));
-  take.mark("weekday");
+  take.mark("suites");
   await human.click(weekend);
-  await human.wait(1500);
+  await human.wait(1600);
   take.mark("weekend");
-  await human.click(page.getByRole("button", { name: /Feriados/ }).first());
-  await human.wait(1500);
-  take.mark("holiday");
-  await human.click(page.getByRole("button", { name: /Segunda a quinta/ }).first());
-  await human.wait(1400);
+  // the story of the place
+  await human.move(1100, 420);
+  await human.glide((await top("#legado")) + 40, 3.2);
+  await human.wait(1300);
+  take.mark("legacy");
+  // room service: the menu, ordered from the suite
+  const menu = page.getByText("Peça sem sair da suíte").first();
+  // where it is now, below the fold (a box is measured without scrolling)
+  const y = (await menu.boundingBox()).y;
+  await human.glide(y - 330, 3.4);
+  await human.wait(700);
+  await take.box("menu", menu.locator("xpath=ancestor::section[1]"));
+  take.mark("menu");
+  await human.wait(1600);
   take.mark("out");
   const t = await take.stop();
   results["motel-detail"] = { ...encode(t, `${OUT}dallas-motel-detail`, { from: t.marks.in - 0.3, to: t.marks.out }), blocked: blocked() };

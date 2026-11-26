@@ -257,10 +257,10 @@
           "result": "The motel now has an address of its own, with the right price calculated on the spot before any conversation, bookings that arrive on WhatsApp with the suite and the hours already chosen, and a panel in which the staff change prices, holidays and the menu without calling anyone."
         },
         "motion": {
+          "hero": "Its own address after almost twenty years",
           "days": "The price changes with the day of the week",
-          "weekday": "Monday to Thursday",
-          "weekend": "Weekend",
-          "holiday": "Holidays"
+          "legacy": "The motel's story, since 2007",
+          "menu": "The digital menu, ordered from the suite"
         }
       },
       "secret": {

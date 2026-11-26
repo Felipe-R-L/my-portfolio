@@ -97,6 +97,8 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
     const list = listRef.current;
     if (!track || !list) return;
     const items = [...list.querySelectorAll<HTMLElement>("[data-dest]")];
+    const curtains = [...(slotRef.current?.querySelectorAll<HTMLElement>("[data-curtain]") ?? [])];
+    const marks = [...(sectionRef.current?.querySelectorAll<HTMLElement>("[data-index]") ?? [])];
     const st = ScrollTrigger.create({
       trigger: track,
       start: "top top",
@@ -114,6 +116,24 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
           const v = k === i ? (i === 0 ? 1 : enter) : k === i - 1 ? 1 - leave : 0;
           el.style.setProperty("--in", v.toFixed(4));
           el.style.setProperty("--dir", k < i ? "-1" : "1");
+        });
+        // The curtain: on the way to a new destination its name sweeps across
+        // the picture from the left, holds, and opens on the new screen, so
+        // even a hurried scroll sees which project it is now.
+        curtains.forEach((el, k) => {
+          let right = 100;
+          let left = 0;
+          if (k === i && i > 0 && arrive > 0 && arrive < 1) {
+            right = (1 - clamp01(arrive / 0.32)) * 100;
+            left = clamp01((arrive - 0.6) / 0.38) * 100;
+          }
+          el.style.clipPath = `inset(0 ${right.toFixed(2)}% 0 ${left.toFixed(2)}%)`;
+          el.style.visibility = right >= 100 || left >= 100 ? "hidden" : "visible";
+        });
+        // The index over the picture: where we are among the projects.
+        marks.forEach((el, k) => {
+          el.style.setProperty("--p", (k < i ? 1 : k === i ? clamp01(local) : 0).toFixed(4));
+          el.dataset.on = k === i ? "true" : "false";
         });
         if (i !== currentRef.current) setCurrent(i);
       },
@@ -212,7 +232,26 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
                 </li>
               ))}
             </ol>
-            <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" {...openOnClick} />
+            <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" {...openOnClick}>
+              <ol className="dest-index" aria-hidden="true">
+                {WORK.map((w, i) => (
+                  <li key={w.id} data-index={w.id} data-on={i === 0 ? "true" : "false"}>
+                    <span className="dest-index-n">{count(i)}</span>
+                    {t(`work.items.${w.id}.title`)}
+                  </li>
+                ))}
+              </ol>
+              {WORK.map((w, i) => (
+                <div key={w.id} className="dest-curtain" data-curtain={w.id} aria-hidden="true">
+                  <span className="dest-curtain-count">
+                    {count(i)}
+                    <span>/{total}</span>
+                  </span>
+                  <span className="dest-curtain-kind">{t(`work.kind.${w.kind}`)}</span>
+                  <span className="dest-curtain-name">{t(`work.items.${w.id}.title`)}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

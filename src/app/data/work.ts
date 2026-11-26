@@ -90,7 +90,7 @@ export const WORK: readonly WorkItem[] = [
     href: "https://jrdallasmotel.com.br",
     stack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase", "Vercel"],
     parts: ["context", "problem", "decision", "result"],
-    video: { card: clip("dallas-motel-detail"), detail: clip("dallas-motel-detail") },
+    video: { card: clip("dallas-motel-detail", true), detail: clip("dallas-motel-detail", true) },
     motion: "dallas-motel-detail",
   },
 ];

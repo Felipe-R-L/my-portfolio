@@ -124,8 +124,8 @@
   margin: 0.35rem 0 0;
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(2rem, 3vw, 2.9rem);
-  line-height: 1.05;
+  font-size: clamp(2.4rem, 3.8vw, 3.8rem);
+  line-height: 1.02;
 }
 
 .dest-result {
@@ -315,4 +315,109 @@
 
 .dest-still {
   cursor: pointer;
+}
+
+/* ---------- the change of destination, made plain ---------- */
+
+/* Which project, among the three, over the picture: the current one lit,
+   a bar filling as its stretch of the scroll goes by. */
+.dest-index {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 0.9rem);
+  display: grid;
+  grid-template-columns: repeat(var(--beats), 1fr);
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.dest-index li {
+  --p: 0;
+  position: relative;
+  padding-bottom: 0.55rem;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition: color 0.4s var(--ease-arrive);
+}
+
+.dest-index li::before,
+.dest-index li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: rgb(159 195 214 / 0.18);
+}
+
+.dest-index li::after {
+  background: var(--diamante);
+  transform: scaleX(var(--p));
+  transform-origin: left;
+}
+
+.dest-index li[data-on="true"] {
+  color: var(--ink);
+}
+
+.dest-index-n {
+  margin-right: 0.5rem;
+  color: var(--diamante);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The curtain: the next project's name, sweeping across the picture. Its
+   clip-path is set from the scroll (Work.tsx). */
+.dest-curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 0.6rem;
+  padding: 0 clamp(2rem, 5vw, 4.5rem);
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgb(159 195 214 / 0.16), transparent 60%),
+    #06080b;
+  box-shadow: inset 0 0 0 1px rgb(159 195 214 / 0.3);
+  clip-path: inset(0 100% 0 0);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.dest-curtain-count {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  color: var(--diamante);
+  font-variant-numeric: tabular-nums;
+}
+
+.dest-curtain-count span {
+  font-size: 0.5em;
+  color: var(--ink-faint);
+}
+
+.dest-curtain-kind {
+  color: var(--diamante);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dest-curtain-name {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 0.95;
+  color: var(--ink);
 }
