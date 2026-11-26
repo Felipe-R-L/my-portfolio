@@ -19,4 +19,10 @@ i18n
     },
   });
 
+// The shell script sets <html lang> before the first paint; keep it in step
+// when the visitor switches language from the nav.
+i18n.on('languageChanged', (lng) => {
+  if (typeof document !== 'undefined') document.documentElement.lang = lng.slice(0, 2);
+});
+
 export default i18n;

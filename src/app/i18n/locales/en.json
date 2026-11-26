@@ -291,6 +291,7 @@
     "visit": "See it live",
     "visit_login": "Open the system, login required",
     "visit_aria": "Open {{name}} in a new tab",
+    "visit_sr": ": {{name}}, opens in a new tab",
     "prev": "Previous work",
     "next": "Next work",
     "case": {
@@ -300,6 +301,7 @@
       "close": "Close",
       "open": "See details",
       "open_aria": "See the details of {{name}}",
+      "open_sr": ": {{name}}",
       "context": "Context",
       "decision": "The decision",
       "result": "The result",

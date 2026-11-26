@@ -223,11 +223,13 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
         <p className="dest-result">{t(`work.items.${w.id}.result`)}</p>
         {w.illustrative && <p className="dest-note">{t(`work.items.${w.id}.note`)}</p>}
         <div className="dest-actions">
-          <button type="button" className="dest-open" onClick={() => onOpenCase?.(w, frameBox(w.id))} aria-label={t("work.case.open_aria", { name })}>
+          <button type="button" className="dest-open" onClick={() => onOpenCase?.(w, frameBox(w.id))}>
             {t("work.case.open")}
+            <span className="sr-only">{t("work.case.open_sr", { name })}</span>
           </button>
-          <a className="dest-link" href={w.href} target="_blank" rel="noreferrer" aria-label={t("work.visit_aria", { name })}>
+          <a className="dest-link" href={w.href} target="_blank" rel="noreferrer">
             {w.loginRequired ? t("work.visit_login") : t("work.visit")}
+            <span className="sr-only">{t("work.visit_sr", { name })}</span>
           </a>
         </div>
       </>

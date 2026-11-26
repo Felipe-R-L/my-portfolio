@@ -8,7 +8,8 @@
   --diamante: #9fc3d6;
   --ink: #f5f7ff;
   --ink-soft: rgb(222 226 235);
-  --ink-faint: rgb(245 247 255 / 0.45);
+  /* 0.58 keeps small faint text above 4.5:1 on the page black (0.45 was 4.1:1). */
+  --ink-faint: rgb(245 247 255 / 0.58);
   --hairline: rgb(245 247 255 / 0.16);
   /* The headings' serif: Cormorant Garamond (Felipe, 2026-11-26), closed up to
      Fraunces' density (measured 2.3-5%), a touch larger than the Instrument it

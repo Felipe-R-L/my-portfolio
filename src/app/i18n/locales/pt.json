@@ -291,6 +291,7 @@
     "visit": "Ver no ar",
     "visit_login": "Abrir o sistema, requer login",
     "visit_aria": "Abrir {{name}} em nova aba",
+    "visit_sr": ": {{name}}, abre em nova aba",
     "prev": "Trabalho anterior",
     "next": "Próximo trabalho",
     "case": {
@@ -300,6 +301,7 @@
       "close": "Fechar",
       "open": "Ver detalhes",
       "open_aria": "Ver detalhes de {{name}}",
+      "open_sr": ": {{name}}",
       "context": "Contexto",
       "decision": "A decisão",
       "result": "O resultado",

@@ -149,7 +149,7 @@ function ChapterImage({ chapter }: { chapter: StoryChapter }) {
       />
       {chapter.badge && (
         <span className="story-badge">
-          <img src={chapter.badge} alt={t(`story.chapters.${chapter.id}.badge`)} loading="lazy" decoding="async" />
+          <img src={chapter.badge} alt={t(`story.chapters.${chapter.id}.badge`)} width={356} height={100} loading="lazy" decoding="async" />
         </span>
       )}
     </figure>

@@ -222,8 +222,9 @@ export function CaseLayer({
               ))}
             </ul>
           </div>
-          <a className="case-live" href={shown.href} target="_blank" rel="noreferrer" aria-label={t("work.visit_aria", { name })}>
+          <a className="case-live" href={shown.href} target="_blank" rel="noreferrer">
             {shown.loginRequired ? t("work.visit_login") : t("work.visit")}
+            <span className="sr-only">{t("work.visit_sr", { name })}</span>
           </a>
         </footer>
       </article>
