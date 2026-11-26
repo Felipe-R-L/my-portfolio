@@ -140,21 +140,24 @@
 .plano[data-mode="list"] .plano-line {
   width: 1px;
   height: auto;
-  margin: 1.1rem 0 1.1rem calc(1.25rem - 0.5px);
+  margin: 0 0 0 calc(1.25rem - 0.5px);
   grid-template-columns: none;
+  /* the hairline runs from the first step's title to the last one's */
+  background: linear-gradient(
+    to bottom,
+    transparent var(--from, 0),
+    var(--hairline) var(--from, 0),
+    var(--hairline) var(--to, 100%),
+    transparent var(--to, 100%)
+  );
 }
 
+/* each stop is level with its step's title (Process.tsx measures --at) */
 .plano[data-mode="swipe"] .plano-stop,
 .plano[data-mode="list"] .plano-stop {
   left: 50%;
+  top: var(--at, 0);
 }
-
-.plano[data-mode="swipe"] .plano-stop:nth-child(1),
-.plano[data-mode="list"] .plano-stop:nth-child(1) { top: 0; }
-.plano[data-mode="swipe"] .plano-stop:nth-child(2),
-.plano[data-mode="list"] .plano-stop:nth-child(2) { top: 50%; }
-.plano[data-mode="swipe"] .plano-stop:nth-child(3),
-.plano[data-mode="list"] .plano-stop:nth-child(3) { top: 100%; }
 
 .plano[data-mode="swipe"] .steps,
 .plano[data-mode="list"] .steps {

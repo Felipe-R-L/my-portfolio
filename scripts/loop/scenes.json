@@ -48,47 +48,66 @@
     "story": 0.97
   },
   {
-    "name": "04-trabalho-00",
-    "sel": "#projects",
-    "p": 0,
-    "offset": 0.01
+    "name": "04-destinos-00",
+    "sel": ".dest-track",
+    "p": 0
   },
   {
-    "name": "04-trabalho-arrastado",
-    "sel": "#projects",
-    "p": 0.5,
-    "offset": 0.01,
-    "drag": -700
+    "name": "04-destinos-50",
+    "sel": ".dest-track",
+    "p": 0.5
   },
   {
-    "name": "05-prova-00",
-    "sel": ".proof",
-    "p": 0,
-    "offset": -0.25
+    "name": "04-destinos-100",
+    "sel": ".dest-track",
+    "p": 1
   },
   {
-    "name": "05-prova-40",
-    "sel": ".proof",
-    "p": 0,
-    "offset": 0.2
+    "name": "05-emuso-00",
+    "sel": ".proof-track",
+    "p": 0
   },
   {
-    "name": "06-processo-00",
-    "sel": "#process",
-    "p": 0,
-    "offset": 0.05
+    "name": "05-emuso-60",
+    "sel": ".proof-track",
+    "p": 0.6
   },
   {
-    "name": "06-processo-60",
-    "sel": "#process",
+    "name": "06-t4-recuo",
+    "sel": ".plano-track",
     "p": 0,
-    "offset": 0.6
+    "offset": -0.5
   },
   {
-    "name": "07-conversa",
-    "sel": "#contact",
+    "name": "06-plano-00",
+    "sel": ".plano-track",
+    "p": 0
+  },
+  {
+    "name": "06-plano-50",
+    "sel": ".plano-track",
+    "p": 0.5
+  },
+  {
+    "name": "06-plano-100",
+    "sel": ".plano-track",
+    "p": 1
+  },
+  {
+    "name": "07-t5-cidade",
+    "sel": ".talk-runway",
     "p": 0,
-    "offset": 0
+    "offset": 0.3
+  },
+  {
+    "name": "07-t5-aberto",
+    "sel": ".talk-runway",
+    "p": 1
+  },
+  {
+    "name": "07-convite",
+    "sel": ".talk-body",
+    "p": 0
   },
   {
     "name": "99-fim",

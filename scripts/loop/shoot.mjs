@@ -4,7 +4,7 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { chromium } from "playwright-core";
 
 const out = process.argv[2];
-const url = process.argv[3] ?? "http://localhost:5199/";
+const url = process.argv[3] ?? "http://127.0.0.1:5173/";
 if (!out) throw new Error("usage: shoot.mjs <outDir> [url]");
 mkdirSync(out, { recursive: true });
 const scenes = JSON.parse(readFileSync(new URL("./scenes.json", import.meta.url)));
@@ -33,11 +33,11 @@ for (const run of runs) {
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const city = document.querySelector(".city");
       const cityTop = city ? city.getBoundingClientRect().top + window.scrollY : 0;
-      // Mirrors HeroCity: TRACK_DESKTOP 2.8 / TRACK_PHONE 3.15, STORY_TRACK 6.4.
-      const heroLen = (reduced ? 1.2 : phone ? 3.15 : 2.8) * vh;
+      // Mirrors SCROLL in src/app/motion/tokens.ts (hero, origin + story).
+      const heroLen = (reduced ? 1.2 : phone ? 2.3 : 1.9) * vh;
       if (hero !== undefined) return Math.round(cityTop + hero * heroLen);
       if (story !== undefined) {
-        if (!phone && !reduced) return Math.round(cityTop + heroLen + story * 6.4 * vh);
+        if (!phone && !reduced) return Math.round(cityTop + heroLen + story * 5.0 * vh);
         const list = document.querySelector(".story-list");
         if (!list) return null;
         const r = list.getBoundingClientRect();
@@ -49,28 +49,14 @@ for (const run of runs) {
       }
       const el = document.querySelector(sel);
       if (!el) return null;
-      // a pinned scene scrolls through its pin spacer, not its own height
-      const box = el.closest(".pin-spacer") ?? el;
-      const r = box.getBoundingClientRect();
+      // a sticky track scrolls through its own height less one screen
+      const r = el.getBoundingClientRect();
       const top = r.top + window.scrollY;
       const travel = Math.max(0, r.height - window.innerHeight);
       return Math.round(top + p * travel + (offset ?? 0) * window.innerHeight);
     }, s);
     if (y === null) { console.error(`[${run.prefix}] missing target for ${s.name}`); continue; }
     await page.evaluate((y) => window.scrollTo(0, y), y);
-    if (s.drag) {
-      // drag the work carousel sideways, by mouse on desktop and by finger on a phone
-      const box = await page.locator(".work-track").boundingBox();
-      if (box) {
-        const sx = Math.min(box.x + box.width - 20, run.viewport.width * 0.7);
-        const sy = box.y + 120;
-        await page.mouse.move(sx, sy);
-        await page.mouse.down();
-        for (let i = 1; i <= 12; i++) await page.mouse.move(sx + (s.drag * i) / 12, sy, { steps: 2 });
-        await page.mouse.up();
-        await page.waitForTimeout(1200);
-      }
-    }
     // Lenis smooths wheel input only; a programmatic jump lands at once. Give
     // ScrollTrigger and the scrubs time to settle.
     await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));

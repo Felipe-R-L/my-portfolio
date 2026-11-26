@@ -175,13 +175,23 @@ export function HeroCity() {
       const vh = window.innerHeight;
       const start = pageTop(sec) + TRACK_DESKTOP * vh;
       const len = ORIGIN_TRACK * vh;
-      const cut = start + len * 0.52;
+      const cut = start + len * 0.5;
+      const back = start + len * 0.8;
       const slot = () => boxOf(originSlotRef.current);
+      // where the hero left the framed portrait: the middle, at FRAME_DESKTOP
+      const portrait = () => {
+        const vw = window.innerWidth;
+        const w = vw * FRAME_DESKTOP;
+        const h = w / 1.6;
+        return { x: (vw - w) / 2, y: (vh - h) / 2, w, h };
+      };
       return [
         // a cut from the portrait to the coast, the frame opening out of the distance
         { content: "diamante-a", start, end: cut, arrive: 0.3, gesture: "rack" as const, slot },
         // and a straight cut to the town
-        { content: "diamante-c", start: cut, end: start + len, arrive: 0.06, gesture: "cut" as const, slot },
+        { content: "diamante-c", start: cut, end: back, arrive: 0.06, gesture: "cut" as const, slot },
+        // the town draws back to where the portrait was, and dissolves into it
+        { content: "diamante-c", start: back, end: start + len, arrive: 0.6, gesture: "cut" as const, slot: portrait },
       ];
     });
   }, [storyInStage]);
@@ -289,11 +299,15 @@ export function HeroCity() {
         stage.dataset.origin = ps > 0 && ps < ORIGIN_END ? "true" : "false";
         if (ps < ORIGIN_END) {
           storyProgress.set(0);
-          gsap.set(frame, { opacity: 0 });
-          if (ring) ring.style.opacity = "0";
           const k = span(ps, 0, ORIGIN_END);
-          // the caption comes in after the first shot has settled and leaves just before the cut back
-          origin?.style.setProperty("--in", String(easeInOut(span(k, 0.12, 0.26)) * (1 - span(k, 0.9, 1))));
+          // T0.5, the town to the portrait: once the journey's frame has drawn
+          // the town back to the portrait's place, the portrait dissolves in
+          // over it, a century and a half in one frame, and only then moves aside
+          placeAside(0);
+          gsap.set(frame, { opacity: easeInOut(span(k, 0.9, 0.99)) });
+          if (ring) ring.style.opacity = "0";
+          // the caption comes in after the first shot has settled and leaves before the town draws back
+          origin?.style.setProperty("--in", String(easeInOut(span(k, 0.12, 0.26)) * (1 - span(k, 0.7, 0.8))));
           return;
         }
         origin?.style.setProperty("--in", "0");

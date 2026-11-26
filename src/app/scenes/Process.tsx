@@ -44,26 +44,32 @@ export function Process() {
         mode === "swipe"
           ? { x: lineBox.x - MARKER.w / 2, y: lineBox.y + k * lineBox.h - MARKER.h / 2, w: MARKER.w, h: MARKER.h }
           : { x: lineBox.x + k * lineBox.w - MARKER.w / 2, y: lineBox.y - MARKER.h / 2, w: MARKER.w, h: MARKER.h };
-      const mark = (k: number) => {
-        // a stop is reached once the marker is on it
-        const i = Math.min(STEPS.length - 1, Math.floor(k * (STEPS.length - 1) + 1e-6));
+      const reach = (i: number) => {
         if (i !== reachedRef.current) {
           reachedRef.current = i;
           setReached(i);
         }
       };
+      // a stop is reached once the marker is on it
+      const mark = (k: number) => reach(Math.min(STEPS.length - 1, Math.floor(k * (STEPS.length - 1) + 1e-6)));
 
       if (mode === "swipe") {
         // the marker rides the line down, held at the middle of the screen
-        const top = pageTop(line);
-        const h = line.offsetHeight;
-        const live = (): Box => {
-          const r = line.getBoundingClientRect();
-          const k = clamp01((vh / 2 - r.top) / Math.max(1, r.height));
-          mark(k);
-          return markerAt(k, { x: r.left + r.width / 2, y: r.top, w: r.width, h: r.height });
+        // between the first stop and the last; each stop sits at its step
+        const stops = Array.from(line.children) as HTMLElement[];
+        const center = (el: HTMLElement) => {
+          const r = el.getBoundingClientRect();
+          return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
         };
-        return [{ content: "offline", start: top - vh / 2, end: top + h - vh / 2, arrive: 0, gesture: "cut" as const, slot: live }];
+        const first = pageTop(stops[0]);
+        const last = pageTop(stops[stops.length - 1]);
+        const live = (): Box => {
+          const ys = stops.map((el) => center(el).y);
+          const y = Math.min(Math.max(vh / 2, ys[0]), ys[ys.length - 1]);
+          const x = center(stops[0]).x;
+          return { x: x - MARKER.w / 2, y: y - MARKER.h / 2, w: MARKER.w, h: MARKER.h };
+        };
+        return [{ content: "offline", start: first - vh / 2, end: last - vh / 2 + 1, arrive: 0, gesture: "cut" as const, slot: live }];
       }
 
       const track = trackRef.current;
@@ -110,8 +116,51 @@ export function Process() {
     });
   }, [mode]);
 
+  // phone and reduced motion: the line runs down beside the steps, which are
+  // not all the same height, so each stop is put level with its step's title
+  const stepsRef = useRef<HTMLOListElement>(null);
+  useLayoutEffect(() => {
+    if (mode === "scroll") return;
+    const line = lineRef.current;
+    const list = stepsRef.current;
+    if (!line || !list) return;
+    const place = () => {
+      const top = line.getBoundingClientRect().top;
+      const ys = Array.from(list.querySelectorAll<HTMLElement>(".step-title")).map((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top + r.height / 2 - top;
+      });
+      Array.from(line.children).forEach((stop, i) => (stop as HTMLElement).style.setProperty("--at", `${ys[i]}px`));
+      line.style.setProperty("--from", `${ys[0]}px`);
+      line.style.setProperty("--to", `${ys[ys.length - 1]}px`);
+    };
+    place();
+    const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(place);
+    ro?.observe(list);
+    // on a phone a stop is reached once it passes the middle of the screen,
+    // where the marker rides, however fast the thumb goes past it
+    const onScroll = () => {
+      if (line.offsetHeight === 0) return; // not laid out
+      const mid = window.innerHeight / 2 + 1;
+      const n = Array.from(line.children).filter((el) => el.getBoundingClientRect().top <= mid).length;
+      const i = Math.max(0, n - 1);
+      if (i !== reachedRef.current) {
+        reachedRef.current = i;
+        setReached(i);
+      }
+    };
+    if (mode === "swipe") {
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [mode]);
+
   const steps = (
-    <ol className="steps">
+    <ol ref={stepsRef} className="steps">
       {STEPS.map((id, i) => (
         <li key={id} className="step" data-reached={i <= reached ? "true" : "false"}>
           <span className="step-n" aria-hidden="true">
