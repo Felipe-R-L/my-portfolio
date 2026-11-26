@@ -284,7 +284,8 @@
       "open_aria": "See the details of {{name}}",
       "context": "Context",
       "decision": "The decision",
-      "result": "The result"
+      "result": "The result",
+      "back": "Back to the projects"
     }
   },
   "talk": {

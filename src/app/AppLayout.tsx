@@ -14,6 +14,8 @@ import { useJourney } from "./journey/useJourney";
 import { AmbientLight } from "./journey/AmbientLight";
 import { ChapterRail } from "./journey/ChapterRail";
 import { JourneyFrame } from "./journey/JourneyFrame";
+import { useCaseRoute } from "./journey/caseRoute";
+import { CaseLayer } from "./scenes/CaseLayer";
 import { DURATION } from "./motion/tokens";
 
 /**
@@ -34,6 +36,7 @@ export default function AppLayout() {
   useHashScroll(lenisRef);
   const { t, i18n } = useTranslation();
   const journey = useJourney();
+  const caseRoute = useCaseRoute();
 
   const navItems: GlassNavItem[] = [
     // One item per chapter, in the journey's order, landing on its anchor.
@@ -82,11 +85,14 @@ export default function AppLayout() {
             used to carry these ids would have duplicated them. */}
         {/* The hero; the story scene (who I am) follows it. */}
         <Hero />
-        <Work />
+        <Work onOpenCase={caseRoute.open} />
         <Proof />
         <Process />
         <Talk />
       </main>
+
+      {/* The surface: a destination's case, over the journey (/work/<slug>). */}
+      <CaseLayer item={caseRoute.item} from={caseRoute.from} onClose={caseRoute.close} lenisRef={lenisRef} />
     </div>
   );
 }
