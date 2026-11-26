@@ -1,31 +1,32 @@
 import { center, type ClipMeta, type Rect } from "../components/motion/clip";
 
 /**
- * How each recorded clip is presented (Felipe, 2026-11-26: the approach that
- * works best for each project). Every moment comes from the clip's own marks
+ * How each recorded clip is presented (Felipe, 2026-11-26). Every moment comes from the clip's own marks
  * and boxes (scripts/capture), so a new take keeps the motion in step.
  *
- * camera  Dallas Sync: the screen sits tilted like a device on a desk, the
- *         camera dives into the gesture (the plate, the confirm) and pulls
- *         back to the room whose clock starts running.
- * crops   the shop and the motel's site: the screen steps aside and the
- *         details that convince come off it, enlarged, one after another.
+ * camera  every project: the screen sits tilted like a device on a desk, the
+ *         camera dives into each gesture where the hand clicks (Dallas Sync:
+ *         the plate, the confirm, the room whose clock starts; the shop: the
+ *         variant and its price, the cart, Pix; the motel: the day's tab and
+ *         the suites' totals) and settles back for the loop. Felipe, after
+ *         seeing a crops version for the shop and the motel: the camera
+ *         everywhere, the crops read far and small.
  * plain   Em uso: the camera holds still (the chapter's idea); only the hand.
  *
  * Words: `work.items.<id>.motion.<key>`.
  */
 export type CameraKey = { t: number; rx: number; ry: number; s: number; x: number; y: number };
 export type Caption = { from: number; to: number; key: string };
-export type Crop = { still: string; rect: Rect; at: number; key: string };
 export type MotionSpec =
   | {
       mode: "camera";
       camera: (m: ClipMeta) => CameraKey[];
       captions: (m: ClipMeta) => Caption[];
+      /** The caption at the top, where the bottom of the screen is what matters. */
+      captionTop?: boolean;
       /** A ring drawn around something on screen, for a while. */
       ring?: (m: ClipMeta) => { rect: Rect; from: number; to: number } | null;
     }
-  | { mode: "crops"; crops: (m: ClipMeta) => Crop[] }
   | { mode: "plain" };
 
 const MID = { x: 720, y: 450 };
@@ -64,28 +65,69 @@ export const MOTION: Record<string, MotionSpec> = {
   },
 
   "secret-detail": {
-    mode: "crops",
-    crops: ({ marks: M, clicks }) => [
-      // the variant chosen, with its own price above it
-      { still: "variant", rect: { x: 760, y: 170, w: 570, h: 330 }, at: M.variant, key: "variant" },
-      // the cart: one item, no account
-      { still: "cart", rect: { x: 168, y: 82, w: 650, h: 120 }, at: M.cart + 0.3, key: "cart" },
-      // Pix, the Mercado Pago step, and why it asks for a CPF (from the click on Pix)
-      { still: "pix", rect: { x: 866, y: 352, w: 396, h: 210 }, at: (clicks.find((c) => c > M.cart + 3) ?? M.pix - 3) + 0.5, key: "pix" },
+    mode: "camera",
+    // product, its variant and price, into the cart, then Pix (from where the hand clicked)
+    camera: ({ marks: M, boxes: B, clicks: C, duration: end }) => {
+      const cart = center(B.cartItem);
+      const pickup = center(B.pickup);
+      const pix = center(B.pixOption);
+      const name = center(B.name);
+      return [
+        { t: 0, ...HOME },
+        { t: C[0] - 0.45, rx: 0, ry: 0, s: 1.25, x: 229, y: 457 },
+        { t: C[0] + 0.5, ...FLAT },
+        { t: C[1] - 0.6, rx: 0, ry: 0, s: 1.5, x: 1116, y: 330 },
+        { t: M.variant + 0.2, rx: 0, ry: 0, s: 1.5, x: 1116, y: 330 },
+        { t: C[2] - 0.2, rx: 0, ry: 0, s: 1.4, x: 1001, y: 560 },
+        { t: C[2] + 0.7, ...FLAT },
+        { t: C[3] - 0.3, rx: 0, ry: 0, s: 1.3, x: 1312, y: 120 },
+        { t: C[3] + 1.0, ...FLAT },
+        { t: M.cart - 0.2, rx: 0, ry: 0, s: 1.45, x: (cart.x + pickup.x) / 2, y: (cart.y + pickup.y) / 2 + 40 },
+        { t: C[4] + 0.6, rx: 0, ry: 0, s: 1.45, x: (cart.x + pickup.x) / 2, y: (cart.y + pickup.y) / 2 + 40 },
+        { t: C[5] - 0.2, rx: 0, ry: 0, s: 1.4, x: 1090, y: 480 },
+        { t: C[6] - 0.4, rx: 0, ry: 0, s: 1.55, ...pix },
+        { t: C[7] - 0.4, rx: 0, ry: 0, s: 1.6, x: name.x + 120, y: name.y - 60 },
+        { t: end - 0.3, rx: 0, ry: 0, s: 1.6, x: name.x + 120, y: name.y - 60 },
+        { t: end + 1.2, ...HOME },
+      ];
+    },
+    captions: ({ marks: M, clicks: C, duration: end }) => [
+      { from: C[1] - 0.4, to: C[2] - 0.1, key: "variant" },
+      { from: M.cart, to: C[5], key: "cart" },
+      { from: C[6] - 0.2, to: end + 0.6, key: "pix" },
     ],
   },
 
   "dallas-motel-detail": {
-    mode: "crops",
-    crops: ({ marks: M }) => {
-      // the first suite's total, as the day changes
-      const rect = { x: 104, y: 748, w: 372, h: 86 };
+    mode: "camera",
+    // the totals sit low on the screen
+    captionTop: true,
+    // the day's tab, then the totals of the suites, for each day
+    camera: ({ boxes: B, clicks: C, duration: end }) => {
+      const tabs = center(B.tabs);
+      const totals = { rx: 0, ry: 0, s: 1.15, x: 720, y: 790 };
+      const tab = { rx: 0, ry: 0, s: 1.7, x: tabs.x, y: tabs.y + 40 };
       return [
-        { still: "weekday", rect, at: M.weekday + 0.4, key: "weekday" },
-        { still: "weekend", rect, at: M.weekend, key: "weekend" },
-        { still: "holiday", rect, at: M.holiday, key: "holiday" },
+        { t: 0, ...HOME },
+        { t: C[0] - 0.5, ...tab },
+        { t: C[0] + 0.1, ...tab },
+        { t: C[0] + 0.8, ...totals },
+        { t: C[1] - 0.7, ...totals },
+        { t: C[1] - 0.1, ...tab },
+        { t: C[1] + 0.6, ...totals },
+        { t: C[2] - 0.7, ...totals },
+        { t: C[2] - 0.1, ...tab },
+        { t: C[2] + 0.6, ...totals },
+        { t: end + 0.2, ...totals },
+        { t: end + 1.2, ...HOME },
       ];
     },
+    captions: ({ clicks: C, duration: end }) => [
+      { from: 0.3, to: C[0] + 0.3, key: "days" },
+      { from: C[0] + 0.6, to: C[1] - 0.2, key: "weekend" },
+      { from: C[1] + 0.5, to: C[2] - 0.2, key: "holiday" },
+      { from: C[2] + 0.5, to: end + 0.6, key: "weekday" },
+    ],
   },
 
   "dallas-sync-offline": { mode: "plain" },
