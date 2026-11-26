@@ -21,16 +21,19 @@ let container: HTMLDivElement | null = null
 afterEach(() => { act(() => root?.unmount()); container?.remove() })
 
 describe('work details', () => {
-  it('shows the problem, what was built, the stack and the link for a piece of work', () => {
+  it('tells the case as a problem solved, in order, with the stack last and the link', () => {
     container = document.createElement('div')
     document.body.appendChild(container)
     root = createRoot(container)
     const item = WORK[0]
     act(() => root!.render(React.createElement(WorkCase, { item, onClose: () => {} })))
     const text = container.textContent ?? ''
-    expect(text).toContain(`work.items.${item.id}.case.problem`)
-    expect(text).toContain(`work.items.${item.id}.case.built`)
-    for (const s of item.stack) expect(text).toContain(s)
+    // every part the project has, in CASE_PARTS order
+    const at = item.parts.map((part) => text.indexOf(`work.items.${item.id}.case.${part}`))
+    at.forEach((i) => expect(i).toBeGreaterThanOrEqual(0))
+    expect([...at].sort((a, b) => a - b)).toEqual(at)
+    // the stack is a supporting detail, after the story
+    for (const s of item.stack) expect(text.indexOf(s)).toBeGreaterThan(at[at.length - 1])
     expect(container.querySelector(`a[href="${item.href}"]`)).not.toBeNull()
   })
 
@@ -38,9 +41,7 @@ describe('work details', () => {
     for (const bundle of [pt, en]) {
       for (const w of WORK) {
         const c = (bundle.work.items as Record<string, { case?: Record<string, string> }>)[w.id].case
-        expect(c?.problem, `${w.id}.problem`).toBeTruthy()
-        expect(c?.built, `${w.id}.built`).toBeTruthy()
-        if (w.hasNow) expect(c?.now, `${w.id}.now`).toBeTruthy()
+        for (const part of w.parts) expect(c?.[part], `${w.id}.${part}`).toBeTruthy()
       }
       expect(JSON.stringify(bundle.work)).not.toMatch(/família|family|cresci|grew up|\b87\b|40M|\b274\b/i)
     }

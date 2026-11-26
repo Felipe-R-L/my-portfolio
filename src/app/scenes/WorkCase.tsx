@@ -60,20 +60,14 @@ export function WorkCase({ item, onClose }: { item: WorkItem | null; onClose: ()
           </div>
 
           <dl className="case-text">
-            <div>
-              <dt>{t("work.case.problem")}</dt>
-              <dd>{t(`${base}.case.problem`)}</dd>
-            </div>
-            <div>
-              <dt>{t("work.case.built")}</dt>
-              <dd>{t(`${base}.case.built`)}</dd>
-            </div>
-            {item.hasNow && (
-              <div>
-                <dt>{t("work.case.now")}</dt>
-                <dd>{t(`${base}.case.now`)}</dd>
+            {/* The case as a problem solved: context, problem, decision,
+                result and, where there is one, today. */}
+            {item.parts.map((part) => (
+              <div key={part}>
+                <dt>{t(`work.case.${part}`)}</dt>
+                <dd>{t(`${base}.case.${part}`)}</dd>
               </div>
-            )}
+            ))}
             <div>
               <dt>{t("work.case.stack")}</dt>
               <dd>

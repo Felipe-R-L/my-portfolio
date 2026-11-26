@@ -237,14 +237,17 @@
       },
       "omd": {
         "title": "OMD do Brasil",
-        "text": "Entrei na OMD do Brasil em 2024 como desenvolvedor, e atualmente cuido de três plataformas em produção que atendem 31 empresas.",
+        "text": "Entrei na OMD do Brasil em 2024 como desenvolvedor, e atualmente cuido de três plataformas em produção que atendem 31 empresas e 92 máquinas conectadas, nas quais um relatório que levava 30 segundos para abrir hoje abre em menos de 2.",
         "alt": "Tela do OMDfarm"
       },
       "hoje": {
         "title": "Hoje",
-        "text": "Divido o meu tempo entre a OMD, o Dallas Sync e projetos para negócios que precisam de um site, de uma loja virtual ou de um sistema feito sob medida.",
+        "text": "Divido o meu tempo entre a OMD, o Dallas Sync e projetos para negócios que precisam de um site, de uma loja virtual ou de um sistema feito sob medida. Fora do código eu fotografo e filmo, e é de lá que vem o cuidado com enquadramento e luz que procuro levar para cada tela que construo.",
         "alt": "O mapa de suítes do Dallas Sync"
       }
+    },
+    "origin": {
+      "caption": "1867 · Diamante, Calábria"
     }
   },
   "work": {
@@ -254,8 +257,7 @@
     "kind": {
       "sistema": "Sistema",
       "site": "Site",
-      "loja": "Loja virtual",
-      "omd": "Construí na OMD"
+      "loja": "Loja virtual"
     },
     "items": {
       "dallas_sync": {
@@ -263,42 +265,31 @@
         "result": "A recepção do motel continua funcionando quando a internet cai, e o dono acompanha ocupação, estoque e financeiro num painel só.",
         "note": "Tela do sistema em modo treino, sem dados reais.",
         "case": {
+          "context": "O Dallas Sync é o sistema de gestão que eu desenvolvo e vendo por assinatura para motéis, e o Dallas Motel, em Pitangueiras, é o primeiro cliente a usá-lo na recepção, em produção desde setembro de 2026.",
           "problem": "Motéis costumam operar com sistemas que só registram o que aconteceu, e quando a internet cai a recepção para, o que no meio de um turno significa fila na portaria e conta fechada no papel.",
-          "built": "Construí o Dallas Sync como um PMS offline-first, em que check-in, comanda, pagamento e checkout gravam no próprio computador da recepção e entram numa fila que o servidor reconcilia quando a rede volta, com o dinheiro sempre em centavos e cada cliente isolado por RLS no banco.",
-          "now": "O sistema está em produção desde setembro de 2026, com o Dallas Motel como cliente, e a camada que estou construindo agora é a de inteligência, começando pela leitura de notas fiscais por IA com confirmação humana obrigatória antes de qualquer lançamento."
+          "decision": "Escolhi construir o sistema offline-first, com check-in, comanda e pagamento gravando no próprio computador da recepção e entrando numa fila que o servidor reconcilia quando a rede volta, e descartei o caminho mais comum de um sistema que só funciona conectado, porque a internet do motel cai e o turno não pode parar esperando por ela. Pelo mesmo motivo, quem está aprendendo usa um modo treino que é uma organização separada, com as mesmas telas e nenhum dado real, já que um erro de treino lançado no sistema em uso viraria dinheiro errado no caixa.",
+          "result": "A recepção continua lançando check-in, comanda e pagamento sem internet, vê a fila do que ainda não subiu e sincroniza quando a rede volta, e as recepcionistas aprendem no modo treino sem tocar em nenhum dado do motel.",
+          "now": "A camada que estou construindo agora é a de gestão e inteligência, com um painel para o dono em que cada indicador é composto só de métricas medidas e abre até a transação que o originou, enquanto projeções e sugestões ficam numa camada acima que nunca entra no número."
         }
       },
       "dallas_motel": {
         "title": "Dallas Motel",
         "result": "Site com cardápio digital e um painel onde a gerência muda suítes, preços e feriados sozinha, sem precisar chamar programador.",
         "case": {
-          "problem": "O Dallas Motel precisava de um site que mostrasse as suítes e o cardápio sem depender de alguém de fora toda vez que um preço ou um feriado mudasse.",
-          "built": "Fiz o site institucional com cardápio digital e um painel em que a própria gerência atualiza suítes, preços e feriados, sem precisar chamar um desenvolvedor."
+          "context": "O Dallas Motel abriu em 2007, na zona rural de Pitangueiras, e passou quase vinte anos com clientela fiel e nenhuma página na internet.",
+          "problem": "Quem procura motel decide pelo celular antes de sair de casa, e como o preço muda conforme a suíte, o dia da semana, o feriado e as horas de permanência, toda dúvida virava mensagem no WhatsApp, a recepção passava o dia respondendo a mesma pergunta e muita gente desistia antes de perguntar.",
+          "decision": "Montei o site com as páginas geradas já com preços e cardápio escritos no HTML e descartei o site React comum, que só desenha o conteúdo no navegador, porque os assistentes de IA que já respondem boa parte da busca local não executam JavaScript e encontrariam uma página em branco. Se o banco não responde durante a montagem, a publicação para e o site anterior continua no ar, já que uma home sem preços seria pior do que uma home desatualizada por alguns minutos.",
+          "result": "O motel passou a ter um endereço próprio, com o preço certo calculado na hora antes de qualquer conversa, reservas que chegam no WhatsApp já com a suíte e as horas escolhidas e um painel em que a equipe muda preços, feriados e cardápio sem chamar ninguém."
         }
       },
       "secret": {
         "title": "Secret Boutique",
         "result": "Loja online com pagamento pelo Mercado Pago, verificação de idade na entrada e pedidos rastreáveis sem expor o cliente.",
         "case": {
+          "context": "A Secret Boutique é a minha própria loja de produtos íntimos, que construí do zero, da vitrine ao painel em que acompanho os pedidos.",
           "problem": "Uma loja de produtos íntimos vende melhor quando o cliente sente que ninguém vai saber do pedido, então a discrição precisava estar em cada etapa da compra.",
-          "built": "Construí a loja com pagamento pelo Mercado Pago, verificação de idade na entrada, avaliações anônimas e pedidos rastreáveis que nunca expõem quem comprou."
-        }
-      },
-      "omdfarm": {
-        "title": "OMDfarm",
-        "result": "Telemetria de máquinas agrícolas em tempo real, com mapa operacional e BI de produtividade.",
-        "case": {
-          "problem": "Quem opera máquinas agrícolas precisa saber em tempo real onde cada máquina está e quanto ela produziu, sem esperar o relatório do fim do dia.",
-          "built": "Escrevi o projeto inicial do OMDfarm e defini a arquitetura, com Nx, clean architecture no servidor e Angular standalone no front, além da infraestrutura em Terraform, e a plataforma entrega mapa operacional, apontamentos, BI de produtividade e uma API externa para integração de terceiros.",
-          "now": "As plataformas da OMD atendem hoje 31 empresas e 92 máquinas conectadas, e o OMDfarm foi apresentado na Agrishow."
-        }
-      },
-      "eco360": {
-        "title": "Gestão Eco 360",
-        "result": "Logística de coleta de resíduos com telemetria de vídeo e um módulo de rotas que padroniza o trabalho dos motoristas.",
-        "case": {
-          "problem": "A coleta de resíduos depende de rotas cumpridas à risca, e a empresa precisava acompanhar a frota ao vivo e medir a cobertura de rota em cada bairro.",
-          "built": "Construí do zero toda a camada de infraestrutura e deploy da plataforma multi-tenant e entreguei os subsistemas de maior risco, como o compartilhamento de ativos entre clientes, o isolamento por RLS e a telemetria com snap-to-road."
+          "decision": "Escolhi o Mercado Pago, com Pix e cartão, além da opção de pagar na entrega com cartão ou dinheiro, e não deixei a confirmação do pagamento depender só do aviso que o Mercado Pago manda ao servidor, porque um aviso perdido deixaria um pedido pago parado como pendente, então a loja também consulta o pagamento até ele se resolver.",
+          "result": "O cliente compra sem expor quem é, com verificação de idade na entrada, avaliações anônimas e pedidos rastreáveis por código, e eu acompanho cada pedido do pagamento à entrega num painel só."
         }
       }
     },
@@ -309,12 +300,14 @@
     "next": "Próximo trabalho",
     "case": {
       "problem": "O problema",
-      "built": "O que eu fiz",
       "now": "Hoje",
       "stack": "Feito com",
       "close": "Fechar",
       "open": "Ver detalhes",
-      "open_aria": "Ver detalhes de {{name}}"
+      "open_aria": "Ver detalhes de {{name}}",
+      "context": "Contexto",
+      "decision": "A decisão",
+      "result": "O resultado"
     }
   },
   "proof": {
@@ -331,7 +324,27 @@
     "blog_label": "Último artigo no blog",
     "email_label": "Ou por e-mail",
     "rights": "Todos os direitos reservados.",
-    "credits": "Fotos de Diamante (Eugenio Magurno) e do IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons."
+    "credits": "Fotos de Diamante (Eugenio Magurno) e do IFSP Sertãozinho (Panoramio), CC BY-SA 3.0, via Wikimedia Commons.",
+    "chips": {
+      "prompt": "O que você precisa?",
+      "site": {
+        "label": "Site",
+        "message": "Oi Felipe! Vi seu portfólio e quero um site para o meu negócio."
+      },
+      "loja": {
+        "label": "Loja virtual",
+        "message": "Oi Felipe! Vi seu portfólio e quero montar uma loja virtual."
+      },
+      "sistema": {
+        "label": "Sistema",
+        "message": "Oi Felipe! Vi seu portfólio e preciso de um sistema sob medida para o meu negócio."
+      },
+      "outro": {
+        "label": "Outro",
+        "message": "Oi Felipe! Vi seu portfólio e queria conversar sobre um projeto."
+      }
+    },
+    "proof_link": "Veja o Dallas Sync funcionando sem internet"
   },
   "journey": {
     "chapters": {
@@ -342,5 +355,40 @@
       "retorno": "Contato"
     },
     "where": "Capítulo {{n}} de {{total}}: {{name}}"
+  },
+  "telemetria": {
+    "title": "Em uso",
+    "entries": {
+      "since": {
+        "label": "desde set/2026",
+        "text": "Desde setembro de 2026 o Dallas Sync está em produção na recepção do Dallas Motel, que é onde dá para ver se ele funciona de verdade."
+      },
+      "offline": {
+        "label": "sem internet",
+        "text": "Quando a internet cai, a recepção continua lançando, enxerga a fila do que ainda não subiu e o sistema sincroniza sozinho quando a rede volta, que é exatamente o que o vídeo ao lado mostra."
+      },
+      "training": {
+        "label": "modo treino",
+        "text": "Quem entra na equipe aprende num modo treino separado, que tem as mesmas telas e nenhum dado real, então um erro cometido ali não muda o caixa de ninguém."
+      }
+    },
+    "video_note": "Gravado em modo treino, com dados fictícios."
+  },
+  "plano": {
+    "title": "Como funciona",
+    "steps": {
+      "talk": {
+        "title": "Conversa",
+        "text": "Você me conta o que precisa pelo WhatsApp ou numa chamada, e eu pergunto o suficiente para entender o problema antes de falar de solução."
+      },
+      "proposal": {
+        "title": "Proposta",
+        "text": "Mando por escrito o que vou construir, o que fica de fora e quanto custa, e nada começa antes do seu ok."
+      },
+      "start": {
+        "title": "Início",
+        "text": "Começo pela parte que resolve o problema principal e te mostro cada etapa funcionando, para que você possa ajustar ao longo do caminho com o sistema já na sua frente."
+      }
+    }
   }
 }

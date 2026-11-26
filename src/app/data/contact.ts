@@ -15,3 +15,19 @@ export function whatsappHref(message: string): string | null {
   if (!WHATSAPP_NUMBER) return null;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
+
+/**
+ * Availability shown next to the contact button. OFF by default: nothing is
+ * shown until Felipe sets `enabled: true` and writes the text for both
+ * languages (e.g. "Agenda aberta a partir de março" / "Booking from March").
+ * Keep it a fact he can stand behind on the day it is read.
+ */
+export const AVAILABILITY: { enabled: boolean; text: { pt: string; en: string } } = {
+  enabled: false,
+  text: { pt: "", en: "" },
+};
+
+/** The kinds of project the contact chips offer, each with its own WhatsApp
+    message in i18n (`talk.chips.<kind>`). */
+export const PROJECT_KINDS = ["site", "loja", "sistema", "outro"] as const;
+export type ProjectKind = (typeof PROJECT_KINDS)[number];
