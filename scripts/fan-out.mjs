@@ -155,6 +155,48 @@ export async function renderRoutes({ repoRoot, dist }) {
   return posts
 }
 
+/**
+ * A case's address, /work/<slug>, as a page of its own for whoever receives
+ * the link: the home page's HTML with the case's title, description, address
+ * and picture in the head, so a link sent on WhatsApp previews the project.
+ * The app reads the path and opens the case over the journey.
+ */
+export function renderCase({ template, item, title, description }) {
+  const url = `${SITE}/work/${item.slug}`
+  const image = `${SITE}${item.image.src}`
+  const full = `${title} | Felipe Rodrigues Leone`
+  const set = (html, re, value) => {
+    if (!re.test(html)) throw new Error(`[fan-out] index.html has no ${re} to fill for ${item.slug}`)
+    return html.replace(re, (_m, open, close) => `${open}${escapeAttr(value)}${close}`)
+  }
+  let html = template
+  html = set(html, /(<title>)[^<]*(<\/title>)/, full)
+  html = set(html, /(<meta name="description" content=")[^"]*(")/, description)
+  for (const net of ['og', 'twitter']) {
+    html = set(html, new RegExp(`(<meta property="${net}:title" content=")[^"]*(")`), full)
+    html = set(html, new RegExp(`(<meta property="${net}:description" content=")[^"]*(")`), description)
+    html = set(html, new RegExp(`(<meta property="${net}:url" content=")[^"]*(")`), url)
+    html = set(html, new RegExp(`(<meta property="${net}:image" content=")[^"]*(")`), image)
+  }
+  return html.replace('</head>', () => `  <link rel="canonical" href="${url}" />\n  </head>`)
+}
+
+export async function renderCases({ repoRoot, dist }) {
+  const { WORK } = await import(join(repoRoot, 'src', 'app', 'data', 'work.ts'))
+  const pt = JSON.parse(readFileSync(join(repoRoot, 'src', 'app', 'i18n', 'locales', 'pt.json'), 'utf8'))
+  const template = readFileSync(join(dist, 'index.html'), 'utf8')
+  const root = resolve(dist, 'work') + sep
+  for (const item of WORK) {
+    const text = pt.work.items[item.id]
+    const target = resolve(dist, 'work', item.slug, 'index.html')
+    if (!target.startsWith(root)) throw new Error(`[fan-out] case slug "${item.slug}" escapes dist/work/`)
+    mkdirSync(dirname(target), { recursive: true })
+    writeFileSync(target, renderCase({ template, item, title: text.title, description: text.result }))
+    console.log(`  emitted work/${item.slug}/index.html`)
+  }
+  return WORK.length
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const repoRoot = process.cwd()
   const dist = join(repoRoot, 'dist')
@@ -166,5 +208,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const { writeOgImages } = await import('./lib/og-image.mjs')
   await writeOgImages({ posts, dist, repoRoot })
 
-  console.log(`\n✓ emitted ${posts.length + 1} blog routes\n`)
+  const cases = await renderCases({ repoRoot, dist })
+
+  console.log(`\n✓ emitted ${posts.length + 1} blog routes and ${cases} case routes\n`)
 }

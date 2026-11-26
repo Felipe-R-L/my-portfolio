@@ -83,3 +83,23 @@ describe('renderRoute', () => {
     expect(html).toContain('og:type" content="website"')
   })
 })
+
+describe('renderCase', async () => {
+  const { renderCase } = await import('../scripts/fan-out.mjs')
+  const { readFileSync } = await import('node:fs')
+  const template = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+  const item = { slug: 'dallas-sync', image: { src: '/assets/projects/dallas-sync-1440.webp' } }
+  const html = renderCase({ template, item, title: 'Dallas Sync', description: 'A recepção "continua" & funciona.' })
+
+  it('gives the case its own title, description and address for link previews', () => {
+    expect(html).toContain('<title>Dallas Sync | Felipe Rodrigues Leone</title>')
+    expect(html).toContain('name="description" content="A recepção &quot;continua&quot; &amp; funciona."')
+    expect(html).toContain(`og:url" content="${SITE}/work/dallas-sync"`)
+    expect(html).toContain(`twitter:image" content="${SITE}/assets/projects/dallas-sync-1440.webp"`)
+    expect(html).toContain(`<link rel="canonical" href="${SITE}/work/dallas-sync" />`)
+  })
+
+  it('leaves the home page description nowhere in the head', () => {
+    expect(html).not.toContain('do rascunho ao suporte')
+  })
+})

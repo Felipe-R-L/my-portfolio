@@ -16,12 +16,19 @@
   z-index: 60;
   overflow-y: auto;
   overscroll-behavior: contain;
-  background: var(--paper);
   color: var(--paper-ink);
+}
+
+/* The light floor, on its own so it can rise under the picture (T2). */
+.case-ground {
+  position: fixed;
+  inset: 0;
+  background: var(--paper);
 }
 
 .case-sheet {
   position: relative;
+  z-index: 1;
   max-width: 64rem;
   margin: 0 auto;
   padding: clamp(1.25rem, 4vh, 2.5rem) var(--gutter) clamp(4rem, 10vh, 6rem);
