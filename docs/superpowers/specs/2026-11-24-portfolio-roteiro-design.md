@@ -1,6 +1,6 @@
 # Portfolio: roteiro de cenas e transições
 
-Data: 2026-11-24 · Branch: `freela-networking` · Status: aguardando aprovação
+Data: 2026-11-24 (atualizado em 2026-11-26) · Branch: `freela-networking` · Status: jornada em capítulos implementada, em polimento (loops 017–047). O estado atual está no Adendo 4, que prevalece sobre o que vem antes dele.
 
 ## Intenção
 
@@ -148,3 +148,90 @@ O sobrenome **Leone** entra no nome da hero e em todo lugar onde o nome dele apa
 - **Uma tela por cena embaixo.** Prova, Processo e Conversa ocupam cada uma uma tela inteira no desktop; nunca aparecem duas ao mesmo tempo.
 - **Cards 3D.** Os passos do Processo se levantam da página quando a linha chega, e cards de números, passos e projetos se inclinam na direção do ponteiro.
 - **Projetos em movimento e com detalhes.** A imagem em foco se move devagar (e o Dallas Sync alterna entre duas telas reais, em modo treino); clicar abre os detalhes: o problema, o que foi feito, hoje, a stack e todas as telas. Base do Dallas Sync: `dallas-turborepo/docs/VISAO-PRODUTO.md` e README.
+
+## Adendo 4 (2026-11-25 e 2026-11-26): jornada em capítulos
+
+Pedido do Felipe em 2026-11-25: a home vira uma jornada em capítulos, com um único quadro persistente como fio condutor. Plano da fase 0 aprovado no artifact https://claude.ai/artifact/S5814wmGNEyW7UvrmbsU7q. Construída nos loops 017–047. **Este adendo descreve o estado atual e prevalece sobre o roteiro das 7 cenas acima.**
+
+### Estrutura
+
+- **Capítulos:** hero e história (`partida`) → Projetos (`destinos`) → Em uso (`telemetria`) → Como funciona (`plano`) → Fale comigo (`retorno`).
+- **O quadro (`src/app/journey/`):** um único `JourneyFrame` fixo por baixo da página.
+  - Cada cena registra *beats* com `registerBeats`, e o diretor (`director.ts`) calcula onde o quadro está (`frameAt`).
+  - O conteúdo de cada beat vem de `contents.ts`.
+  - As travessias: T1 do hero para a história, T2 para o caso aberto, T3 para Em uso, T4 para Como funciona e T5 para Fale comigo.
+- **Modos (`useJourneyMode`):**
+  - `scroll` no desktop;
+  - `swipe` no celular;
+  - `list` com movimento reduzido.
+- **Luz ambiente (`AmbientLight`):** uma cor por capítulo, fixa atrás de tudo.
+  - Cenários carregados por proximidade: o mapa topográfico gerado no Como funciona e as fotos de Diamante (CC BY-SA 3.0, Eugenio Magurno) atrás do Fale comigo.
+- **Rolagem leve:**
+  - Lenis com `lerp 0.1` e `wheelMultiplier 1`;
+  - a página tem cerca de 17 telas;
+  - os tamanhos das pistas estão em `SCROLL`, em `src/app/motion/tokens.ts`.
+
+### Hero
+
+- **Foto:** a do terraço em que o Felipe olha para a câmera (42EEEC6B, trocada em 2026-11-26).
+- **Assets gerados dela:**
+  - versões em cinza e em cor;
+  - o recorte da pessoa (rembg `isnet-general-use`, rodado fora do projeto);
+  - formatos largo (3400×2125) e alto (1800×2185).
+- **Enquadramento:** o rosto e os cantos de partida da câmera estão em `components/hero/camera.ts`.
+- **Dados das fotos:** sem EXIF e sem localização.
+
+### História (trilho horizontal ao lado do retrato)
+
+- **Capítulos:** OBA 2017 → ETEC 2020 → IFSP 2022 → Dallas Motel 2023 → OMD do Brasil 2024 → Hoje. O capítulo de origem (Diamante e Vincenzo) foi removido, e o texto de família não volta.
+- **Foco e passado:** são geométricos. Um card passa a "passado" quando a borda esquerda dele chega ao retrato. O foco, a cor revelada e o fundo seguem o card logo ao lado do retrato, então a trilha abre na OBA.
+- **Fundos:** cada capítulo tem um fundo com parallax (0,3 da velocidade dos cards) que se transforma no do próximo, num platô de peso `1,5 − 2·|i − at|`.
+  - O véu escurece a faixa do texto, e o texto ganha um halo escuro.
+- **Card e fundo de cada capítulo:**
+
+| Capítulo | Card | Fundo |
+|---|---|---|
+| OBA | medalha de prata desenhada | sistema solar colorido |
+| ETEC | o código `int main` | o terminal rodando o programa (`$ ./hello`, "Hello, world") |
+| IFSP | foto da turma de engenharia mecânica com o carrinho de CDs, mais o logo do IFSP (domínio público) | o croqui do carrinho no caderno dele, com a tinta separada do papel |
+| Dallas Motel | a tela do site | o hero do jrdallasmotel.com.br |
+| OMD | a foto dele na OMD | o estande da OMD na Agrishow (foto dele) |
+| Hoje | carrossel 3D com as telas reais do Dallas Sync, da Secret Boutique e do Dallas Motel: troca no hover, gira sozinho a cada 3,2 s e fica parado com movimento reduzido | a cidade vista do alto (foto dele, sem o letreiro do hotel) |
+
+- **Créditos no rodapé:** só Diamante e o logo do IFSP.
+
+### Projetos
+
+- **Projetos:** Dallas Sync, Secret Boutique e Dallas Motel. OMDfarm e Eco360 saíram; a OMD fica só como capítulo da história.
+- **A troca de projeto:**
+  - a tela que sai recua girando para o fundo, à esquerda;
+  - a folha de rosto do próximo (número, tipo e nome) vem do fundo, à direita, até a frente;
+  - ela segura um instante e segue em direção a quem olha, abrindo na tela nova.
+  - Só `transform` e `opacity`, ligados à rolagem.
+- **Índice sobre o quadro:** "01 Dallas Sync · 02 Secret Boutique · 03 Dallas Motel", com o projeto atual aceso e uma barra de progresso.
+- **Caso aberto:** clicar no quadro ou em "Ver detalhes" abre o caso em `/work/<slug>`. O build gera uma página estática por caso, com título e og próprios (`scripts/fan-out.mjs`).
+
+### Motion dos projetos (`MotionShot`, `data/motion.ts`)
+
+- **Como o vídeo é apresentado:**
+  - a tela gravada fica num "mundo" de 1440×900;
+  - a câmera inclina e aproxima nos gestos;
+  - o cursor é desenhado a partir do caminho gravado, sem cursor real no vídeo;
+  - há legendas, anel e pulso de clique;
+  - o último quadro segura 1,2 s antes do loop.
+- **Câmera:** uma cúbica monótona (Fritsch–Carlson) que passa por poucos pontos bem espaçados. Ela não para em cada ponto, nunca ultrapassa e segura parada só entre pontos iguais. O tempo é um relógio próprio, ancorado no vídeo.
+- **Gravações (`scripts/capture/`):** Playwright com screencast via CDP, codificado em H.264 (e VP9 quando sai menor), com pôster.
+  - **Dallas Sync:** organização de demonstração local, em modo treino, com seed fictícia. O card avisa que a tela é ilustrativa.
+  - **Secret Boutique:** a tela inicial, o carrossel de destaques, o catálogo e um produto no carrinho. Sem checkout.
+  - **Dallas Motel:** do hero para baixo, passando pelas suítes (com o clique em Fim de semana), pelo legado e pelo cardápio.
+  - Os dois sites são gravados em produção só para leitura, com toda requisição que não é GET abortada.
+
+### Regras que continuam
+
+- **Conteúdo:** nada de número, depoimento, logo ou cliente inventado, nem foto de banco passando por foto dele.
+- **Dados de cliente:** nenhum dado real de cliente nos vídeos.
+- **Produção:** nunca concluir pagamento nem usar credencial de produção.
+- **Animação:** só `transform`, `opacity`, `filter` e `clip-path`.
+- **Movimento reduzido:** o site continua legível.
+- **Clichês espaciais:** nenhum (foguete, astronauta e afins).
+- **Deploy:** nunca.

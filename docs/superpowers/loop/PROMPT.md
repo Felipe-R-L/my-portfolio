@@ -4,9 +4,17 @@ Uso: `/ralph-loop "$(cat docs/superpowers/loop/PROMPT.md)" --max-iterations 30 -
 
 O mesmo texto volta a cada iteração. A memória entre iterações vive só em arquivos, listados abaixo.
 
+> **Como o loop roda desde a jornada em capítulos (loops 017 em diante):** o crítico é o próprio Felipe. Cada retorno dele vira uma iteração. O construtor lê o pedido, corrige na causa, roda o gate, confere com prints (`shoot.mjs` ou um script de captura pontual) e escreve `.loop/notes/NNN.md` com:
+> - o pedido;
+> - a causa encontrada;
+> - o que mudou;
+> - como foi conferido.
+>
+> Depois atualiza `.loop/state.json` e faz o commit. O fluxo com o crítico cego abaixo continua valendo quando o loop roda sozinho.
+
 ---
 
-Você está construindo o portfolio descrito em `docs/superpowers/specs/2026-11-24-portfolio-roteiro-design.md`, seguindo o plano em `docs/superpowers/plans/2026-11-24-portfolio-roteiro.md`. Trabalhe em `/home/felipe/Code/my-portfolio`, na branch `freela-networking`.
+Você está construindo o portfolio descrito em `docs/superpowers/specs/2026-11-24-portfolio-roteiro-design.md`, seguindo o plano em `docs/superpowers/plans/2026-11-24-portfolio-roteiro.md`. Trabalhe em `/home/felipe/Code/pessoal/my-portfolio`, na branch `freela-networking`. O estado atual do site é o **Adendo 4** da spec (jornada em capítulos), e o andamento está na **Fase 2** do plano.
 
 ## Arquivos do loop (`.loop/`, ignorado pelo git)
 
@@ -48,7 +56,7 @@ bash scripts/loop/gate.sh
 - Teste vermelho não vai para o crítico.
 
 ### 5. Capturar
-- Suba o dev server, se não estiver no ar: `pnpm dev --port 5199`.
+- Suba o dev server, se não estiver no ar: `pnpm dev --host 127.0.0.1 --port 5199 --strictPort`. O `shoot.mjs` usa essa URL por padrão.
 - Rode `node scripts/loop/shoot.mjs .loop/shots/<NNN>`.
 - O script tira prints em dois tamanhos de tela:
   - desktop, 1440×900;
@@ -98,8 +106,17 @@ Use um subagente **novo**, sem o contexto desta conversa, do tipo `impeccable:im
 
 ### 8. Commit
 - Faça um commit por iteração com uma mensagem curta: `loop NNN: <passo>`.
-- Termine a mensagem com as linhas de atribuição da sessão.
-- Nunca dê push.
+- **Sem `Co-Authored-By`** em nenhum commit do projeto (pedido do Felipe em 2026-11-26; o histórico foi reescrito sem essas linhas).
+- Nunca dê push, nunca faça deploy.
+
+### Vídeos dos projetos (`scripts/capture/`)
+- `node scripts/capture/dallas-sync.mjs` grava o Dallas Sync local, na organização `demo`, em modo treino e com seed fictícia. Precisa do servidor na porta 3000, do web app na 5173 e do Postgres na 5544.
+- `node scripts/capture/sites.mjs secret-detail|motel-detail` grava a Secret Boutique e o Dallas Motel em produção, **só leitura**: toda requisição que não é GET é abortada. Nunca concluir pagamento nem usar credencial de produção.
+- Cada gravação gera `public/assets/projects/video/<clip>`:
+  - `-720.mp4` e `-1440.mp4`;
+  - `.webm`, quando sai menor;
+  - `-poster.webp` e `.json`, com as marcas, as caixas, os cliques e o caminho da mão.
+- A câmera e as legendas de cada clipe ficam em `src/app/data/motion.ts`. Use poucas chaves, bem espaçadas, e cheque com `mpdecimate` que não há quadros congelados nos trechos em movimento.
 
 ## Proibido
 - Ler `.loop/notes/`, em qualquer forma, sendo o construtor.

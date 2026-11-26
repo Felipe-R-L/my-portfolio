@@ -292,3 +292,52 @@
   - se `motion` não tiver mais uso, rode `pnpm remove motion`;
   - os mocks dos testes que citam `motion/react` acompanham a remoção.
 - [x] **Step 4:** Portões completos e `scenes.json` final, com a página inteira em cerca de 30 posições. Commit: `loop: navegação e limpeza`.
+
+---
+
+## Fase 2: jornada em capítulos (loops 017–047, 2026-11-25 e 2026-11-26)
+
+> Pedido do Felipe em 2026-11-25. A spec atual é o **Adendo 4** de `docs/superpowers/specs/2026-11-24-portfolio-roteiro-design.md`. A partir daqui, o loop roda com o Felipe como crítico: cada retorno dele vira uma iteração com gate, prints, uma nota em `.loop/notes/NNN.md` e um commit `loop NNN: <resumo>`.
+
+### Fundação e capítulos (017–029)
+
+- [x] **017–020:** a fundação da jornada e a medição de antes; o hero pinta antes do JS; o trilho de capítulos mostra onde o visitante está; os casos contados como problema resolvido.
+- [x] **021–025:** o quadro persistente e os destinos; a história; Em uso com a câmera parada; Como funciona com a câmera recuando; o convite e a volta para a cidade.
+- [x] **026–027:** o caso como rota (`/work/<slug>`) sobre a jornada, e a T2 de verdade.
+- [x] **028:** rolagem mais leve (cerca de 17 telas, `wheelMultiplier 1`), as paradas no lugar e o convite começando no rosto.
+- [x] **029:** Diamante sai da história e vira cenário. O texto de família não volta.
+
+### Vídeos e motion (030–034, 046–047)
+
+- [x] **030–032:** os vídeos gravados com `scripts/capture`, depois regravados sem cursor real, com o caminho da mão gravado em `<clip>.json`.
+- [x] **033–034:** motion graphics nas telas (`MotionShot`), com câmera em todos os projetos.
+- [x] **046:** a regravação do Dallas Motel, do hero ao cardápio.
+- [x] **047:** a câmera passa a ser uma curva monótona com relógio suave, sem trancos. A regravação da Secret Boutique vai da tela inicial ao carrinho, sem checkout.
+
+### Cenas de baixo (035–038)
+
+- [x] **035:** o fio e os passos do Como funciona, com ícones.
+- [x] **036:** a vista detalhada consertada, o clique no vídeo e as transições sem sobreposição (`useLeave`).
+- [x] **037:** os cards da história que revelam a cor, e a saída da história.
+- [x] **038:** o mapa topográfico gerado no Como funciona, e Diamante no Fale comigo.
+
+### Fotos e fundos da história (039–045)
+
+- [x] **039:** os fundos com parallax e transformação, a medalha da OBA e as fotos dele no IFSP e na OMD.
+- [x] **040:** o fundo e o foco seguem o card ao lado do retrato, então a trilha abre na OBA. As fotos trocam: de frente no hero, de lado no fim.
+- [x] **041 e 043:** a turma do IFSP no card e o croqui do caderno no fundo, mais visível.
+- [x] **042:** o contraste da faixa do texto (véu e halo).
+- [x] **044:** o fundo da ETEC roda o programa do card (o terminal).
+- [x] **045:** o estande da OMD na Agrishow, a cidade em Hoje e o carrossel 3D das plataformas.
+
+### Projetos (046–047)
+
+- [x] **046:** o índice sobre o quadro e o nome maior.
+- [x] **047:** a troca de projeto vira um card 3D: a tela que sai recua ao fundo e a folha de rosto do próximo vem do fundo para a frente.
+
+### Pendente
+
+- [ ] Projetos a cerca de 54 fps de média em rolagem contínua, com quedas isoladas de 33 ms no trecho da Secret Boutique.
+- [ ] No celular, a T5 ainda cobre a tela, e Diamante não aparece.
+- [ ] O Lighthouse e duas rodadas seguidas sem marca, antes do relatório final.
+- [ ] Para o Felipe: desfazer a isenção da assinatura de demonstração do Dallas Sync no banco local. O comando está em `.loop/notes/030.md`.
