@@ -54,7 +54,8 @@ export const STORY: readonly StoryChapter[] = [
   {
     id: "hoje",
     year: "hoje",
-    image: { src: `${P}/dallas-sync-op-720.webp`, srcSet: `${P}/dallas-sync-op-720.webp 720w, ${P}/dallas-sync-op-1440.webp 1440w` },
+    // the three systems he looks after, side by side (scripts/assets/today.mjs)
+    image: { src: `${S}/hoje-720.webp`, srcSet: `${S}/hoje-720.webp 720w, ${S}/hoje-1440.webp 1440w` },
     bg: { src: `${S}/bg-hoje-1440.webp` },
   },
 ];
