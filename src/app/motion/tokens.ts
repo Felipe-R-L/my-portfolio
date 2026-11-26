@@ -32,24 +32,29 @@ export const DURATION = {
 } as const;
 
 /** Pinned scroll lengths, in screens. */
+/**
+ * Scroll lengths, in screens. Kept short on purpose: 26 screens on a desktop
+ * read as heavy in review (2026-11-26), so each stretch is only as long as
+ * its gesture needs to be legible.
+ */
 export const SCROLL = {
   /** The hero: dive through the name, pull back to the portrait, frame it. */
-  hero: { desktop: 2.8, phone: 3.15, reduced: 1.2 },
+  hero: { desktop: 1.9, phone: 2.3, reduced: 1.2 },
   /** Desktop: the story plays on in the hero's pinned stage. */
-  story: 6.4,
+  story: 4.0,
   /** The Diamante opening of the story: two shots and a cut. */
-  origin: 1.6,
+  origin: 1.0,
   /** T1, Partida → Destinos: the tilt up into the night. */
-  tilt: 1.0,
+  tilt: 0.7,
   /** Each destination: its approach, then a still stretch to read it. */
-  destination: { approach: 1.2, hold: 0.5 },
+  destination: { approach: 0.7, hold: 0.3 },
   /** T3, Destinos → Telemetria: the light change, camera locked off. */
-  light: 0.8,
+  light: 0.5,
   /** T4: the frame pulls back into the marker, then tracks the 3 steps. */
-  pullBack: 0.6,
-  track: 1.5,
+  pullBack: 0.4,
+  track: 0.9,
   /** T5, Plano de voo → Retorno: the final pull-back over the city. */
-  finale: 1.2,
+  finale: 0.8,
 } as const;
 
 /** Scroll pixels per pixel of sideways travel, so every rail resists alike. */

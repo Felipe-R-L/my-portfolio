@@ -35,6 +35,10 @@
   background:
     linear-gradient(90deg, rgb(4 5 8 / 0.85) 0%, rgb(4 5 8 / 0.6) 50%, rgb(4 5 8 / 0) 72%),
     linear-gradient(0deg, rgb(4 5 8 / 0.9) 0%, rgb(4 5 8 / 0) 70%);
+  /* the page's body starts below the runway: the veil fades in from that
+     edge instead of drawing a line across the picture */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 35svh);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 35svh);
   pointer-events: none;
 }
 

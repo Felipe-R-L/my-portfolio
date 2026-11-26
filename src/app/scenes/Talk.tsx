@@ -59,13 +59,16 @@ export function Talk() {
         // opens to the whole screen as the runway reaches the top; the steps
         // above it are never set over the picture
         const top = pageTop(runway);
+        // and only once the marker of Como funciona has reached its last stop
+        const lastStop = document.querySelector<HTMLElement>(".plano-stop:last-child");
+        const start = Math.max(top - vh, lastStop ? pageTop(lastStop) - vh / 2 + 1 : 0);
         const rise = (): Box => {
           const r = runway.getBoundingClientRect();
           const k = span((vh - r.top) / vh, 0.5, 1);
           return lerpBox({ x: 0, y: r.top, w: vw, h: vw / 1.6 }, coverBox(vw, vh), easeInOut(k));
         };
         return [
-          { content: "city", start: top - vh, end: top + runway.offsetHeight, arrive: 0, gesture: "cut" as const, slot: rise },
+          { content: "city", start, end: top + runway.offsetHeight, arrive: 0, gesture: "cut" as const, slot: rise },
           { content: "city", start: top + runway.offsetHeight, end, arrive: 0, gesture: "cut" as const, still: true, slot: () => coverBox(vw, vh) },
         ];
       }

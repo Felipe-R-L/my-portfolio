@@ -63,14 +63,13 @@ const OFFLINE: FrameContent = {
 };
 
 /**
- * Retorno: the city of the opening, now in colour. The shot starts close on
- * the lower-left corner of the skyline (where the opening starts too) and
- * pulls back to the whole frame: the scale shrinks geometrically, which reads
- * as a constant speed, while the centre drifts back to the middle.
+ * Retorno: the photo of the opening, now in colour. The shot starts on his
+ * face, already the person the visitor met in the hero (Felipe asked for it
+ * on 2026-11-26, rather than a zoom into the buildings), and eases back a
+ * little as the corners open, so he settles in the right-hand third.
  */
-// close on the buildings-only corner, left of the person: at scale 2.6 a
-// half-width of 0.19 of the photo shows, so the centre can sit at 0.2
-const CITY_FROM = { s: 2.6, fx: 0.2, fy: 0.68 };
+// on the face: at scale 1.5 a half-width of 0.33 of the photo shows
+const CITY_FROM = { s: 1.5, fx: 0.5, fy: 0.44 };
 // and it settles a little closer than the whole photo, with him in the
 // right-hand third: the invitation is set on the left, clear of his face
 const CITY_TO = { s: 1.25, fx: 0.41, fy: 0.5 };
