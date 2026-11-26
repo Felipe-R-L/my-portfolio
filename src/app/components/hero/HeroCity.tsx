@@ -110,7 +110,7 @@ function measureZoomOrigin(stage: HTMLElement): string {
 
 /** The name laid out identically in every layer; `show` picks what this
     layer draws: the city line alone, or every other line and the credits. */
-function NameLayout({ show, measure = false }: { show: "front" | "city"; measure?: boolean }) {
+export function NameLayout({ show, measure = false }: { show: "front" | "city"; measure?: boolean }) {
   let offset = 0;
   return (
     <div className="hero-frame">

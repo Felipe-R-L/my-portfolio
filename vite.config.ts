@@ -3,6 +3,9 @@ import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import postsPlugin from "./plugins/vite-plugin-posts.mjs";
+import { heroShellHtml } from "./src/app/components/hero/shell";
+import pt from "./src/app/i18n/locales/pt.json";
+import en from "./src/app/i18n/locales/en.json";
 
 function figmaAssetResolver() {
   return {
@@ -16,9 +19,29 @@ function figmaAssetResolver() {
   };
 }
 
+/**
+ * Writes the hero's first frame into the homepage's #root, so the name and
+ * the pitch paint before any JS runs (LCP). React replaces it on mount with
+ * the same markup. See src/app/components/hero/shell.ts.
+ */
+function heroShell() {
+  return {
+    name: "hero-shell",
+    transformIndexHtml(html: string, ctx: { filename: string }) {
+      if (!ctx.filename.endsWith("index.html") || ctx.filename.endsWith("blog.html")) return html;
+      const shell = heroShellHtml({
+        pt: { description: pt.hero.description, cta: pt.hero.cta_projects },
+        en: { description: en.hero.description, cta: en.hero.cta_projects },
+      });
+      return html.replace('<div id="root"></div>', `<div id="root">${shell}</div>`);
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
     figmaAssetResolver(),
+    heroShell(),
     postsPlugin({ repoRoot: __dirname }),
     // Use OXC plugin for better performance and Vite 8 compatibility
     react(),

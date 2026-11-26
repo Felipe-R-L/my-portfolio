@@ -52,11 +52,14 @@
 }
 
 /* Letters rise one by one out of their line's mask, once, on load. Every
-   layer that draws the name runs the same keyframes, so they stay aligned. */
+   layer that draws the name runs the same keyframes, so they stay aligned.
+   --hero-elapsed is how long the static shell (index.html) had been on
+   screen when React replaced it: the new nodes pick the entrance up where
+   the shell's left it instead of starting over (src/main.tsx). */
 .hero-letter {
   display: inline-block;
   animation: hero-rise 1s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-  animation-delay: calc(120ms + var(--i) * 45ms);
+  animation-delay: calc(120ms + var(--i) * 45ms - var(--hero-elapsed, 0s));
 }
 
 @keyframes hero-rise {
@@ -68,6 +71,7 @@
 /* ---------- credits ---------- */
 
 .hero-credits {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -75,13 +79,26 @@
   gap: 1.25rem 3rem;
   margin-top: clamp(1.25rem, 3.5vh, 2.25rem);
   padding-top: clamp(1.25rem, 3vh, 1.75rem);
-  border-top: 1px solid rgb(245 247 255 / 0.16);
-  animation: hero-credits-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.9s backwards;
 }
 
-@keyframes hero-credits-in {
+/* The rule above the credits draws in from the left once the name has
+   risen. The text itself never animates: it is the phone's largest text
+   (LCP), and Chrome does not count text under an opacity animation as
+   painted until the animation is over. */
+.hero-credits::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: rgb(245 247 255 / 0.16);
+  transform-origin: left center;
+  animation: hero-rule-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: calc(0.3s - var(--hero-elapsed, 0s));
+}
+
+@keyframes hero-rule-in {
   from {
-    opacity: 0;
+    transform: scaleX(0);
   }
 }
 
@@ -139,7 +156,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero-letter,
-  .hero-credits {
+  .hero-credits::before {
     animation: none;
   }
 }
