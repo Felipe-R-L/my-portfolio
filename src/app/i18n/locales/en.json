@@ -332,7 +332,7 @@
         "text": "New staff learn in a separate training mode that has the same screens and no real data, so a mistake made there does not change anyone's till."
       }
     },
-    "video_note": "The video shows it happening, recorded in training mode with made-up data.",
+    "video_note": "The video was recorded with the internet actually switched off, in training mode with made-up data, and the check-in made there reached the server on its own once the network was back.",
     "still_note": "The system in training mode, with no real data."
   },
   "plano": {

@@ -39,6 +39,18 @@ export type WorkItem = {
 };
 
 const P = "/assets/projects";
+const V = `${P}/video`;
+
+/**
+ * A recorded loop (scripts/capture): its poster and H.264 at two widths, plus
+ * VP9 only where it came out smaller (the long scrolls; on the flat UI takes
+ * H.264 wins and the webm was dropped).
+ */
+const clip = (name: string, webm = false): ProjectVideoSources => ({
+  poster: `${V}/${name}-poster.webp`,
+  w720: { mp4: `${V}/${name}-720.mp4`, ...(webm && { webm: `${V}/${name}-720.webm` }) },
+  w1440: { mp4: `${V}/${name}-1440.mp4`, ...(webm && { webm: `${V}/${name}-1440.webm` }) },
+});
 
 export const WORK: readonly WorkItem[] = [
   {
@@ -52,6 +64,8 @@ export const WORK: readonly WorkItem[] = [
     gallery: [{ src: `${P}/dallas-sync-op-1440.webp`, srcSet: `${P}/dallas-sync-op-720.webp 720w, ${P}/dallas-sync-op-1440.webp 1440w` }],
     stack: ["React 19", "NestJS 11", "PostgreSQL", "Drizzle", "Dexie", "Better Auth", "Turborepo"],
     parts: ["context", "problem", "decision", "result", "now"],
+    // the training organization, made-up data; the detail is recorded offline
+    video: { card: clip("dallas-sync-card"), detail: clip("dallas-sync-offline") },
   },
   {
     id: "secret",
@@ -61,6 +75,8 @@ export const WORK: readonly WorkItem[] = [
     href: "https://secret-boutique.com.br",
     stack: ["Next.js 16", "Supabase", "Mercado Pago"],
     parts: ["context", "problem", "decision", "result"],
+    // the open (SFW) catalogue; the detail stops at the Pix form, never submitted
+    video: { card: clip("secret-card", true), detail: clip("secret-detail") },
   },
   {
     id: "dallas_motel",
@@ -70,6 +86,7 @@ export const WORK: readonly WorkItem[] = [
     href: "https://jrdallasmotel.com.br",
     stack: ["React", "TypeScript", "Vite", "Tailwind CSS", "Supabase", "Vercel"],
     parts: ["context", "problem", "decision", "result"],
+    video: { card: clip("dallas-motel-card", true), detail: clip("dallas-motel-detail") },
   },
 ];
 
