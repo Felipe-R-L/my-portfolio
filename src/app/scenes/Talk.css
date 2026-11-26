@@ -1,56 +1,50 @@
-/* The close: the serif returns for one line, then a quiet footer. */
+/*
+ * Retorno. The city behind is the journey's frame, opened to the whole
+ * screen (T5); this scene draws the invitation over it. A veil darkens the
+ * picture only where the words sit, so it stays the city everywhere else.
+ */
 
 .talk {
   position: relative;
-  z-index: 10;
+  color: var(--ink);
+}
+
+/* Where the camera pulls back over the city: an empty stretch of scroll. */
+.talk-runway {
+  height: var(--runway);
+}
+
+/* Every word on the left half: the right of the screen is the city, and him. */
+.talk-body {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: clamp(3rem, 6vw, 6rem);
-  /* A full section break above, sized so that the close, with its footer,
-     about fills the last screen and nothing of the steps peeks out behind
-     the menu at the very end; no stretched gap inside it. */
+  grid-template-columns: minmax(0, 52%);
+  gap: clamp(2rem, 4vh, 3rem);
   min-height: 100svh;
-  align-content: center;
-  padding: clamp(6rem, 16vh, 9rem) var(--gutter) clamp(3rem, 8vh, 5rem);
-  background: #050608;
-  color: #eef1f6;
+  align-content: end;
+  padding: clamp(6rem, 16vh, 10rem) var(--gutter) clamp(1.5rem, 4vh, 2.5rem);
+  padding-left: calc(var(--gutter) + 1.5rem);
+}
+
+/* The veil: dark low and to the left, where the words are; clear above. */
+.talk-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgb(4 5 8 / 0.85) 0%, rgb(4 5 8 / 0.6) 50%, rgb(4 5 8 / 0) 72%),
+    linear-gradient(0deg, rgb(4 5 8 / 0.9) 0%, rgb(4 5 8 / 0) 70%);
+  pointer-events: none;
 }
 
 .talk-title {
-  grid-column: 1 / -1;
-  margin: 0 0 calc(-1 * clamp(1.5rem, 3vw, 3rem));
-  font-family: "Instrument Serif", Georgia, serif;
+  margin: 0 0 1.25rem;
+  font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(4.5rem, 15.5vw, 15rem);
-  line-height: 0.88;
-  letter-spacing: -0.02em;
-  color: #eef1f6;
-  /* the hero's city in colour (a crop of its left side, where he is not),
-     drifting slowly behind the letters */
-  background: url("/assets/profile/talk-city.webp") 0% 50% / cover no-repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: talk-drift 26s ease-in-out infinite alternate;
-}
-
-@keyframes talk-drift {
-  to {
-    background-position: 100% 50%;
-  }
-}
-
-@media (max-width: 767px) {
-  .talk-title {
-    font-size: 21vw;
-    margin-bottom: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .talk-title {
-    animation: none;
-  }
+  font-size: clamp(3.25rem, 6vw, 6rem);
+  line-height: 0.95;
+  text-wrap: balance;
 }
 
 .talk-lead {
@@ -58,7 +52,65 @@
   max-width: 44ch;
   font-size: 1.125rem;
   line-height: 1.6;
-  color: rgb(196 203 214);
+  color: var(--ink-soft);
+}
+
+/* What the visitor needs: real radio buttons, drawn as chips. */
+.talk-kinds {
+  margin: 2rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.talk-kinds-q {
+  margin-bottom: 0.75rem;
+  padding: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.talk-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.talk-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border: 1px solid rgb(245 247 255 / 0.28);
+  border-radius: 999px;
+  background: rgb(4 5 8 / 0.35);
+  color: var(--ink);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-arrive), border-color 0.25s var(--ease-arrive), color 0.25s var(--ease-arrive);
+}
+
+.talk-chip input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.talk-chip:hover {
+  border-color: var(--diamante);
+}
+
+.talk-chip[data-on="true"] {
+  background: var(--diamante);
+  border-color: var(--diamante);
+  color: #05070a;
+}
+
+.talk-chip:has(input:focus-visible) {
+  outline: 2px solid var(--diamante);
+  outline-offset: 3px;
 }
 
 .talk-actions {
@@ -66,7 +118,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem 2rem;
-  margin-top: 2.25rem;
+  margin-top: 1.75rem;
 }
 
 .talk-cta {
@@ -75,58 +127,81 @@
   min-height: 3.25rem;
   padding: 0 1.75rem;
   border-radius: 999px;
-  background: #eef1f6;
+  background: var(--ink);
   color: #050608;
   font-weight: 600;
   font-size: 1.0625rem;
   text-decoration: none;
-  transition: background-color 0.25s ease;
+  transition: background-color 0.25s var(--ease-arrive);
 }
 
 .talk-cta:hover {
   background: #fff;
 }
 
+.talk-cta:focus-visible,
+.talk-mail:focus-visible,
+.talk-proof:focus-visible,
+.talk-link:focus-visible {
+  outline: 2px solid var(--diamante);
+  outline-offset: 3px;
+}
+
 .talk-mail {
   font-size: 1rem;
-  color: #eef1f6;
+  color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 0.3em;
   text-decoration-color: rgb(255 255 255 / 0.35);
 }
 
 .talk-mail-label {
-  color: rgb(178 186 199);
+  color: var(--ink-soft);
+}
+
+.talk-availability {
+  margin: 1rem 0 0;
+  color: var(--diamante);
+  font-size: 0.95rem;
+}
+
+.talk-proof {
+  display: inline-block;
+  margin-top: 1.75rem;
+  color: var(--diamante);
+  font-size: 0.95rem;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+  text-decoration-color: rgb(159 195 214 / 0.45);
 }
 
 .talk-side {
   display: grid;
-  align-content: end;
-  gap: 2.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
 }
 
 .talk-block {
   padding-top: 1.25rem;
-  border-top: 1px solid rgb(255 255 255 / 0.14);
+  border-top: 1px solid var(--hairline);
 }
 
 .talk-block-title {
   margin: 0 0 0.5rem;
   font-size: 1.125rem;
   font-weight: 700;
-  letter-spacing: -0.015em;
 }
 
 .talk-block-text {
   margin: 0 0 0.75rem;
   font-size: 1rem;
   line-height: 1.55;
-  color: rgb(196 203 214);
+  color: var(--ink-soft);
 }
 
 .talk-link {
   font-size: 1rem;
-  color: #eef1f6;
+  color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 0.3em;
   text-decoration-color: rgb(255 255 255 / 0.4);
@@ -137,58 +212,60 @@
   line-height: 1.45;
 }
 
-.talk-cta:focus-visible,
-.talk-mail:focus-visible,
-.talk-link:focus-visible,
-.talk-foot a:focus-visible {
-  outline: 2px solid #eef1f6;
-  outline-offset: 3px;
-}
-
-.talk-main,
-.talk-side {
-  align-self: start;
-}
-
-.talk-credits {
-  flex-basis: 100%;
-  margin: 0;
-  font-size: 0.75rem;
-  color: rgb(140 148 162);
-}
-
 .talk-foot {
   grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 1rem 2rem;
+  gap: 0.75rem 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgb(255 255 255 / 0.1);
-  font-size: 0.9375rem;
-  color: rgb(160 168 182);
+  border-top: 1px solid var(--hairline);
+  color: var(--ink-soft);
+  font-size: 0.875rem;
 }
 
 .talk-foot-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
-.talk-foot a {
-  color: rgb(196 203 214);
-  text-decoration: none;
+.talk-foot-links a {
+  color: inherit;
 }
 
-.talk-foot a:hover {
-  color: #fff;
+.talk-credits {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+}
+
+/* Reduced motion: no pull-back, the city is simply there, still. */
+.talk[data-mode="list"] .talk-runway {
+  height: 0;
+}
+
+.talk[data-mode="list"] {
+  background: #05070a url("/assets/profile/scene-wide-color.webp") center / cover no-repeat;
 }
 
 @media (max-width: 767px) {
-  .talk {
+  .talk-runway {
+    height: 60svh;
+  }
+
+  .talk-body {
     grid-template-columns: 1fr;
-    min-height: auto;
-    /* clears the floating menu pill */
-    padding-bottom: 7rem;
+    gap: 3rem;
+    padding: 4rem var(--gutter) calc(6.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .talk-side {
+    grid-template-columns: 1fr;
+  }
+
+  .talk-body::before {
+    background: linear-gradient(0deg, rgb(4 5 8 / 0.92) 0%, rgb(4 5 8 / 0.7) 60%, rgb(4 5 8 / 0.35) 100%);
   }
 }
