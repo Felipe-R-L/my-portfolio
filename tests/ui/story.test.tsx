@@ -56,10 +56,11 @@ describe('story', () => {
     expect(c.querySelector('[data-chapter="hoje"]')?.getAttribute('data-focus')).toBe('true')
   })
 
-  it('names Vincenzo and never says the motel is the family business', () => {
+  it('tells no family origin and never says the motel is the family business', () => {
     for (const bundle of [pt, en]) {
       const all = JSON.stringify(bundle.story)
-      expect(all).toContain('Vincenzo Leone')
+      // Diamante is scenery now (Como funciona), not a chapter (2026-11-26)
+      expect(all).not.toMatch(/Vincenzo|tatarav|great-great/i)
       expect(all).not.toMatch(/fam[ií]lia do|cresci|grew up|family business|family's/i)
     }
   })

@@ -33,11 +33,11 @@ for (const run of runs) {
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const city = document.querySelector(".city");
       const cityTop = city ? city.getBoundingClientRect().top + window.scrollY : 0;
-      // Mirrors SCROLL in src/app/motion/tokens.ts (hero, origin + story).
+      // Mirrors SCROLL in src/app/motion/tokens.ts (hero; story + tilt).
       const heroLen = (reduced ? 1.2 : phone ? 2.3 : 1.9) * vh;
       if (hero !== undefined) return Math.round(cityTop + hero * heroLen);
       if (story !== undefined) {
-        if (!phone && !reduced) return Math.round(cityTop + heroLen + story * 5.0 * vh);
+        if (!phone && !reduced) return Math.round(cityTop + heroLen + story * 4.7 * vh);
         const list = document.querySelector(".story-list");
         if (!list) return null;
         const r = list.getBoundingClientRect();

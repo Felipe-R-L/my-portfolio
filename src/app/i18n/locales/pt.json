@@ -189,11 +189,6 @@
     "label": "Minha história",
     "today": "hoje",
     "chapters": {
-      "diamante": {
-        "title": "Diamante, Calábria",
-        "text": "Meu tataravô Vincenzo Leone nasceu em Diamante, no sul da Itália, e é dele que vem o sobrenome Leone.",
-        "alt": "Diamante vista do alto, a cidade branca sobre o mar da Calábria"
-      },
       "oba": {
         "title": "Prata na OBA",
         "text": "Ainda na escola, conquistei a medalha de prata na XIX Olimpíada Brasileira de Astronomia e Astronáutica."
@@ -222,9 +217,6 @@
         "text": "Divido o meu tempo entre a OMD, o Dallas Sync e projetos para negócios que precisam de um site, de uma loja virtual ou de um sistema feito sob medida. Fora do código eu fotografo e filmo, e é de lá que vem o cuidado com enquadramento e luz que procuro levar para cada tela que construo.",
         "alt": "O mapa de suítes do Dallas Sync"
       }
-    },
-    "origin": {
-      "caption": "1867 · Diamante, Calábria"
     }
   },
   "work": {

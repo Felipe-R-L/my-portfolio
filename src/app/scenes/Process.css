@@ -16,6 +16,7 @@
 }
 
 .plano-stage {
+  isolation: isolate;
   position: sticky;
   top: 0;
   height: 100svh;
@@ -23,6 +24,34 @@
   grid-template-rows: auto 1fr auto;
   padding: clamp(5.5rem, 12vh, 8rem) var(--gutter) clamp(2rem, 6vh, 4rem);
   padding-left: calc(var(--gutter) + 1.5rem);
+}
+
+/* The scenery: Diamante's coast, dim under the words, panning with the travel. */
+.plano-scenery {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.plano-scenery img {
+  max-width: none;
+  width: 130%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.42;
+  transform: translate3d(calc(var(--pan, 0.5) * -23%), 0, 0);
+  will-change: transform;
+}
+
+/* dark at the top and bottom edges, where the page meets it, and under the words */
+.plano-scenery::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgb(5 6 8) 0%, rgb(5 6 8 / 0.35) 30%, rgb(5 6 8 / 0.55) 62%, rgb(5 6 8) 100%);
 }
 
 .plano-title {
@@ -171,3 +200,10 @@
   justify-items: start;
 }
 
+
+/* Phone and reduced motion: the coast stands still behind the steps. */
+.plano[data-mode="swipe"] .plano-scenery img,
+.plano[data-mode="list"] .plano-scenery img {
+  width: 100%;
+  transform: none;
+}

@@ -189,11 +189,6 @@
     "label": "My story",
     "today": "today",
     "chapters": {
-      "diamante": {
-        "title": "Diamante, Calabria",
-        "text": "My great-great-grandfather Vincenzo Leone was born in Diamante, in the south of Italy, and it is from him that the surname Leone comes.",
-        "alt": "Diamante from above, the white town over the Calabrian sea"
-      },
       "oba": {
         "title": "Silver at the OBA",
         "text": "While still in school, I won the silver medal at the 19th Brazilian Astronomy and Astronautics Olympiad."
@@ -222,9 +217,6 @@
         "text": "I split my time between OMD, Dallas Sync and projects for businesses that need a website, an online store or a system built around the way they work. Outside code I take photographs and film, which is where the care for framing and light that I try to bring to every screen I build comes from.",
         "alt": "The Dallas Sync suite map"
       }
-    },
-    "origin": {
-      "caption": "1867 · Diamante, Calabria"
     }
   },
   "work": {

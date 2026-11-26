@@ -79,7 +79,7 @@ describe("the frame", () => {
 
 describe("motion tokens", () => {
   it("gives every pinned passage a positive length", () => {
-    const lengths = [SCROLL.origin, SCROLL.tilt, SCROLL.light, SCROLL.pullBack, SCROLL.track, SCROLL.finale, SCROLL.destination.approach, SCROLL.destination.hold];
+    const lengths = [SCROLL.story, SCROLL.tilt, SCROLL.light, SCROLL.pullBack, SCROLL.track, SCROLL.finale, SCROLL.destination.approach, SCROLL.destination.hold];
     lengths.forEach((l) => expect(l).toBeGreaterThan(0));
   });
 

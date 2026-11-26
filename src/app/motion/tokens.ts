@@ -42,8 +42,6 @@ export const SCROLL = {
   hero: { desktop: 1.9, phone: 2.3, reduced: 1.2 },
   /** Desktop: the story plays on in the hero's pinned stage. */
   story: 4.0,
-  /** The Diamante opening of the story: two shots and a cut. */
-  origin: 1.0,
   /** T1, Partida → Destinos: the tilt up into the night. */
   tilt: 0.7,
   /** Each destination: its approach, then a still stretch to read it. */
