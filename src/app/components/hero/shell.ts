@@ -4,45 +4,54 @@
  *
  * Without it the page shows nothing until React has downloaded and run, and
  * on a phone that took 3.5 s (Lighthouse "render delay"). The shell is the
- * front layer of the name exactly as `NameLayout show="front"` renders it, so
- * when React mounts and replaces it nothing moves; the city then appears
- * inside the letters. tests/ui/hero-shell.test.tsx holds the two together.
+ * name exactly as `NameLayout` renders it, over Diamante, so when React mounts
+ * and replaces it nothing moves. tests/ui/hero-shell.test.tsx holds the two
+ * together.
  *
  * Pure strings, no React: the Vite config imports this file.
  */
 import { NAME } from "./name";
+import { STAMP_SVG } from "./stamp";
 
 const esc = (s: string) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 
 export type ShellCopy = { description: string; cta: string };
 
-/** The front layer of the name: every line laid out, the city line a ghost. */
+/** The name: each line a row of words, every letter numbered for the rise. */
 export function nameFrontHtml(copy: ShellCopy): string {
   let offset = 0;
   const lines = NAME.lines
-    .map((word, i) => {
-      const isCity = i === NAME.city;
-      let marked = false;
-      const letters = [...word]
-        .map((ch, k) => {
-          const target = isCity && !marked && ch.toLowerCase() === NAME.mark;
-          if (target) marked = true;
-          const zoom = target ? ` data-zoom-target="${NAME.markX}"` : "";
-          return `<span class="hero-letter"${zoom} style="--i:${offset + k}">${esc(ch)}</span>`;
+    .map((words, i) => {
+      const row = words
+        .map((w) => {
+          const letters = [...w.text]
+            .map((ch, k) => `<span class="hero-letter" style="--i:${offset + k}">${esc(ch)}</span>`)
+            .join("");
+          offset += w.text.length;
+          return `<span class="hero-word${w.em ? " hero-word--em" : ""}">${letters}</span>`;
         })
-        .join("");
-      offset += word.length;
-      const cls = `hero-line${i > 0 ? " hero-line--next" : ""}${isCity ? " city-ghost" : ""}`;
-      return `<span class="${cls}"><span class="hero-word">${letters}</span></span>`;
+        .join(" ");
+      return `<span class="hero-line${i > 0 ? " hero-line--next" : ""}">${row}</span>`;
     })
     .join("");
   return (
-    `<div class="hero-frame"><div class="hero-name" aria-hidden="true" data-measure="">${lines}</div>` +
+    `<div class="hero-frame"><div class="hero-name" aria-hidden="true">${lines}</div>` +
     `<div class="hero-credits "><p class="hero-pitch" data-shell="description">${esc(copy.description)}</p>` +
     `<a href="#projects" class="hero-link" data-shell="cta">${esc(copy.cta)}</a></div></div>`
   );
 }
+
+/**
+ * Diamante behind the name: the photo (one file per device, so the browser
+ * fetches only one), the film grain, and the travel stamp. Graded by CSS
+ * (HeroCity.css). React mounts this same markup.
+ */
+export const PLACE_HTML =
+  `<picture><source media="(max-width: 768px)" srcset="/assets/story/diamante-c-1200.webp">` +
+  `<img class="city-place-photo" src="/assets/story/diamante-c-1800.webp" alt="" width="1800" height="1173" fetchpriority="high" decoding="async"></picture>` +
+  `<div class="city-place-grain"></div>` +
+  `<div class="hero-stamp">${STAMP_SVG}</div>`;
 
 /**
  * The whole shell for #root, plus the inline script that swaps in the
@@ -52,6 +61,7 @@ export function nameFrontHtml(copy: ShellCopy): string {
 export function heroShellHtml(copies: Record<"pt" | "en", ShellCopy>, fallback: "pt" | "en" = "en"): string {
   const body =
     `<section class="city" aria-label="${esc(NAME.full)}"><div class="city-stage">` +
+    `<div class="city-place" aria-hidden="true">${PLACE_HTML}</div>` +
     `<div class="city-front"><h1 class="sr-only">${esc(NAME.full)}</h1>${nameFrontHtml(copies[fallback])}</div>` +
     `</div></section>`;
   const json = JSON.stringify(copies).replaceAll("<", "\\u003c");

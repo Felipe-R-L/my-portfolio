@@ -40,26 +40,36 @@
       a chain of two third-party requests to Google. Both are now same-origin.
     -->
     <!--
-      LCP: the photo the city hero is shot on, one version per device, split
-      at the same breakpoint as useIsMobile.
+      LCP: Diamante behind the name, one version per device, split at the
+      same breakpoint as useIsMobile.
     -->
     <link
       rel="preload"
       as="image"
       media="(min-width: 769px)"
-      href="/assets/profile/scene-wide-3400.webp"
+      href="/assets/story/diamante-c-1800.webp"
       fetchpriority="high"
     />
     <link
       rel="preload"
       as="image"
       media="(max-width: 768px)"
-      href="/assets/profile/scene-tall-1800.webp"
+      href="/assets/story/diamante-c-1200.webp"
       fetchpriority="high"
+    />
+    <!-- The portrait the window opens onto, right behind. -->
+    <link rel="preload" as="image" media="(min-width: 769px)" href="/assets/profile/scene-wide-3400.webp" />
+    <link rel="preload" as="image" media="(max-width: 768px)" href="/assets/profile/scene-tall-1800.webp" />
+    <link
+      rel="preload"
+      href="/assets/fonts/cormorant-garamond-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
     <link
       rel="preload"
-      href="/assets/fonts/space-grotesk-latin.woff2"
+      href="/assets/fonts/eb-garamond-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -77,7 +87,7 @@
     </style>
   </head>
 
-  <body>
+  <body class="home-text">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

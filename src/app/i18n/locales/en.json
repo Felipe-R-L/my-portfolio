@@ -339,30 +339,10 @@
     "chapters": {
       "partida": "About",
       "destinos": "Projects",
-      "telemetria": "In use",
       "plano": "How it works",
       "retorno": "Contact"
     },
     "where": "Chapter {{n}} of {{total}}: {{name}}"
-  },
-  "telemetria": {
-    "title": "In use",
-    "entries": {
-      "since": {
-        "label": "since Sep 2026",
-        "text": "Since September 2026 Dallas Sync has been in production at the front desk of Dallas Motel, which is where you can tell whether it really works."
-      },
-      "offline": {
-        "label": "offline",
-        "text": "When the internet drops, the front desk keeps recording, sees the queue of what has not gone up yet and the system syncs on its own once the network is back."
-      },
-      "training": {
-        "label": "training mode",
-        "text": "New staff learn in a separate training mode that has the same screens and no real data, so a mistake made there does not change anyone's till."
-      }
-    },
-    "video_note": "The video was recorded with the internet actually switched off, in training mode with made-up data, and the check-in made there reached the server on its own once the network was back.",
-    "still_note": "The system in training mode, with no real data."
   },
   "plano": {
     "title": "How it works",

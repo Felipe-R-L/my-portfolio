@@ -60,9 +60,9 @@ describe('talk', () => {
     expect(chips[2].closest('label')?.getAttribute('data-on')).toBe('true')
   })
 
-  it('offers the proof in place of a testimonial, and shows no availability while it is off', () => {
+  it('offers the proof (the Dallas Sync case) in place of a testimonial, and shows no availability while it is off', () => {
     const c = render()
-    expect(c.querySelector('a.talk-proof')?.getAttribute('href')).toBe('#proof')
+    expect(c.querySelector('a.talk-proof')?.getAttribute('href')).toBe('/work/dallas-sync')
     expect(AVAILABILITY.enabled).toBe(false)
     expect(c.querySelector('.talk-availability')).toBeNull()
   })

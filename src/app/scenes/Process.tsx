@@ -51,8 +51,8 @@ export function Process() {
       const vh = window.innerHeight;
       const stuck = pageTop(track);
       const travel = SCROLL.track * vh;
-      const proof = document.querySelector(".proof-track");
-      const pullFrom = proof ? pageTop(proof) + proof.getBoundingClientRect().height - vh : stuck - vh;
+      const prev = document.querySelector(".dest-track");
+      const pullFrom = prev ? pageTop(prev) + prev.getBoundingClientRect().height - vh : stuck - vh;
       const legs = STEPS.length - 1;
       return [
         { from: pullFrom, to: stuck, duration: 1.5 },
@@ -101,11 +101,11 @@ export function Process() {
       const st = stage.getBoundingClientRect();
       const lineBox: Box = { x: l.left, y: l.top - st.top + l.height / 2, w: l.width, h: 0 };
       const travel = SCROLL.track * vh;
-      // T4 starts where Em uso lets the frame go
-      const proof = document.querySelector(".proof-track");
-      const pullFrom = proof ? pageTop(proof) + proof.getBoundingClientRect().height - vh : stuck - vh;
+      // T4 starts where the destinations let the frame go
+      const prev = document.querySelector(".dest-track");
+      const pullFrom = prev ? pageTop(prev) + prev.getBoundingClientRect().height - vh : stuck - vh;
       return [
-        // T4: the pull-back, from the front desk's screen down to the marker at the first stop
+        // T4: the pull-back, cut to the front desk's screen, down to the marker at the first stop
         {
           content: "offline",
           start: pullFrom,

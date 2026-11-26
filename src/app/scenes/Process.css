@@ -28,6 +28,7 @@
 .plano-title {
   margin: 0;
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-track);
   font-weight: var(--serif-weight);
   font-size: calc(clamp(2.5rem, 4.2vw, 4rem) * var(--serif-scale));
@@ -185,6 +186,8 @@
 }
 
 .step-n {
+  font-family: var(--ui);
+  font-size-adjust: none;
   color: var(--ink-faint);
   font-size: 0.78rem;
   font-weight: 600;
@@ -200,6 +203,7 @@
 .step-title {
   margin: 0;
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-sub-track);
   font-weight: var(--serif-sub-weight);
   font-size: calc(clamp(1.6rem, 2.2vw, 2.1rem) * var(--serif-scale));

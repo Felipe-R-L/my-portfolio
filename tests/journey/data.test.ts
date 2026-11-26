@@ -30,14 +30,14 @@ describe("the journey's copy", () => {
 
   it("states facts only: no counters, no deadlines in days, no clichés", () => {
     for (const bundle of [pt, en]) {
-      const text = JSON.stringify({ t: bundle.telemetria, p: bundle.plano, c: bundle.talk.chips });
+      const text = JSON.stringify({ p: bundle.plano, c: bundle.talk.chips });
       // the steps describe what happens, never how many days it takes
       expect(text).not.toMatch(/\b\d+\s*(dias?|days?|semanas?|weeks?)\b/i);
       // whole words: the olympiad's real name ("Astronáutica") is a fact, not a cliché
       expect(JSON.stringify(bundle)).not.toMatch(/\b(decolar|decolagem|foguete|rocket|astronauta?)\b|take off/i);
       // the voice rules: no em dash in what the homepage shows (the recruiter
       // version's `experience` copy is parked and out of scope)
-      const home = { hero: bundle.hero, story: bundle.story, work: bundle.work, telemetria: bundle.telemetria, plano: bundle.plano, talk: bundle.talk, contact: bundle.contact, journey: bundle.journey };
+      const home = { hero: bundle.hero, story: bundle.story, work: bundle.work, plano: bundle.plano, talk: bundle.talk, contact: bundle.contact, journey: bundle.journey };
       expect(JSON.stringify(home)).not.toContain("—");
     }
   });

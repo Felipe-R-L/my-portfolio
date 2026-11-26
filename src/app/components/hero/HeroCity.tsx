@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 import { gsap } from "../../scroll/gsap";
@@ -10,36 +10,32 @@ import { STORY } from "../../data/story";
 import { registerPassages } from "../../scroll/glide";
 import { LiquidReveal } from "./LiquidReveal";
 import { Credits, Letters, NAME } from "./HeroParts";
+import { PLACE_HTML } from "./shell";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
 import { FRAME_RADIUS, SCROLL } from "../../motion/tokens";
 import { useTranslation } from "react-i18next";
 import "./HeroCity.css";
 
 /**
- * The city inside the name, then the person, then who he is.
+ * Diamante, then the person, then who he is.
  *
  * One pinned scene, played by scrolling:
  *
- * 1. FELIPE in solid white; RODRIGUES is a row of windows onto the Campinas
- *    skyline, seen from the top of the Patriani building. Only buildings: the
- *    person is kept for later. The windows are a dark sheet with white letters
- *    blended with `multiply` over the photo, so the page stays dark around the
- *    letters and nothing competes with the name.
- * 2. The camera flies through the stem of the I. Scaling the sheet grows that
- *    window while the photo underneath stays put, until the skyline fills the
- *    screen.
- * 3. The camera pulls back. The skyline was never a separate picture: it is
- *    the empty left corner of the rooftop portrait, magnified. Pulling back
- *    on the same photo brings the person into frame with no cut.
- * 4. The photo holds and comes alive (see LiquidReveal): the pointer pours
+ * 1. The name, solid, over Diamante (the town in Calabria the family came
+ *    from): the photo graded cool and a little drained, film grain over it
+ *    and a travel stamp in the corner. Only scenery: no family story.
+ * 2. The name rises away and a window opens in the middle of the frame onto
+ *    the rooftop portrait. It grows to the whole screen while the camera
+ *    eases in, and Diamante loses its colour behind it, so the sea and the
+ *    black-and-white city read as one cut.
+ * 3. The photo holds and comes alive (see LiquidReveal): the pointer pours
  *    its colour back in like oil on water, and the person shifts in depth
- *    in front of the city. Who I am settles at the foot of the frame like a
- *    caption.
- * 5. The exit: the picture pulls back into a framed photo in the middle of
+ *    in front of the city.
+ * 4. The exit: the picture pulls back into a framed photo in the middle of
  *    the dark page, then is left behind as the page scrolls on.
  *
- * Reduced motion: no zoom, no camera move and no bubbles; the sheet dissolves
- * over the final framing.
+ * Reduced motion: no window and no camera move; Diamante and the name give
+ * way to the portrait at once.
  */
 
 /** Scroll length of the scene, as a multiple of the viewport height. */
@@ -68,18 +64,18 @@ const ASIDE_CROP_R = 0.24;
 const ASIDE_CROP_B = 0.2;
 const ASIDE_LEFT = 0.05;
 
-/** How far the camera flies into the I. Scale grows exponentially with
-    progress, which reads as a constant speed of approach. */
-const ZOOM_MAX = 90;
-const ZOOM_FROM = 0.023;
-const ZOOM_TO = 0.275;
-
-/** When the camera pulls back, over scene progress; after it, the photo
-    holds and the colour can be revealed. */
-const PULL_FROM = 0.32;
-const PULL_TO = 0.565;
-/** The colour reveal runs from the moment the sheet has gone. */
-const REVEAL_FROM = 0.29;
+/** The window onto the portrait, over scene progress: it opens from
+    nothing to WINDOW (the first stretch), then grows to the whole screen. */
+const OPEN_FROM = 0.03;
+const OPEN_TO = 0.42;
+/** The window's size before it grows, as fractions of the viewport. */
+const WINDOW_DESKTOP = { w: 0.3, h: 0.52 };
+const WINDOW_PHONE = { w: 0.6, h: 0.42 };
+/** How close the camera starts while the window opens; it eases back to
+    the portrait's own framing as the window fills the screen. */
+const ZOOM_IN = 1.35;
+/** The colour reveal runs once the portrait fills the screen. */
+const REVEAL_FROM = OPEN_TO;
 /** The exit: the photo pulls back into a framed picture in the middle of
     the dark page, and is left behind as the page scrolls on. */
 const EXIT_FROM = 0.8;
@@ -101,47 +97,31 @@ function useReducedMotion() {
   return reduced;
 }
 
-/** Where the fly-through aims: the middle of the I's stem, measured on the
-    front layer's invisible surname (same layout, never scaled). offsetLeft
-    and offsetTop ignore transforms, so the rise animation does not skew it. */
-function measureZoomOrigin(stage: HTMLElement): string {
-  const target = stage.querySelector<HTMLElement>("[data-measure] [data-zoom-target]");
-  if (!target) return "50% 75%";
-  let x = target.offsetWidth * Number(target.dataset.zoomTarget || 0.5);
-  let y = target.offsetHeight * 0.55;
-  let el: HTMLElement | null = target;
-  while (el && el !== stage) {
-    x += el.offsetLeft;
-    y += el.offsetTop;
-    el = el.offsetParent as HTMLElement | null;
-  }
-  return `${Math.round(x)}px ${Math.round(y)}px`;
-}
-
-/** The name laid out identically in every layer; `show` picks what this
-    layer draws: the city line alone, or every other line and the credits. */
-export function NameLayout({ show, measure = false }: { show: "front" | "city"; measure?: boolean }) {
+/** The name and the credits. The static shell (shell.ts) writes the same
+    markup into index.html, so mounting moves nothing. */
+export function NameLayout() {
   let offset = 0;
   return (
     <div className="hero-frame">
-      <div className="hero-name" aria-hidden="true" {...(measure ? { "data-measure": "" } : {})}>
-        {NAME.lines.map((word, i) => {
-          const isCity = i === NAME.city;
-          const drawn = show === "city" ? isCity : !isCity;
-          const start = offset;
-          offset += word.length;
-          return (
-            <span key={word} className={`hero-line${i > 0 ? " hero-line--next" : ""}${drawn ? "" : " city-ghost"}`}>
-              <span className="hero-word">
-                <Letters word={word} offset={start} {...(isCity ? { mark: NAME.mark, markX: NAME.markX } : {})} />
-              </span>
-            </span>
-          );
-        })}
+      <div className="hero-name" aria-hidden="true">
+        {NAME.lines.map((words, i) => (
+          <span key={i} className={`hero-line${i > 0 ? " hero-line--next" : ""}`}>
+            {words.map((w, j) => {
+              const start = offset;
+              offset += w.text.length;
+              return (
+                <Fragment key={w.text}>
+                  {j > 0 && " "}
+                  <span className={`hero-word${w.em ? " hero-word--em" : ""}`}>
+                    <Letters word={w.text} offset={start} />
+                  </span>
+                </Fragment>
+              );
+            })}
+          </span>
+        ))}
       </div>
-      {/* Every layer reserves the credits' height so the name sits at the
-          same place; only the front layer shows them. */}
-      <Credits className={show === "front" ? "" : "city-ghost"} />
+      <Credits />
     </div>
   );
 }
@@ -170,7 +150,9 @@ export function HeroCity() {
       const q = <T extends Element>(sel: string) => stage.querySelector<T>(sel)!;
       const photo = q<HTMLImageElement>(".city-photo");
       const frame = q<HTMLDivElement>(".city-frame");
-      const sheet = q<HTMLDivElement>(".city-sheet");
+      const place = q<HTMLDivElement>(".city-place");
+      const stamp = stage.querySelector<HTMLDivElement>(".hero-stamp");
+      const win = isMobile ? WINDOW_PHONE : WINDOW_DESKTOP;
       const front = q<HTMLDivElement>(".city-front");
       const reveal = q<HTMLCanvasElement>(".city-reveal");
       const ring = stage.querySelector<HTMLDivElement>(".city-ring");
@@ -180,32 +162,45 @@ export function HeroCity() {
       let vh = stage.clientHeight;
       let progress = 0;
 
-      // The non-linear parts: the fly-through, the camera and the exit.
+      // The non-linear parts: the window, the camera and the exit.
       const render = (p: number) => {
         progress = p;
-        const zoom = reduce ? 1 : Math.pow(ZOOM_MAX, span(p, ZOOM_FROM, ZOOM_TO));
-        gsap.set(sheet, { scale: zoom });
+        // Reduced motion: no window. Diamante and the name hold, then the
+        // portrait is simply there.
+        const open = reduce ? (p < 0.23 ? 0 : 1) : span(p, OPEN_FROM, OPEN_TO);
+        // `a` opens the window from nothing, `b` grows it to the screen
+        const a = 1 - (1 - span(open, 0, 0.3)) ** 3;
+        const b = easeInOut(span(open, 0.45, 1));
+        const fw = win.w * a + (1 - win.w) * b;
+        const fh = win.h * a + (1 - win.h) * b;
+        const ix = ((1 - fw) / 2) * 100;
+        const iy = ((1 - fh) / 2) * 100;
+        const winRadius = FRAME_RADIUS * (1 - b);
 
-        // Reduced motion: no camera move. The skyline stays behind the name
-        // until the sheet has gone, then the portrait is simply there.
-        const pull = reduce ? (p < 0.23 ? 0 : 1) : span(p, PULL_FROM, PULL_TO);
-        const c = cameraAt(pull, shot, vw, vh);
+        // The camera starts close on his face, held in the middle of the
+        // window, and eases back to the portrait's own framing as the window
+        // fills the screen (where the face sits higher, in the upper third).
+        const c0 = cameraAt(1, shot, vw, vh);
+        const z = Math.pow(ZOOM_IN, 1 - b);
+        const scale = c0.scale * z;
+        const faceX = vw / 2 + (c0.x + shot.face.x * c0.scale - vw / 2) * b;
+        const faceY = vh / 2 + (c0.y + shot.face.y * c0.scale - vh / 2) * b;
+        const c = { scale, x: faceX - shot.face.x * scale, y: faceY - shot.face.y * scale };
         camera.set(c);
-        // Inside the letters the shadows of the buildings would eat the
-        // letterforms; the photo is lifted there and settles as the name goes.
-        const lift = 1 - span(p, 0.23, 0.29);
-        gsap.set(photo, {
-          x: c.x,
-          y: c.y,
-          scale: c.scale,
-          filter: lift > 0 ? `brightness(${1 + 0.2 * lift}) contrast(${1 - 0.14 * lift})` : "none",
-        });
+        gsap.set(photo, { x: c.x, y: c.y, scale: c.scale });
+
+        // Diamante drains behind the window and is gone once it is covered.
+        place.style.setProperty("--drain", String(b));
+        place.style.setProperty("--open", String(open));
+        place.style.visibility = b >= 1 ? "hidden" : "visible";
+        if (stamp) stamp.style.opacity = String(reduce ? (open > 0 ? 0 : 1) : 1 - span(p, 0.008, 0.07));
 
         const k = reduce ? (p >= EXIT_FROM ? 1 : 0) : easeInOut(span(p, EXIT_FROM, EXIT_TO));
         const sc = 1 - (1 - frameTarget) * k;
         // radius compensated for the scale, so it lands at a fixed size on screen
         const radius = sc >= 0.999 ? 0 : (FRAME_RADIUS * (1 - sc)) / (1 - frameTarget) / sc;
-        gsap.set(frame, { scale: sc, borderRadius: radius, x: 0, clipPath: "none", opacity: 1 });
+        const clip = fw >= 0.999 && fh >= 0.999 ? "none" : `inset(${iy}% ${ix}% round ${winRadius}px)`;
+        gsap.set(frame, { scale: sc, borderRadius: radius, x: 0, clipPath: clip, opacity: 1 });
 
         // The colour drains as the picture becomes a frame, so the frame that
         // is left behind (and carried into the story) is a clean black and white.
@@ -219,7 +214,6 @@ export function HeroCity() {
       const measure = () => {
         vw = stage.clientWidth;
         vh = stage.clientHeight;
-        sheet.style.transformOrigin = measureZoomOrigin(stage);
         render(progress);
       };
       measure();
@@ -315,9 +309,9 @@ export function HeroCity() {
             return [
               // seconds at 1x: the camera moves are given more time than their
               // scroll length would, the eye has a lot to follow in them
-              { from: top, to: top + PULL_TO * L, duration: 1.9 },
+              { from: top, to: top + OPEN_TO * L, duration: 1.9 },
               // the portrait holding for the colour (poured by the pointer)
-              { from: top + PULL_TO * L, to: top + EXIT_FROM * L, hold: true },
+              { from: top + OPEN_TO * L, to: top + EXIT_FROM * L, hold: true },
               { from: top + EXIT_FROM * L, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: 1.6 },
               { from: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), to: at(RAIL_TRAVEL_FROM), hold: true },
               // the cards keep up with a fast scroll more than the camera does
@@ -366,12 +360,9 @@ export function HeroCity() {
       const band = (el: Element, from: number, to: number, a: gsap.TweenVars, b: gsap.TweenVars) =>
         tl.fromTo(el, a, { ...b, duration: to - from, immediateRender: false }, from);
 
-      // Reduced motion: the sheet does not dissolve, it is simply gone.
-      if (reduce) tl.set(sheet, { opacity: 0 }, 0.23).set(sheet, { opacity: 1 }, 0);
-      else band(sheet, 0.23, 0.29, { opacity: 1 }, { opacity: 0 });
       if (reduce) tl.set(front, { opacity: 0 }, 0.23).set(front, { opacity: 1 }, 0);
-      else band(front, 0.004, 0.054, { opacity: 1 }, { opacity: 0 });
-      if (!reduce) band(front, 0, 0.06, { y: "0vh" }, { y: "-5vh" });
+      else band(front, 0.006, 0.08, { opacity: 1 }, { opacity: 0 });
+      if (!reduce) band(front, 0, 0.09, { y: "0vh" }, { y: "-8vh" });
       return () => {
         ro.disconnect();
         offPassages?.();
@@ -393,11 +384,15 @@ export function HeroCity() {
       }}
     >
       <div ref={stageRef} className="city-stage">
+        {/* Diamante behind everything: the photo, the grain and the stamp
+            (the same markup the static shell paints before React). */}
+        <div className="city-place" aria-hidden="true" dangerouslySetInnerHTML={{ __html: PLACE_HTML }} />
+
         {/* The picture: photo, colour reveal, scaled as one into
             a frame on the way out. */}
         <div className="city-frame" data-scene-frame="">
-          {/* The whole scene is shot on this one photo; the camera moves over
-              it. LCP element: index.html preloads both device versions. */}
+          {/* The portrait the window opens onto; the camera moves over it.
+              Diamante is the first paint (LCP); index.html preloads both. */}
           <img
             key={shot.src}
             className="city-photo"
@@ -407,7 +402,6 @@ export function HeroCity() {
             width={shot.width}
             height={shot.height}
             style={{ width: shot.width, height: shot.height }}
-            {...{ fetchpriority: "high" }}
             decoding="async"
           />
 
@@ -428,15 +422,10 @@ export function HeroCity() {
 
         {storyInStage && <div className="city-ring" aria-hidden="true" />}
 
-        {/* The dark sheet with the surname cut as windows. */}
-        <div className="city-sheet" aria-hidden="true">
-          <NameLayout show="city" />
-        </div>
-
-        {/* FELIPE, the credits, and the real heading for assistive tech. */}
+        {/* The name, the credits, and the real heading for assistive tech. */}
         <div className="city-front">
           <h1 className="sr-only">{NAME.full}</h1>
-          <NameLayout show="front" measure />
+          <NameLayout />
         </div>
 
         {storyInStage && <Story mode="rail" progress={storyProgress} />}

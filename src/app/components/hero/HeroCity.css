@@ -15,7 +15,6 @@
   top: 0;
   height: 100svh;
   overflow: hidden;
-  /* the multiply layer blends with the photos only, never with the page */
   isolation: isolate;
   background: var(--bg);
   /* The name layers are text, even when invisible: without this the photo
@@ -86,28 +85,120 @@
   opacity: 0;
 }
 
-/* ---------- the windows ---------- */
+/* ---------- Diamante ---------- */
 
 /*
- * A sheet of the page's dark with white letters, multiplied over the photo:
- * white shows the photo, dark hides it. Scaling the sheet flies through a
- * letter while the photo beneath stays where it is.
- *
- * No will-change: the sheet scales to 90x, and a promoted layer would be
- * rasterised once and stretched, leaving stair-stepped letter edges.
+ * The town behind the name, with the one treatment every photo of the page
+ * is meant to share: a little drained, cool, darker at the top (for the nav)
+ * and at the foot (for the name), under film grain. --drain (0..1, set by
+ * HeroCity) takes the colour out as the window onto the portrait grows, so
+ * the sea hands over to the black-and-white city.
  */
-.city-sheet {
+.city-place {
+  --drain: 0;
+  --open: 0;
   position: absolute;
   inset: 0;
+  overflow: hidden;
   background: var(--bg);
-  mix-blend-mode: multiply;
 }
 
-.city-sheet .hero-name {
-  color: #fff;
+.city-place picture {
+  position: absolute;
+  inset: -3%;
+  display: block;
 }
 
-/* ---------- front: FELIPE and the credits ---------- */
+.city-place-photo {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 60% 62%;
+  filter: saturate(calc(0.72 * (1 - var(--drain)))) contrast(1.06)
+    brightness(calc(0.92 - 0.32 * var(--drain)));
+  /* the slow drift stands in for footage until the licensed clip arrives */
+  animation: place-drift 28s ease-in-out infinite alternate;
+  scale: calc(1 + 0.06 * var(--open));
+}
+
+.city-place::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgb(5 6 8 / 0.55) 0%, rgb(5 6 8 / 0.05) 34%, rgb(5 6 8 / 0.18) 58%, rgb(5 6 8 / 0.86) 100%),
+    linear-gradient(90deg, rgb(5 6 8 / 0.4), rgb(5 6 8 / 0) 58%);
+}
+
+.city-place-grain {
+  position: absolute;
+  inset: -50%;
+  z-index: 1;
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: place-grain 0.9s steps(4) infinite;
+}
+
+@keyframes place-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-1.5%, -1%, 0); }
+}
+
+@keyframes place-grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-6%, 4%); }
+  50% { transform: translate(5%, -3%); }
+  75% { transform: translate(-3%, -6%); }
+}
+
+/* The travel stamp: top right, tilted, inked in the page's white. */
+.hero-stamp {
+  position: absolute;
+  z-index: 2;
+  top: clamp(5.5rem, 13vh, 8rem);
+  right: var(--gutter, 2rem);
+  width: clamp(6.5rem, 11.5vw, 11rem);
+  aspect-ratio: 1;
+  color: rgb(245 247 255 / 0.86);
+  rotate: -9deg;
+  pointer-events: none;
+}
+
+.hero-stamp-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hero-stamp-rim {
+  font-family: var(--serif);
+  font-size-adjust: none;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.hero-stamp-coords {
+  font-family: var(--serif);
+  font-size-adjust: none;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .city-place-photo,
+  .city-place-grain {
+    animation: none;
+  }
+}
+
+/* ---------- front: the name and the credits ---------- */
 
 .city-front {
   position: absolute;

@@ -339,30 +339,10 @@
     "chapters": {
       "partida": "Sobre",
       "destinos": "Projetos",
-      "telemetria": "Em uso",
       "plano": "Como funciona",
       "retorno": "Contato"
     },
     "where": "Capítulo {{n}} de {{total}}: {{name}}"
-  },
-  "telemetria": {
-    "title": "Em uso",
-    "entries": {
-      "since": {
-        "label": "desde set/2026",
-        "text": "Desde setembro de 2026 o Dallas Sync está em produção na recepção do Dallas Motel, que é onde dá para ver se ele funciona de verdade."
-      },
-      "offline": {
-        "label": "sem internet",
-        "text": "Quando a internet cai, a recepção continua lançando, enxerga a fila do que ainda não subiu e o sistema sincroniza sozinho quando a rede volta."
-      },
-      "training": {
-        "label": "modo treino",
-        "text": "Quem entra na equipe aprende num modo treino separado, que tem as mesmas telas e nenhum dado real, então um erro cometido ali não muda o caixa de ninguém."
-      }
-    },
-    "video_note": "O vídeo foi gravado com a internet desligada de verdade, em modo treino e com dados fictícios, e o check-in feito ali chegou ao servidor sozinho assim que a rede voltou.",
-    "still_note": "Tela do sistema em modo treino, sem dados reais."
   },
   "plano": {
     "title": "Como funciona",

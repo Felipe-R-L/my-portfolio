@@ -30,10 +30,10 @@ describe("hero shell", () => {
     });
   });
 
-  it("is the same markup React renders for the front layer, so mounting moves nothing", async () => {
+  it("is the same markup React renders for the name, so mounting moves nothing", async () => {
     for (const [lng, locale] of [["en", en], ["pt", pt]] as const) {
       await i18n.changeLanguage(lng);
-      const react = renderToStaticMarkup(<NameLayout show="front" measure />);
+      const react = renderToStaticMarkup(<NameLayout />);
       expect(unmark(nameFrontHtml(copy(locale)))).toBe(react);
     }
   });
@@ -43,6 +43,9 @@ describe("hero shell", () => {
     expect(html).toContain(JSON.stringify(pt.hero.description).slice(1, 20));
     expect(html).toContain('<h1 class="sr-only">Felipe Rodrigues Leone</h1>');
     expect(html).toContain("i18nextLng");
+    // Diamante and the stamp paint with the name, before any JS
+    expect(html).toContain("diamante-c-1800.webp");
+    expect(html).toContain("BENVENUTI A DIAMANTE");
     // nothing in the copy can close the inline script early
     expect(html.match(/<\/script>/g)).toHaveLength(1);
   });

@@ -20,7 +20,28 @@
   --serif-track: -0.035em;
   --serif-sub-track: -0.02em;
   --serif-scale: 1.1;
+  /* The running text: EB Garamond, as in the blog. Its small letters sit low,
+     so it is set larger through font-size-adjust (x-height 0.46 of the size,
+     about 15% up from its own) and a touch heavier, for reading on black.
+     Labels, the nav and figures in caps stay in the system sans, as in the blog. */
+  --text: "EB Garamond", Garamond, Georgia, serif;
+  --text-adjust: 0.46;
+  --text-weight: 450;
+  --ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --ease-arrive: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-leave: cubic-bezier(0.55, 0, 1, 0.45);
   --ease-travel: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* The homepage's text (AppLayout's root). Every rule that sets its own face
+   (the serif headings, the sans labels, code) turns the adjust off. */
+.home-text {
+  font-family: var(--text);
+  font-weight: var(--text-weight);
+  font-size-adjust: var(--text-adjust);
+}
+
+.home-text nav {
+  font-family: var(--ui);
+  font-size-adjust: none;
 }

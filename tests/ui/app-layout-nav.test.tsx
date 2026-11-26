@@ -42,7 +42,6 @@ vi.mock('lucide-react', () => ({
 const stub = (label: string) => () => React.createElement('div', { 'data-stub': label })
 vi.mock('../../src/app/components/Hero', () => ({ Hero: stub('hero') }))
 vi.mock('../../src/app/scenes/Work', () => ({ Work: stub('work') }))
-vi.mock('../../src/app/scenes/Proof', () => ({ Proof: stub('proof') }))
 vi.mock('../../src/app/scenes/Talk', () => ({ Talk: stub('talk') }))
 vi.mock('../../src/app/scroll/gsap', () => ({
   ScrollTrigger: {
@@ -89,7 +88,7 @@ describe('AppLayout nav pill click handler', () => {
     const el = await mountAppLayout()
     const hrefs = [...el.querySelectorAll<HTMLAnchorElement>('nav a[href^="#"]')].map((a) => a.getAttribute('href'))
     // one item per chapter, landing on the anchors the blog already links to
-    expect([...new Set(hrefs)]).toEqual(['#about', '#projects', '#proof', '#process', '#contact'])
+    expect([...new Set(hrefs)]).toEqual(['#about', '#projects', '#process', '#contact'])
   })
 
   it('does not call preventDefault when Lenis is unavailable (mobile), letting the anchor jump natively', async () => {

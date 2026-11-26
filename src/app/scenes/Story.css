@@ -21,6 +21,7 @@
 
 .story-year {
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-sub-track);
   font-weight: var(--serif-sub-weight);
   font-size: calc(1.5rem * var(--serif-scale));
@@ -33,6 +34,7 @@
 .story-title {
   margin: 0;
   font-family: var(--serif);
+  font-size-adjust: none;
   font-weight: var(--serif-weight);
   font-size: calc(clamp(2.25rem, 3.4vw, 3.5rem) * var(--serif-scale));
   line-height: 1.02;
@@ -159,6 +161,7 @@
 .story-code {
   margin: 0;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size-adjust: none;
   display: grid;
   gap: 0.3rem;
   font-size: clamp(0.75rem, 1vw, 0.95rem);
@@ -410,6 +413,7 @@
   display: grid;
   gap: 0.4rem;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size-adjust: none;
   font-size: clamp(1.2rem, 2.2vw, 2.4rem);
   line-height: 1.2;
   color: #8a96a3;

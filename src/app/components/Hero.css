@@ -1,14 +1,15 @@
 /*
- * Shared by both hero compositions. The name is set as architecture: one size
- * computed so RODRIGUES fills the viewport width, FELIPE at the same size.
+ * The name in two lines, the journey's serif, "Rodrigues" in italic
+ * (proposal B, 2026-11-26): one size computed so "Rodrigues Leone" spans most
+ * of the viewport width, "Felipe" at the same size above it.
  * Under it, a credits row with a hairline above, like the billing block on a
  * film poster: the sentence on the left, the link to the work on the right.
  */
 
 .hero-frame {
-  /* RODRIGUES fills the width; on a short screen the three lines take the
-     height instead, so the credits never fall off the bottom */
-  --name-size: min(16.1vw, 20.5rem, calc((100svh - 22rem) / 2.5));
+  /* "Rodrigues Leone" spans the width; on a short screen the two lines take
+     the height instead, so the credits never fall off the bottom */
+  --name-size: min(13.4vw, 17.5rem, calc((100svh - 22rem) / 1.85));
   --ink: #f5f7ff;
   position: absolute;
   inset: 0;
@@ -25,14 +26,17 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  font-family: var(--serif);
+  font-size-adjust: none;
   font-size: var(--name-size);
   /* the F's side bearing, so the name's ink lines up with the text below */
-  margin-left: -0.065em;
-  font-weight: 700;
-  line-height: 0.8;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
+  margin-left: -0.045em;
+  font-weight: 500;
+  line-height: 0.88;
+  letter-spacing: -0.05em;
   color: var(--ink);
+  /* lifts the white off the bright parts of the photo */
+  text-shadow: 0 0.02em 0.25em rgb(5 6 8 / 0.35);
 }
 
 .hero-line {
@@ -43,12 +47,19 @@
 }
 
 .hero-line--next {
-  margin-top: -0.06em;
+  margin-top: -0.04em;
 }
 
 .hero-word {
   display: inline-block;
   white-space: nowrap;
+}
+
+.hero-word--em {
+  font-style: italic;
+  font-weight: 400;
+  /* the italic leans past its box; room so the mask does not clip the s */
+  padding-right: 0.04em;
 }
 
 /* Letters rise one by one out of their line's mask, once, on load. Every
@@ -135,7 +146,8 @@
 
 @media (max-width: 767px) {
   .hero-frame {
-    --name-size: 16.2vw;
+    /* "Rodrigues" and "Leone" fall on their own lines on a phone */
+    --name-size: 19vw;
     /* the name sits a little above the middle, not at the foot of an empty screen */
     justify-content: center;
     padding-top: 5rem;

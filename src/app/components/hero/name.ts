@@ -1,15 +1,12 @@
 /** The name, shared by the hero and its static shell (no React here). */
 
+export type NameWord = { readonly text: string; readonly em?: boolean };
+
 /**
- * The name as the hero sets it, one entry per line. The city shows through
- * the `city` line only, and the camera dives through the first `mark` letter
- * of that line, aimed at `markX` of its width (the middle of an I's stem, the
- * left of an L's).
+ * The name as the hero sets it: one entry per line, each a row of words.
+ * Two lines with "Rodrigues" in italic (Felipe, 2026-11-26: proposal B).
  */
-export const NAME = {
+export const NAME: { full: string; lines: readonly (readonly NameWord[])[] } = {
   full: "Felipe Rodrigues Leone",
-  lines: ["Felipe", "Rodrigues", "Leone"],
-  city: 1,
-  mark: "i",
-  markX: 0.5,
-} as const;
+  lines: [[{ text: "Felipe" }], [{ text: "Rodrigues", em: true }, { text: "Leone" }]],
+};

@@ -8,35 +8,14 @@ import { useTranslation } from "react-i18next";
 
 export { NAME } from "./name";
 
-export function Letters({
-  word,
-  offset,
-  mark,
-  markX = 0.5,
-}: {
-  word: string;
-  offset: number;
-  /** Tags the first such letter, which the city hero zooms through. */
-  mark?: string;
-  markX?: number;
-}) {
-  let marked = false;
+export function Letters({ word, offset }: { word: string; offset: number }) {
   return (
     <>
-      {[...word].map((ch, i) => {
-        const isTarget = !!mark && !marked && ch.toLowerCase() === mark;
-        if (isTarget) marked = true;
-        return (
-          <span
-            key={i}
-            className="hero-letter"
-            data-zoom-target={isTarget ? String(markX) : undefined}
-            style={{ ["--i" as string]: offset + i }}
-          >
-            {ch}
-          </span>
-        );
-      })}
+      {[...word].map((ch, i) => (
+        <span key={i} className="hero-letter" style={{ ["--i" as string]: offset + i }}>
+          {ch}
+        </span>
+      ))}
     </>
   );
 }

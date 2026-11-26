@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 
 import { Hero } from "./components/Hero";
 import { Work } from "./scenes/Work";
-import { Proof } from "./scenes/Proof";
 import { Process } from "./scenes/Process";
 import { Talk } from "./scenes/Talk";
 import { GlassNav, type GlassNavItem } from "./components/shared/GlassNav";
@@ -19,9 +18,9 @@ import { CaseLayer } from "./scenes/CaseLayer";
 import { DURATION } from "./motion/tokens";
 
 /**
- * The homepage, for business owners: seven scenes in one take. The name and
- * the city, the portrait, the story, the work, the proof, how it works, and
- * the conversation that closes the page. `src/app/recruiter/` keeps the pieces
+ * The homepage, for business owners: six scenes in one take. The name over
+ * Diamante, the portrait, the story, the work, how it works, and the
+ * conversation that closes the page. `src/app/recruiter/` keeps the pieces
  * of a future version for recruiters.
  */
 const LANGUAGES = [
@@ -55,7 +54,7 @@ export default function AppLayout() {
   ];
 
   return (
-    <div className="bg-[#050608] min-h-screen font-sans selection:bg-blue-500/30 selection:text-blue-200 overflow-x-clip">
+    <div className="home-text bg-[#050608] min-h-screen selection:bg-blue-500/30 selection:text-blue-200 overflow-x-clip">
       {/* The light of the chapter in view, behind everything. */}
       <div className="fixed inset-0 z-0" aria-hidden="true">
         <AmbientLight active={journey.active} />
@@ -86,7 +85,6 @@ export default function AppLayout() {
         {/* The hero; the story scene (who I am) follows it. */}
         <Hero />
         <Work onOpenCase={caseRoute.open} />
-        <Proof />
         <Process />
         <Talk />
       </main>

@@ -23,7 +23,7 @@ const SCENERY: Partial<Record<ChapterId, { src: string; srcSet: string; near: Ch
   plano: {
     src: "/assets/plano/topo-1200.webp",
     srcSet: "/assets/plano/topo-1200.webp 1200w, /assets/plano/topo-2400.webp 2400w",
-    near: ["telemetria", "plano", "retorno"],
+    near: ["destinos", "plano", "retorno"],
   },
   retorno: {
     src: "/assets/story/diamante-c-1200.webp",

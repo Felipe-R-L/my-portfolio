@@ -37,13 +37,6 @@
     linear-gradient(180deg, #04060a 0%, #030407 100%);
 }
 
-/* Telemetria (in use): low, neutral light from below, an instrument room. */
-.ambient--telemetria {
-  background-image:
-    radial-gradient(90% 45% at 50% 112%, rgb(214 218 222 / 0.07), transparent 70%),
-    linear-gradient(180deg, #08090a 0%, #0a0b0b 100%);
-}
-
 /* Plano (how it works): even and wide, a faint horizon a little below the middle. */
 .ambient--plano {
   background-image:

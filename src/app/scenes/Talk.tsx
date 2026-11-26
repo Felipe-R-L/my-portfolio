@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { summaries } from "virtual:posts";
 
@@ -41,6 +41,18 @@ function middleBox(vw: number, vh: number): Box {
  * behind the page to its end. The visitor picks what they need and the
  * WhatsApp message is written for them.
  */
+/** The proof link opens the Dallas Sync case, where the offline front desk
+    and the training mode are told: as a layer over the journey, like a click
+    on its card (caseRoute listens for popstate), not a page load. */
+const PROOF_CASE = "/work/dallas-sync";
+
+function openProofCase(event: MouseEvent<HTMLAnchorElement>) {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+  event.preventDefault();
+  window.history.pushState({ case: "dallas-sync" }, "", PROOF_CASE);
+  window.dispatchEvent(new PopStateEvent("popstate", { state: { case: "dallas-sync" } }));
+}
+
 export function Talk() {
   const { t, i18n } = useTranslation();
   const mode = useJourneyMode();
@@ -164,7 +176,7 @@ export function Talk() {
           {AVAILABILITY.enabled && AVAILABILITY.text[lang] && <p className="talk-availability">{AVAILABILITY.text[lang]}</p>}
 
           {/* In place of a testimonial there is none yet: the proof itself. */}
-          <a className="talk-proof" href="#proof">
+          <a className="talk-proof" href={PROOF_CASE} onClick={openProofCase}>
             {t("talk.proof_link")}
           </a>
         </div>

@@ -63,16 +63,6 @@
     "p": 1
   },
   {
-    "name": "05-emuso-00",
-    "sel": ".proof-track",
-    "p": 0
-  },
-  {
-    "name": "05-emuso-60",
-    "sel": ".proof-track",
-    "p": 0.6
-  },
-  {
     "name": "06-t4-recuo",
     "sel": ".plano-track",
     "p": 0,

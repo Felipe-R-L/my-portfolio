@@ -38,6 +38,7 @@
 .dest-title {
   margin: 0;
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-track);
   font-weight: var(--serif-weight);
   font-size: calc(clamp(2.5rem, 4.2vw, 4rem) * var(--serif-scale));
@@ -102,6 +103,7 @@
   gap: 0.35rem;
   margin: 0 0 1.25rem;
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-track);
   font-weight: var(--serif-weight);
   font-size: calc(clamp(3.5rem, 6vw, 5.5rem) * var(--serif-scale));
@@ -115,6 +117,8 @@
 }
 
 .dest-kind {
+  font-family: var(--ui);
+  font-size-adjust: none;
   margin: 0;
   color: var(--diamante);
   font-size: 0.8rem;
@@ -126,6 +130,7 @@
 .dest-name {
   margin: 0.35rem 0 0;
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-track);
   font-weight: var(--serif-weight);
   font-size: calc(clamp(2.4rem, 3.8vw, 3.8rem) * var(--serif-scale));
@@ -340,6 +345,8 @@
 }
 
 .dest-index li {
+  font-family: var(--ui);
+  font-size-adjust: none;
   --p: 0;
   position: relative;
   padding-bottom: 0.55rem;
@@ -428,6 +435,7 @@
 
 .dest-curtain-count {
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-sub-track);
   font-weight: var(--serif-sub-weight);
   font-size: calc(clamp(1.6rem, 2.4vw, 2.4rem) * var(--serif-scale));
@@ -441,6 +449,8 @@
 }
 
 .dest-curtain-kind {
+  font-family: var(--ui);
+  font-size-adjust: none;
   color: var(--diamante);
   font-size: 0.85rem;
   font-weight: 600;
@@ -450,6 +460,7 @@
 
 .dest-curtain-name {
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-track);
   font-weight: var(--serif-weight);
   font-size: calc(clamp(3rem, 6vw, 6rem) * var(--serif-scale));

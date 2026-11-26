@@ -95,6 +95,8 @@
 }
 
 .case-kind {
+  font-family: var(--ui);
+  font-size-adjust: none;
   color: var(--paper-accent);
   font-size: 0.8rem;
   font-weight: 600;
@@ -105,6 +107,7 @@
 .case-title {
   margin: 0.4rem 0 0;
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-track);
   font-weight: var(--serif-weight);
   font-size: calc(clamp(2.6rem, 5vw, 4.25rem) * var(--serif-scale));
@@ -122,6 +125,7 @@
 .case-part dt {
   margin-bottom: 0.5rem;
   font-family: var(--serif);
+  font-size-adjust: none;
   letter-spacing: var(--serif-sub-track);
   font-weight: var(--serif-sub-weight);
   font-size: calc(1.6rem * var(--serif-scale));
