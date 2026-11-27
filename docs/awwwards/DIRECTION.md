@@ -34,7 +34,16 @@ o retorno no fim).
 ## Decisões fechadas
 
 - Hero: nome em duas linhas, Cormorant Garamond, "Rodrigues" em itálico,
-  sólido sobre Diamante; uma janela abre no rosto e cresce até o retrato.
+  sólido sobre Diamante. (2026-11-27) A passagem para o retrato deixa de ser
+  a janela no rosto: o mar chega e lava o hero, uma onda só, guiada pela
+  rolagem e reversível; a onda leva a cor, e quando recua fica o retrato em
+  preto e branco. Prévia antes de entrar no site. Movimento reduzido: dissolve.
+- Retrato em preto e branco: ao parar, um traço curto de cor cruza o rosto
+  uma vez sozinho e evapora (mostra que reage ao cursor e ao toque).
+- Som: desligado por padrão, botão discreto na nav. Música bem baixa ao
+  fundo, sonoplastia da onda, dos cards e do quadro. Nada toca sozinho.
+- Mídia de Diamante: clipes aéreos do Storyblocks (assinatura do Felipe);
+  publicar com a assinatura ativa e guardar o comprovante.
 - Carimbo de viagem no hero: "Benvenuti a Diamante · Città dei murales e del
   peperoncino", pimenta, coordenadas.
 - Tipografia: Cormorant Garamond nos títulos, EB Garamond no corpo (peso 450,
@@ -50,7 +59,9 @@ o retorno no fim).
 
 ## Pendente do Felipe (o loop não decide)
 
-- Vídeo do drone do Getty (compra em 2026-11-28) e o fundo do Contato a
-  partir dele.
+- Escolha dos clipes e músicas do Storyblocks (favoritos dele) e o fundo
+  do Contato a partir do vídeo. Getty descartado (preço).
+- Linha discreta sobre o tataravô no site: aprovada em princípio, texto e
+  lugar propostos (rodapé do Contato), falta o OK.
 - Galeria "Fora do código" com fotos e filmes dele.
 - Conta PRO, contatos para votar, data do envio.
