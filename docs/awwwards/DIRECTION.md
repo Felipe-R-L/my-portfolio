@@ -101,10 +101,10 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   ele: Amore al Mare (Grand_Project), Bossa Nova Soulful (andriih) e
   Nostalgic Folk No. 3 (Sonican). O motor de um barco ao longe ("Distant
   small boat returning to marina", freesound_community, Pixabay) acompanha o
-  barco do voo de Diamante. Sobre a vista aérea de Diamante, só um vento bem
-  suave (o "wind 4" abafado, Felipe 2026-11-27); o mar baixinho sob a
-  música entra com a onda e segue até o fim:
-  "Gentle Ocean Waves" (DRAGON-STUDIO, Pixabay). O canto superior esquerdo é o único botão do
+  barco do voo de Diamante. Som ambiente só o vento (o "wind 4" abafado):
+  sobre a vista aérea de Diamante e, mais baixo, sob a música no resto da
+  página. Sem mar ambiente (Felipe, 2026-11-27: soava como água num
+  balde). O canto superior esquerdo é o único botão do
   som (saiu da nav, Felipe 2026-11-27): ao chegar, um convite ("Ligar o
   som", barras pulsando); se a pessoa rola sem ligar, vira uma bolinha no
   mesmo lugar; ligado, é o player (desligar, faixa, próxima). Reserva: Vivaldi, Verão, Allegro non molto (John Harrison,
@@ -116,7 +116,7 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
 - **Detalhes de Diamante no resto da página** (aprovado em 2026-11-27,
   inclusive o som): as coordenadas de Diamante na marca de borda (feito em awwwards 42); o mar
   voltando como transição para o Contato (awwwards 44); o som do mar baixinho sob a
-  música. Sem pimenta, mural ou ilustração fora do hero.
+  música (tirado: só vento e música, 2026-11-27). Sem pimenta, mural ou ilustração fora do hero.
 - Hospedagem da mídia (2026-11-27): **Cloudflare R2**, num subdomínio
   próprio (`media.feliperl.space`). O Felipe cria o bucket e põe as chaves
   no `.env.local` (nunca no chat nem no git). Até lá, o site lê de

@@ -88,5 +88,3 @@ Música (Pixabay Content License, fora do git em `public/assets/sb/`):
 Diamante, resto do voo no hero (`diamante-rest2-*`, fora do git): Storyblocks 348598595 (aproximação), 348598575 (vista de cima) e 348598585 (barco), Francesco Rinaldi, mesma sessão do 348598577.
 
 Motor de barco ao longe no hero (`boat-loop.mp3`, fora do git): "Distant small boat returning to marina", freesound_community, Pixabay (Pixabay Content License), trecho de 15 s em loop.
-
-Mar ao fundo do site (`sea-loop.mp3`, fora do git): "Gentle Ocean Waves", DRAGON-STUDIO, Pixabay (Pixabay Content License), trecho de 40 s em loop.

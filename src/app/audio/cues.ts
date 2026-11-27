@@ -8,14 +8,15 @@
 import type { Synth } from "./synth";
 import { media } from "../media";
 
-export type Cue = "wave" | "shore" | "wind" | "boat" | "sea" | "card" | "slide" | "frame" | "tick";
+export type Cue = "wave" | "shore" | "wind" | "boat" | "card" | "slide" | "frame" | "tick";
 
 export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; volume: number }> = {
   /** the sea rising over Diamante (Pixabay: "Waves Crashing", DRAGON-STUDIO) */
   wave: { src: media("wave-in.mp3"), volume: 0.45 },
   /** the sea going back off the portrait (Pixabay: "Wave on the Shore", DRAGON-STUDIO) */
   shore: { src: media("wave-out.mp3"), volume: 0.4 },
-  /** a soft wind over Diamante while the hero is up, a loop (Pixabay:
+  /** a soft wind over Diamante while the hero is up, and lower still under
+      the music for the rest of the page, a loop (Pixabay:
       "a gentle breeze, wind 4", mario1298 via Freesound; low-passed and
       quieter, its hiss read as surf over the aerial view) */
   wind: { src: media("wind-soft.mp3"), loop: true, volume: 0.2 },
@@ -23,11 +24,6 @@ export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; vo
       loop, its level following the video (Pixabay: "Distant small boat
       returning to marina", freesound_community) */
   boat: { src: media("boat-loop.mp3"), loop: true, volume: 0.32 },
-  /** the sea, very low under the music, from the hero's wave on down (never
-      over the aerial view: the wind is Diamante's sound there): Diamante
-      is on the coast (Pixabay: "Gentle Ocean Waves", DRAGON-STUDIO; a 40 s
-      loop) */
-  sea: { src: media("sea-loop.mp3"), loop: true, volume: 0.1 },
   /** a chapter's card coming up beside the portrait: paper swiped */
   card: { synth: "card", volume: 0.18 },
   /** the portrait moving aside for the chapters: a card slid off a table */

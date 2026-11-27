@@ -193,10 +193,10 @@ export function HeroCity() {
         }
         if (w >= 1 && was < 1 && was > 0.6) sound.play("frame");
         const above = w < 0.5 ? 1 - seaPhase(w).rise : 0;
-        sound.level("wind", above);
-        // the sea under the music comes in with the wave and stays below it
-        // (over the aerial view it was too much: only the wind there)
-        sound.level("sea", w >= 0.3 ? 1 : 0);
+        // the wind: Diamante's sound over the aerial view, then lower under
+        // the music for the rest of the page (a sea ambience read as water
+        // sloshing in a bucket: Felipe, 2026-11-27, wind and music only)
+        sound.level("wind", Math.max(above, w >= 0.5 ? 0.4 : 0));
         sound.level("boat", boatNear * above);
         wash.set(w);
         // the sea covers the screen at the middle of the wash: Diamante and
