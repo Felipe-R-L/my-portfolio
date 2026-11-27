@@ -4,24 +4,23 @@
     "hero": 0
   },
   {
-    "name": "01-abertura-10",
-    "hero": 0.1
+    "name": "01-onda-sobe",
+    "hero": 0.11,
+    "hold": true
   },
   {
-    "name": "01-mergulho-25",
-    "hero": 0.25
+    "name": "01-onda-cobre",
+    "hero": 0.215,
+    "hold": true
   },
   {
-    "name": "02-encontro-50",
-    "hero": 0.5
+    "name": "02-onda-recua",
+    "hero": 0.33,
+    "hold": true
   },
   {
-    "name": "02-encontro-70",
-    "hero": 0.7
-  },
-  {
-    "name": "02-quadro-88",
-    "hero": 0.88
+    "name": "02-retrato",
+    "hero": 0.45
   },
   {
     "name": "02-quadro-100",

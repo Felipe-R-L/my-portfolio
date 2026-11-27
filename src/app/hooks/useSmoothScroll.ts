@@ -225,6 +225,8 @@ export function useSmoothScroll() {
         settleLater(80);
         return;
       }
+      // dev only: the capture script holds a change half done to shoot it
+      if (import.meta.env.DEV && (window as unknown as { __glideHold?: boolean }).__glideHold) return;
       const to = settleTarget(passages(), lenis.targetScroll, moveDir);
       if (to === null) return;
       run(lenis, { passage: { from: to, to }, to, dir: Math.sign(to - lenis.animatedScroll), dur: settleDuration(to - lenis.animatedScroll, vh()) }, easeOut);

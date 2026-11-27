@@ -8,7 +8,7 @@ import { useScene } from "../../scroll/useScene";
 import { RAIL_ENTER_TO, RAIL_TRAVEL_FROM, RAIL_TRAVEL_TO, Story, railStops } from "../../scenes/Story";
 import { STORY } from "../../data/story";
 import { registerPassages } from "../../scroll/glide";
-import { SeaWash } from "./SeaWash";
+import { SeaWash, seaPhase } from "./SeaWash";
 import { Credits, Letters, NAME } from "./HeroParts";
 import { PLACE_HTML } from "./shell";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
@@ -66,9 +66,6 @@ const ASIDE_LEFT = 0.05;
     screen halfway and is gone by OPEN_TO, leaving the portrait. */
 const OPEN_FROM = 0.01;
 const OPEN_TO = 0.42;
-/** The sea's own curve, kept soft (the same in SeaWash): the passage's
-    scroll already eases in and out. */
-const softEase = (x: number) => 0.5 * x + 0.25 * (1 - Math.cos(Math.PI * x));
 /** The exit: the photo pulls back into a framed picture in the middle of
     the dark page, and is left behind as the page scrolls on. */
 const EXIT_FROM = 0.8;
@@ -163,9 +160,7 @@ export function HeroCity() {
         wash.set(w);
         // the sea covers the screen at the middle of the wash: Diamante and
         // the name under it before, the portrait after
-        const rise = softEase(span(w, 0, 0.46));
-        const fall = softEase(span(w, 0.54, 1));
-        const after = w >= 0.5;
+        const { rise, fall, after } = seaPhase(w);
 
         // The camera on the portrait: it comes out of the water a little
         // close and settles back to its own framing as the sea goes.

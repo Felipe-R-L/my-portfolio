@@ -93,7 +93,8 @@ void main(){
   float inSea = smoothstep(-.002, .004, d);
 
   // on land: the shade the wave throws ahead, or the wet it leaves behind
-  float ahead = after < .5 ? .25 * exp(min(d, 0.) * 18.) : 0.;
+  // (light and short: deeper, it read as a dark smear on the town)
+  float ahead = after < .5 ? .12 * exp(min(d, 0.) * 28.) : 0.;
   float wet = after > .5 ? .22 * exp(min(d, 0.) * 7.) : 0.;
   float landA = max(ahead, wet) * (1. - inSea);
   // loose spray just ahead of the crest, thrown up where the foam is thick
@@ -113,6 +114,18 @@ function compile(gl: WebGL2RenderingContext, type: number, src: string) {
   gl.compileShader(s);
   if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s) ?? "shader");
   return s;
+}
+
+/** Soft: the scroll already eases the whole passage in and out, so a
+    second steep curve here bunched the crossing into half a second. */
+const soft = (x: number) => 0.5 * x + 0.25 * (1 - Math.cos(Math.PI * x));
+const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
+
+/** Where the sea is at wash `w`: drawn only strictly inside (0, 1); rising
+    over Diamante up to the middle, going back off the portrait after it. */
+export function seaPhase(w: number) {
+  const rise = soft(clamp01(w / 0.46));
+  return { on: w > 0 && w < 1, after: w >= 0.5, rise, fall: soft(clamp01((w - 0.54) / 0.46)), placeZoom: 1 + 0.08 * rise };
 }
 
 export function SeaWash({
@@ -218,17 +231,13 @@ export function SeaWash({
     const ro = new ResizeObserver(resize);
     ro.observe(stage);
 
-    // Soft: the scroll already eases the whole passage in and out, so a
-    // second steep curve here bunched the crossing into half a second.
-    const ease = (x: number) => 0.5 * x + 0.25 * (1 - Math.cos(Math.PI * x));
-    const clamp = (x: number) => Math.max(0, Math.min(1, x));
     const t0 = performance.now();
     let frame = 0;
 
     const draw = (now: number) => {
       frame = 0;
-      const w = wash.get();
-      const on = w > 0 && w < 1;
+      const sea = seaPhase(wash.get());
+      const on = sea.on;
       canvas.style.visibility = on ? "visible" : "hidden";
       if (!on) {
         if (!water.paused) water.pause();
@@ -243,7 +252,7 @@ export function SeaWash({
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       if (water.readyState >= 2) upload(0, T.water, water, true);
-      const after = w >= 0.5;
+      const after = sea.after;
       const src = !after ? placeSource() : null;
       let placeSz: [number, number] = [16, 9];
       if (src) {
@@ -256,10 +265,10 @@ export function SeaWash({
       gl.uniform2f(U("portSz"), portraitSize.width, portraitSize.height);
       gl.uniform2f(U("vidSz"), water.videoWidth || 1440, water.videoHeight || 2560);
       gl.uniform3f(U("cam"), c.scale * dpr, c.x * dpr, c.y * dpr);
-      gl.uniform1f(U("rise"), ease(clamp(w / 0.46)));
-      gl.uniform1f(U("fall"), ease(clamp((w - 0.54) / 0.46)));
+      gl.uniform1f(U("rise"), sea.rise);
+      gl.uniform1f(U("fall"), sea.fall);
       gl.uniform1f(U("after"), after ? 1 : 0);
-      gl.uniform1f(U("placeZoom"), 1 + 0.08 * ease(clamp(w / 0.46)));
+      gl.uniform1f(U("placeZoom"), sea.placeZoom);
       gl.uniform1f(U("t"), (now - t0) / 1000);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       frame = requestAnimationFrame(draw);

@@ -58,6 +58,9 @@ for (const run of runs) {
       return Math.round(top + p * travel + (offset ?? 0) * window.innerHeight);
     }, s);
     if (y === null) { console.error(`[${run.prefix}] missing target for ${s.name}`); continue; }
+    // a scene inside a change (the sea half way) is held there: the glide
+    // would otherwise carry it on to the change's end before the shot
+    await page.evaluate((hold) => { window.__glideHold = !!hold; }, s.hold);
     await page.evaluate((y) => window.scrollTo(0, y), y);
     // Lenis smooths wheel input only; a programmatic jump lands at once. Give
     // ScrollTrigger and the scrubs time to settle.
