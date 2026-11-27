@@ -212,6 +212,7 @@ export function Talk() {
             ))}
             <a href="/blog">Blog</a>
           </nav>
+          <p className="talk-origin">{t("talk.origin")}</p>
           <p className="talk-credits">{t("talk.credits")}</p>
         </footer>
       </div>

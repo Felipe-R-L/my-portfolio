@@ -15,9 +15,9 @@ precisa ser impecável).
 ## Conceito: o site inteiro rodado em Diamante 400
 
 O portfólio é um filme. Diamante, na Calábria, terra do tataravô do Felipe, é
-o plano de abertura e o nome da película ("DIAMANTE 400"). Nenhum texto conta
-a história da família; o vínculo é visual (o carimbo, o corte origem → hoje,
-o retorno no fim).
+o plano de abertura e o nome da película ("DIAMANTE 400"). O vínculo é visual (o
+carimbo, o corte origem → hoje, o retorno no fim); o único texto sobre ele é
+uma linha discreta no rodapé do Contato.
 
 - **A cor conta a viagem.** Diamante abre em cor e perde a cor quando o
   retrato abre (o hoje). O meio da página fica em preto e branco e a cor só
@@ -61,7 +61,6 @@ o retorno no fim).
 
 - Escolha dos clipes e músicas do Storyblocks (favoritos dele) e o fundo
   do Contato a partir do vídeo. Getty descartado (preço).
-- Linha discreta sobre o tataravô no site: aprovada em princípio, texto e
-  lugar propostos (rodapé do Contato), falta o OK.
+- Linha sobre o tataravô: no rodapé do Contato, aprovada (awwwards 19).
 - Galeria "Fora do código" com fotos e filmes dele.
 - Conta PRO, contatos para votar, data do envio.

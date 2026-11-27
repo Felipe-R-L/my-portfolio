@@ -259,6 +259,15 @@
   color: inherit;
 }
 
+/* the one line that says why Diamante: quiet, in the body face */
+.talk-origin {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
 .talk-credits {
   flex-basis: 100%;
   margin: 0;
