@@ -4,7 +4,7 @@ import type { VirtualScrollData } from "lenis";
 
 import { gsap, ScrollTrigger } from "../scroll/gsap";
 import { isJumping } from "../scroll/jump";
-import { UNDER_EVENT, underCurve, durationFor, holdAhead, speedFor, holds, passages, playTarget, settleDuration, settleTarget, type Passage } from "../scroll/glide";
+import { UNDER_EVENT, underCurve, durationFor, holdAhead, speedFor, holds, passages, playTarget, segmentEase, setPace, settleDuration, settleTarget, type Passage } from "../scroll/glide";
 
 /** A wheel event this long after the previous one, or clearly stronger than
     it, starts a new gesture; anything else is the same gesture's tail (a
@@ -48,7 +48,21 @@ const easeOut = (t: number) => Math.sin((t * Math.PI) / 2);
 /** Half straight, half sine: moving from the first frame, peak at 1.3x. */
 const softInOut = (t: number) => 0.5 * t + 0.5 * easeInOut(t);
 
-type Play = { passage: Passage; to: number; dir: number; start: number; dur: number; speed: number };
+/** Hurrying a change on its own clock (the seas, Felipe 2026-11-27: "não
+    testar a paciência de ninguém"): a gesture the same way, past the first
+    HURRY_GRACE_S (the gesture that started it, still arriving), halves what
+    is left of it; a hard one, or insisting, brings it down to HURRY_S. It is
+    never cut: the same curve plays faster, the water with it. */
+const HURRY_S = 0.6;
+const HURRY_GRACE_S = 0.35;
+/** Under a cover, the page crosses while the screen is covered (from this
+    share of its time on): a gesture before then waits for it. */
+const COVERED_AT = 0.45;
+
+/** Where a change on its own clock is on its curve: `ease` from u0 to u1
+    over the play's time; `full` is the curve's whole time at 1x. */
+type Curve = { ease: (t: number) => number; u0: number; u1: number; full: number; pace: number; origin: number };
+type Play = { passage: Passage; to: number; dir: number; start: number; dur: number; speed: number; curve?: Curve; still?: boolean };
 
 /**
  * Lenis smooth scrolling on desktop, driven by GSAP's ticker so ScrollTrigger
@@ -96,26 +110,38 @@ export function useSmoothScroll() {
       lenis.options.lerp = LERP_CALM + ((LERP_FAST - LERP_CALM) * (speed - 1)) / (MAX_SPEED - 1);
     };
 
-    const run = (lenis: Lenis, p: Omit<Play, "start" | "speed">, easing: (t: number) => number) => {
-      play = { ...p, start: performance.now(), speed: speedFor(p.passage, speed) };
-      if (p.passage.under) window.dispatchEvent(new CustomEvent(UNDER_EVENT, { detail: { dir: p.dir, seconds: p.dur } }));
+    let hurryTimer = 0;
+    let stillTimer = 0;
+    const run = (lenis: Lenis, p: Omit<Play, "start" | "speed" | "still">, easing: (t: number) => number) => {
+      window.clearTimeout(hurryTimer);
+      window.clearTimeout(stillTimer);
+      // already where this stretch ends (under the sea, before or after the
+      // page crosses): nothing to scroll, only time to wait. Lenis would
+      // skip a scroll to where it is and leave the one before running.
+      const still = Math.abs(p.to - lenis.animatedScroll) < 0.5;
+      play = { ...p, start: performance.now(), speed: speedFor(p.passage, speed), still };
+      // (a hurried or turned-back stretch of a play tells the seas itself)
+      if (!p.curve || p.curve.pace === 1) setPace(p.curve?.pace ?? 1);
+      if (p.passage.under && (!p.curve || (p.curve.u0 === 0 && p.curve.u1 === 1))) window.dispatchEvent(new CustomEvent(UNDER_EVENT, { detail: { dir: p.dir, seconds: p.dur } }));
       if (import.meta.env.DEV) {
         const w = window as unknown as { __glideLog?: unknown[] };
         (w.__glideLog ??= []).push({ from: Math.round(lenis.animatedScroll), to: Math.round(p.to), dur: +p.dur.toFixed(2), speed: +speedFor(p.passage, speed).toFixed(2) });
       }
-      lenis.scrollTo(p.to, {
-        duration: p.dur,
-        easing,
-        force: true,
-        onComplete: () => {
-          play = null;
-          endedAt = performance.now();
-          const e = engaged;
-          engaged = null;
-          if (e && advance(lenis, e.dir, e.dir * 2, e.v)) return;
-          tailUntil = performance.now() + GESTURE_GAP_MS;
-        },
-      });
+      const done = () => {
+        play = null;
+        setPace(1);
+        endedAt = performance.now();
+        const e = engaged;
+        engaged = null;
+        if (e && advance(lenis, e.dir, e.dir * 2, e.v)) return;
+        tailUntil = performance.now() + GESTURE_GAP_MS;
+      };
+      if (still) {
+        lenis.reset();
+        stillTimer = window.setTimeout(done, p.dur * 1000);
+        return;
+      }
+      lenis.scrollTo(p.to, { duration: p.dur, easing, force: true, onComplete: done });
     };
 
     /**
@@ -147,8 +173,52 @@ export function useSmoothScroll() {
         // speed the page arrives with, within reason
         const joined = Math.min(base, Math.max(0.6 * base, (Math.PI / 2) * (d / v)));
         run(lenis, { ...hit, dir, dur: joined }, easeOut);
-      } else run(lenis, { ...hit, dir, dur: base }, hit.passage.under ? underCurve : hit.passage.soft ? softInOut : easeInOut);
+      } else {
+        const ease = hit.passage.under ? underCurve : hit.passage.soft ? softInOut : easeInOut;
+        const own = hit.passage.under || hit.passage.whole;
+        run(lenis, { ...hit, dir, dur: base, ...(own ? { curve: { ease, u0: 0, u1: 1, full: base, pace: 1, origin: performance.now() } } : {}) }, ease);
+      }
       return true;
+    };
+
+    /** Where a play on its own clock is on its curve now (0..1). */
+    const curveAt = (p: Play, c: Curve, now: number) => c.u0 + (c.u1 - c.u0) * Math.min(1, (now - p.start) / 1000 / p.dur);
+
+    /** The rest of a play on its own clock, faster: the same curve from
+        where it is, its water at the same pace. */
+    const hurry = (lenis: Lenis, p: Play, hard: boolean) => {
+      const c = p.curve;
+      if (!c || play !== p) return;
+      const now = performance.now();
+      const u = curveAt(p, c, now);
+      const left = (Math.abs(c.u1 - u) * c.full) / c.pace;
+      const want = hard ? HURRY_S : Math.max(HURRY_S, left / 2);
+      if (left <= want * 1.15) return;
+      const next = { ...c, u0: u, pace: (c.pace * left) / want };
+      setPace(next.pace);
+      run(lenis, { passage: p.passage, to: p.to, dir: p.dir, dur: want, curve: next }, segmentEase(c.ease, u, c.u1));
+    };
+
+    /** Turning back a play on its own clock, from where it is. Under a
+        cover: its curve backwards, the sea going back down with it. On its
+        own clock inside (the hero): the way back from here, as a gesture
+        back from this point would play it (the sea follows the scroll). */
+    const turnBack = (lenis: Lenis, p: Play, dir: number) => {
+      const c = p.curve;
+      if (!c) return;
+      const now = performance.now();
+      const to = dir > 0 ? p.passage.to : p.passage.from;
+      if (p.passage.under) {
+        const u = curveAt(p, c, now);
+        const u1 = c.u1 === 1 ? 0 : 1;
+        const dur = Math.max(0.2, Math.abs(u - u1) * c.full);
+        window.dispatchEvent(new CustomEvent(UNDER_EVENT, { detail: { dir, seconds: dur, back: true } }));
+        run(lenis, { passage: p.passage, to, dir, dur, curve: { ...c, u0: u, u1, pace: 1, origin: now } }, segmentEase(c.ease, u, u1));
+        return;
+      }
+      const ease = p.passage.soft ? softInOut : easeInOut;
+      const dur = durationFor(p.passage, to - lenis.animatedScroll, vh());
+      run(lenis, { passage: p.passage, to, dir, dur, curve: { ease, u0: 0, u1: 1, full: dur, pace: 1, origin: now } }, ease);
     };
 
     const onWheel = ({ deltaY, event }: VirtualScrollData): boolean => {
@@ -179,16 +249,39 @@ export function useSmoothScroll() {
       };
 
       // something else took the scroll over (a nav jump): forget the play
-      if (play && !lenis.isScrolling) {
+      if (play && !play.still && !lenis.isScrolling) {
         play = null;
         engaged = null;
+        setPace(1);
       }
 
       if (play) {
         const p = play;
         // under a cover (the sea), or with a clock of its own inside: it
         // runs its course at its own time
-        if (p.passage.under || p.passage.whole) return eat();
+        // runs its course at its own time; a fresh gesture hurries it along
+        // (never cutting it) or turns it back from where it is
+        if (p.passage.under || p.passage.whole) {
+          const c = p.curve;
+          if (!c || !fresh) return eat();
+          if (dir !== p.dir) {
+            turnBack(lenis, p, dir);
+            return eat();
+          }
+          if ((now - c.origin) / 1000 < HURRY_GRACE_S) return eat();
+          // a hard flick, or insisting after a first hurry: straight to the end
+          const hard = speed >= 2 || c.pace > 1;
+          const u = curveAt(p, c, now);
+          // under a cover going on: not until the screen is covered
+          if (p.passage.under && c.u1 === 1 && u < COVERED_AT) {
+            window.clearTimeout(hurryTimer);
+            const wait = ((COVERED_AT - u) / (c.u1 - c.u0)) * p.dur * 1000;
+            hurryTimer = window.setTimeout(() => hurry(lenis, p, hard), wait);
+            return eat();
+          }
+          hurry(lenis, p, hard);
+          return eat();
+        }
         const left = Math.max(0, p.dur - (now - p.start) / 1000);
         // the gear taken before the revs drop: a push the same way in the
         // change's last stretch engages the next one; this one keeps its
@@ -303,6 +396,8 @@ export function useSmoothScroll() {
         // the hand has the page: whatever was playing gives way
         play = null;
         engaged = null;
+        window.clearTimeout(stillTimer);
+        setPace(1);
         settleLater();
       }
     });
@@ -312,6 +407,9 @@ export function useSmoothScroll() {
 
     return () => {
       window.clearTimeout(settleTimer);
+      window.clearTimeout(hurryTimer);
+      window.clearTimeout(stillTimer);
+      setPace(1);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown, true);
       window.removeEventListener("pointerup", onUp, true);

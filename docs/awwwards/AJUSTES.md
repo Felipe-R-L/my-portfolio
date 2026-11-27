@@ -1,4 +1,4 @@
-# Ajustes de 2026-11-27 (awwwards 23 a 50)
+# Ajustes de 2026-11-27 (awwwards 23 a 54)
 
 Tudo o que mudou a pedido do Felipe ou pelo loop neste dia, com o motivo,
 para quem retomar o trabalho. As decisões em si estão em `DIRECTION.md`;
@@ -44,6 +44,24 @@ aqui fica o que foi feito e o que quebrou no caminho.
   embalo e cobria o plano 4 no mesmo instante. O mar nunca é engatado pelo
   embalo e espera 0,65 s depois do trecho anterior; o plano conta como
   alcançado com uma folga de alguns px. (48)
+
+## Usabilidade: acelerar sem cortar (54)
+- Um gesto durante a abertura do hero ou o mar antes do Contato não é mais
+  ignorado. No mesmo sentido, o resto da passagem toca na **mesma curva**,
+  mais rápido, e o mar junto (`timeScale` pelo evento `glide:pace`): um
+  gesto corta pela metade o que falta, insistir ou um giro forte leva a
+  ~0,6 s. Os primeiros 0,35 s não contam (é o próprio gesto que começou).
+- No sentido contrário volta na hora: o hero refaz a volta de onde está; o
+  mar do Contato toca a própria curva de trás para frente, a página
+  atravessando de volta sob a água.
+- O mar do Contato só acelera com a tela coberta: um gesto antes espera
+  esse instante.
+- Defeito achado no caminho: quando a página já estava no fim do trecho
+  (sob a água, antes ou depois de atravessar), o Lenis ignorava o novo
+  scroll e o anterior seguia; voltar cedo mostrava a página indo ao
+  Contato com o mar descendo. Agora esse trecho é só tempo (`still`).
+- Conferido: `.loop/tools/herohurry.mjs` e `talkhurry.mjs` (sem gesto,
+  um gesto, dois, volta), `heroclock`, `plano3` (plano 4 aceso e com som).
 
 ## Navegação
 - **Links da nav quebrados** (o Contato caía no meio da passagem do mar e

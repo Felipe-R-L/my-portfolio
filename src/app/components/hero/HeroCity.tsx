@@ -7,7 +7,7 @@ import { createSignal } from "../../scroll/signal";
 import { useScene } from "../../scroll/useScene";
 import { RAIL_ENTER_TO, RAIL_TRAVEL_FROM, RAIL_TRAVEL_TO, Story, railStops } from "../../scenes/Story";
 import { STORY } from "../../data/story";
-import { registerPassages } from "../../scroll/glide";
+import { PACE_EVENT, currentPace, registerPassages } from "../../scroll/glide";
 import { isJumping } from "../../scroll/jump";
 import { SeaWash, seaPhase } from "./SeaWash";
 import { Credits, Letters, NAME } from "./HeroParts";
@@ -267,7 +267,11 @@ export function HeroCity() {
           ease: quick ? "power1.out" : "sine.inOut",
           onUpdate: () => applyWash(sea.w),
         });
+        // hurried by a gesture with the passage around it: the same pace
+        seaTween.timeScale(currentPace());
       };
+      const onPace = () => seaTween?.timeScale(currentPace());
+      window.addEventListener(PACE_EVENT, onPace);
 
       // The scroll's part: when the sea starts or goes back, and the exit.
       const render = (p: number) => {
@@ -469,6 +473,7 @@ export function HeroCity() {
       // (the name, the pitch and the stamp follow the sea: applyWash)
       return () => {
         offLoop?.();
+        window.removeEventListener(PACE_EVENT, onPace);
         seaTween?.kill();
         rest?.removeEventListener("timeupdate", onRestTime);
         rest?.removeEventListener("ended", onRestTime);

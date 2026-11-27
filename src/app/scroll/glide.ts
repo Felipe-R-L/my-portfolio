@@ -182,3 +182,34 @@ export function underCurve(t: number): number {
 /** Fired on window when a passage played `under` a cover starts, so the
     cover plays with it: detail = { dir, seconds }. */
 export const UNDER_EVENT = "glide:under";
+
+/** Fired on window when the pace of a passage on its own clock changes (a
+    gesture hurrying it along, or back to 1x when it is done or turned
+    back): detail = { pace }. Whatever runs on a clock inside the passage
+    (the seas) plays at that pace too, so the page and the water stay
+    together frame for frame. */
+export const PACE_EVENT = "glide:pace";
+
+let pace = 1;
+
+/** The pace a passage on its own clock plays at now (1 = its own time). */
+export function currentPace(): number {
+  return pace;
+}
+
+export function setPace(k: number): void {
+  if (k === pace) return;
+  pace = k;
+  if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent(PACE_EVENT, { detail: { pace: k } }));
+}
+
+/** A stretch of a passage's curve: `ease` from u0 to u1 (either way),
+    renormalised to 0..1 for a scroll from where the page is to the end it
+    is headed for. Hurrying keeps the same curve, only faster; turning back
+    plays it backwards; so every frame in between is still seen. */
+export function segmentEase(ease: (t: number) => number, u0: number, u1: number): (s: number) => number {
+  const a = ease(u0);
+  const d = ease(u1) - a;
+  if (Math.abs(d) < 1e-6) return (s) => s;
+  return (s) => (ease(u0 + s * (u1 - u0)) - a) / d;
+}

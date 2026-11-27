@@ -152,8 +152,12 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   animações diferentes, mas sem testar a paciência de ninguém. Toda
   animação com tempo próprio deve poder ser acelerada por um gesto e
   desfeita a qualquer momento, sem corte visual (LOOP.md, passos 8 a 10).
-- **Galeria:** a coletânea está no Drive (Pessoal/Mídia); escolher fotos e
-  trechos de vídeo sem rostos de terceiros de frente.
+  Feito para a abertura e o mar do Contato (awwwards 54, ver AJUSTES.md):
+  o mesmo filme, mais rápido; nunca um salto.
+- **Galeria:** a coletânea está no Drive (Pessoal/Mídia,
+  `Portfolio-1-001.zip`, 4,2 GB, enviada em 2026-11-27); grande demais para
+  o conector do Drive, precisa estar no disco (Downloads) para escolher
+  fotos e trechos de vídeo sem rostos de terceiros de frente.
 - **Kit de submissão:** a descrição ainda fala do "quadro que abre no meu
   rosto" e do preto e branco; precisa ser reescrita na voz dele.
 - Conta PRO, contatos para votar, data do envio.

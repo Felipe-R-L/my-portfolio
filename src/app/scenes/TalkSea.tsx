@@ -5,7 +5,7 @@ import { sound } from "../audio/sound";
 import { SeaWash } from "../components/hero/SeaWash";
 import type { Camera } from "../components/hero/camera";
 import { media } from "../media";
-import { UNDER_EVENT } from "../scroll/glide";
+import { PACE_EVENT, UNDER_EVENT, currentPace } from "../scroll/glide";
 import { createSignal } from "../scroll/signal";
 import "./TalkSea.css";
 
@@ -51,10 +51,18 @@ export function TalkSea() {
     window.addEventListener("resize", fit);
 
     let tween: gsap.core.Tween | null = null;
+    // the wash, linear in the passage's time (the page's curve is on it)
+    const s = { w: 0 };
     const onUnder = (e: Event) => {
-      const { seconds } = (e as CustomEvent<{ dir: number; seconds: number }>).detail;
+      const { seconds, back } = (e as CustomEvent<{ dir: number; seconds: number; back?: boolean }>).detail;
       tween?.kill();
-      const s = { w: 0 };
+      if (back) {
+        // turned back: the same water, backwards, from where it is
+        if (s.w > 0.3 && s.w < 0.9) sound.play("wave", { volume: 0.7 });
+        tween = gsap.to(s, { w: 0, duration: seconds, ease: "none", onUpdate: () => wash.set(s.w), onComplete: () => wash.set(0) });
+        return;
+      }
+      s.w = 0;
       let was = 0;
       wash.set(0);
       sound.play("wave");
@@ -70,11 +78,17 @@ export function TalkSea() {
         // gone: the canvas hides itself at 1 (SeaWash draws only inside 0..1)
         onComplete: () => wash.set(1),
       });
+      tween.timeScale(currentPace());
     };
+    // hurried by a gesture once the screen is covered: the page and the
+    // water at the same pace
+    const onPace = () => tween?.timeScale(currentPace());
     window.addEventListener(UNDER_EVENT, onUnder);
+    window.addEventListener(PACE_EVENT, onPace);
     return () => {
       window.removeEventListener("resize", fit);
       window.removeEventListener(UNDER_EVENT, onUnder);
+      window.removeEventListener(PACE_EVENT, onPace);
       tween?.kill();
     };
   }, [wash, camera]);
