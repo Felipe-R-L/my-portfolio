@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import type { Signal } from "../../scroll/signal";
 import type { Camera } from "./camera";
 import { media } from "../../media";
+import { placeVideoOn } from "./placeLoop";
 
 /**
  * The sea that carries the page from Diamante to the portrait.
@@ -238,7 +239,7 @@ export function SeaWash({
 
     // Diamante under the shallows: its own video frame, or its poster
     const placeSource = () => {
-      const vid = stage.querySelector<HTMLVideoElement>(".city-place-video");
+      const vid = placeVideoOn(stage);
       if (vid && vid.readyState >= 2 && getComputedStyle(vid).display !== "none") return vid;
       const img = stage.querySelector<HTMLImageElement>(".city-place-photo");
       return img && img.complete && img.naturalWidth ? img : null;

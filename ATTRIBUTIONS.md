@@ -84,3 +84,5 @@ Música (Pixabay Content License, fora do git em `public/assets/sb/`):
 - `music-amore-al-mare-501525.mp3`: "Romantic Italian Melody - Amore al Mare (Love at the Sea)", Grand_Project — https://pixabay.com/music/modern-classical-romantic-italian-melody-amore-al-mare-love-at-the-sea-501525/
 - `music-bossa-nova-soulful-630197.mp3`: "Bossa Nova Soulful Music", andriih — https://pixabay.com/music/bossa-nova-bossa-nova-soulful-music-630197/
 - `music-nostalgic-folk-3-468043.mp3`: "Nostalgic Folk Music No.3 - Romantic Loop", Sonican — https://pixabay.com/music/solo-guitar-nostalgic-folk-music-no3-romantic-loop-468043/
+
+Diamante, resto do voo no hero (`diamante-rest-*`, fora do git): Storyblocks 348598595 (aproximação), 348598575 (vista de cima) e 348598585 (barco), Francesco Rinaldi, mesma sessão do 348598577.

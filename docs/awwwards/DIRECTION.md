@@ -37,7 +37,9 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
 
 1. **Diamante.** Voo de drone que recua da cidade velha até a costa inteira
    ao pôr do sol (Storyblocks 348598577, Francesco Rinaldi), tocado uma vez a
-   1,5× (15 s) e parado na vista larga. Primeiro quadro = pôster e LCP (um
+   1,5× (15 s); depois o resto do mesmo voo (aproximação até a ponta, os
+   telhados de cima, um barco saindo para o mar; 348598595, 348598575,
+   348598585, 48 s) e de volta ao recuo, em loop com fusões (`placeLoop.ts`). Primeiro quadro = pôster e LCP (um
    arquivo por aparelho); no celular, corte vertical e sombra mais alta sob o
    texto. Nome em duas linhas (Cormorant, "Rodrigues" em itálico) e o
    carimbo de viagem.

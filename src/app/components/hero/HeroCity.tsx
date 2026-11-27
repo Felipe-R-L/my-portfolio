@@ -11,6 +11,7 @@ import { registerPassages } from "../../scroll/glide";
 import { SeaWash, seaPhase } from "./SeaWash";
 import { Credits, Letters, NAME } from "./HeroParts";
 import { placeHtml } from "./shell";
+import { placeLoop } from "./placeLoop";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
 import { FRAME_RADIUS, SCROLL } from "../../motion/tokens";
 import { useTranslation } from "react-i18next";
@@ -157,6 +158,7 @@ export function HeroCity() {
       let progress = 0;
 
       const low = front.querySelectorAll<HTMLElement>(".hero-pitch, .hero-link");
+      const offLoop = reduce ? null : placeLoop(stage);
 
       // The sea, by its own clock: once the visitor starts down from the
       // top it plays through on its own (rises, covers, goes back), like the
@@ -413,6 +415,7 @@ export function HeroCity() {
 
       // (the name, the pitch and the stamp follow the sea: applyWash)
       return () => {
+        offLoop?.();
         seaTween?.kill();
         ro.disconnect();
         offPassages?.();
