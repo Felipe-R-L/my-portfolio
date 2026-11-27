@@ -7,6 +7,7 @@ import { Process } from "./scenes/Process";
 import { Talk } from "./scenes/Talk";
 import { GlassNav, type GlassNavItem } from "./components/shared/GlassNav";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
+import { useFocusFollow } from "./hooks/useFocusFollow";
 import { useHashScroll } from "./hooks/useHashScroll";
 import { CHAPTERS } from "./journey/chapters";
 import { useJourney } from "./journey/useJourney";
@@ -33,6 +34,8 @@ export default function AppLayout() {
   // Honours `/#projects` and friends on arrival — links into the homepage from
   // the blog are cross-document, so nothing else would act on the fragment.
   useHashScroll(lenisRef);
+  // what the keyboard focuses is always on screen
+  useFocusFollow(lenisRef);
   const { t, i18n } = useTranslation();
   const journey = useJourney();
   const caseRoute = useCaseRoute();
@@ -55,6 +58,11 @@ export default function AppLayout() {
 
   return (
     <div className="home-text bg-[#050608] min-h-screen selection:bg-blue-500/30 selection:text-blue-200 overflow-x-clip">
+      {/* first stop of the keyboard: past the nav, straight to the page */}
+      <a className="skip-link" href="#main">
+        {t("nav.skip")}
+      </a>
+
       {/* The light of the chapter in view, behind everything. */}
       <div className="fixed inset-0 z-0" aria-hidden="true">
         <AmbientLight active={journey.active} />
@@ -79,7 +87,7 @@ export default function AppLayout() {
         status={<ChapterRail variant="pill" active={journey.active} progress={journey.progress} />}
       />
 
-      <main className="relative z-10 w-full overflow-x-clip">
+      <main id="main" tabIndex={-1} className="relative z-10 w-full overflow-x-clip outline-none">
         {/* Each section now owns its own scroll target, so the wrapper divs that
             used to carry these ids would have duplicated them. */}
         {/* The hero; the story scene (who I am) follows it. */}

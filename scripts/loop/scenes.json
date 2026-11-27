@@ -97,7 +97,8 @@
   {
     "name": "07-convite",
     "sel": ".talk-body",
-    "p": 0
+    "p": 0,
+    "offset": -0.12
   },
   {
     "name": "99-fim",

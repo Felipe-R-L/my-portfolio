@@ -16,7 +16,9 @@ import { center, type ClipMeta, type Rect } from "../components/motion/clip";
  * Words: `work.items.<id>.motion.<key>`.
  */
 export type CameraKey = { t: number; rx: number; ry: number; s: number; x: number; y: number };
-export type Caption = { from: number; to: number; key: string };
+/** `top` puts one caption above the action instead of over it (the clip's
+ *  own `captionTop` sets the default for all of them). */
+export type Caption = { from: number; to: number; key: string; at?: "top" | "bottom" };
 export type MotionSpec =
   | {
       mode: "camera";
@@ -58,7 +60,8 @@ export const MOTION: Record<string, MotionSpec> = {
     },
     captions: ({ marks: M, duration: end }) => [
       { from: 0.2, to: M.modal + 0.4, key: "map" },
-      { from: M.typing - 0.2, to: M.confirm, key: "plate" },
+      // the confirm buttons sit under the plate: this one goes on top
+      { from: M.typing - 0.2, to: M.confirm, key: "plate", at: "top" },
       { from: M.occupied + 0.6, to: end + 0.6, key: "clock" },
     ],
     ring: ({ marks: M, boxes: B, duration: end }) => ({ rect: B.roomAfter ?? B.room, from: M.occupied + 0.6, to: end + 0.6 }),

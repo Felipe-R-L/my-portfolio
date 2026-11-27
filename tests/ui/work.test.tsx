@@ -72,8 +72,10 @@ describe('destinations', () => {
     expect(vars.length).toBeGreaterThan(0)
     // the stage is sticky CSS: no GSAP pin, so the nav can jump anywhere
     expect(vars.some((v) => v.pin)).toBe(false)
-    // only the current destination can take focus
-    expect(c.querySelectorAll('.dest-item[inert]').length).toBe(WORK.length - 1)
+    // every destination is reachable from the keyboard; focusing one that is
+    // not on stage takes the page to it, so the page handles that focus
+    expect(c.querySelectorAll('.dest-item[inert]').length).toBe(0)
+    expect(c.querySelectorAll('.dest-item[data-focus-handled]').length).toBe(WORK.length)
   })
 
   it('on a phone, puts the frame on top and the destinations in a native swipe', () => {

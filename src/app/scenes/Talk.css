@@ -19,10 +19,12 @@
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 52%);
-  gap: clamp(2rem, 4vh, 3rem);
+  /* at the end of the page all of it, title to credits, fits one screen
+     with the title clear of the nav */
+  gap: clamp(1.25rem, 2.6vh, 2.25rem);
   min-height: 100svh;
   align-content: end;
-  padding: clamp(6rem, 16vh, 10rem) var(--gutter) clamp(1.5rem, 4vh, 2.5rem);
+  padding: clamp(6rem, 16vh, 10rem) var(--gutter) clamp(1rem, 2.5vh, 1.75rem);
   padding-left: calc(var(--gutter) + 1.5rem);
 }
 
@@ -188,7 +190,7 @@
 .talk-proof {
   display: inline-block;
   /* a 44px target for the thumb, the same line on screen */
-  margin-top: 1.15rem;
+  margin-top: 0.45rem;
   padding: 0.7rem 0;
   color: var(--diamante);
   font-size: 0.95rem;
@@ -268,12 +270,24 @@
   height: 0;
 }
 
-/* the photo stays whole on the right; on the left, where the words are, the
-   page's dark comes over it, so nothing is read against the bright city */
+/* Without the camera's pull-back the picture is where the moving version
+   leaves it: framed on the right, beside the words, never behind them. */
 .talk[data-mode="list"] {
-  background:
-    linear-gradient(90deg, rgb(5 7 10 / 0.96) 0%, rgb(5 7 10 / 0.9) 38%, rgb(5 7 10 / 0.45) 62%, rgb(5 7 10 / 0) 80%),
-    #05070a url("/assets/profile/talk-side-2400.webp") center / cover no-repeat;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .talk[data-mode="list"]::before {
+    content: "";
+    position: absolute;
+    top: clamp(9rem, 30vh, 17rem);
+    right: calc(var(--gutter) + 1.5rem);
+    width: min(37vw, 34rem);
+    aspect-ratio: 1.62;
+    border-radius: 14px;
+    border: 1.5px solid rgb(159 195 214 / 0.4);
+    background: #05070a url("/assets/profile/talk-side-1200.webp") 54% 30% / cover no-repeat;
+  }
 }
 
 @media (max-width: 767px) {

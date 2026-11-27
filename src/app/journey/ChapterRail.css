@@ -79,9 +79,13 @@
    gutter is 3rem there), read bottom to top. The ticks stack vertically and
    the fill grows upward. */
 .rail--desk {
-  /* it stands over the portrait's bright sky as well as the dark page */
-  text-shadow: 0 0 0.6rem rgb(0 0 0 / 0.75), 0 0 0.15rem rgb(0 0 0 / 0.6);
-  filter: drop-shadow(0 0 0.35rem rgb(0 0 0 / 0.45));
+  /* it stands over the portrait's bright sky as well as the dark page: a
+     narrow strip of the nav's dark glass under it */
+  padding: 0.7rem 0.3rem;
+  border-radius: 999px;
+  background: rgb(8 10 16 / 0.55);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   position: fixed;
   left: 0.9rem;
   top: 50%;

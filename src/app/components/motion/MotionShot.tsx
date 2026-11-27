@@ -188,6 +188,8 @@ export function MotionShot({
         const k = seg(tm, now.from, now.from + 0.4, out) * (1 - seg(tm, now.to - 0.3, now.to));
         const text = t(`${textBase}.${now.key}`);
         if (cap.textContent !== text) cap.textContent = text;
+        const at = now.at ?? (spec.mode === "camera" && spec.captionTop ? "top" : "bottom");
+        if (cap.dataset.at !== at) cap.dataset.at = at;
         cap.style.opacity = String(k);
         cap.style.transform = `translateY(${(1 - k) * 14}px)`;
       } else cap.style.opacity = "0";

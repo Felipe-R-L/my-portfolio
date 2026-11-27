@@ -320,7 +320,10 @@ export function HeroCity() {
               // the cards keep up with a fast scroll more than the camera does
               ...rail.map((r) => ({ ...r, duration: 1.1, sensitivity: 1.6 })),
               { from: at(RAIL_TRAVEL_TO), to: storyFrom + chapters, hold: true },
-              { from: storyFrom + chapters, to: end, duration: 1.4 },
+              // T1 runs on into the first project's arrival (which starts at
+              // `end`): the two merge into one change, so the page never
+              // comes to rest on the portrait alone in the dark between them
+              { from: storyFrom + chapters, to: end + 3, duration: 2.8 },
             ];
           })
         : null;

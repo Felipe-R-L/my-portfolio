@@ -53,6 +53,20 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
   const currentRef = useRef(0);
   currentRef.current = current;
 
+  // The keyboard reaches every project, not only the one on stage: focusing a
+  // project that is not showing takes the page to where it rests, mid-hold.
+  const focusProject = (i: number) => {
+    const track = trackRef.current;
+    if (mode !== "scroll" || !track) return;
+    const vh = window.innerHeight;
+    const beatPx = (SCROLL.destination.approach + SCROLL.destination.hold) * vh;
+    const base = pageTop(track);
+    // already resting on this project: stay
+    const y = window.scrollY;
+    if (y >= base + (i + ARRIVE) * beatPx && y <= base + (i + 1) * beatPx) return;
+    window.scrollTo({ top: base + (i + (ARRIVE + 1) / 2) * beatPx, behavior: "instant" as ScrollBehavior });
+  };
+
   // The frame's beats, one per destination (wide screens; a phone has the
   // pictures in the cards' slot, see InlineFrame).
   useLayoutEffect(() => {
@@ -258,7 +272,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
             </header>
             <ol ref={listRef} className="dest-list">
               {WORK.map((w, i) => (
-                <li key={w.id} className="dest-item" data-dest={w.id} data-current={i === current ? "true" : "false"} {...(i !== current ? { inert: "" } : {})}>
+                <li key={w.id} className="dest-item" data-dest={w.id} data-current={i === current ? "true" : "false"} data-focus-handled="" onFocus={() => focusProject(i)}>
                   {text(w, i)}
                 </li>
               ))}

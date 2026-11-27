@@ -24,6 +24,7 @@ export function useJourney(): Journey {
 
   useLayoutEffect(() => {
     const triggers: ScrollTrigger[] = [];
+    const lastId = CHAPTERS[CHAPTERS.length - 1].id;
     for (const chapter of CHAPTERS) {
       const els = [...document.querySelectorAll<HTMLElement>(`[data-journey="${chapter.id}"]`)];
       if (els.length === 0) continue;
@@ -32,7 +33,8 @@ export function useJourney(): Journey {
           trigger: els[0],
           endTrigger: els[els.length - 1],
           start: "top center",
-          end: "bottom center",
+          // the last chapter ends with the page, so the rail is full there
+          end: chapter.id === lastId ? "bottom bottom" : "bottom center",
           onToggle: (self) => {
             if (self.isActive) setActive(chapter.id);
           },

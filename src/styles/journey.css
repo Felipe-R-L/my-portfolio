@@ -87,3 +87,27 @@ body.home-text::after {
     animation: none;
   }
 }
+
+/* Skip link: out of sight until the keyboard reaches it, then a pill in the
+   corner above everything. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #05070a;
+  font-family: var(--ui);
+  font-size-adjust: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  outline: 2px solid var(--diamante);
+  outline-offset: 3px;
+}

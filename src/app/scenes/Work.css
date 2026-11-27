@@ -237,8 +237,8 @@
   overscroll-behavior-x: contain;
   /* the next project shows at the edge as a promise, fading out, not as a
      line of text cut off by the screen */
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 4.5rem), transparent);
-  mask-image: linear-gradient(to right, #000 calc(100% - 4.5rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 4.5rem), transparent calc(100% - 1.25rem));
+  mask-image: linear-gradient(to right, #000 calc(100% - 4.5rem), transparent calc(100% - 1.25rem));
 }
 
 .dest-swipe::-webkit-scrollbar {
