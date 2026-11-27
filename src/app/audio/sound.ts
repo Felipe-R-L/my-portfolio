@@ -1,4 +1,5 @@
 import { CUES, MUSIC, type Cue } from "./cues";
+import { render } from "./synth";
 
 /**
  * The site's sound. Off by default and off until the visitor turns it on:
@@ -61,8 +62,16 @@ function graph() {
 }
 
 async function load(name: Cue) {
-  const src = CUES[name].src;
-  if (!ctx || !src || buffers.has(name)) return;
+  const { src, synth } = CUES[name];
+  if (!ctx || buffers.has(name)) return;
+  if (synth) {
+    const data = render(synth, ctx.sampleRate);
+    const buffer = ctx.createBuffer(1, data.length, ctx.sampleRate);
+    buffer.copyToChannel(data, 0);
+    buffers.set(name, buffer);
+    return;
+  }
+  if (!src) return;
   try {
     const data = await (await fetch(src)).arrayBuffer();
     buffers.set(name, await ctx.decodeAudioData(data));

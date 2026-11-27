@@ -14,6 +14,7 @@ import { PLACE_HTML } from "./shell";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
 import { FRAME_RADIUS, SCROLL } from "../../motion/tokens";
 import { useTranslation } from "react-i18next";
+import { sound } from "../../audio/sound";
 import "./HeroCity.css";
 
 /**
@@ -157,6 +158,8 @@ export function HeroCity() {
         // Reduced motion: no sea. Diamante and the name hold, then the
         // portrait is simply there.
         const w = reduce ? (p < 0.23 ? 0 : 1) : span(p, OPEN_FROM, OPEN_TO);
+        // the sea gone and the portrait settled: a shutter
+        if (w >= 1 && wash.get() < 1 && wash.get() > 0.6) sound.play("frame");
         wash.set(w);
         // the sea covers the screen at the middle of the wash: Diamante and
         // the name under it before, the portrait after
@@ -206,7 +209,11 @@ export function HeroCity() {
 
       // The framed photo moved aside to the left, cropped to a portrait, by
       // `a` (0 = the framed picture in the middle, 1 = the portrait aside).
+      // the portrait going aside for the chapters, or back: a card slid
+      let lastAside = -1;
       const placeAside = (a: number) => {
+        if (lastAside >= 0 && (lastAside - 0.5) * (a - 0.5) < 0) sound.play("slide", { pan: -0.3 });
+        lastAside = a;
         const sc = FRAME_DESKTOP + (ASIDE_SCALE - FRAME_DESKTOP) * a;
         const cropL = ASIDE_CROP_L * a;
         const cropR = ASIDE_CROP_R * a;

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { STORY, chapterAt, type StoryChapter } from "../data/story";
 import { span, timelineDistance } from "../scroll/math";
 import type { Signal } from "../scroll/signal";
+import { sound } from "../audio/sound";
 import "./Story.css";
 
 /**
@@ -273,6 +274,8 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
   const distance = useRef(0);
   // where each chapter starts and how wide it is, inside the track (measured)
   const spans = useRef<{ left: number; width: number }[]>([]);
+  /** the first card still in the rail, last frame (-1: the rail not in) */
+  const lastIn = useRef(-1);
   const bgRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
@@ -302,6 +305,9 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
         if (shift + c.left >= edge && firstIn === spans.current.length) firstIn = i;
       });
       track.style.transform = `translate3d(${x + (1 - enter) * 80}px, 0, 0)`;
+      // a card coming up beside the portrait (or going back behind it)
+      if (enter >= 1 && lastIn.current !== -1 && firstIn !== lastIn.current) sound.play("card", { pan: 0.25 });
+      lastIn.current = enter >= 1 ? firstIn : -1;
       // the backgrounds follow the cards, measured from the portrait: a
       // chapter's background is at its brightest when its card has come up
       // against the portrait (where the rail rests, see railStops), and turns

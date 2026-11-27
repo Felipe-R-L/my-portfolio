@@ -83,8 +83,14 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   na Calábria, foi a terra do meu tataravô."
 - Som (awwwards 17): desligado por padrão, botão discreto na nav, escolha
   lembrada no aparelho. Música bem baixa ao fundo; sonoplastia da onda, dos
-  cards e do quadro; nada toca sozinho. Motor em `src/app/audio/`; os cues
-  em `cues.ts` ficam mudos até ter arquivo.
+  cards e do quadro; nada toca sozinho. Motor em `src/app/audio/`.
+  Fontes (Felipe, 2026-11-27; o áudio do Storyblocks é um plano à parte,
+  R$ 260, e não compensa): papel, cartão, shutter e tick são **gerados na
+  página** (`synth.ts`, sem arquivo e sem licença); onda e vento vêm do
+  **Pixabay** (uso livre, ele escolhe de ouvido); a música é **uma peça
+  clássica italiana em domínio público** numa gravação livre (candidata: o
+  Intermezzo de *Cavalleria rusticana*, de Mascagni, Orquestra Sinfônica de
+  Fulda, Commons, licença EFF Open Audio, com crédito).
 - Mídia de banco: Storyblocks (assinatura do Felipe, plano com acesso total
   desde 2026-11-27, inclui áudio). Pode ser de outro lugar que não a Itália
   quando for só textura (o mar). Nunca para o Felipe ou os projetos.
