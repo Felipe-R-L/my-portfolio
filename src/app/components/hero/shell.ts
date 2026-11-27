@@ -12,6 +12,7 @@
  */
 import { NAME } from "./name";
 import { STAMP_SVG } from "./stamp";
+import { mediaBase } from "../../media";
 
 const esc = (s: string) =>
   s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
@@ -50,17 +51,22 @@ export function nameFrontHtml(copy: ShellCopy): string {
  * can play. Reduced motion keeps the still. Then the film grain and the travel
  * stamp. Graded by CSS (HeroCity.css). React mounts this same markup.
  */
-const SB = "/assets/sb";
-export const PLACE_HTML =
+/** The place's markup (the media's address is read when it is built). The
+    picture and the video are fetched in CORS mode: the sea reads their
+    frames into WebGL, which a cross-origin image without it would refuse. */
+export const placeHtml = () => {
+  const SB = mediaBase();
+  return (
   `<picture><source media="(max-width: 768px)" srcset="${SB}/diamante-aerial-first-tall-720.webp">` +
-  `<img class="city-place-photo" src="${SB}/diamante-aerial-first-1920.webp" alt="" width="1920" height="1081" fetchpriority="high" decoding="async"></picture>` +
-  `<video class="city-place-video" muted playsinline autoplay preload="auto" aria-hidden="true">` +
+  `<img class="city-place-photo" src="${SB}/diamante-aerial-first-1920.webp" alt="" width="1920" height="1081" fetchpriority="high" decoding="async" crossorigin="anonymous"></picture>` +
+  `<video class="city-place-video" muted playsinline autoplay preload="auto" aria-hidden="true" crossorigin="anonymous">` +
   `<source media="(max-width: 768px)" src="${SB}/diamante-aerial-tall-720.webm" type="video/webm">` +
   `<source media="(max-width: 768px)" src="${SB}/diamante-aerial-tall-720.mp4" type="video/mp4">` +
   `<source src="${SB}/diamante-aerial-1920.webm" type="video/webm">` +
   `<source src="${SB}/diamante-aerial-1920.mp4" type="video/mp4"></video>` +
   `<div class="city-place-grain"></div>` +
-  `<div class="hero-stamp">${STAMP_SVG}</div>`;
+  `<div class="hero-stamp">${STAMP_SVG}</div>`);
+}
 
 /**
  * The whole shell for #root, plus the inline script that swaps in the
@@ -70,7 +76,7 @@ export const PLACE_HTML =
 export function heroShellHtml(copies: Record<"pt" | "en", ShellCopy>, fallback: "pt" | "en" = "en"): string {
   const body =
     `<section class="city" aria-label="${esc(NAME.full)}"><div class="city-stage">` +
-    `<div class="city-place" aria-hidden="true">${PLACE_HTML}</div>` +
+    `<div class="city-place" aria-hidden="true">${placeHtml()}</div>` +
     `<div class="city-front"><h1 class="sr-only">${esc(NAME.full)}</h1>${nameFrontHtml(copies[fallback])}</div>` +
     `</div></section>`;
   const json = JSON.stringify(copies).replaceAll("<", "\\u003c");

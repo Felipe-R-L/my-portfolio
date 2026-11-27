@@ -1,9 +1,10 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import postsPlugin from "./plugins/vite-plugin-posts.mjs";
 import { heroShellHtml } from "./src/app/components/hero/shell";
+import { mediaBase } from "./src/app/media";
 import pt from "./src/app/i18n/locales/pt.json";
 import en from "./src/app/i18n/locales/en.json";
 
@@ -33,12 +34,22 @@ function heroShell() {
         pt: { description: pt.hero.description, cta: pt.hero.cta_projects },
         en: { description: en.hero.description, cta: en.hero.cta_projects },
       });
-      return html.replace('<div id="root"></div>', `<div id="root">${shell}</div>`);
+      // the preloads point where the media is (R2 in production), in CORS
+      // mode like the picture they warm up
+      const base = mediaBase();
+      return html
+        .replace('<div id="root"></div>', `<div id="root">${shell}</div>`)
+        .replaceAll('href="/assets/sb/', `crossorigin="anonymous" href="${base}/`);
     },
   };
 }
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  // VITE_MEDIA_BASE from .env.local reaches the app on its own; the config
+  // (which renders the hero shell into index.html) needs it handed over
+  const env = loadEnv(mode, __dirname, "VITE_");
+  if (env.VITE_MEDIA_BASE && !process.env.VITE_MEDIA_BASE) process.env.VITE_MEDIA_BASE = env.VITE_MEDIA_BASE;
+  return {
   plugins: [
     figmaAssetResolver(),
     heroShell(),
@@ -89,4 +100,5 @@ export default defineConfig({
   },
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ["**/*.svg", "**/*.csv"],
+};
 });

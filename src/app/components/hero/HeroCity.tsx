@@ -10,7 +10,7 @@ import { STORY } from "../../data/story";
 import { registerPassages } from "../../scroll/glide";
 import { SeaWash, seaPhase } from "./SeaWash";
 import { Credits, Letters, NAME } from "./HeroParts";
-import { PLACE_HTML } from "./shell";
+import { placeHtml } from "./shell";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
 import { FRAME_RADIUS, SCROLL } from "../../motion/tokens";
 import { useTranslation } from "react-i18next";
@@ -396,7 +396,7 @@ export function HeroCity() {
       <div ref={stageRef} className="city-stage">
         {/* Diamante behind everything: the photo, the grain and the stamp
             (the same markup the static shell paints before React). */}
-        <div className="city-place" aria-hidden="true" dangerouslySetInnerHTML={{ __html: PLACE_HTML }} />
+        <div className="city-place" aria-hidden="true" dangerouslySetInnerHTML={{ __html: placeHtml() }} />
 
         {/* The picture: photo, colour reveal, scaled as one into
             a frame on the way out. */}

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { Signal } from "../../scroll/signal";
 import type { Camera } from "./camera";
+import { media } from "../../media";
 
 /**
  * The sea that carries the page from Diamante to the portrait.
@@ -25,8 +26,8 @@ import type { Camera } from "./camera";
     AV1 where the browser decodes it (about 4 MB on desktop, 2.6 MB on the
     phone); otherwise H.264 at phone size (6.7 MB). */
 export function waterSource(phone: boolean, canPlay: (type: string) => string): string {
-  if (canPlay('video/mp4; codecs="av01.0.08M.10"')) return phone ? "/assets/sb/sea-1080.av1.mp4" : "/assets/sb/sea-1440.av1.mp4";
-  return "/assets/sb/sea-1080.h264.mp4";
+  if (canPlay('video/mp4; codecs="av01.0.08M.10"')) return phone ? media("sea-1080.av1.mp4") : media("sea-1440.av1.mp4");
+  return media("sea-1080.h264.mp4");
 }
 
 const VERT = `#version 300 es
@@ -204,6 +205,8 @@ export function SeaWash({
     // The sea: fetched once the page has settled, never with the first paint.
     const water = document.createElement("video");
     water.muted = true;
+    // CORS: its frames go into WebGL, and the file may be on the media domain
+    water.crossOrigin = "anonymous";
     water.loop = true;
     water.playsInline = true;
     water.preload = "auto";

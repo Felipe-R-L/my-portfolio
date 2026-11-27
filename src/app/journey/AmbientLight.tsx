@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { CHAPTERS, type ChapterId } from "./chapters";
 import "./AmbientLight.css";
+import { media } from "../media";
 
 /**
  * The light of each chapter, behind everything. One painted layer per
@@ -20,8 +21,8 @@ import "./AmbientLight.css";
  */
 const SCENERY: Partial<Record<ChapterId, { src: string; srcSet: string; near: ChapterId[] }>> = {
   retorno: {
-    src: "/assets/sb/diamante-end-1200.webp",
-    srcSet: "/assets/sb/diamante-end-1200.webp 1200w, /assets/sb/diamante-end-2400.webp 2400w",
+    src: media("diamante-end-1200.webp"),
+    srcSet: `${media("diamante-end-1200.webp")} 1200w, ${media("diamante-end-2400.webp")} 2400w`,
     near: ["plano", "retorno"],
   },
 };

@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "sync:posts": "node scripts/sync-posts.mjs",
-    "check:posts": "node scripts/check-posts.mjs"
+    "check:posts": "node scripts/check-posts.mjs",
+    "media:push": "bash scripts/media-push.sh"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
