@@ -59,6 +59,19 @@
   color: rgb(159 195 214 / 0.62);
   white-space: nowrap;
 }
+/* where the film was shot (Diamante), after the reel; its own line on a phone */
+.edge-coords::before {
+  content: " · ";
+}
+@media (max-width: 767px) {
+  .edge-coords {
+    display: block;
+    margin-top: 0.35em;
+  }
+  .edge-coords::before {
+    content: none;
+  }
+}
 
 /* One grain over the whole page, so the photos, the product screens and the
    dark between them read as the same film. It moves on the compositor only. */

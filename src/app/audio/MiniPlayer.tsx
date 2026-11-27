@@ -25,12 +25,39 @@ export function MiniPlayer() {
   const on = sound.on;
   const [folded, setFolded] = useState(false);
 
+  // the sea under the music, the whole way down (only heard with the sound on)
+  useEffect(() => {
+    sound.level("sea", 1);
+    return () => sound.level("sea", 0);
+  }, []);
+
   useEffect(() => {
     if (on || folded) return;
     const check = () => window.scrollY > FOLD_AT && setFolded(true);
     check();
     window.addEventListener("scroll", check, { passive: true });
     return () => window.removeEventListener("scroll", check);
+  }, [on, folded]);
+
+  // On a phone the corner is over the text as it scrolls by: the dot steps
+  // out of the way going down and comes back going up (like a phone's own
+  // address bar), and so does the player. The invitation stays put.
+  const [away, setAway] = useState(false);
+  useEffect(() => {
+    if (!on && !folded) {
+      setAway(false);
+      return;
+    }
+    const phone = window.matchMedia?.("(max-width: 767px)");
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - last) < 6) return;
+      setAway(!!phone?.matches && y > last);
+      last = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [on, folded]);
 
   if (!PLAYLIST.length) return null;
@@ -46,7 +73,12 @@ export function MiniPlayer() {
 
   if (!on) {
     return (
-      <section className="mini-player glass-dark" data-state={folded ? "dot" : "invite"} aria-label={t("player.label")}>
+      <section
+        className="mini-player glass-dark"
+        data-state={folded ? "dot" : "invite"}
+        data-away={away || undefined}
+        aria-label={t("player.label")}
+      >
         <button
           type="button"
           className="mini-player-invite"
@@ -66,7 +98,12 @@ export function MiniPlayer() {
 
   const track = PLAYLIST[sound.track];
   return (
-    <section className="mini-player glass-dark" data-state="on" aria-label={t("player.label")}>
+    <section
+      className="mini-player glass-dark"
+      data-state="on"
+      data-away={away || undefined}
+      aria-label={t("player.label")}
+    >
       <button
         type="button"
         className="mini-player-btn"

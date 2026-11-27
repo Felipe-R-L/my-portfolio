@@ -8,7 +8,7 @@
 import type { Synth } from "./synth";
 import { media } from "../media";
 
-export type Cue = "wave" | "shore" | "wind" | "boat" | "card" | "slide" | "frame" | "tick";
+export type Cue = "wave" | "shore" | "wind" | "boat" | "sea" | "card" | "slide" | "frame" | "tick";
 
 export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; volume: number }> = {
   /** the sea rising over Diamante (Pixabay: "Waves Crashing", DRAGON-STUDIO) */
@@ -22,6 +22,10 @@ export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; vo
       loop, its level following the video (Pixabay: "Distant small boat
       returning to marina", freesound_community) */
   boat: { src: media("boat-loop.mp3"), loop: true, volume: 0.32 },
+  /** the sea, very low under the music, all the way down the page: Diamante
+      is on the coast (Pixabay: "Gentle Ocean Waves", DRAGON-STUDIO; a 40 s
+      loop) */
+  sea: { src: media("sea-loop.mp3"), loop: true, volume: 0.1 },
   /** a chapter's card coming up beside the portrait: paper swiped */
   card: { synth: "card", volume: 0.18 },
   /** the portrait moving aside for the chapters: a card slid off a table */

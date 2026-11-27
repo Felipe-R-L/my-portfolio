@@ -12,6 +12,7 @@ import { clamp01 } from "../scroll/math";
 import { useJourneyMode } from "../journey/useJourneyMode";
 import { sound } from "../audio/sound";
 import "./Work.css";
+import { EdgePrint } from "../journey/EdgePrint";
 
 /** Share of a destination's scroll spent arriving; the rest holds still. */
 const ARRIVE = SCROLL.destination.approach / (SCROLL.destination.approach + SCROLL.destination.hold);
@@ -276,7 +277,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
                 {t("work.title")}
               </h2>
               <p className="dest-lead">{t("work.lead")}</p>
-              <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "02" })}</span>
+              <EdgePrint n="02" />
             </header>
             <ol ref={listRef} className="dest-list">
               {WORK.map((w, i) => (
@@ -321,7 +322,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
               {t("work.title")}
             </h2>
             <p className="dest-lead">{t("work.lead")}</p>
-              <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "02" })}</span>
+              <EdgePrint n="02" />
           </header>
           <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" {...openOnClick}>
             <InlineFrame ids={WORK.map((w) => w.id)} current={WORK[current].id} />
@@ -343,7 +344,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
               {t("work.title")}
             </h2>
             <p className="dest-lead">{t("work.lead")}</p>
-              <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "02" })}</span>
+              <EdgePrint n="02" />
           </header>
           {WORK.map((w, i) => (
             <article key={w.id} className="dest-card" data-dest={w.id}>

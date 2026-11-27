@@ -12,6 +12,7 @@ import { registerPassages } from "../scroll/glide";
 import { span } from "../scroll/math";
 import { easeInOut } from "../components/hero/camera";
 import "./Talk.css";
+import { EdgePrint } from "../journey/EdgePrint";
 
 /**
  * Where the frame comes to rest on a wide screen: a framed photo on the right,
@@ -149,7 +150,7 @@ export function Talk() {
           <h2 id="talk-title" className="talk-title">
             {t("contact.title_part2")}
           </h2>
-          <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "04" })}</span>
+          <EdgePrint n="04" />
           <p className="talk-lead">{t("contact.cta_desc")}</p>
 
           <fieldset className="talk-kinds">

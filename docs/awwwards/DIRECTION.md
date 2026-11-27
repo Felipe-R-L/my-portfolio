@@ -94,7 +94,8 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   ele: Amore al Mare (Grand_Project), Bossa Nova Soulful (andriih) e
   Nostalgic Folk No. 3 (Sonican). O motor de um barco ao longe ("Distant
   small boat returning to marina", freesound_community, Pixabay) acompanha o
-  barco do voo de Diamante. O canto superior esquerdo é o único botão do
+  barco do voo de Diamante. O mar baixinho sob a música, a página toda:
+  "Gentle Ocean Waves" (DRAGON-STUDIO, Pixabay). O canto superior esquerdo é o único botão do
   som (saiu da nav, Felipe 2026-11-27): ao chegar, um convite ("Ligar o
   som", barras pulsando); se a pessoa rola sem ligar, vira uma bolinha no
   mesmo lugar; ligado, é o player (desligar, faixa, próxima). Reserva: Vivaldi, Verão, Allegro non molto (John Harrison,
@@ -104,7 +105,7 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   quando for só textura (o mar). Nunca para o Felipe ou os projetos.
   Publicar com a assinatura ativa e guardar o comprovante.
 - **Detalhes de Diamante no resto da página** (aprovado em 2026-11-27,
-  inclusive o som): as coordenadas de Diamante na marca de borda; o mar
+  inclusive o som): as coordenadas de Diamante na marca de borda (feito em awwwards 42); o mar
   voltando como transição para o Contato; o som do mar baixinho sob a
   música. Sem pimenta, mural ou ilustração fora do hero.
 - Hospedagem da mídia (2026-11-27): **Cloudflare R2**, num subdomínio

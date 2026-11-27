@@ -11,6 +11,7 @@ import { clamp01 } from "../scroll/math";
 import { useLeave } from "../journey/useLeave";
 import { sound } from "../audio/sound";
 import "./Process.css";
+import { EdgePrint } from "../journey/EdgePrint";
 
 /** The four shots, in order. Prose: `plano.steps.<id>`; no step promises a deadline. */
 export const STEPS = ["talk", "proposal", "build", "live"] as const;
@@ -300,7 +301,7 @@ export function Process() {
             <h2 id="process-title" className="plano-title">
               {t("plano.title")}
             </h2>
-            <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "03" })}</span>
+            <EdgePrint n="03" />
             <p className="plano-lead">{t("plano.lead")}</p>
           </header>
           <div className="plano-route">

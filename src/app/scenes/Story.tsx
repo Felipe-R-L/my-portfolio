@@ -6,6 +6,7 @@ import { span, timelineDistance } from "../scroll/math";
 import type { Signal } from "../scroll/signal";
 import { sound } from "../audio/sound";
 import "./Story.css";
+import { EdgePrint } from "../journey/EdgePrint";
 
 /**
  * Scene 3, who I am, told as a timeline in the editorial voice of the page.
@@ -375,7 +376,7 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
     {/* the chapter's title, like every chapter's, in the margin above the portrait */}
     <header ref={headRef} className="story-head" data-no-reveal="">
       <h2 className="story-head-title">{t("story.title")}</h2>
-      <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "01" })}</span>
+      <EdgePrint n="01" />
     </header>
     <div ref={railRef} className="story-rail" data-no-reveal="">
       <div className="story-bg" aria-hidden="true">
@@ -419,7 +420,7 @@ function StoryList() {
         <h2 id="story-title" className="story-head-title">
           {t("story.title")}
         </h2>
-        <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "01" })}</span>
+        <EdgePrint n="01" />
       </header>
       <div ref={listRef} className="story-list-items">
         <Chapters focus={focus} />
