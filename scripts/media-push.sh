@@ -1,27 +1,19 @@
 #!/usr/bin/env bash
 # Uploads the licensed media (public/assets/sb/, never in git) to the R2
-# bucket served at VITE_MEDIA_BASE. Auth: `npx wrangler login` once (OAuth,
-# no keys on disk), or CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID in the env.
-# Usage: pnpm media:push [bucket]   (default: $R2_BUCKET or feliperl-media)
+# bucket served at VITE_MEDIA_BASE, through R2's S3 interface with rclone.
+# Credentials in .env.local (never in git): R2_ACCOUNT_ID, R2_ACCESS_KEY_ID,
+# R2_SECRET_ACCESS_KEY, R2_BUCKET. With a Cloudflare account API token, the
+# key id is the token's id and the secret is the SHA-256 of its value.
+# Usage: pnpm media:push
 set -euo pipefail
 cd "$(dirname "$0")/.."
-[ -f .env.local ] && set -a && . ./.env.local && set +a
-BUCKET="${1:-${R2_BUCKET:-feliperl-media}}"
-DIR=public/assets/sb
-type_of() {
-  case "$1" in
-    *.mp4) echo video/mp4 ;; *.webm) echo video/webm ;; *.webp) echo image/webp ;;
-    *.mp3) echo audio/mpeg ;; *) echo application/octet-stream ;;
-  esac
-}
-n=0
-for f in "$DIR"/*; do
-  [ -f "$f" ] || continue
-  name=$(basename "$f")
-  echo "→ $name"
-  npx --yes wrangler r2 object put "$BUCKET/$name" --file "$f" --remote \
-    --content-type "$(type_of "$name")" \
-    --cache-control "public, max-age=31536000, immutable" >/dev/null
-  n=$((n + 1))
-done
-echo "$n arquivos em $BUCKET"
+set -a; . ./.env.local; set +a
+export RCLONE_CONFIG_R2_TYPE=s3 RCLONE_CONFIG_R2_PROVIDER=Cloudflare \
+  RCLONE_CONFIG_R2_ACCESS_KEY_ID="$R2_ACCESS_KEY_ID" \
+  RCLONE_CONFIG_R2_SECRET_ACCESS_KEY="$R2_SECRET_ACCESS_KEY" \
+  RCLONE_CONFIG_R2_ENDPOINT="https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" \
+  RCLONE_CONFIG_R2_NO_CHECK_BUCKET=true
+# the files never change under a name (a new cut gets a new name): cached for a year
+rclone copy public/assets/sb "r2:${R2_BUCKET:-my-portfolio}" \
+  --header-upload "Cache-Control: public, max-age=31536000, immutable" \
+  --progress --stats-one-line
