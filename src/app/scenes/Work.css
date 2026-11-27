@@ -213,7 +213,9 @@
 /* ---------- phone: the frame on top, a swipe below ---------- */
 
 .dest-phone {
-  padding: 5rem 0 3rem;
+  /* tight enough that, with the chapter's top at the top of the screen, the
+     first project's links clear the dock at the bottom (390x844) */
+  padding: 4rem 0 3rem;
 }
 
 .dest-phone .dest-head {
@@ -222,7 +224,7 @@
 
 .dest-phone .dest-slot {
   width: calc(100% - 2 * var(--gutter));
-  margin: 1.75rem auto 0;
+  margin: 1.25rem auto 0;
 }
 
 .dest-swipe {

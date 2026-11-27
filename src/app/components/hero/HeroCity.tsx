@@ -349,13 +349,19 @@ export function HeroCity() {
         },
       });
       tl.to({}, { duration: 1 }, 0);
-      const band = (el: Element, from: number, to: number, a: gsap.TweenVars, b: gsap.TweenVars) =>
+      const band = (el: Element | NodeListOf<Element>, from: number, to: number, a: gsap.TweenVars, b: gsap.TweenVars) =>
         tl.fromTo(el, a, { ...b, duration: to - from, immediateRender: false }, from);
 
       if (reduce) tl.set(front, { opacity: 0 }, 0.23).set(front, { opacity: 1 }, 0);
       // the name is on a nearer plane than the town: it rises faster, and the
       // sea takes it
-      else band(front, OPEN_FROM, OPEN_FROM + (OPEN_TO - OPEN_FROM) * 0.5, { y: "0vh" }, { y: "-14vh" });
+      else {
+        band(front, OPEN_FROM, OPEN_FROM + (OPEN_TO - OPEN_FROM) * 0.5, { y: "0vh" }, { y: "-14vh" });
+        // the pitch and the link sit low, where the sea arrives first: they
+        // go before its rim reaches them, never seen cut by the foam
+        const low = front.querySelectorAll(".hero-pitch, .hero-link");
+        if (low.length) band(low, OPEN_FROM, OPEN_FROM + (OPEN_TO - OPEN_FROM) * 0.06, { opacity: 1 }, { opacity: 0 });
+      }
       return () => {
         ro.disconnect();
         offPassages?.();

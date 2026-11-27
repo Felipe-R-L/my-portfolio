@@ -53,21 +53,40 @@ void main(){
   float aspect = res.x / res.y;
   float front = after < .5 ? mix(1.08, -.16, rise) : mix(-.16, 1.08, fall);
   float edge = front + (fbm(vec2(uv.x * aspect * 2.2, t * .25)) - .5) * .16
-                     + sin(uv.x * aspect * 9. + t * 1.3) * .008;
+                     + sin(uv.x * aspect * 9. + t * 1.3) * .008
+                     + (noise(vec2(uv.x * aspect * 38., t * .8)) - .5) * .012;  // a ragged line, not a curve
   float d = uv.y - edge;                    // > 0 under water
 
   // the footage, its densest foam pinned just under the edge
   float w = aspect * vidSz.y / vidSz.x;
   vec2 wu = vec2(uv.x, .56 + d / w);
   float beyond = smoothstep(.85, 1.15, wu.y);
-  if (wu.y > 1.) { float k = mod(wu.y - 1., .8); wu.y = k < .4 ? 1. - k : .6 + (k - .4); }
+  // past the clip's end: mirrored (seamless at the join), then turned the
+  // other way across too, so the water below never folds into a symmetric
+  // pattern
+  float flip = 0.;
+  if (wu.y > 1.) { float k = mod(wu.y - 1., .8); flip = smoothstep(.02, .14, min(k, .8 - k)); wu.y = k < .4 ? 1. - k : .6 + (k - .4); }
   vec3 wc = texture(water, wu).rgb;
-  wc = mix(wc, textureLod(water, wu, 4.).rgb * vec3(.55, .68, .7), beyond * .85);
-  vec2 g = vec2(dFdx(dot(wc, vec3(.33))), dFdy(dot(wc, vec3(.33))));
+  if (flip > 0.) wc = mix(wc, texture(water, vec2(1. - wu.x, 1.6 - wu.y)).rgb, flip);
+  // far from the crest: darker, deeper water that keeps some of its texture
+  // (a heavier blur read as a smear on the phone)
+  wc = mix(wc, textureLod(water, wu, 2.5).rgb * vec3(.5, .64, .68), beyond * .85);
+  // refraction from the water's broad shapes: the gradient of the full
+  // detail jumped pixel to pixel and showed as grain under the crest
+  float lum = dot(textureLod(water, wu, 2.).rgb, vec3(.33));
+  vec2 g = vec2(dFdx(lum), dFdy(lum));
   float shallow = 1. - smoothstep(0., .18, d);
   vec3 bent = under(uv + g * 6. * shallow) * .55;
-  float foam = smoothstep(.45, .8, dot(wc, vec3(.33)));
-  float rim = smoothstep(0., .006, d) * (1. - smoothstep(.006, .03 + .02 * fbm(uv * 40. + t), d));
+  // where the foam hides what is under the water: from its broad shapes,
+  // pixel-sharp it switched on and off pixel by pixel (grain in the shallows)
+  float foam = smoothstep(.42, .8, mix(dot(wc, vec3(.33)), lum, .75));
+  // the foam line: its thickness and brightness drift along the crest, and
+  // it breaks into lace in places instead of running as one even band
+  float along = fbm(vec2(uv.x * aspect * 4.5, t * .35));
+  float thick = .008 + .04 * along;
+  // (one octave, a few pixels wide: finer noise read as grain)
+  float lace = smoothstep(.3, .7, noise(vec2(uv.x * aspect * 26., d * 70. - t * 1.2)));
+  float rim = smoothstep(0., .004, d) * (1. - smoothstep(thick * .35, thick, d)) * mix(.3, 1., lace) * (.5 + .5 * along);
   float depth = smoothstep(0., .16, d);
   vec3 sea = mix(bent * vec3(.55, .78, .8), wc, max(depth, foam));
   sea = mix(sea, vec3(.95, .98, 1.), rim * .85);
@@ -77,9 +96,15 @@ void main(){
   float ahead = after < .5 ? .25 * exp(min(d, 0.) * 18.) : 0.;
   float wet = after > .5 ? .22 * exp(min(d, 0.) * 7.) : 0.;
   float landA = max(ahead, wet) * (1. - inSea);
+  // loose spray just ahead of the crest, thrown up where the foam is thick
+  vec2 cell = uv * res / 9.;
+  vec2 id = floor(cell);
+  float h = hash(id + floor(t * 3.) * 17.);
+  float drop = step(.975, h) * (1. - smoothstep(.12, .38, length(fract(cell) - .5)));
+  float spray = drop * (d < 0. ? exp(d * 40.) : 0.) * (.4 + along) * .9 * (1. - inSea);
   vec3 sheen = vec3(.05, .07, .08) * smoothstep(.55, .9, fbm(uv * 30. + t * .2)) * (after > .5 ? exp(min(d, 0.) * 7.) : 0.);
   // premultiplied: the sea opaque, the land darkened (and glinting) a little
-  o = vec4(sea * inSea + sheen * (1. - inSea), inSea + landA);
+  o = vec4(sea * inSea + sheen * (1. - inSea) + vec3(.95, .98, 1.) * spray, min(1., inSea + landA + spray));
 }`;
 
 function compile(gl: WebGL2RenderingContext, type: number, src: string) {

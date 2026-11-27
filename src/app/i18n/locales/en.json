@@ -16,13 +16,13 @@
     "cta_projects": "View projects"
   },
   "contact": {
-    "title_part2": "Let's talk.",
+    "title_part2": "Let’s talk.",
     "cta_title": "Have a project in mind?",
-    "cta_desc": "Tell me the idea, even if it's still rough. I reply fast and will tell you honestly whether and how I can help.",
+    "cta_desc": "Tell me the idea, even if it’s still rough. I reply fast and will tell you honestly whether and how I can help.",
     "whatsapp_cta": "Message on WhatsApp",
     "whatsapp_message": "Hi Felipe! I saw your portfolio and would like to talk about a project.",
     "network_title": "Developer, designer or founder?",
-    "network_desc": "I'm always up for swapping ideas, referring work and building partnerships. Find me on LinkedIn or right here."
+    "network_desc": "I’m always up for swapping ideas, referring work and building partnerships. Find me on LinkedIn or right here."
   },
   "projects": {
     "title_part1": "Projects",
@@ -66,14 +66,14 @@
         "tabs": {
           "offline": "No internet",
           "invoice": "Invoice by photo",
-          "bi": "Owner's panel",
+          "bi": "Owner’s panel",
           "tenants": "Many motels"
         },
         "captions": {
-          "offline": "The internet drops and the front desk keeps checking guests in, adding orders and taking payments. When it's back, everything syncs on its own, with nothing duplicated.",
-          "invoice": "Snap the supplier's invoice and AI fills in the entry. Someone checks it, and it becomes an expense and a stock entry at once.",
+          "offline": "The internet drops and the front desk keeps checking guests in, adding orders and taking payments. When it’s back, everything syncs on its own, with nothing duplicated.",
+          "invoice": "Snap the supplier’s invoice and AI fills in the entry. Someone checks it, and it becomes an expense and a stock entry at once.",
           "bi": "The owner sees when the motel fills up and which suites earn the most, without building a spreadsheet.",
-          "tenants": "Many motels run on the same system, and one never sees another's data."
+          "tenants": "Many motels run on the same system, and one never sees another’s data."
         },
         "offline": {
           "screen": "Front desk",
@@ -104,7 +104,7 @@
           "confirm": "Confirm"
         },
         "bi": {
-          "screen": "Owner's panel",
+          "screen": "Owner’s panel",
           "heatmap": "Occupancy by day and hour",
           "suites": "Top-earning suites",
           "days": [
@@ -154,7 +154,7 @@
           "companies": "companies served",
           "machines": "connected machines"
         },
-        "metrics_source": "Figures for OMD's telemetry platform.",
+        "metrics_source": "Figures for OMD’s telemetry platform.",
         "visit": "View the platform",
         "visit_aria": "Visit the OMDfarm landing page, opens in a new tab",
         "private": "Private repository"
@@ -242,19 +242,19 @@
     "items": {
       "dallas_sync": {
         "title": "Dallas Sync",
-        "result": "The motel's front desk keeps working when the internet drops, and the owner follows occupancy, stock and finances on a single panel.",
+        "result": "The motel’s front desk keeps working when the internet drops, and the owner follows occupancy, stock and finances on a single panel.",
         "note": "The system in training mode, with no real data.",
         "case": {
           "context": "Dallas Sync is the management system I build and sell to motels as a subscription, and Dallas Motel, in Pitangueiras, is the first client running it at the front desk, in production since September 2026.",
           "problem": "Motels usually run on systems that only record what already happened, so when the internet drops the front desk stops, which in the middle of a shift means a queue at the gate and bills closed on paper.",
-          "decision": "I chose to build it offline-first, with check-in, tabs and payments saved on the front desk's own computer and placed in a queue that the server reconciles once the network is back, and I ruled out the more common system that only works while connected, since the motel's internet does drop and a shift cannot wait for it. For the same reason, whoever is learning works in a training mode that is a separate organization, with the same screens and no real data, so a practice mistake never turns into wrong money in the till.",
-          "result": "The front desk keeps recording check-ins, tabs and payments with no internet, sees the queue of what has not gone up yet and syncs once the network returns, while new receptionists learn in training mode without touching any of the motel's data.",
-          "now": "The layer I am building now is management and intelligence, starting with an owner's dashboard in which every indicator is made only of measured metrics and opens down to the transaction behind it, while projections and suggestions live in a layer above that never enters the number."
+          "decision": "I chose to build it offline-first, with check-in, tabs and payments saved on the front desk’s own computer and placed in a queue that the server reconciles once the network is back, and I ruled out the more common system that only works while connected, since the motel’s internet does drop and a shift cannot wait for it. For the same reason, whoever is learning works in a training mode that is a separate organization, with the same screens and no real data, so a practice mistake never turns into wrong money in the till.",
+          "result": "The front desk keeps recording check-ins, tabs and payments with no internet, sees the queue of what has not gone up yet and syncs once the network returns, while new receptionists learn in training mode without touching any of the motel’s data.",
+          "now": "The layer I am building now is management and intelligence, starting with an owner’s dashboard in which every indicator is made only of measured metrics and opens down to the transaction behind it, while projections and suggestions live in a layer above that never enters the number."
         },
         "motion": {
           "map": "Check-in straight from the room map",
-          "plate": "The plate becomes the stay's identifier",
-          "clock": "The room's clock is already running"
+          "plate": "The plate becomes the stay’s identifier",
+          "clock": "The room’s clock is already running"
         }
       },
       "dallas_motel": {
@@ -269,7 +269,7 @@
         "motion": {
           "hero": "Its own address after almost twenty years",
           "days": "The price changes with the day of the week",
-          "legacy": "The motel's story, since 2007",
+          "legacy": "The motel’s story, since 2007",
           "menu": "The digital menu, ordered from the suite"
         }
       },
@@ -315,7 +315,7 @@
     "blog_label": "Latest article on the blog",
     "email_label": "Or by email",
     "rights": "All rights reserved.",
-    "origin": "Diamante, in Calabria, was my great-great-grandfather's hometown.",
+    "origin": "Diamante, in Calabria, was my great-great-grandfather’s hometown.",
     "credits": "Aerial footage of Diamante by Francesco Rinaldi, via Storyblocks. IFSP logo in the public domain.",
     "chips": {
       "prompt": "What do you need?",
