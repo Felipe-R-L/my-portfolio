@@ -36,18 +36,20 @@ function bandpass(rate: number) {
 
 const smooth = (t: number) => t * t * (3 - 2 * t);
 
-/** Paper swiped across paper: bright, breathy, a little grain. ~0.22 s */
+/** Paper swiped across paper: a soft breath, no grit. ~0.24 s */
 function card(rate: number) {
-  const n = Math.round(rate * 0.22);
+  const n = Math.round(rate * 0.24);
   const out = new Float32Array(n);
-  const r = noise(7), grain = noise(19);
-  const bp = bandpass(rate);
+  const r = noise(7);
+  const bp = bandpass(rate), lp = bandpass(rate);
+  let soft = 0;
   for (let i = 0; i < n; i++) {
     const t = i / n;
-    const env = smooth(Math.min(1, t / 0.18)) * Math.pow(1 - t, 1.6);
-    // the fibres catch now and then
-    const g = 1 + (grain() > 0.92 ? 0.8 : 0);
-    out[i] = bp(r(), 2600 + 2400 * t, 0.9) * env * g * 1.4;
+    const env = smooth(Math.min(1, t / 0.3)) * Math.pow(1 - t, 2);
+    // a wide band that rises a little, then a one-pole low-pass takes the edge off
+    const x = bp(r(), 1300 + 900 * t, 0.6) + 0.35 * lp(r(), 700, 0.7);
+    soft += (x - soft) * 0.35;
+    out[i] = soft * env;
   }
   return out;
 }
@@ -87,11 +89,20 @@ function frame(rate: number) {
   return out;
 }
 
-/** A tick: a short, dull knock. ~0.03 s */
+/** A tick: a soft wooden tap, the pitch falling as it dies. ~0.05 s */
 function tick(rate: number) {
-  const n = Math.round(rate * 0.03);
+  const n = Math.round(rate * 0.05);
   const out = new Float32Array(n);
-  for (let i = 0; i < n; i++) out[i] = Math.sin((2 * Math.PI * 1800 * i) / rate) * Math.exp(-i / (rate * 0.004)) * 0.6;
+  const r = noise(53);
+  const body = bandpass(rate);
+  let phase = 0;
+  for (let i = 0; i < n; i++) {
+    const t = i / rate;
+    phase += (2 * Math.PI * (620 - 220 * Math.min(1, t / 0.03))) / rate;
+    const tone = Math.sin(phase) * Math.exp(-t / 0.012);
+    const knock = body(r(), 1100, 3) * Math.exp(-t / 0.003);
+    out[i] = tone * 0.8 + knock * 0.6;
+  }
   return out;
 }
 
