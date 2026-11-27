@@ -39,6 +39,9 @@ const FASTEST_S = 0.35;
 
 /** Sine curves: their fastest moment is about 1.6x the average speed. A
     cubic peaks at 3x, and the camera and the cards read as a jolt. */
+/** The beat a change with a sea in it waits after the one before has come
+    to rest, however hard the visitor keeps scrolling. */
+const SEA_BREATH_MS = 650;
 const easeInOut = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
 const easeOut = (t: number) => Math.sin((t * Math.PI) / 2);
 /** Half straight, half sine: moving from the first frame, peak at 1.3x. */
@@ -67,6 +70,8 @@ export function useSmoothScroll() {
 
     let play: Play | null = null;
     let tailUntil = 0;
+    /** When the last change came to rest (for the seas' breath before them). */
+    let endedAt = 0;
     /** The next change is engaged: it starts as this one lands, at the speed
         this one arrives with (px/s). */
     let engaged: { dir: number; v: number } | null = null;
@@ -103,6 +108,7 @@ export function useSmoothScroll() {
         force: true,
         onComplete: () => {
           play = null;
+          endedAt = performance.now();
           const e = engaged;
           engaged = null;
           if (e && advance(lenis, e.dir, e.dir * 2, e.v)) return;
@@ -126,6 +132,13 @@ export function useSmoothScroll() {
       }
       const hit = playTarget(passages(), lenis.targetScroll, delta);
       if (!hit) return across !== null;
+      // a change under a cover or on its own clock (the seas) is never
+      // carried into by the momentum of the one before: it waits for a
+      // gesture of its own, so the last shot before it is seen and heard
+      if (v !== undefined && (hit.passage.under || hit.passage.whole)) return across !== null;
+      // and not on the heels of it either: the shot before is given a beat
+      // to land (lit, its shutter heard) before the sea takes the screen
+      if ((hit.passage.under || hit.passage.whole) && performance.now() - endedAt < SEA_BREATH_MS) return true;
       const d = Math.abs(hit.to - lenis.animatedScroll);
       const base = durationFor(hit.passage, hit.to - lenis.animatedScroll, vh()) / speedFor(hit.passage, speed);
       if (v && v > 0 && !hit.passage.under && !hit.passage.whole) {
@@ -179,7 +192,12 @@ export function useSmoothScroll() {
         // the gear taken before the revs drop: a push the same way in the
         // change's last stretch engages the next one; this one keeps its
         // speed to the end instead of settling, and the next takes it over
-        if (dir === p.dir && !engaged && (fresh || abs >= ACTIVE_PX) && left < ENGAGE_SHARE * p.dur) {
+        const nextOwn = (() => {
+          // (across a hold, if one waits in between)
+          const n = playTarget(passages(), holdAhead(holds(), p.to, dir) ?? p.to, dir * 2);
+          return !!n && (n.passage.under || n.passage.whole);
+        })();
+        if (dir === p.dir && !engaged && !nextOwn && (fresh || abs >= ACTIVE_PX) && left < ENGAGE_SHARE * p.dur) {
           const rest = Math.abs(p.to - lenis.animatedScroll);
           if (left > 0.05 && rest > 1) {
             engaged = { dir, v: rest / left };

@@ -102,8 +102,10 @@ export function Process() {
           setReached(i);
         }
       };
-      // a stop is reached once the marker is on it
-      const mark = (k: number) => reach(Math.min(STEPS.length - 1, Math.floor(k * (STEPS.length - 1) + 1e-6)));
+      // a stop is reached once the marker is on it, give or take a few px:
+      // the page can come to rest a fraction short of the last stop (a
+      // fractional pixel ratio, a trackpad), and the last shot never lit
+      const mark = (k: number) => reach(Math.min(STEPS.length - 1, Math.floor(k * (STEPS.length - 1) + 0.02)));
 
       const track = trackRef.current;
       const stage = stageRef.current;
