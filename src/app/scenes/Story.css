@@ -80,7 +80,9 @@
 
 .story-chapter[data-focus="true"] .story-media img,
 .story-chapter:hover .story-media img {
-  filter: none;
+  /* the photo's own colour, in the film's grade (the hero's Diamante is
+     held back the same way), never louder than the rest of the page */
+  filter: saturate(0.8) contrast(1.03);
 }
 
 /* under the pointer the picture also comes a little closer */
@@ -166,7 +168,7 @@
   font-size-adjust: none;
   display: grid;
   gap: 0.3rem;
-  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  font-size: clamp(0.875rem, 1vw, 0.95rem);
   line-height: 1.4;
   color: var(--story-accent);
 }
@@ -225,10 +227,6 @@
   visibility: hidden;
 }
 
-/* The OBA medal: a smaller title, not a full chapter's weight. */
-.story-chapter--seal .story-title {
-  font-size: clamp(1.75rem, 2.4vw, 2.5rem);
-}
 
 /* ---------- desktop rail, inside the hero's pinned stage ---------- */
 
@@ -584,4 +582,36 @@
 /* the words keep a soft dark halo, so no background reaches into them */
 .story-rail :is(.story-title, .story-text, .story-year) {
   text-shadow: 0 1px 2px rgb(5 6 8 / 0.9), 0 0 18px rgb(5 6 8 / 0.85);
+}
+
+/* ---------- the chapter's title ---------- */
+
+.story-head-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size-adjust: none;
+  letter-spacing: var(--serif-track);
+  font-weight: var(--serif-weight);
+  font-size: calc(clamp(2.5rem, 4.2vw, 4rem) * var(--serif-scale));
+  line-height: 1;
+  color: var(--story-ink);
+}
+
+/* desktop: in the margin above the portrait, where the other chapters keep
+   their titles; it leaves first when the portrait returns to the middle */
+.story-head {
+  --out: 0;
+  position: absolute;
+  top: clamp(5rem, 10.5vh, 6.5rem);
+  left: calc(var(--gutter) + 1.5rem);
+  z-index: 4;
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 calc(var(--out) * -1.5rem);
+  filter: opacity(calc(1 - var(--out)));
+  pointer-events: none;
+}
+
+.story-list-head {
+  margin-bottom: clamp(2.5rem, 6vh, 3.5rem);
 }

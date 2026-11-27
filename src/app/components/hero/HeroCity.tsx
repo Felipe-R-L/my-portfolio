@@ -253,6 +253,7 @@ export function HeroCity() {
 
       const renderStory = (ps: number) => {
         const rail = stage.querySelector<HTMLDivElement>(".story-rail");
+        const head = stage.querySelector<HTMLElement>(".story-head");
         const cEnd = cameraAt(1, shot, vw, vh);
 
         // The chapters, beside the portrait.
@@ -263,6 +264,7 @@ export function HeroCity() {
           gsap.set(photo, { y: cEnd.y });
           if (night) night.style.opacity = "0";
           if (rail) rail.style.removeProperty("--out");
+          head?.style.removeProperty("--out");
           return;
         }
 
@@ -277,6 +279,7 @@ export function HeroCity() {
         if (night) night.style.opacity = "0";
         // the chapters slide off to the left as the portrait leaves its place
         if (rail) rail.style.setProperty("--out", String(easeInOut(span(k, 0, 0.4))));
+        head?.style.setProperty("--out", String(easeInOut(span(k, 0, 0.25))));
         gsap.set(frame, { opacity: 1 });
       };
 

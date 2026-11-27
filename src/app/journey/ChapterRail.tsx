@@ -37,8 +37,11 @@ export function ChapterRail({
   }, [progress, variant]);
 
   const label = t(CHAPTERS[i].label);
+  // the desk rail stands alone in the margin, so it is a landmark of its own;
+  // the pill's lives inside the nav's button
+  const Root = variant === "desk" ? "aside" : "div";
   return (
-    <div className={`rail rail--${variant}`} data-variant={variant}>
+    <Root className={`rail rail--${variant}`} data-variant={variant} {...(variant === "desk" ? { "aria-label": t("journey.rail_label") } : {})}>
       <span className="rail-count" aria-hidden="true">
         {String(i + 1).padStart(2, "0")}
         <span className="rail-of">/{String(total).padStart(2, "0")}</span>
@@ -54,6 +57,6 @@ export function ChapterRail({
         <span ref={fillRef} className="rail-fill" />
       </span>
       <span className="sr-only">{t("journey.where", { n: i + 1, total, name: label })}</span>
-    </div>
+    </Root>
   );
 }

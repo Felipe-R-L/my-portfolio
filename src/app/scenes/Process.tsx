@@ -267,7 +267,8 @@ export function Process() {
     <ol ref={stepsRef} className="steps">
       {STEPS.map((id, i) => (
         <li key={id} className="step" data-reached={i <= reached ? "true" : "false"}>
-          <div className="step-shot">{shot(id)}</div>
+          {/* the frame is a picture of the step; its words are the title and text below */}
+          <div className="step-shot" aria-hidden="true">{shot(id)}</div>
           <span className="step-n">{t("plano.shot", { n: i + 1 })}</span>
           <h3 className="step-title">{t(`plano.steps.${id}.title`)}</h3>
           <p className="step-text">{t(`plano.steps.${id}.text`)}</p>
@@ -292,14 +293,12 @@ export function Process() {
               {t("plano.title")}
             </h2>
             <p className="plano-lead">{t("plano.lead")}</p>
-            {/* on the strip the print rides the line; without the ride, under the title like every chapter */}
-            <span className="edge-print plano-edge-head" aria-hidden="true">{t("journey.edge", { n: "03" })}</span>
+            <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "03" })}</span>
           </header>
           <div className="plano-route">
             {/* the line the marker rides, with one stop per step */}
             <div ref={lineRef} className="plano-line" aria-hidden="true">
               {/* the thread: solid behind the marker, a soft light where it is */}
-              <span className="plano-edge">{t("journey.edge", { n: "03" })}</span>
               <span className="plano-fill" />
               <span className="plano-head" />
               {STEPS.map((id, i) => (

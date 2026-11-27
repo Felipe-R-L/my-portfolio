@@ -55,19 +55,6 @@
   gap: 1.75rem;
 }
 
-/* the edge print of the film, above the line, like the code on a negative */
-.plano-edge {
-  position: absolute;
-  left: calc(-100% / (var(--stops) - 1) / 2);
-  /* clear of the marker, which rides the line half its height above it */
-  bottom: 1.6rem;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size-adjust: none;
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  color: rgb(159 195 214 / 0.62);
-  white-space: nowrap;
-}
 
 /* The line: dashed ahead of the marker, a solid thread behind it (--k, the
    share covered, set by the beats), and a soft light where the marker is. */
@@ -198,13 +185,13 @@
   overflow: hidden;
   background: #0e1116;
   outline: 1px solid rgb(245 247 255 / 0.08);
-  opacity: 0.5;
-  filter: grayscale(0.7);
-  transition: opacity 0.6s var(--ease-travel), filter 0.6s var(--ease-travel), outline-color 0.6s var(--ease-travel), box-shadow 0.6s var(--ease-travel);
+  /* dimmed by light, not by transparency: the shot reads as a darker print
+     and the words inside keep their own contrast */
+  filter: grayscale(0.7) brightness(0.5);
+  transition: filter 0.6s var(--ease-travel), outline-color 0.6s var(--ease-travel), box-shadow 0.6s var(--ease-travel);
 }
 
 .step[data-reached="true"] .step-shot {
-  opacity: 1;
   filter: none;
   outline-color: rgb(159 195 214 / 0.5);
   box-shadow: 0 0 2.2rem -0.8rem rgb(159 195 214 / 0.45);
@@ -241,7 +228,7 @@
   width: 0.4rem;
   height: 0.4rem;
   border-radius: 50%;
-  background: #5bd08a;
+  background: var(--diamante);
 }
 
 /* shot 1: the message the site's WhatsApp button writes, and a reply on its way */
@@ -261,11 +248,14 @@
   margin: 0;
   padding: 0.45rem 0.6rem;
   border-radius: 10px 10px 3px 10px;
-  background: #1d3a33;
-  color: #e9f3ef;
+  /* the site's blue, not a messenger's green: the shot is a frame of this
+     film, not a screenshot of another app */
+  background: rgb(159 195 214 / 0.18);
+  outline: 1px solid rgb(159 195 214 / 0.35);
+  color: var(--ink);
   font-family: var(--ui);
   font-size-adjust: none;
-  font-size: 0.7rem;
+  font-size: clamp(0.75rem, 0.95vw, 0.9rem);
   line-height: 1.35;
 }
 
@@ -557,11 +547,6 @@
   display: none;
 }
 
-.plano[data-mode="swipe"] .plano-edge,
-.plano[data-mode="list"] .plano-edge {
-  display: none;
-}
-
 .plano[data-mode="swipe"] .shot-bubble,
 .plano[data-mode="list"] .shot-bubble {
   font-size: 0.8rem;
@@ -578,6 +563,13 @@
    ride, the four shots side by side and lit, with no line to travel. Stacked
    one under the other, each shot would take a screen of its own. */
 @media (min-width: 768px) {
+  /* the same column as the projects above it */
+  .plano[data-mode="list"] .plano-stage {
+    max-width: 76rem;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   .plano[data-mode="list"] .plano-route {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -600,7 +592,6 @@
   }
 
   .plano[data-mode="list"] .step-shot {
-    opacity: 1;
     filter: none;
     outline-color: rgb(159 195 214 / 0.5);
   }
@@ -611,14 +602,13 @@
 
 }
 
-.plano[data-mode="scroll"] .plano-edge-head {
-  display: none;
-}
 
-/* T5: the steps and the line leave as the stage lets go */
-.plano-stage .plano-title,
+/* T5: the title, the steps and the line leave as the stage lets go, gone
+   before the frame has grown over a third of the way, so the picture never
+   opens over half-faded words */
+.plano-stage .plano-copy,
 .plano-stage .plano-route {
-  opacity: calc(1 - var(--leave, 0));
+  opacity: calc(1 - var(--leave, 0) * 2.5);
 }
 
 /* Phone: the marker rides the line in the page. The rider spans the line

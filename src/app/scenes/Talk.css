@@ -81,6 +81,18 @@
   gap: 0.6rem;
 }
 
+/* phone: two by two, so no option is left alone on a line of its own */
+@media (max-width: 767px) {
+  .talk-chips {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .talk-chip {
+    justify-content: center;
+  }
+}
+
 .talk-chip {
   position: relative;
   display: inline-flex;
@@ -154,6 +166,8 @@
 }
 
 .talk-mail {
+  display: inline-block;
+  padding: 0.7rem 0;
   font-size: 1rem;
   color: var(--ink);
   text-decoration: underline;
@@ -173,7 +187,9 @@
 
 .talk-proof {
   display: inline-block;
-  margin-top: 1.75rem;
+  /* a 44px target for the thumb, the same line on screen */
+  margin-top: 1.15rem;
+  padding: 0.7rem 0;
   color: var(--diamante);
   font-size: 0.95rem;
   text-decoration: underline;
@@ -243,8 +259,8 @@
 .talk-credits {
   flex-basis: 100%;
   margin: 0;
-  color: var(--ink-faint);
-  font-size: 0.8rem;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
 }
 
 /* Reduced motion: no pull-back, the city is simply there, still. */
@@ -252,8 +268,26 @@
   height: 0;
 }
 
+/* the photo stays whole on the right; on the left, where the words are, the
+   page's dark comes over it, so nothing is read against the bright city */
 .talk[data-mode="list"] {
-  background: #05070a url("/assets/profile/talk-side-2400.webp") center / cover no-repeat;
+  background:
+    linear-gradient(90deg, rgb(5 7 10 / 0.96) 0%, rgb(5 7 10 / 0.9) 38%, rgb(5 7 10 / 0.45) 62%, rgb(5 7 10 / 0) 80%),
+    #05070a url("/assets/profile/talk-side-2400.webp") center / cover no-repeat;
+}
+
+@media (max-width: 767px) {
+  .talk[data-mode="list"] {
+    background:
+      linear-gradient(180deg, rgb(5 7 10 / 0.55), rgb(5 7 10 / 0.92) 40%),
+      #05070a url("/assets/profile/talk-side-1200.webp") 54% 0 / cover no-repeat;
+  }
+}
+
+/* phone: the words sit on the city in the dusk; a veil under them keeps
+   every line readable over the roofs */
+.talk[data-mode="swipe"] .talk-body {
+  background: linear-gradient(to bottom, rgb(5 7 10 / 0) 0, rgb(5 7 10 / 0.72) 7rem, rgb(5 7 10 / 0.86) 100%);
 }
 
 @media (max-width: 767px) {

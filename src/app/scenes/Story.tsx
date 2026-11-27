@@ -266,6 +266,7 @@ function Chapters({ focus, past = focus }: { focus: number; past?: number }) {
 function StoryRail({ progress }: { progress: Signal<number> }) {
   const { t } = useTranslation();
   const railRef = useRef<HTMLDivElement>(null);
+  const headRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [focus, setFocus] = useState(0);
   const [past, setPast] = useState(0);
@@ -284,6 +285,10 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
       // released by its sticky parent, carries it off the top of the screen.
       rail.style.opacity = String(enter);
       rail.style.visibility = p <= 0 ? "hidden" : "visible";
+      if (headRef.current) {
+        headRef.current.style.opacity = String(enter);
+        headRef.current.style.visibility = p <= 0 ? "hidden" : "visible";
+      }
       const x = -distance.current * span(p, TRAVEL_FROM, TRAVEL_TO);
       // By where the chapters are, not by their index: a chapter steps out of
       // the way once its left edge reaches the portrait. (Reads first,
@@ -360,8 +365,13 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
   }, [progress]);
 
   return (
+    <>
+    {/* the chapter's title, like every chapter's, in the margin above the portrait */}
+    <header ref={headRef} className="story-head" data-no-reveal="">
+      <h2 className="story-head-title">{t("story.title")}</h2>
+      <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "01" })}</span>
+    </header>
     <div ref={railRef} className="story-rail" data-no-reveal="">
-      <h2 className="sr-only">{t("story.title")}</h2>
       <div className="story-bg" aria-hidden="true">
         {STORY.map((c, i) => (
           <div key={c.id} ref={(el) => (bgRefs.current[i] = el)} className="story-bg-layer" data-bg={c.id}>
@@ -373,6 +383,7 @@ function StoryRail({ progress }: { progress: Signal<number> }) {
         <Chapters focus={focus} past={past} />
       </div>
     </div>
+    </>
   );
 }
 
@@ -398,9 +409,12 @@ function StoryList() {
 
   return (
     <section id="about" className="story-list" data-journey="partida" aria-labelledby="story-title">
-      <h2 id="story-title" className="sr-only">
-        {t("story.title")}
-      </h2>
+      <header className="story-list-head">
+        <h2 id="story-title" className="story-head-title">
+          {t("story.title")}
+        </h2>
+        <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "01" })}</span>
+      </header>
       <div ref={listRef} className="story-list-items">
         <Chapters focus={focus} />
       </div>

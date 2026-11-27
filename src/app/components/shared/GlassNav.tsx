@@ -294,11 +294,15 @@ export function GlassNav({
               onClick={() => setOpen((value) => !value)}
               aria-expanded={open}
               aria-controls={panelId}
-              aria-label={open ? closeLabel : openLabel}
+              // closed, the button shows where you are (the chapter rail): its
+              // name is "Menu" followed by that text, so what is read contains
+              // what is seen (WCAG 2.5.3)
+              aria-label={open || !status ? (open ? closeLabel : openLabel) : undefined}
               className="flex h-14 min-h-[44px] shrink-0 items-center justify-between gap-2 px-5"
             >
               <span className="flex items-center gap-2 text-[17px] font-medium text-white">
                 {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+                {!open && status && <span className="sr-only">{openLabel}, </span>}
                 {open ? closeLabel : (status ?? openLabel)}
               </span>
               <span className="text-[13px] font-bold uppercase tracking-widest text-white/50" aria-hidden="true">

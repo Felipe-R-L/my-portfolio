@@ -336,6 +336,7 @@
     "proof_link": "See Dallas Sync working without internet"
   },
   "journey": {
+    "rail_label": "Progress through the page",
     "edge": "FRL 2026 · DIAMANTE 400 · {{n}}",
     "chapters": {
       "partida": "About",

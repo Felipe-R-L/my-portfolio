@@ -62,7 +62,21 @@ for (const run of runs) {
     // Lenis smooths wheel input only; a programmatic jump lands at once. Give
     // ScrollTrigger and the scrubs time to settle.
     await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
-    await page.waitForTimeout(700);
+    // The glide passages carry a jump that lands mid-passage on to its end,
+    // over a second or more; shoot where the page comes to rest, as a
+    // visitor who stops scrolling sees it (at most 5 s).
+    await page.evaluate(() => new Promise((done) => {
+      let last = scrollY, still = 0;
+      const t0 = performance.now();
+      const tick = () => {
+        still = scrollY === last ? still + 1 : 0;
+        last = scrollY;
+        if (still >= 24 || performance.now() - t0 > 5000) done();
+        else requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }));
+    await page.waitForTimeout(500);
     await page.screenshot({ path: `${out}/${run.prefix}-${s.name}.png` });
   }
   await ctx.close();

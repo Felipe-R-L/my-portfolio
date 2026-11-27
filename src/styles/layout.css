@@ -91,7 +91,9 @@
 .glass-dark {
   --glass-filter: blur(20px) saturate(160%) brightness(1.12);
   border: 1px solid rgb(255 255 255 / 0.16);
-  background: linear-gradient(rgb(22 24 32 / 0.62), rgb(12 14 20 / 0.72));
+  /* dense enough that a line of text passing under it never reads through
+     it, even where the blur is not drawn */
+  background: linear-gradient(rgb(22 24 32 / 0.78), rgb(12 14 20 / 0.86));
   -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
   box-shadow:
