@@ -37,6 +37,9 @@ teclado), performance (~95 celular, 98 desktop), SEO e sitemap, responsivo
 linha do tataravô, o voo de Diamante no hero e no Contato, e o mar levando
 ao retrato colorido.
 
+O registro do que mudou em 2026-11-27 (e por quê) está em
+`docs/awwwards/AJUSTES.md`; leia junto com DIRECTION.md.
+
 Passos 1 a 5 feitos (awwwards 25 a 39, parte fora do loop, com o Felipe):
 a onda agora toca sozinha no tempo dela (tween de `sea.w`, disparado pela
 rolagem), então as cenas de meio de onda com `hold` em `scenes.json` não

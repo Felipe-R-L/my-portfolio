@@ -49,10 +49,11 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
    arquivo por aparelho); no celular, corte vertical e sombra mais alta sob o
    texto. Nome em duas linhas (Cormorant, "Rodrigues" em itálico) e o
    carimbo de viagem.
-2. **O mar** (`src/app/components/hero/SeaWash.tsx`, WebGL). No trecho da
-   rolagem que era a janela no rosto (OPEN_FROM..OPEN_TO da cena), a onda
-   sobe de baixo sobre Diamante e o nome, cobre a tela e recua deixando o
-   retrato colorido. A água é o clipe Storyblocks 355192518 (espuma subindo
+2. **O mar** (`src/app/components/hero/SeaWash.tsx`, WebGL). Toca no
+   próprio relógio (3,6 s), como os cards da História e dos Projetos: o
+   primeiro movimento da rolagem a dispara e ela vai até o fim sozinha. A
+   onda sobe de baixo sobre Diamante e o nome, cobre a tela e recua
+   deixando o retrato colorido. A água é o clipe Storyblocks 355192518 (espuma subindo
    sobre mar fundo, filmado na vertical, master ProRes 4K), com tom puxado
    para verde-azulado. A borda é desenhada (linha orgânica animada + faixa de
    espuma viva) e logo abaixo dela fica sempre a parte mais densa da espuma
@@ -61,10 +62,13 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
    frente da onda a terra fica na sombra; atrás dela, na volta, o retrato
    fica molhado e seca. Câmera: Diamante mergulha (escala), o nome sobe num
    plano mais próximo (−14vh) até a água levar, o retrato sai da água 12%
-   mais perto e assenta. Tudo reversível pela rolagem.
+   mais perto e assenta. Na volta (rolando para cima) espelha a ida: o card
+   abre no retrato e o mar já vem buscá-lo, sem o retrato parado na tela.
 3. Sem pausa (Felipe, 2026-11-27): no desktop, o mar recua e o retrato
    já vira o card que vai para o lado com a História, numa passagem só
-   (`SEA_PASSAGE`, 5,2 s).
+   (`SEA_PASSAGE`, 5,2 s). Ela toca inteira no tempo dela (`whole` no
+   glide): rolar forte não a acelera, senão os cards chegavam por cima da
+   onda.
 - **Movimento reduzido:** sem mar; o retrato simplesmente aparece.
 - Removidos: a janela no rosto, o pincel de cor no retrato (`LiquidReveal`) e
   o traço automático de cor (awwwards 16), porque o retrato já é colorido.
@@ -90,8 +94,7 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   (skill `writing-as-felipe`).
 - Linha sobre o tataravô: só no rodapé do Contato (awwwards 19): "Diamante,
   na Calábria, foi a terra do meu tataravô."
-- Som (awwwards 17): desligado por padrão, botão discreto na nav, escolha
-  lembrada no aparelho. Música bem baixa ao fundo; sonoplastia da onda, dos
+- Som (awwwards 17): desligado por padrão, escolha lembrada no aparelho. Música bem baixa ao fundo; sonoplastia da onda, dos
   cards e do quadro; nada toca sozinho. Motor em `src/app/audio/`.
   Fontes (Felipe, 2026-11-27; o áudio do Storyblocks é um plano à parte,
   R$ 260, e não compensa): papel, cartão, shutter e tick são **gerados na
@@ -101,14 +104,22 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   ele: Amore al Mare (Grand_Project), Bossa Nova Soulful (andriih) e
   Nostalgic Folk No. 3 (Sonican). O motor de um barco ao longe ("Distant
   small boat returning to marina", freesound_community, Pixabay) acompanha o
-  barco do voo de Diamante. Som ambiente só o vento (o "wind 4" abafado):
+  barco do voo de Diamante (volume 0,2, abaixado a pedido). Som ambiente só o vento (o "wind 4" abafado):
   sobre a vista aérea de Diamante e, mais baixo, sob a música no resto da
   página. Sem mar ambiente (Felipe, 2026-11-27: soava como água num
   balde). O canto superior esquerdo é o único botão do
   som (saiu da nav, Felipe 2026-11-27): ao chegar, um convite ("Ligar o
   som", barras pulsando); se a pessoa rola sem ligar, vira uma bolinha no
-  mesmo lugar; ligado, é o player (desligar, faixa, próxima). Reserva: Vivaldi, Verão, Allegro non molto (John Harrison,
-  CC BY-SA).
+  mesmo lugar (no celular ela sai do caminho enquanto se rola para baixo);
+  ligado, é o player (desligar, faixa, próxima). Woosh gerado na página
+  nos links da nav. Reserva de música: Vivaldi, Verão, Allegro non molto
+  (John Harrison, CC BY-SA).
+- **Navegação** (Felipe, 2026-11-27): os links da nav voam até o capítulo
+  em 0,9 s com uma rajada de vento na tela (desfoque e riscos) e o woosh,
+  sem onda no caminho (repetida a cada clique enjoava); os mares vão direto
+  para o estado do destino e os outros sons ficam quietos no voo
+  (`scroll/jump.ts`). Cada link pousa onde o capítulo assenta: "Sobre" no
+  retrato ao lado do primeiro card, o Contato no fim da página.
 - Mídia de banco: Storyblocks (assinatura do Felipe, plano com acesso total
   desde 2026-11-27, inclui áudio). Pode ser de outro lugar que não a Itália
   quando for só textura (o mar). Nunca para o Felipe ou os projetos.
@@ -131,8 +142,10 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
 - **A regra de cor depois do retrato colorido:** o meio da página continua
   em preto e branco com cor no foco, ou a cor fica em tudo? Afeta História,
   Como funciona e o "plano alcançado".
-- **Músicas:** o MCP do Storyblocks não lê as pastas nem os favoritos dele;
-  ele passa os nomes ou baixa.
+- **O mar no celular:** a onda antes do Contato e o voo da nav são só do
+  desktop (o celular rola livre, sem passagens). Levar ou não.
+- **Sons escolhidos pelo construtor sem ouvir** (motor do barco; reservas
+  em `.loop/QUESTIONS.md`): o Felipe confirma de ouvido.
 - **Galeria "Fora do código":** fotos dele, sem tratamento, num álbum
   compartilhado do Google Fotos chamado "Portfolio" (o link fica em
   `.loop/QUESTIONS.md`, fora do git). Ele ainda vai acrescentar fotos e quer
