@@ -58,13 +58,21 @@ for (const run of runs) {
       return Math.round(top + p * travel + (offset ?? 0) * window.innerHeight);
     }, s);
     if (y === null) { console.error(`[${run.prefix}] missing target for ${s.name}`); continue; }
-    // a scene inside a change (the sea half way) is held there: the glide
-    // would otherwise carry it on to the change's end before the shot
-    await page.evaluate((hold) => { window.__glideHold = !!hold; }, s.hold);
     await page.evaluate((y) => window.scrollTo(0, y), y);
     // Lenis smooths wheel input only; a programmatic jump lands at once. Give
     // ScrollTrigger and the scrubs time to settle.
     await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    // The sea plays by its own clock once the scroll sets it off: a scene
+    // with `times` is shot at those moments after the jump (ms), mid-wave.
+    if (s.times) {
+      let waited = 0;
+      for (const ms of s.times) {
+        await page.waitForTimeout(ms - waited);
+        waited = ms;
+        await page.screenshot({ path: `${out}/${run.prefix}-${s.name}-${ms}.png` });
+      }
+      continue;
+    }
     // The glide passages carry a jump that lands mid-passage on to its end,
     // over a second or more; shoot where the page comes to rest, as a
     // visitor who stops scrolling sees it (at most 5 s).

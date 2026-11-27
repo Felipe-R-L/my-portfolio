@@ -300,8 +300,8 @@ export function Process() {
             <h2 id="process-title" className="plano-title">
               {t("plano.title")}
             </h2>
-            <p className="plano-lead">{t("plano.lead")}</p>
             <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "03" })}</span>
+            <p className="plano-lead">{t("plano.lead")}</p>
           </header>
           <div className="plano-route">
             {/* the line the marker rides, with one stop per step */}

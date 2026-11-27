@@ -4,19 +4,13 @@
     "hero": 0
   },
   {
-    "name": "01-onda-sobe",
-    "hero": 0.11,
-    "hold": true
-  },
-  {
-    "name": "01-onda-cobre",
-    "hero": 0.215,
-    "hold": true
-  },
-  {
-    "name": "02-onda-recua",
-    "hero": 0.33,
-    "hold": true
+    "name": "01-onda",
+    "hero": 0.05,
+    "times": [
+      900,
+      1800,
+      2700
+    ]
   },
   {
     "name": "02-retrato",
@@ -80,17 +74,6 @@
   {
     "name": "06-plano-100",
     "sel": ".plano-track",
-    "p": 1
-  },
-  {
-    "name": "07-t5-cidade",
-    "sel": ".talk-runway, .talk-photo",
-    "p": 0,
-    "offset": 0.3
-  },
-  {
-    "name": "07-t5-aberto",
-    "sel": ".talk-runway, .talk-photo",
     "p": 1
   },
   {
