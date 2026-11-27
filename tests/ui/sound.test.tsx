@@ -26,4 +26,13 @@ describe("sound", () => {
     expect(localStorage.getItem("frl-sound")).toBe("off");
     expect(seen).toEqual([true, false]);
   });
+
+  it("a loop's level asked before sound is on starts nothing", async () => {
+    const ctor = vi.fn();
+    (window as unknown as { AudioContext: unknown }).AudioContext = ctor;
+    const { sound } = await import("../../src/app/audio/sound");
+    sound.level("wind", 1);
+    sound.level("wind", 0.5);
+    expect(ctor).not.toHaveBeenCalled();
+  });
 });

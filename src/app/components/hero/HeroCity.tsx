@@ -158,8 +158,17 @@ export function HeroCity() {
         // Reduced motion: no sea. Diamante and the name hold, then the
         // portrait is simply there.
         const w = reduce ? (p < 0.23 ? 0 : 1) : span(p, OPEN_FROM, OPEN_TO);
-        // the sea gone and the portrait settled: a shutter
-        if (w >= 1 && wash.get() < 1 && wash.get() > 0.6) sound.play("frame");
+        // Sound (only with it on): the wind over Diamante, gone under the
+        // sea; the wave as it starts to come in and as it goes back; a
+        // shutter once the portrait has settled.
+        const was = wash.get();
+        if (!reduce) {
+          if (was < 0.02 && w >= 0.02) sound.play("wave");
+          if (was < 0.54 && w >= 0.54) sound.play("shore");
+          if (was > 0.46 && w <= 0.46) sound.play("wave", { volume: 0.7 });
+        }
+        if (w >= 1 && was < 1 && was > 0.6) sound.play("frame");
+        sound.level("wind", w < 0.5 ? 1 - seaPhase(w).rise : 0);
         wash.set(w);
         // the sea covers the screen at the middle of the wash: Diamante and
         // the name under it before, the portrait after

@@ -21,6 +21,9 @@ let master: GainNode | null = null;
 let musicGain: GainNode | null = null;
 let music: HTMLAudioElement | null = null;
 const buffers = new Map<Cue, AudioBuffer>();
+/** Loops (the wind): a source that runs while its level is above zero. */
+const loops = new Map<Cue, { gain: GainNode; src: AudioBufferSourceNode | null }>();
+const levels = new Map<Cue, number>();
 const lastPlayed = new Map<Cue, number>();
 
 function read() {
@@ -75,9 +78,39 @@ async function load(name: Cue) {
   try {
     const data = await (await fetch(src)).arrayBuffer();
     buffers.set(name, await ctx.decodeAudioData(data));
+    if (CUES[name].loop) applyLevel(name);
   } catch {
     /* a missing cue stays silent */
   }
+}
+
+/** Bring a loop to its asked level, starting its source the first time. */
+function applyLevel(name: Cue) {
+  if (!ctx || !master) return;
+  const buffer = buffers.get(name);
+  if (!buffer) return;
+  let l = loops.get(name);
+  if (!l) {
+    const gain = ctx.createGain();
+    gain.gain.value = 0;
+    gain.connect(master);
+    l = { gain, src: null };
+    loops.set(name, l);
+  }
+  const level = on ? (levels.get(name) ?? 0) : 0;
+  if (level > 0 && !l.src) {
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    src.loop = true;
+    src.connect(l.gain);
+    src.start();
+    l.src = src;
+  }
+  const g = l.gain.gain;
+  g.cancelScheduledValues(ctx.currentTime);
+  g.setValueAtTime(g.value, ctx.currentTime);
+  // a short ramp: the level follows the scroll without zipper noise
+  g.linearRampToValueAtTime(CUES[name].volume * level, ctx.currentTime + 0.25);
 }
 
 function fadeMusic(to: number, seconds: number) {
@@ -94,11 +127,13 @@ function start() {
   void c.resume();
   if (music) void music.play().catch(() => {});
   fadeMusic(MUSIC.volume, 1.6);
+  for (const name of levels.keys()) applyLevel(name);
 }
 
 function stop() {
   if (!ctx) return;
   fadeMusic(0, 0.5);
+  for (const name of loops.keys()) applyLevel(name);
   window.setTimeout(() => {
     if (on) return;
     music?.pause();
@@ -136,6 +171,14 @@ export const sound = {
   subscribe(l: Listener) {
     listeners.add(l);
     return () => void listeners.delete(l);
+  },
+  /** Set a loop's level, 0 to 1 (the wind under the hero). Cheap to call
+      every frame: nothing happens until the level actually changes. */
+  level(name: Cue, value: number) {
+    const v = Math.round(Math.max(0, Math.min(1, value)) * 50) / 50;
+    if (levels.get(name) === v) return;
+    levels.set(name, v);
+    if (on && ctx) applyLevel(name);
   },
   /** Play a cue if sound is on. `pan` runs from -1 (left) to 1 (right). */
   play(name: Cue, opts: { volume?: number; pan?: number; rate?: number } = {}) {

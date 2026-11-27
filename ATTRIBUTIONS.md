@@ -70,3 +70,12 @@ Files committed to this repository (latin subset, from Google Fonts):
   (resized, cropped for phones and graded on the page).
 - `public/assets/story/diamante-*.webp`: "PanoramadiamanteEM1.jpg" and
   "PanoramadiamanteEM2.jpg" by Eugenio Magurno, CC BY-SA 3.0, via Wikimedia Commons.
+
+## Sons (fora do git, em `public/assets/sb/`)
+
+Pixabay Content License (uso comercial livre, crédito opcional; os arquivos não são redistribuídos soltos):
+- `wave-in.mp3`: "Waves Crashing", DRAGON-STUDIO — https://pixabay.com/sound-effects/nature-waves-crashing-397977/
+- `wave-out.mp3`: "Wave on the Shore", DRAGON-STUDIO — https://pixabay.com/sound-effects/nature-wave-on-the-shore-390306/
+- `wind-loop.mp3`: "a gentle breeze, wind 4", mario1298 (Freesound) via Pixabay — https://pixabay.com/sound-effects/nature-a-gentle-breeze-wind-4-14681/ (cortado em loop de 38 s)
+
+Papel, cartão, obturador e tick são gerados na página (`src/app/audio/synth.ts`).
