@@ -39,6 +39,10 @@ export type Passage = {
       Contato): the page barely moves while the cover comes up, crosses the
       whole way while the screen is covered, and is still as it goes. */
   under?: boolean;
+  /** Plays whole, on its own time: a harder scroll does not speed it up and
+      gestures while it plays do not hurry it (something on its own clock
+      runs inside it, the hero's sea). Implied by `under`. */
+  whole?: boolean;
 };
 
 type Builder = () => Passage[];
@@ -99,6 +103,7 @@ export function durationFor(passage: Passage, distance: number, vh: number): num
 /** The speed a change plays at, from the speed the scroll asks for: the gain
     over 1x scaled by the change's own sensitivity. */
 export function speedFor(passage: Passage, speed: number): number {
+  if (passage.whole || passage.under) return 1;
   return 1 + (speed - 1) * (passage.sensitivity ?? 1);
 }
 
@@ -122,7 +127,8 @@ export function mergePassages(list: Passage[], gap = 2): Passage[] {
       const sensitivity = last.sensitivity ?? p.sensitivity;
       const soft = last.soft || p.soft;
       const under = last.under || p.under;
-      out[out.length - 1] = { from: last.from, to: Math.max(last.to, p.to), ...(duration ? { duration } : {}), ...(sensitivity !== undefined ? { sensitivity } : {}), ...(soft ? { soft } : {}), ...(under ? { under } : {}) };
+      const whole = last.whole || p.whole;
+      out[out.length - 1] = { from: last.from, to: Math.max(last.to, p.to), ...(duration ? { duration } : {}), ...(sensitivity !== undefined ? { sensitivity } : {}), ...(soft ? { soft } : {}), ...(under ? { under } : {}), ...(whole ? { whole } : {}) };
     } else out.push({ ...p });
   }
   return out;

@@ -72,6 +72,10 @@ describe("sensitivity", () => {
     const { speedFor } = await import("../../src/app/scroll/glide");
     expect(speedFor({ from: 0, to: 1 }, 2.5)).toBe(2.5);
     expect(speedFor({ from: 0, to: 1, sensitivity: 0.5 }, 2.5)).toBe(1.75);
+    // a change with its own clock inside (the hero's sea) or under a cover
+    // always plays at its own time
+    expect(speedFor({ from: 0, to: 1, whole: true }, 2.5)).toBe(1);
+    expect(speedFor({ from: 0, to: 1, under: true }, 2.5)).toBe(1);
     expect(speedFor({ from: 0, to: 1, sensitivity: 1.6 }, 2.5)).toBeCloseTo(3.4);
     expect(speedFor({ from: 0, to: 1, sensitivity: 1.6 }, 1)).toBe(1);
   });

@@ -128,7 +128,7 @@ export function useSmoothScroll() {
       if (!hit) return across !== null;
       const d = Math.abs(hit.to - lenis.animatedScroll);
       const base = durationFor(hit.passage, hit.to - lenis.animatedScroll, vh()) / speedFor(hit.passage, speed);
-      if (v && v > 0 && !hit.passage.under) {
+      if (v && v > 0 && !hit.passage.under && !hit.passage.whole) {
         // an ease-out starts at pi/2 times its average speed: match the
         // speed the page arrives with, within reason
         const joined = Math.min(base, Math.max(0.6 * base, (Math.PI / 2) * (d / v)));
@@ -172,9 +172,9 @@ export function useSmoothScroll() {
 
       if (play) {
         const p = play;
-        // under a cover (the sea): it runs its course, the page must not be
-        // seen moving outside it
-        if (p.passage.under) return eat();
+        // under a cover (the sea), or with a clock of its own inside: it
+        // runs its course at its own time
+        if (p.passage.under || p.passage.whole) return eat();
         const left = Math.max(0, p.dur - (now - p.start) / 1000);
         // the gear taken before the revs drop: a push the same way in the
         // change's last stretch engages the next one; this one keeps its

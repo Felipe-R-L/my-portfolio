@@ -388,7 +388,7 @@ export function HeroCity() {
               // the sea and the portrait framed and moved aside: one change,
               // no stop on the portrait alone (Felipe, 2026-11-27); the sea
               // plays on its own clock inside it
-              { from: top, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: SEA_PASSAGE, soft: true },
+              { from: top, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: SEA_PASSAGE, soft: true, whole: true },
               { from: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), to: at(RAIL_TRAVEL_FROM), hold: true },
               // the cards keep up with a fast scroll more than the camera does
               ...rail.map((r) => ({ ...r, duration: 1.1, sensitivity: 1.6 })),
