@@ -7,3 +7,8 @@ guidelines/*
 .loop/
 design-src/
 .claude/*.local.md
+
+# Secrets: API keys live in .env and never enter the repo.
+.env
+.env.*
+!.env.example
