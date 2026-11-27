@@ -32,6 +32,7 @@ const buffers = new Map<Cue, AudioBuffer>();
 const loops = new Map<Cue, { gain: GainNode; src: AudioBufferSourceNode | null }>();
 const levels = new Map<Cue, number>();
 const lastPlayed = new Map<Cue, number>();
+let hushUntil = 0;
 
 function read() {
   try {
@@ -246,6 +247,11 @@ export const sound = {
   toggle() {
     sound.set(!on);
   },
+  /** For `seconds`, the cues the page sets off stay silent (a nav jump
+      flies past shutters and cards that would all sound at once). */
+  hush(seconds: number) {
+    hushUntil = performance.now() + seconds * 1000;
+  },
   subscribe(l: Listener) {
     listeners.add(l);
     return () => void listeners.delete(l);
@@ -259,8 +265,10 @@ export const sound = {
     if (on && ctx) applyLevel(name);
   },
   /** Play a cue if sound is on. `pan` runs from -1 (left) to 1 (right). */
-  play(name: Cue, opts: { volume?: number; pan?: number; rate?: number } = {}) {
+  play(name: Cue, opts: { volume?: number; pan?: number; rate?: number; force?: boolean } = {}) {
     if (!on || !ctx || !master || ctx.state !== "running") return;
+    // hushed (the page flown through by the nav): only the woosh is heard
+    if (!opts.force && performance.now() < hushUntil) return;
     const buffer = buffers.get(name);
     if (!buffer) return;
     // the same cue fired twice in a breath sounds like a glitch

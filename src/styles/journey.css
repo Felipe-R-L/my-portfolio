@@ -148,3 +148,41 @@ body.home-text::after {
     min-width: 44px;
   }
 }
+
+/* The nav's jump to a chapter (scroll/jump.ts): a gust. The page blurs with
+   the speed and thin streaks of air run past the way it travels, swelling
+   and gone with the flight (0.9 s). */
+html[data-jump] main,
+html[data-jump] .journey-frame {
+  animation: jump-blur 0.9s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+@keyframes jump-blur {
+  0%, 100% { filter: none; }
+  45% { filter: blur(6px) saturate(0.85); }
+}
+html[data-jump]::after {
+  content: "";
+  position: fixed;
+  inset: -20% 0;
+  z-index: 44;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 37px, rgb(220 235 245 / 0.07) 37px 38px, transparent 38px 91px),
+    repeating-linear-gradient(90deg, transparent 0 61px, rgb(220 235 245 / 0.05) 61px 62px, transparent 62px 143px);
+  -webkit-mask-image: repeating-linear-gradient(180deg, #000 0 18%, transparent 18% 31%, #000 31% 44%, transparent 44% 60%);
+  mask-image: repeating-linear-gradient(180deg, #000 0 18%, transparent 18% 31%, #000 31% 44%, transparent 44% 60%);
+  animation: jump-gust 0.9s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+html[data-jump="down"]::after {
+  --gust-from: 30%;
+  --gust-to: -30%;
+}
+html[data-jump="up"]::after {
+  --gust-from: -30%;
+  --gust-to: 30%;
+}
+@keyframes jump-gust {
+  0% { opacity: 0; transform: translateY(var(--gust-from, 30%)); }
+  40%, 60% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(var(--gust-to, -30%)); }
+}

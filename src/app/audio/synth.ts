@@ -8,7 +8,7 @@
  * Pure: (sampleRate) -> samples, the same every time (seeded noise).
  */
 
-export type Synth = "card" | "slide" | "frame" | "tick";
+export type Synth = "card" | "slide" | "frame" | "tick" | "woosh";
 
 /** A repeatable noise source: the same sound on every visit. */
 function noise(seed: number) {
@@ -110,7 +110,27 @@ function tick(rate: number) {
   return out;
 }
 
-const MAKERS: Record<Synth, (rate: number) => Float32Array> = { card, slide, frame, tick };
+/** A woosh: air rushing past, its pitch rising and falling with the swell
+    (the page flown through to a chapter). ~0.7 s */
+function woosh(rate: number) {
+  const n = Math.round(rate * 0.7);
+  const out = new Float32Array(n);
+  const r = noise(67);
+  const bp = bandpass(rate);
+  let a = 0;
+  const k = 1 - Math.exp((-2 * Math.PI * 2400) / rate);
+  for (let i = 0; i < n; i++) {
+    const t = i / n;
+    // swells fast, dies slower, like something passing close by
+    const env = Math.pow(Math.sin(Math.PI * Math.pow(t, 0.6)), 2.2);
+    const x = bp(r(), 260 + 1500 * Math.sin(Math.PI * Math.pow(t, 0.75)), 0.9);
+    a += (x - a) * k;
+    out[i] = a * env;
+  }
+  return out;
+}
+
+const MAKERS: Record<Synth, (rate: number) => Float32Array> = { card, slide, frame, tick, woosh };
 
 /** The samples of `name` at `rate`, peak-normalised to 0.9. */
 export function render(name: Synth, rate: number): Float32Array {

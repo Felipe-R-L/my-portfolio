@@ -16,8 +16,8 @@ import { ChapterRail } from "./journey/ChapterRail";
 import { JourneyFrame } from "./journey/JourneyFrame";
 import { useCaseRoute } from "./journey/caseRoute";
 import { CaseLayer } from "./scenes/CaseLayer";
-import { DURATION } from "./motion/tokens";
 import { MiniPlayer } from "./audio/MiniPlayer";
+import { jumpTo } from "./scroll/jump";
 
 // The nav enters 1.5 s after the page; it and its animation library come in
 // their own chunk, off the path of the first paint.
@@ -53,9 +53,11 @@ export default function AppLayout() {
       label: t(c.label),
       onSelect: (event: MouseEvent<HTMLAnchorElement>) => {
         const lenis = lenisRef.current;
-        if (!lenis) return; // no Lenis (e.g. mobile): let the browser scroll natively
+        const el = document.getElementById(c.anchor);
+        if (!lenis || !el) return; // no Lenis (e.g. mobile): let the browser scroll natively
         event.preventDefault();
-        lenis.scrollTo(`#${c.anchor}`, { duration: DURATION.navJump });
+        // flown there, with a gust and a woosh, no sea on the way
+        jumpTo(lenis, el);
       },
     })),
     { id: "blog", href: "/blog", label: t("nav.blog") },

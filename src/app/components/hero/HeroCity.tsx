@@ -8,6 +8,7 @@ import { useScene } from "../../scroll/useScene";
 import { RAIL_ENTER_TO, RAIL_TRAVEL_FROM, RAIL_TRAVEL_TO, Story, railStops } from "../../scenes/Story";
 import { STORY } from "../../data/story";
 import { registerPassages } from "../../scroll/glide";
+import { isJumping } from "../../scroll/jump";
 import { SeaWash, seaPhase } from "./SeaWash";
 import { Credits, Letters, NAME } from "./HeroParts";
 import { placeHtml } from "./shell";
@@ -126,6 +127,8 @@ export function HeroCity() {
   const reduce = useReducedMotion();
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
+  /** Where the nav's "Sobre" lands: kept on the opening's end (below). */
+  const anchorRef = useRef<HTMLSpanElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const shot = isMobile ? SHOT_TALL : SHOT_WIDE;
 
@@ -239,6 +242,17 @@ export function HeroCity() {
       let seaTween: gsap.core.Tween | null = null;
       let seaTarget = 0;
       const playSea = (to: number, quick = false) => {
+        // flown past by the nav: the sea is simply where it would be there
+        if (isJumping()) {
+          seaTween?.kill();
+          seaTween = null;
+          seaTarget = to;
+          if (sea.w !== to) {
+            sea.w = to;
+            applyWash(to);
+          }
+          return;
+        }
         if (to === seaTarget && seaTween) return;
         seaTarget = to;
         seaTween?.kill();
@@ -391,13 +405,19 @@ export function HeroCity() {
             const stops = [...new Set([0, ...measuredStops, 1].map((u) => Math.round(u * 1e4) / 1e4))].sort((a, b) => a - b);
             const travelAt = (u: number) => at(RAIL_TRAVEL_FROM + (RAIL_TRAVEL_TO - RAIL_TRAVEL_FROM) * u);
             const rail = stops.slice(1).map((u, j) => ({ from: travelAt(stops[j]), to: travelAt(u) }));
+            // "Sobre" in the nav lands where the opening comes to rest: the
+            // portrait aside with the first card (not the rail's middle)
+            const rest = at(Math.max(ASIDE_TO, RAIL_ENTER_TO));
+            const anchor = anchorRef.current;
+            const box = anchor?.offsetParent;
+            if (anchor && box) anchor.style.top = `${rest - (box.getBoundingClientRect().top + window.scrollY)}px`;
             return [
               // seconds at 1x: the camera moves are given more time than their
               // scroll length would, the eye has a lot to follow in them
               // the sea and the portrait framed and moved aside: one change,
               // no stop on the portrait alone (Felipe, 2026-11-27); the sea
               // plays on its own clock inside it
-              { from: top, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: SEA_PASSAGE, soft: true, whole: true },
+              { from: top, to: rest, duration: SEA_PASSAGE, soft: true, whole: true },
               { from: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), to: at(RAIL_TRAVEL_FROM), hold: true },
               // the cards keep up with a fast scroll more than the camera does
               ...rail.map((r) => ({ ...r, duration: 1.1, sensitivity: 1.6 })),
@@ -525,6 +545,7 @@ export function HeroCity() {
         {/* Where the nav's "Sobre" lands: the story's opening. */}
         {storyInStage && (
           <span
+            ref={anchorRef}
             id="about"
             className="city-anchor"
             style={{ top: `calc(${TRACK_DESKTOP * 100}svh)` }}

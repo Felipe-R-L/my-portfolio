@@ -8,7 +8,7 @@
 import type { Synth } from "./synth";
 import { media } from "../media";
 
-export type Cue = "wave" | "shore" | "wind" | "boat" | "card" | "slide" | "frame" | "tick";
+export type Cue = "wave" | "shore" | "wind" | "boat" | "card" | "slide" | "frame" | "tick" | "woosh";
 
 export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; volume: number }> = {
   /** the sea rising over Diamante (Pixabay: "Waves Crashing", DRAGON-STUDIO) */
@@ -23,7 +23,7 @@ export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; vo
   /** a small boat far off, while the one in the flight heads out to sea: a
       loop, its level following the video (Pixabay: "Distant small boat
       returning to marina", freesound_community) */
-  boat: { src: media("boat-loop.mp3"), loop: true, volume: 0.32 },
+  boat: { src: media("boat-loop.mp3"), loop: true, volume: 0.2 },
   /** a chapter's card coming up beside the portrait: paper swiped */
   card: { synth: "card", volume: 0.18 },
   /** the portrait moving aside for the chapters: a card slid off a table */
@@ -32,6 +32,8 @@ export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; vo
   frame: { synth: "frame", volume: 0.22 },
   /** small UI moves */
   tick: { synth: "tick", volume: 0.12 },
+  /** a chapter picked in the nav: the page flown through to it */
+  woosh: { synth: "woosh", volume: 0.22 },
 };
 
 /** The background music, soft and low under everything: a short playlist the

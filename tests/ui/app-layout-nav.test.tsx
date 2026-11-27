@@ -112,10 +112,16 @@ describe('AppLayout nav pill click handler', () => {
     expect(event!.defaultPrevented).toBe(false)
   })
 
-  it('calls preventDefault and scrolls via Lenis when it is available', async () => {
+  it('flies the page to the chapter via Lenis when it is available', async () => {
     const scrollTo = vi.fn()
     lenisRef.current = { scrollTo }
     const el = await mountAppLayout()
+    // the chapter (the Hero is stubbed): 1200 px down a 5000 px page
+    const about = document.createElement('div')
+    about.id = 'about'
+    about.getBoundingClientRect = () => ({ top: 1200 }) as DOMRect
+    document.body.appendChild(about)
+    Object.defineProperty(document.documentElement, 'scrollHeight', { value: 5000, configurable: true })
     const link = el.querySelector<HTMLAnchorElement>('a[href="#about"]')
     expect(link).not.toBeNull()
 
@@ -126,6 +132,7 @@ describe('AppLayout nav pill click handler', () => {
     })
 
     expect(event!.defaultPrevented).toBe(true)
-    expect(scrollTo).toHaveBeenCalledWith('#about', { duration: 1.2 })
+    expect(scrollTo).toHaveBeenCalledWith(1200, expect.objectContaining({ duration: 0.9, force: true }))
+    about.remove()
   })
 })

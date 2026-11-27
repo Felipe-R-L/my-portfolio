@@ -3,6 +3,7 @@ import Lenis from "lenis";
 import type { VirtualScrollData } from "lenis";
 
 import { gsap, ScrollTrigger } from "../scroll/gsap";
+import { isJumping } from "../scroll/jump";
 import { UNDER_EVENT, underCurve, durationFor, holdAhead, speedFor, holds, passages, playTarget, settleDuration, settleTarget, type Passage } from "../scroll/glide";
 
 /** A wheel event this long after the previous one, or clearly stronger than
@@ -241,7 +242,8 @@ export function useSmoothScroll() {
     const settle = () => {
       settleTimer = 0;
       const lenis = lenisRef.current;
-      if (!lenis || play || pointerDown || onScrollbar || lenis.isStopped) return;
+      // (a nav jump flying the page through changes is not a hand letting go)
+      if (!lenis || play || pointerDown || onScrollbar || lenis.isStopped || isJumping()) return;
       // still easing out from the wheel: look again once it has come to rest
       if (Math.abs(lenis.targetScroll - lenis.animatedScroll) > 2 && lenis.isScrolling) {
         settleLater(80);
