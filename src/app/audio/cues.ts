@@ -27,5 +27,14 @@ export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; vo
   tick: { synth: "tick", volume: 0.12 },
 };
 
-/** The background music: soft and low under everything. */
-export const MUSIC: { src?: string; volume: number } = { volume: 0.12 };
+/** The background music, soft and low under everything: a short playlist the
+    visitor can step through (Pixabay Content License, chosen by Felipe). */
+export type Track = { title: string; artist: string; src: string };
+
+export const PLAYLIST: Track[] = [
+  { title: "Amore al Mare", artist: "Grand_Project", src: "/assets/sb/music-amore-al-mare-501525.mp3" },
+  { title: "Bossa Nova Soulful", artist: "andriih", src: "/assets/sb/music-bossa-nova-soulful-630197.mp3" },
+  { title: "Nostalgic Folk No. 3", artist: "Sonican", src: "/assets/sb/music-nostalgic-folk-3-468043.mp3" },
+];
+
+export const MUSIC = { volume: 0.12 };

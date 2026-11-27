@@ -17,6 +17,7 @@ import { JourneyFrame } from "./journey/JourneyFrame";
 import { useCaseRoute } from "./journey/caseRoute";
 import { CaseLayer } from "./scenes/CaseLayer";
 import { DURATION } from "./motion/tokens";
+import { MiniPlayer } from "./audio/MiniPlayer";
 
 // The nav enters 1.5 s after the page; it and its animation library come in
 // their own chunk, off the path of the first paint.
@@ -92,6 +93,9 @@ export default function AppLayout() {
         status={<ChapterRail variant="pill" active={journey.active} progress={journey.progress} />}
       />
       </Suspense>
+
+      {/* The music, in a corner, while the sound is on. */}
+      <MiniPlayer />
 
       <main id="main" tabIndex={-1} className="relative z-10 w-full overflow-x-clip outline-none">
         {/* Each section now owns its own scroll target, so the wrapper divs that

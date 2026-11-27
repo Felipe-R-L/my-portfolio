@@ -378,5 +378,11 @@
         "chip": "Dallas Motel, no ar"
       }
     }
+  },
+  "player": {
+    "label": "Música",
+    "mute": "Silenciar a música",
+    "unmute": "Tocar a música",
+    "next": "Próxima música"
   }
 }

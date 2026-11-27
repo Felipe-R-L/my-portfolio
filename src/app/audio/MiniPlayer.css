@@ -1,0 +1,73 @@
+/* A small glass pill in the top-left corner, level with the nav: the one
+   corner nothing on the page uses (the hero's pitch sits bottom-left, its
+   link bottom-right, the stamp top-right). The nav's material, quieter. */
+.mini-player {
+  position: fixed;
+  left: 24px;
+  top: 27px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  max-width: min(300px, calc(100vw - 40px));
+  height: 36px;
+  padding: 0 4px;
+  border-radius: 999px;
+  font-family: var(--sans, ui-sans-serif, system-ui, sans-serif);
+  color: rgb(255 255 255 / 0.72);
+  animation: mini-player-in 0.5s var(--ease-travel, ease) both;
+}
+.mini-player-btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  color: inherit;
+  transition: color 0.25s, background-color 0.25s;
+}
+.mini-player-btn:hover,
+.mini-player-btn:focus-visible {
+  color: #fff;
+  background: rgb(255 255 255 / 0.08);
+}
+.mini-player-track {
+  min-width: 0;
+  margin: 0 4px;
+  overflow: hidden;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.mini-player-title {
+  color: rgb(255 255 255 / 0.88);
+}
+.mini-player-artist {
+  color: rgb(255 255 255 / 0.55);
+}
+.mini-player[data-muted] .mini-player-track {
+  opacity: 0.55;
+}
+@keyframes mini-player-in {
+  from { opacity: 0; transform: translateY(-6px); }
+}
+/* the phone: the same corner (its nav is the dock at the bottom), the
+   artist left out */
+@media (max-width: 767px) {
+  .mini-player {
+    left: 16px;
+    top: calc(14px + env(safe-area-inset-top, 0px));
+    height: 34px;
+  }
+  .mini-player-artist { display: none; }
+}
+@media (pointer: coarse) {
+  .mini-player { height: 44px; }
+  .mini-player-btn { width: 40px; height: 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mini-player { animation: none; }
+}

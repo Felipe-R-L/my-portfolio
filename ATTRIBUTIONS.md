@@ -79,3 +79,8 @@ Pixabay Content License (uso comercial livre, crédito opcional; os arquivos nã
 - `wind-loop.mp3`: "a gentle breeze, wind 4", mario1298 (Freesound) via Pixabay — https://pixabay.com/sound-effects/nature-a-gentle-breeze-wind-4-14681/ (cortado em loop de 38 s)
 
 Papel, cartão, obturador e tick são gerados na página (`src/app/audio/synth.ts`).
+
+Música (Pixabay Content License, fora do git em `public/assets/sb/`):
+- `music-amore-al-mare-501525.mp3`: "Romantic Italian Melody - Amore al Mare (Love at the Sea)", Grand_Project — https://pixabay.com/music/modern-classical-romantic-italian-melody-amore-al-mare-love-at-the-sea-501525/
+- `music-bossa-nova-soulful-630197.mp3`: "Bossa Nova Soulful Music", andriih — https://pixabay.com/music/bossa-nova-bossa-nova-soulful-music-630197/
+- `music-nostalgic-folk-3-468043.mp3`: "Nostalgic Folk Music No.3 - Romantic Loop", Sonican — https://pixabay.com/music/solo-guitar-nostalgic-folk-music-no3-romantic-loop-468043/

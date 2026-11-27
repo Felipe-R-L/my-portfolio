@@ -1,4 +1,4 @@
-import { CUES, MUSIC, type Cue } from "./cues";
+import { CUES, MUSIC, PLAYLIST, type Cue } from "./cues";
 import { render } from "./synth";
 
 /**
@@ -12,9 +12,16 @@ import { render } from "./synth";
  */
 
 const KEY = "frl-sound";
+const MUSIC_KEY = "frl-music";
+const TRACK_KEY = "frl-track";
 type Listener = (on: boolean) => void;
 
 let on = read();
+/** The music within the sound: the visitor can mute it and keep the rest. */
+let musicOn = remembered(MUSIC_KEY) !== "off";
+let track = Math.min(PLAYLIST.length - 1, Math.max(0, Number(remembered(TRACK_KEY)) || 0));
+/** Bumped on every change, for React (useSyncExternalStore). */
+let version = 0;
 const listeners = new Set<Listener>();
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
@@ -32,6 +39,27 @@ function read() {
   } catch {
     return false;
   }
+}
+
+function remembered(key: string) {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function remember(key: string, value: string) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* private mode */
+  }
+}
+
+function notify() {
+  version++;
+  listeners.forEach((l) => l(on));
 }
 
 function write(value: boolean) {
@@ -53,11 +81,13 @@ function graph() {
   musicGain.gain.value = 0;
   musicGain.connect(master);
   for (const name of Object.keys(CUES) as Cue[]) void load(name);
-  if (MUSIC.src) {
-    music = new Audio(MUSIC.src);
-    music.loop = true;
-    music.preload = "auto";
+  if (PLAYLIST.length) {
+    music = new Audio();
     music.crossOrigin = "anonymous";
+    music.preload = "auto";
+    music.src = PLAYLIST[track].src;
+    // one track after another, round the list
+    music.addEventListener("ended", () => sound.next());
     ctx.createMediaElementSource(music).connect(musicGain);
   }
   document.addEventListener("visibilitychange", onVisibility);
@@ -125,8 +155,10 @@ function start() {
   const c = graph();
   if (!c) return;
   void c.resume();
-  if (music) void music.play().catch(() => {});
-  fadeMusic(MUSIC.volume, 1.6);
+  if (music && musicOn) {
+    void music.play().catch(() => {});
+    fadeMusic(MUSIC.volume, 1.6);
+  }
   for (const name of levels.keys()) applyLevel(name);
 }
 
@@ -148,7 +180,7 @@ function onVisibility() {
     void ctx.suspend();
   } else {
     void ctx.resume();
-    if (music) void music.play().catch(() => {});
+    if (music && musicOn) void music.play().catch(() => {});
   }
 }
 
@@ -163,7 +195,53 @@ export const sound = {
     write(value);
     if (value) start();
     else stop();
-    listeners.forEach((l) => l(value));
+    notify();
+  },
+  get version() {
+    return version;
+  },
+  get musicOn() {
+    return musicOn;
+  },
+  /** The track now (index into PLAYLIST). */
+  get track() {
+    return track;
+  },
+  /** Music on or off, the other sounds unchanged. */
+  setMusic(value: boolean) {
+    if (value === musicOn) return;
+    musicOn = value;
+    remember(MUSIC_KEY, value ? "on" : "off");
+    if (on && music) {
+      if (value) {
+        void music.play().catch(() => {});
+        fadeMusic(MUSIC.volume, 0.8);
+      } else {
+        fadeMusic(0, 0.4);
+        window.setTimeout(() => !musicOn && music?.pause(), 450);
+      }
+    }
+    notify();
+  },
+  /** The next track (or the one before, with -1), faded across. */
+  next(dir = 1) {
+    track = (track + dir + PLAYLIST.length) % PLAYLIST.length;
+    remember(TRACK_KEY, String(track));
+    const el = music;
+    if (el) {
+      const swap = () => {
+        el.src = PLAYLIST[track].src;
+        if (on && musicOn) {
+          void el.play().catch(() => {});
+          fadeMusic(MUSIC.volume, 0.8);
+        }
+      };
+      if (on && musicOn && !el.paused) {
+        fadeMusic(0, 0.3);
+        window.setTimeout(swap, 320);
+      } else swap();
+    }
+    notify();
   },
   toggle() {
     sound.set(!on);
