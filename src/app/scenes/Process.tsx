@@ -1,6 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Blocks, FilePenLine, MessagesSquare, type LucideIcon } from "lucide-react";
 
 import { pageTop, registerBeats } from "../journey/beats";
 import { FRAME_CONTENTS } from "../journey/contents";
@@ -12,21 +11,29 @@ import { clamp01 } from "../scroll/math";
 import { useLeave } from "../journey/useLeave";
 import "./Process.css";
 
-/** The three steps, in order. Prose: `plano.steps.<id>`; no step promises a deadline. */
-export const STEPS = ["talk", "proposal", "start"] as const;
+/** The four shots, in order. Prose: `plano.steps.<id>`; no step promises a deadline. */
+export const STEPS = ["talk", "proposal", "build", "live"] as const;
+type Step = (typeof STEPS)[number];
 
-/** What each step is, at a glance: a conversation, a written proposal, a build in stages. */
-const ICONS: Record<(typeof STEPS)[number], LucideIcon> = { talk: MessagesSquare, proposal: FilePenLine, start: Blocks };
+/** The two shots that show real work, each a different project (Felipe,
+    2026-11-26: Dallas Sync in both read as monotonous). */
+const SHOT_IMAGES: Partial<Record<Step, string>> = {
+  build: "/assets/projects/secret-720.webp",
+  live: "/assets/projects/dallas-720.webp",
+};
 
 /** The frame, pulled all the way back: the "you are here" marker. 16:10. */
 const MARKER = { w: 56, h: 35 };
-/** What the marker shows on a phone: the front desk of Em uso, still. */
+/** What the marker shows on a phone: the front desk of Dallas Sync, still. */
 const MARKER_SRC = FRAME_CONTENTS.find((c) => c.id === "offline")!.image.src;
 
 /**
- * Como funciona: what working together looks like, in three steps.
+ * Como funciona: what working together looks like, as four shots on a strip
+ * of film ("plano" is also a camera shot). Each frame holds something real:
+ * the message the site's WhatsApp button writes, the outline of a written
+ * proposal, a store being built and a site that is live.
  *
- * T4, from Em uso: the camera pulls back. The frame shrinks from the front
+ * T4, from the destinations: the camera pulls back. The frame shrinks from the front
  * desk's screen to a small marker that lands on the start of a line with three
  * stops, and the scroll becomes a sideways travel along it, the marker riding
  * with it. On a phone the line runs down the screen and the marker rides it
@@ -196,42 +203,49 @@ export function Process() {
   // T5 begins as the stage lets go: the steps leave before the city grows where they stand
   useLeave(trackRef, stageRef, mode === "scroll", 0.2);
 
-  // the pan of the scenery behind (AmbientLight): 0 as the stage arrives, 1 as it leaves (desktop only)
-  useLayoutEffect(() => {
-    if (mode !== "scroll") return;
-    const track = trackRef.current;
-    if (!track) return;
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const r = track.getBoundingClientRect();
-      const vh = window.innerHeight;
-      document.documentElement.style.setProperty("--plano-pan", clamp01((vh - r.top) / (r.height + vh)).toFixed(4));
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, [mode]);
+  // what each frame of the strip shows
+  const shot = (id: Step) => {
+    if (id === "talk")
+      return (
+        <div className="shot-chat">
+          <p className="shot-bubble">{t("talk.chips.sistema.message")}</p>
+          <span className="shot-typing" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </span>
+        </div>
+      );
+    if (id === "proposal")
+      return (
+        <div className="shot-doc">
+          <b>{t("plano.doc.title")}</b>
+          <small>{t("plano.doc.build")}</small>
+          <span className="m" />
+          <span className="s" />
+          <small>{t("plano.doc.out")}</small>
+          <span className="s" />
+          <small>{t("plano.doc.cost")}</small>
+          <span className="xs" />
+        </div>
+      );
+    return (
+      <>
+        <img src={SHOT_IMAGES[id]} alt="" loading="lazy" decoding="async" width={720} height={450} />
+        <span className="shot-chip">
+          {id === "live" && <i aria-hidden="true" />}
+          {t(`plano.steps.${id}.chip`)}
+        </span>
+      </>
+    );
+  };
 
   const steps = (
     <ol ref={stepsRef} className="steps">
       {STEPS.map((id, i) => (
         <li key={id} className="step" data-reached={i <= reached ? "true" : "false"}>
-          <span className="step-icon" aria-hidden="true">
-            {(() => {
-              const Icon = ICONS[id];
-              return <Icon size={24} strokeWidth={1.6} />;
-            })()}
-          </span>
-          <span className="step-n" aria-hidden="true">
-            {String(i + 1).padStart(2, "0")}
-          </span>
+          <div className="step-shot">{shot(id)}</div>
+          <span className="step-n">{t("plano.shot", { n: i + 1 })}</span>
           <h3 className="step-title">{t(`plano.steps.${id}.title`)}</h3>
           <p className="step-text">{t(`plano.steps.${id}.text`)}</p>
         </li>
@@ -250,17 +264,26 @@ export function Process() {
     >
       <div ref={trackRef} className="plano-track">
         <div ref={stageRef} className="plano-stage">
-          <h2 id="process-title" className="plano-title">
-            {t("plano.title")}
-          </h2>
+          <header className="plano-copy">
+            <h2 id="process-title" className="plano-title">
+              {t("plano.title")}
+            </h2>
+            <p className="plano-lead">{t("plano.lead")}</p>
+          </header>
           <div className="plano-route">
             {/* the line the marker rides, with one stop per step */}
             <div ref={lineRef} className="plano-line" aria-hidden="true">
               {/* the thread: solid behind the marker, a soft light where it is */}
+              <span className="plano-edge">{t("plano.edge")}</span>
               <span className="plano-fill" />
               <span className="plano-head" />
               {STEPS.map((id, i) => (
-                <span key={id} className="plano-stop" data-reached={i <= reached ? "true" : "false"} />
+                <span
+                  key={id}
+                  className="plano-stop"
+                  data-reached={i <= reached ? "true" : "false"}
+                  style={{ ["--x" as string]: `${(i / (STEPS.length - 1)) * 100}%` }}
+                />
               ))}
               {/* phone: the marker, held at the middle of the screen by
                   sticky positioning between the first stop and the last */}

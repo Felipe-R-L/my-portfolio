@@ -346,18 +346,33 @@
   },
   "plano": {
     "title": "Como funciona",
+    "lead": "Quatro planos, do primeiro contato ao sistema no ar, e em todos eles você fala direto comigo e vê o que está sendo feito.",
+    "shot": "Plano {{n}}",
+    "edge": "FRL 2026 · DIAMANTE 400",
+    "doc": {
+      "title": "Proposta",
+      "build": "O que vou construir",
+      "out": "O que fica de fora",
+      "cost": "Quanto custa"
+    },
     "steps": {
       "talk": {
         "title": "Conversa",
-        "text": "Você me conta o que precisa pelo WhatsApp ou numa chamada, e eu pergunto o suficiente para entender o problema antes de falar de solução."
+        "text": "Você me conta o problema pelo WhatsApp ou numa chamada, e eu faço as perguntas necessárias para entender como o seu negócio funciona hoje antes de falar em qualquer solução."
       },
       "proposal": {
         "title": "Proposta",
-        "text": "Mando por escrito o que vou construir, o que fica de fora e quanto custa, e nada começa antes do seu ok."
+        "text": "Envio por escrito o que vou construir, o que fica de fora e quanto custa, e nenhuma etapa começa antes do seu ok."
       },
-      "start": {
-        "title": "Início",
-        "text": "Começo pela parte que resolve o problema principal e te mostro cada etapa funcionando, para que você possa ajustar ao longo do caminho com o sistema já na sua frente."
+      "build": {
+        "title": "Construção",
+        "text": "Começo pela parte que resolve o problema principal e te mostro cada etapa funcionando, para que você ajuste o rumo com o sistema já na sua frente, e não num documento.",
+        "chip": "Secret Boutique, loja virtual"
+      },
+      "live": {
+        "title": "No ar",
+        "text": "Depois do lançamento continuo responsável pelo que construí, cuidando de correções, ajustes e do que o negócio passar a pedir, e você segue falando com a mesma pessoa que escreveu o código.",
+        "chip": "Dallas Motel, no ar"
       }
     }
   }

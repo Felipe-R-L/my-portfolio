@@ -10,21 +10,15 @@ import "./AmbientLight.css";
  * Decorative: out of the accessibility tree.
  */
 /**
- * Two chapters have a place for their light, behind the frame so they never
- * cover it as it crosses, and fetched only near them, never with the page:
+ * One chapter has a place for its light, behind the frame so it never covers
+ * it as it crosses, and fetched only near it, never with the page (the
+ * topographic map behind Como funciona left with the film-strip rewrite):
  *
- * plano    a topographic map (generated: scripts/assets/topo.mjs), panning
- *          sideways with the travel along the line (`--plano-pan`, Process);
  * retorno  Diamante, a white town on the Calabrian coast (Eugenio Magurno,
  *          CC BY-SA 3.0, via Wikimedia Commons; credited in the footer),
  *          behind the invitation.
  */
 const SCENERY: Partial<Record<ChapterId, { src: string; srcSet: string; near: ChapterId[] }>> = {
-  plano: {
-    src: "/assets/plano/topo-1200.webp",
-    srcSet: "/assets/plano/topo-1200.webp 1200w, /assets/plano/topo-2400.webp 2400w",
-    near: ["destinos", "plano", "retorno"],
-  },
   retorno: {
     src: "/assets/story/diamante-c-1200.webp",
     srcSet: "/assets/story/diamante-c-1200.webp 1200w, /assets/story/diamante-c-2400.webp 2400w",

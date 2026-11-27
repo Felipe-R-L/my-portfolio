@@ -346,18 +346,33 @@
   },
   "plano": {
     "title": "How it works",
+    "lead": "Four shots, from the first message to the system running live, and in every one of them you talk to me directly and see what is being built.",
+    "shot": "Shot {{n}}",
+    "edge": "FRL 2026 · DIAMANTE 400",
+    "doc": {
+      "title": "Proposal",
+      "build": "What I will build",
+      "out": "What stays out",
+      "cost": "What it costs"
+    },
     "steps": {
       "talk": {
         "title": "Conversation",
-        "text": "You tell me what you need on WhatsApp or on a call, and I ask enough to understand the problem before we talk about a solution."
+        "text": "You tell me the problem on WhatsApp or on a call, and I ask what I need to understand how your business works today before we talk about any solution."
       },
       "proposal": {
         "title": "Proposal",
-        "text": "I send in writing what I will build, what stays out and what it costs, and nothing starts until you say yes."
+        "text": "I send in writing what I will build, what stays out and what it costs, and no stage starts until you say yes."
       },
-      "start": {
-        "title": "Start",
-        "text": "I start with the part that solves the main problem and show you each stage working, so you can adjust along the way with the system already in front of you."
+      "build": {
+        "title": "Build",
+        "text": "I start with the part that solves the main problem and show you each stage working, so you can adjust the course with the system already in front of you rather than in a document.",
+        "chip": "Secret Boutique, online store"
+      },
+      "live": {
+        "title": "Live",
+        "text": "After launch I stay responsible for what I built, taking care of fixes, adjustments and whatever the business asks for next, so you keep talking to the same person who wrote the code.",
+        "chip": "Dallas Motel, live"
       }
     }
   }

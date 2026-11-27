@@ -36,16 +36,20 @@ function render(phone = false, reduced = false) {
 }
 
 describe('como funciona (plano)', () => {
-  it('lists the three steps in order, one stop on the line for each', () => {
+  it('lists the four shots in order, one stop on the line for each', () => {
     const c = render()
     expect([...c.querySelectorAll('.step-title')].map((n) => n.textContent)).toEqual(STEPS.map((id) => `plano.steps.${id}.title`))
     expect(c.querySelectorAll('.plano-stop').length).toBe(STEPS.length)
     expect(c.querySelector('section#process')?.getAttribute('data-journey')).toBe('plano')
+    // shots 3 and 4 show two different projects, never the same one twice
+    const imgs = [...c.querySelectorAll('.step-shot img')].map((i) => i.getAttribute('src'))
+    expect(imgs).toHaveLength(2)
+    expect(new Set(imgs).size).toBe(2)
   })
 
   it('starts with only the first stop reached, and with reduced motion shows every step reached', () => {
     const c = render()
-    expect([...c.querySelectorAll('.step')].map((s) => s.getAttribute('data-reached'))).toEqual(['true', 'false', 'false'])
+    expect([...c.querySelectorAll('.step')].map((s) => s.getAttribute('data-reached'))).toEqual(['true', 'false', 'false', 'false'])
     act(() => root?.unmount()); container?.remove()
     const r = render(false, true)
     expect([...r.querySelectorAll('.step')].every((s) => s.getAttribute('data-reached') === 'true')).toBe(true)

@@ -1,7 +1,8 @@
 /*
- * Como funciona. The marker that rides the line is the journey's frame,
- * pulled all the way back (journey/JourneyFrame); the scene draws the line,
- * its stops and the words. Transparent, like every scene of the journey.
+ * Como funciona, four shots on a strip of film. The marker that rides the
+ * line is the journey's frame, pulled all the way back (journey/JourneyFrame);
+ * the scene draws the line, its stops, the strip and the words. Transparent,
+ * like every scene of the journey.
  */
 
 .plano {
@@ -20,8 +21,8 @@
   top: 0;
   height: 100svh;
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  padding: clamp(5.5rem, 12vh, 8rem) var(--gutter) clamp(2rem, 6vh, 4rem);
+  grid-template-rows: auto 1fr;
+  padding: clamp(5.5rem, 12vh, 8rem) var(--gutter) clamp(2rem, 5vh, 3.5rem);
   padding-left: calc(var(--gutter) + 1.5rem);
 }
 
@@ -35,10 +36,36 @@
   line-height: 1;
 }
 
+.plano-copy {
+  display: grid;
+  gap: 1rem;
+}
+
+.plano-lead {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--ink-faint);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
 .plano-route {
   align-self: center;
   display: grid;
-  gap: 2.5rem;
+  gap: 1.75rem;
+}
+
+/* the edge print of the film, above the line, like the code on a negative */
+.plano-edge {
+  position: absolute;
+  left: calc(-100% / (var(--stops) - 1) / 2);
+  bottom: 0.9rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size-adjust: none;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: rgb(159 195 214 / 0.62);
+  white-space: nowrap;
 }
 
 /* The line: dashed ahead of the marker, a solid thread behind it (--k, the
@@ -85,9 +112,9 @@
   transition: background-color 0.4s var(--ease-travel);
 }
 
-.plano-stop:nth-child(1) { left: 0; }
-.plano-stop:nth-child(2) { left: 50%; }
-.plano-stop:nth-child(3) { left: 100%; }
+.plano-stop {
+  left: var(--x, 0);
+}
 
 .plano-stop[data-reached="true"] {
   background: var(--diamante);
@@ -124,75 +151,199 @@
   }
 }
 
+/* The strip: dark film with a row of perforations along each edge. */
 .steps {
+  --hole: rgb(5 6 8);
+  position: relative;
   display: grid;
   grid-template-columns: repeat(var(--stops), minmax(0, 1fr));
-  gap: clamp(1.5rem, 3vw, 3rem);
+  gap: clamp(0.75rem, 1.4vw, 1.25rem);
   margin: 0;
-  padding: 0;
+  padding: 1.6rem clamp(0.75rem, 1.2vw, 1.1rem) 1.4rem;
   list-style: none;
+  border-radius: 6px;
+  background: #0b0d10;
 }
+
+.steps::before,
+.steps::after {
+  content: "";
+  position: absolute;
+  left: 0.6rem;
+  right: 0.6rem;
+  height: 0.6rem;
+  background: var(--hole);
+  -webkit-mask: repeating-linear-gradient(90deg, #000 0 0.75rem, transparent 0.75rem 1.3rem);
+  mask: repeating-linear-gradient(90deg, #000 0 0.75rem, transparent 0.75rem 1.3rem);
+  pointer-events: none;
+}
+
+.steps::before { top: 0.5rem; }
+.steps::after { bottom: 0.5rem; }
 
 .step {
   display: grid;
   align-content: start;
-  gap: 0.5rem;
-  text-align: center;
-  justify-items: center;
-  padding: 1.4rem 1.25rem 1.6rem;
-  border-radius: 18px;
-  border: 1px solid var(--hairline);
-  background: rgb(7 9 12 / 0.62);
-  transition: border-color 0.5s var(--ease-travel);
+  gap: 0.55rem;
+  padding: 0.35rem 0 0.6rem;
 }
 
-.step[data-reached="true"] {
-  border-color: rgb(159 195 214 / 0.32);
-}
-
-/* the step's mark: lit in the accent once the marker gets there */
-.step-icon {
+/* the frame of the shot: dim until the marker reaches it */
+.step-shot {
   position: relative;
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  margin-bottom: 0.35rem;
-  border-radius: 14px;
-  border: 1px solid var(--hairline);
-  background: rgb(255 255 255 / 0.03);
-  color: var(--ink-faint);
-  transition: color 0.5s var(--ease-travel), border-color 0.5s var(--ease-travel), transform 0.6s var(--ease-arrive);
+  aspect-ratio: 16 / 10;
+  margin-bottom: 0.6rem;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #0e1116;
+  outline: 1px solid rgb(245 247 255 / 0.08);
+  opacity: 0.5;
+  filter: grayscale(0.7);
+  transition: opacity 0.6s var(--ease-travel), filter 0.6s var(--ease-travel), outline-color 0.6s var(--ease-travel), box-shadow 0.6s var(--ease-travel);
 }
 
-.step-icon::before {
-  content: "";
-  position: absolute;
-  inset: -14px;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgb(159 195 214 / 0.28), transparent);
-  opacity: 0;
-  transition: opacity 0.6s var(--ease-travel);
-}
-
-.step[data-reached="true"] .step-icon {
-  color: var(--diamante);
-  border-color: rgb(159 195 214 / 0.55);
-  transform: translateY(-3px);
-}
-
-.step[data-reached="true"] .step-icon::before {
+.step[data-reached="true"] .step-shot {
   opacity: 1;
+  filter: none;
+  outline-color: rgb(159 195 214 / 0.5);
+  box-shadow: 0 0 2.2rem -0.8rem rgb(159 195 214 / 0.45);
 }
+
+.step-shot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.shot-chip {
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 99px;
+  background: rgb(5 6 8 / 0.78);
+  font-family: var(--ui);
+  font-size-adjust: none;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.shot-chip i {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: #5bd08a;
+}
+
+/* shot 1: the message the site's WhatsApp button writes, and a reply on its way */
+.shot-chat {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: end;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  background: linear-gradient(180deg, #0d1218, #0a0d11);
+}
+
+.shot-bubble {
+  justify-self: end;
+  max-width: 88%;
+  margin: 0;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px 10px 3px 10px;
+  background: #1d3a33;
+  color: #e9f3ef;
+  font-family: var(--ui);
+  font-size-adjust: none;
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+.shot-typing {
+  justify-self: start;
+  display: flex;
+  gap: 0.22rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px 10px 10px 3px;
+  background: #1a1f26;
+}
+
+.shot-typing span {
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  animation: shot-typing 1.2s ease-in-out infinite;
+}
+
+.shot-typing span:nth-child(2) { animation-delay: 0.15s; }
+.shot-typing span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes shot-typing {
+  0%, 60%, 100% { opacity: 0.35; }
+  30% { opacity: 1; }
+}
+
+/* shot 2: the outline of a written proposal, no figures in it */
+.shot-doc {
+  position: absolute;
+  inset: 0.7rem 1.3rem 0;
+  display: grid;
+  align-content: start;
+  gap: 0.32rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 3px 3px 0 0;
+  background: #eef1f2;
+  color: #11161a;
+}
+
+.shot-doc b {
+  font-family: var(--serif);
+  font-size-adjust: none;
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.shot-doc small {
+  margin-top: 0.2rem;
+  font-family: var(--ui);
+  font-size-adjust: none;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2f6f8f;
+}
+
+.shot-doc span {
+  height: 0.26rem;
+  border-radius: 0.13rem;
+  background: #c9d1d5;
+}
+
+.shot-doc .m { width: 84%; }
+.shot-doc .s { width: 62%; }
+.shot-doc .xs { width: 40%; }
 
 .step-n {
   font-family: var(--ui);
   font-size-adjust: none;
   color: var(--ink-faint);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   transition: color 0.4s var(--ease-travel);
 }
 
@@ -206,16 +357,26 @@
   font-size-adjust: none;
   letter-spacing: var(--serif-sub-track);
   font-weight: var(--serif-sub-weight);
-  font-size: calc(clamp(1.6rem, 2.2vw, 2.1rem) * var(--serif-scale));
+  font-size: calc(clamp(1.5rem, 1.9vw, 1.9rem) * var(--serif-scale));
   line-height: 1.1;
 }
 
 .step-text {
   margin: 0;
-  max-width: 32ch;
   color: var(--ink-soft);
-  font-size: 1rem;
-  line-height: 1.55;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  transition: opacity 0.5s var(--ease-travel);
+}
+
+.step[data-reached="false"] :is(.step-title, .step-text) {
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shot-typing span {
+    animation: none;
+  }
 }
 
 
@@ -286,14 +447,31 @@
 .plano[data-mode="swipe"] .steps,
 .plano[data-mode="list"] .steps {
   grid-template-columns: none;
-  gap: 2.75rem;
+  gap: 2.5rem;
+  padding: 1rem 0;
+  background: none;
 }
 
-.plano[data-mode="swipe"] .step,
-.plano[data-mode="list"] .step {
-  text-align: left;
-  justify-items: start;
-  padding: 1.1rem 1.1rem 1.25rem;
+.plano[data-mode="swipe"] .steps::before,
+.plano[data-mode="swipe"] .steps::after,
+.plano[data-mode="list"] .steps::before,
+.plano[data-mode="list"] .steps::after {
+  display: none;
+}
+
+.plano[data-mode="swipe"] .plano-edge,
+.plano[data-mode="list"] .plano-edge {
+  display: none;
+}
+
+.plano[data-mode="swipe"] .shot-bubble,
+.plano[data-mode="list"] .shot-bubble {
+  font-size: 0.8rem;
+}
+
+.plano[data-mode="swipe"] .step-text,
+.plano[data-mode="list"] .step-text {
+  font-size: 1.05rem;
 }
 
 
