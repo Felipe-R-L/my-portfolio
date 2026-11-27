@@ -36,20 +36,24 @@ function bandpass(rate: number) {
 
 const smooth = (t: number) => t * t * (3 - 2 * t);
 
-/** Paper swiped across paper: a soft breath, no grit. ~0.24 s */
+/** A sheet moved past: a low, airy breath that swells and settles, no edge
+    at all (the brighter takes read as scratchy). ~0.26 s */
 function card(rate: number) {
-  const n = Math.round(rate * 0.24);
+  const n = Math.round(rate * 0.26);
   const out = new Float32Array(n);
   const r = noise(7);
-  const bp = bandpass(rate), lp = bandpass(rate);
-  let soft = 0;
+  const bp = bandpass(rate);
+  let a = 0, b = 0;
+  // two one-pole low-passes (~900 Hz, then ~600 Hz): only the breath is left
+  const ka = 1 - Math.exp((-2 * Math.PI * 900) / rate);
+  const kb = 1 - Math.exp((-2 * Math.PI * 600) / rate);
   for (let i = 0; i < n; i++) {
     const t = i / n;
-    const env = smooth(Math.min(1, t / 0.3)) * Math.pow(1 - t, 2);
-    // a wide band that rises a little, then a one-pole low-pass takes the edge off
-    const x = bp(r(), 1300 + 900 * t, 0.6) + 0.35 * lp(r(), 700, 0.7);
-    soft += (x - soft) * 0.35;
-    out[i] = soft * env;
+    const env = Math.sin(Math.PI * Math.pow(t, 0.7)) ** 2;
+    const x = bp(r(), 700 + 400 * Math.sin(Math.PI * t), 0.5);
+    a += (x - a) * ka;
+    b += (a - b) * kb;
+    out[i] = b * env;
   }
   return out;
 }

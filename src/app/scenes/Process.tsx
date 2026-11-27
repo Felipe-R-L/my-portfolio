@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { pageTop, registerBeats } from "../journey/beats";
@@ -9,6 +9,7 @@ import { useJourneyMode } from "../journey/useJourneyMode";
 import { SCROLL } from "../motion/tokens";
 import { clamp01 } from "../scroll/math";
 import { useLeave } from "../journey/useLeave";
+import { sound } from "../audio/sound";
 import "./Process.css";
 
 /** The four shots, in order. Prose: `plano.steps.<id>`; no step promises a deadline. */
@@ -44,6 +45,13 @@ export function Process() {
   const lineRef = useRef<HTMLDivElement>(null);
   const [reached, setReached] = useState(mode === "list" ? STEPS.length - 1 : 0);
   const reachedRef = useRef(reached);
+  // a shot reached is a frame taken: the shutter; going back, a soft tick
+  const heard = useRef(reached);
+  useEffect(() => {
+    if (reached === heard.current) return;
+    sound.play(reached > heard.current ? "frame" : "tick", { volume: 0.8 });
+    heard.current = reached;
+  }, [reached]);
 
   // Never left half done (scroll/glide.ts): T4's pull-back to the first
   // stop, and the marker between two stops.

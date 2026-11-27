@@ -19,7 +19,7 @@ export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; vo
       "a gentle breeze, wind 4", mario1298 via Freesound) */
   wind: { src: media("wind-loop.mp3"), loop: true, volume: 0.35 },
   /** a chapter's card coming up beside the portrait: paper swiped */
-  card: { synth: "card", volume: 0.22 },
+  card: { synth: "card", volume: 0.18 },
   /** the portrait moving aside for the chapters: a card slid off a table */
   slide: { synth: "slide", volume: 0.2 },
   /** the portrait settling into its frame: a shutter */

@@ -10,6 +10,7 @@ import { SCROLL } from "../motion/tokens";
 import { ScrollTrigger } from "../scroll/gsap";
 import { clamp01 } from "../scroll/math";
 import { useJourneyMode } from "../journey/useJourneyMode";
+import { sound } from "../audio/sound";
 import "./Work.css";
 
 /** Share of a destination's scroll spent arriving; the rest holds still. */
@@ -52,6 +53,13 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
   const [current, setCurrent] = useState(0);
   const currentRef = useRef(0);
   currentRef.current = current;
+  // the next project sliding into place
+  const heard = useRef(current);
+  useEffect(() => {
+    if (current === heard.current) return;
+    sound.play("slide", { pan: current > heard.current ? 0.25 : -0.25 });
+    heard.current = current;
+  }, [current]);
 
   // The keyboard reaches every project, not only the one on stage: focusing a
   // project that is not showing takes the page to where it rests, mid-hold.
