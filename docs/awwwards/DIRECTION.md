@@ -15,35 +15,55 @@ precisa ser impecável).
 ## Conceito: o site inteiro rodado em Diamante 400
 
 O portfólio é um filme. Diamante, na Calábria, terra do tataravô do Felipe, é
-o plano de abertura e o nome da película ("DIAMANTE 400"). O vínculo é visual (o
-carimbo, o corte origem → hoje, o retorno no fim); o único texto sobre ele é
-uma linha discreta no rodapé do Contato.
+o plano de abertura e o nome da película ("DIAMANTE 400"). O vínculo é visual
+(o carimbo, o voo sobre a cidade, o mar que leva ao retrato, o retorno no
+fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
 
-- **A cor conta a viagem.** Diamante abre em cor e perde a cor quando o
-  retrato abre (o hoje). O meio da página fica em preto e branco e a cor só
-  aparece no foco: capítulo ativo, hover, plano alcançado, o retrato sob o
-  cursor. No Contato a cor volta inteira.
-- **Nunca cor inventada.** Só a cor real da foto ou o azul #9fc3d6, acento
-  único. Sem dourado, sem paleta de ilustração.
+- **A cor.** Diamante abre em cor. **O retrato agora é colorido** (Felipe,
+  2026-11-27: o preto e branco não combinou com a onda). O resto do meio da
+  página continua com a regra antiga até ele decidir: preto e branco, com
+  cor só no foco (capítulo ativo, hover, plano alcançado); no Contato a cor
+  volta inteira. Ver "Em aberto".
+- **Nunca cor inventada.** Só a cor real da foto ou do vídeo e o azul
+  #9fc3d6, acento único. Sem dourado, sem paleta de ilustração. Ajuste de
+  tom do mar na edição é permitido (ele pediu).
 - **Uma película:** a mesma granulação na página toda; a marca de borda
   "FRL 2026 · DIAMANTE 400 · 0N" sob o título de cada capítulo; o quadro que
   atravessa a página é a câmera.
-- **Fecho:** o Contato termina em Diamante (quando o vídeo licenciado chegar,
-  o último quadro dele vira o fundo do Contato).
+- **Fecho:** o Contato termina em Diamante: o fundo é o último quadro do voo
+  do hero (feito em awwwards 20).
+
+## O hero (awwwards 20 e 21)
+
+1. **Diamante.** Voo de drone que recua da cidade velha até a costa inteira
+   ao pôr do sol (Storyblocks 348598577, Francesco Rinaldi), tocado uma vez a
+   1,5× (15 s) e parado na vista larga. Primeiro quadro = pôster e LCP (um
+   arquivo por aparelho); no celular, corte vertical e sombra mais alta sob o
+   texto. Nome em duas linhas (Cormorant, "Rodrigues" em itálico) e o
+   carimbo de viagem.
+2. **O mar** (`src/app/components/hero/SeaWash.tsx`, WebGL). No trecho da
+   rolagem que era a janela no rosto (OPEN_FROM..OPEN_TO da cena), a onda
+   sobe de baixo sobre Diamante e o nome, cobre a tela e recua deixando o
+   retrato colorido. A água é o clipe Storyblocks 355192518 (espuma subindo
+   sobre mar fundo, filmado na vertical, master ProRes 4K), com tom puxado
+   para verde-azulado. A borda é desenhada (linha orgânica animada + faixa de
+   espuma viva) e logo abaixo dela fica sempre a parte mais densa da espuma
+   do vídeo. Na água rasa perto da borda, o que está por baixo (o quadro do
+   vídeo de Diamante, depois o retrato) aparece refratado e escurecido; à
+   frente da onda a terra fica na sombra; atrás dela, na volta, o retrato
+   fica molhado e seca. Câmera: Diamante mergulha (escala), o nome sobe num
+   plano mais próximo (−14vh) até a água levar, o retrato sai da água 12%
+   mais perto e assenta. Tudo reversível pela rolagem.
+3. O retrato para; depois vira o quadro que vai para o lado com a História,
+   como antes.
+- **Movimento reduzido:** sem mar; o retrato simplesmente aparece.
+- Removidos: a janela no rosto, o pincel de cor no retrato (`LiquidReveal`) e
+  o traço automático de cor (awwwards 16), porque o retrato já é colorido.
+- Prévias de laboratório (fora do git): `public/assets/sb/wave-immersive.html`
+  (a aprovada) e `wave-preview.html` (as tentativas anteriores).
 
 ## Decisões fechadas
 
-- Hero: nome em duas linhas, Cormorant Garamond, "Rodrigues" em itálico,
-  sólido sobre Diamante. (2026-11-27) A passagem para o retrato deixa de ser
-  a janela no rosto: o mar chega e lava o hero, uma onda só, guiada pela
-  rolagem e reversível; a onda leva a cor, e quando recua fica o retrato em
-  preto e branco. Prévia antes de entrar no site. Movimento reduzido: dissolve.
-- Retrato em preto e branco: ao parar, um traço curto de cor cruza o rosto
-  uma vez sozinho e evapora (mostra que reage ao cursor e ao toque).
-- Som: desligado por padrão, botão discreto na nav. Música bem baixa ao
-  fundo, sonoplastia da onda, dos cards e do quadro. Nada toca sozinho.
-- Mídia de Diamante: clipes aéreos do Storyblocks (assinatura do Felipe);
-  publicar com a assinatura ativa e guardar o comprovante.
 - Carimbo de viagem no hero: "Benvenuti a Diamante · Città dei murales e del
   peperoncino", pimenta, coordenadas.
 - Tipografia: Cormorant Garamond nos títulos, EB Garamond no corpo (peso 450,
@@ -53,17 +73,37 @@ uma linha discreta no rodapé do Contato.
   (Construção) é ilustração; projeto real só no plano 4, e não o Dallas Sync.
 - Sem métricas inventadas; texto em PT e EN com a voz do Felipe
   (skill `writing-as-felipe`).
-- Mídia de banco só para o cenário de Diamante; nunca para o Felipe ou os
-  projetos. Prévias sem licença (`public/assets/story/_test-*`) nunca entram
-  em commit.
+- Linha sobre o tataravô: só no rodapé do Contato (awwwards 19): "Diamante,
+  na Calábria, foi a terra do meu tataravô."
+- Som (awwwards 17): desligado por padrão, botão discreto na nav, escolha
+  lembrada no aparelho. Música bem baixa ao fundo; sonoplastia da onda, dos
+  cards e do quadro; nada toca sozinho. Motor em `src/app/audio/`; os cues
+  em `cues.ts` ficam mudos até ter arquivo.
+- Mídia de banco: Storyblocks (assinatura do Felipe, plano com acesso total
+  desde 2026-11-27, inclui áudio). Pode ser de outro lugar que não a Itália
+  quando for só textura (o mar). Nunca para o Felipe ou os projetos.
+  Publicar com a assinatura ativa e guardar o comprovante.
+- Mídia licenciada nunca entra no git: o repositório `Felipe-R-L/my-portfolio`
+  é público. Tudo fica em `public/assets/sb/` (excluído por
+  `.git/info/exclude`); os masters ficam em `~/Videos/storyblocks-diamante/`.
+  Prévias sem licença (`public/assets/story/_test-*`) também nunca entram.
 
-## Pendente do Felipe (o loop não decide)
+## Em aberto (decisão do Felipe)
 
-- Hospedagem da mídia do Storyblocks: o repositório é público, então os
-  arquivos (`public/assets/sb/`) ficam fora do git; antes do deploy, decidir
-  onde servi-los (repo privado, Vercel Blob ou similar).
-- Músicas do Storyblocks: o MCP não lê as pastas dele; ele passa os nomes ou
-  baixa.
-- Linha sobre o tataravô: no rodapé do Contato, aprovada (awwwards 19).
-- Galeria "Fora do código" com fotos e filmes dele.
+- **A regra de cor depois do retrato colorido:** o meio da página continua
+  em preto e branco com cor no foco, ou a cor fica em tudo? Afeta História,
+  Como funciona e o "plano alcançado".
+- **Detalhes de Diamante no resto da página** (proposta, não aprovada): as
+  coordenadas de Diamante na marca de borda; o mar voltando como transição
+  para o Contato; o som do mar baixinho sob a música. Sem pimenta, mural ou
+  ilustração fora do hero.
+- **Hospedagem da mídia** antes de qualquer deploy: repo privado, Vercel
+  Blob ou similar. Hoje um deploy sairia sem os vídeos.
+- **Músicas:** o MCP do Storyblocks não lê as pastas nem os favoritos dele;
+  ele passa os nomes ou baixa.
+- **Galeria "Fora do código":** fotos dele, sem tratamento. O Google Fotos
+  não é acessível daqui; ele coloca numa pasta `portfolio` no Google Drive ou
+  numa pasta local.
+- **Kit de submissão:** a descrição ainda fala do "quadro que abre no meu
+  rosto" e do preto e branco; precisa ser reescrita na voz dele.
 - Conta PRO, contatos para votar, data do envio.

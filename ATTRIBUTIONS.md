@@ -54,6 +54,14 @@ Files committed to this repository (latin subset, from Google Fonts):
   for the web (1.5x speed, phone crop), first and last frames as stills.
   These files are kept out of this public repository and hosted separately.
 
+## The sea in the hero (Storyblocks)
+
+- `public/assets/sb/rise-*`: Storyblocks 355192518 ("Vitality of blue energy
+  and clear ocean water. Powerful stormy sea waves in top-down drone
+  perspective"), licensed through Felipe's subscription (2026-11-27). A 7.5 s
+  stretch, colour graded towards teal, played forwards then backwards. Kept
+  out of this public repository.
+
 ## Photographs of Diamante (Wikimedia Commons, no longer on the page)
 
 - `public/assets/story/torrione-2000.webp`, `public/assets/story/torrione-tall-980.webp`:

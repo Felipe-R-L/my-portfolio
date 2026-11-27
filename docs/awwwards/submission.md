@@ -10,14 +10,16 @@ formulário mudam; confira na página de envio antes de preencher.
 - **Tipo:** portfólio pessoal (o Awwwards não aceita templates).
 - **Quando:** uma segunda de manhã (horário europeu), segunda quinzena de
   janeiro de 2027, com o build final publicado (os jurados avaliam ao vivo).
-- **Thumbnail principal:** 1600 × 1200 px (FAQ do Awwwards). Provisórias em
-  `.loop/submission/*-1600x1200.png`; refazer depois do vídeo do drone,
-  porque o hero vai mudar.
+- **Thumbnail principal:** 1600 × 1200 px (FAQ do Awwwards). As provisórias
+  em `.loop/submission/*-1600x1200.png` são do hero antigo: refazer com o
+  voo e o mar (um quadro com a onda na metade da tela rende bem).
 
 ## Descrição
 
-Pede o seu OK antes de usar: o texto conta, para o júri, a origem de
-Diamante, que o site não conta em lugar nenhum.
+**Desatualizada (2026-11-27):** fala do quadro que abre no rosto e do preto
+e branco, e o hero agora é o voo de Diamante e o mar que leva ao retrato
+colorido. Reescrever na voz do Felipe (skill `writing-as-felipe`). A origem
+de Diamante pode ser citada: o site já diz numa linha do Contato.
 
 ### PT
 Sou desenvolvedor fullstack e faço sites, lojas virtuais e sistemas para pequenos e médios negócios, e este portfólio foi pensado como um filme, em que o quadro que abre no meu rosto atravessa a página inteira e vira a câmera de cada capítulo, da minha história aos projetos e ao contato.
@@ -32,8 +34,8 @@ The opening shot is Diamante, the Calabrian town my great-great-grandfather came
 
 ## Tags sugeridas
 
-Portfolio, Storytelling, Typography, Scrolling, Transitions, Black & White,
-Photography, Film, Animation, Interaction Design.
+Portfolio, Storytelling, Typography, Scrolling, Transitions, WebGL, Video,
+Photography, Film, Animation, Interaction Design, Sound.
 
 ## Cores
 
@@ -57,14 +59,18 @@ Tailwind CSS 4, Vercel.
 ## Créditos
 
 - Design e desenvolvimento: Felipe Rodrigues Leone.
-- Fotos de Diamante: Eugenio Magurno (CC BY-SA 3.0) e Lorenzo Caputo James
-  (CC BY-SA 4.0), via Wikimedia Commons; logo do IFSP em domínio público.
-- Vídeo do hero: clipe de drone licenciado (Getty Images), quando a compra
-  sair; acrescentar o crédito que a licença pedir.
+- Vídeo aéreo de Diamante (hero e fundo do Contato): Francesco Rinaldi,
+  via Storyblocks (348598577).
+- O mar do hero: Storyblocks 355192518 (licença da assinatura; sem crédito
+  obrigatório, mas citar no kit não custa).
+- Logo do IFSP em domínio público.
 
 ## Checklist antes de enviar
 
-- [ ] Vídeo do drone licenciado no hero e o último quadro no fundo do Contato.
+- [x] Vídeo do drone licenciado no hero e o último quadro no fundo do Contato.
+- [ ] Mídia do Storyblocks hospedada fora do repo público, com a assinatura
+      ativa na data do envio.
+- [ ] Descrição reescrita para o hero novo.
 - [ ] Galeria "Fora do código", se entrar.
 - [ ] Thumbnails refeitas com o hero final.
 - [ ] Lighthouse em produção (celular e desktop) e axe sem violações.

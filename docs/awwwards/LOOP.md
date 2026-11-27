@@ -24,47 +24,51 @@ aprovada, e você não a muda.
 | `.loop/notes/NNN.md` | crítico | **nunca o construtor** |
 | `.loop/log/NNN.md` | construtor | Felipe: o que mudou, a causa, como foi conferido |
 | `.loop/QUESTIONS.md` | construtor | Felipe |
-| `.loop/hero-media-test.patch` | (já existe) | ninguém mexe: é o teste de mídia do hero, volta quando o vídeo chegar |
+| `.loop/tools/*.mjs` | construtor | ferramentas de verificação (axe, teclado, responsivo, `herowave2.mjs` para a onda com a roda do mouse) |
 
 **Regra de ouro: o construtor nunca abre `.loop/notes/`.** O defeito chega
 como retângulo vermelho, sem texto. Deduzir o problema faz parte do trabalho.
 
 ## O plano (só o que não depende do Felipe)
 
+Feito até awwwards 21: captura nos três modos, acessibilidade (axe 0,
+teclado), performance (~95 celular, 98 desktop), SEO e sitemap, responsivo
+(360 a 1920, toques de 44 px), coesão, rascunho do kit, botão de som, a
+linha do tataravô, o voo de Diamante no hero e no Contato, e o mar levando
+ao retrato colorido.
+
 Um passo por iteração, na ordem. Um passo só termina quando o que ele pede
-está feito **e** conferido no navegador.
+está feito **e** conferido no navegador (a onda, com
+`node .loop/tools/herowave2.mjs 1440 900 d`, que gira a roda uma vez e tira
+prints ao longo do tempo; `scrollTo` direto não serve, a rolagem guiada
+leva a página para outro lugar).
 
-1. **Captura completa.** `scripts/loop/scenes.json` e `shoot.mjs` ainda acham
-   seletores que não existem no celular e no movimento reduzido ("missing
-   target"). Faça toda cena ser capturada nos três modos. Corrigir seletor
-   vale; tirar cena para o crítico ver menos, não.
-2. **Acessibilidade (meta: nenhuma falha).** axe-core em desktop, celular e
-   reduzido; caminho inteiro só no teclado (ordem, foco visível, nada preso
-   em pin, o case abre e fecha pelo teclado, Esc fecha); nomes acessíveis;
-   contraste AA em todo texto, inclusive sobre foto; `prefers-reduced-motion`
-   respeitado em tudo que se mexe.
-3. **Performance.** Lighthouse no build de produção (`pnpm build && pnpm
-   preview`), celular e desktop: performance ≥ 95, CLS 0, LCP no celular
-   < 2,5 s, sem JS não usado evitável, imagens no tamanho certo, fontes com
-   preload certo. Conferir também com rede lenta (Slow 4G) que a primeira
-   tela não fica vazia.
-4. **Semântica e SEO.** `lang` e hreflang PT/EN, títulos e descrições, JSON-LD
-   `Person` e `WebSite`, sitemap e robots coerentes, um `h1`, hierarquia de
-   títulos sem pulo, links com destino claro, páginas de case e blog também.
-5. **Responsivo.** Toda cena em 360, 390, 430, 768, 1024, 1280, 1440 e 1920 de
-   largura, e celular deitado. Nada estoura, nada corta texto, nenhum toque
-   menor que 44 px.
-6. **Coesão.** O que ainda destoa de `DIRECTION.md` no site: cor fora da
-   regra, elemento que não fala a língua da película, ritmo e espaçamento
-   desiguais entre capítulos. Só ajustes dentro da direção.
-7. **Kit de submissão (rascunho).** `docs/awwwards/submission.md`: título,
-   descrição curta em PT e EN na voz do Felipe (use a skill
-   `writing-as-felipe` e rode o `checar-voz.py`), tags, cores, fontes,
-   tecnologias, créditos de imagem, e a lista de thumbnails exigidas pelo
-   Awwwards com os tamanhos. Gere as thumbnails provisórias em
-   `.loop/submission/` (o hero ainda vai trocar de mídia). Nada é enviado.
+1. **Ritmo da onda.** Hoje um giro da roda toca a passagem inteira em ~1,5 s
+   (a passagem de `registerPassages` tem `duration: 3.4`, mas a distância
+   encurta o tempo). Meta: a subida e a volta lidas com calma, ~3 s no total
+   num giro, sem travar quem rola rápido. No celular, conferir com o toque.
+2. **Acabamento da onda.** A faixa branca da borda é regular demais: torná-la
+   irregular (espessura e brilho variando, respingos soltos à frente). Água
+   funda longe da crista sem cara de borrão no celular. Conferir no
+   ultrawide (3440×1440) e no celular deitado.
+3. **Peso da mídia.** O mar tem 48 MB (desktop) e 25 MB (celular); o voo,
+   5 MB. Meta: o mar abaixo de ~8 MB por aparelho (trecho menor, AV1 ou VP9
+   com fallback H.264, bitrate pensado para a tela) e carregado só depois do
+   primeiro quadro, sem atrasar o LCP. Os pôsteres em WebP abaixo de 200 KB.
+   Lighthouse de novo depois.
+4. **Captura e testes do hero novo.** `scripts/loop/scenes.json`: as cenas
+   02-encontro e 02-quadro eram da janela; trocar por cenas da onda (subindo,
+   cobrindo, recuando) e do retrato parado. Teste unitário mínimo do
+   `SeaWash` (não monta com movimento reduzido; canvas some fora da faixa).
+5. **Som.** Com o plano de áudio do Storyblocks: escolher e baixar a
+   sonoplastia (onda subindo e recuando, card, quadro, mar baixinho) e
+   ligar os cues em `src/app/audio/cues.ts`, com volume baixo e sem tocar
+   sozinho. A música espera os nomes que o Felipe escolher.
+6. **Coesão com o retrato colorido.** Só o que não depende da decisão de cor
+   (ver "Em aberto" em DIRECTION.md): o quadro que vai para o lado com a
+   História e o T1 continuam certos com a foto colorida?
 
-Depois do passo 7, as iterações só corrigem o que o crítico marcar, até a
+Depois do passo 6, as iterações só corrigem o que o crítico marcar, até a
 parada.
 
 ## Uma iteração
@@ -104,7 +108,7 @@ parada.
    > ritmo e alinhamento; desktop e celular incoerentes; texto inventado ou
    > com jargão; algo que um jurado de Usabilidade ou do Developer Award
    > puniria. Não marque gosto pessoal que contradiga DIRECTION.md. Não
-   > marque a ausência da galeria nem a mídia provisória do hero.
+   > marque a ausência da galeria nem a falta de som.
    >
    > Rode `python3 scripts/loop/mark.py .loop/notes/<NNN>.md .loop/shots/<NNN> .loop/inbox/<NNN>`
    > e responda só `bloqueia=N importante=N detalhe=N`.
@@ -148,7 +152,7 @@ A promessa só sai quando uma dessas duas condições for verdadeira.
 - Ler `.loop/notes/` sendo o construtor.
 - Ajustar crítico, `mark.py` ou o `shoot.mjs` para marcar menos.
 - Pular portões, desativar testes, crescer `detector-baseline.txt`.
-- Mexer em `.loop/hero-media-test.patch`, commitar `public/assets/story/_test-*`
-  ou qualquer asset sem licença.
+- Commitar qualquer coisa de `public/assets/sb/` (mídia licenciada, repo
+  público), `public/assets/story/_test-*` ou asset sem licença.
 - Abrir o `.env` ou imprimir a chave do OpenRouter; gastar crédito do
   OpenRouter.
