@@ -59,7 +59,8 @@
 .plano-edge {
   position: absolute;
   left: calc(-100% / (var(--stops) - 1) / 2);
-  bottom: 0.9rem;
+  /* clear of the marker, which rides the line half its height above it */
+  bottom: 1.6rem;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size-adjust: none;
   font-size: 0.68rem;
@@ -335,6 +336,103 @@
 .shot-doc .m { width: 84%; }
 .shot-doc .s { width: 62%; }
 .shot-doc .xs { width: 40%; }
+
+/* shot 3: a page going up in stages. Built blocks are solid, the rest are
+   still dashed outlines; when the marker reaches the shot the next ones fill
+   in, one after the other, and the stage bar at the foot advances. */
+.shot-build {
+  position: absolute;
+  inset: 0.6rem 0.8rem 0.55rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.4rem;
+}
+
+.shot-bar {
+  display: flex;
+  gap: 0.22rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px 4px 0 0;
+  background: #161b22;
+}
+
+.shot-bar i {
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  background: rgb(245 247 255 / 0.22);
+}
+
+.shot-page {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 0.45fr 1.2fr 1fr 0.4fr;
+  gap: 0.3rem;
+  margin-top: -0.4rem;
+  padding: 0.4rem;
+  border-radius: 0 0 4px 4px;
+  background: #0f1318;
+}
+
+.shot-page .b {
+  border-radius: 3px;
+  border: 1px dashed rgb(159 195 214 / 0.35);
+  background: transparent;
+  transition: background-color 0.5s var(--ease-arrive), border-color 0.5s var(--ease-arrive);
+}
+
+.shot-page .nav { grid-column: 1 / -1; }
+.shot-page .hero { grid-column: 1 / -1; }
+.shot-page .foot { grid-column: 1 / -1; }
+
+/* already built before the marker arrives */
+.shot-page .nav,
+.shot-page .hero {
+  border-color: transparent;
+  background: rgb(245 247 255 / 0.14);
+}
+
+.shot-page .hero {
+  background: linear-gradient(120deg, rgb(159 195 214 / 0.55), rgb(159 195 214 / 0.18));
+}
+
+/* built as the shot is reached, one after the other */
+.step[data-reached="true"] .shot-page :is(.c1, .c2, .c3) {
+  border-color: transparent;
+  background: rgb(245 247 255 / 0.12);
+}
+
+.step[data-reached="true"] .shot-page .c2 { transition-delay: 0.25s; }
+.step[data-reached="true"] .shot-page .c3 { transition-delay: 0.5s; }
+
+.shot-stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+}
+
+.shot-stages i {
+  height: 0.22rem;
+  border-radius: 0.11rem;
+  background: rgb(245 247 255 / 0.14);
+  transition: background-color 0.5s var(--ease-arrive);
+}
+
+.shot-stages i:nth-child(-n + 2) {
+  background: var(--diamante);
+}
+
+.step[data-reached="true"] .shot-stages i:nth-child(3) {
+  background: var(--diamante);
+  transition-delay: 0.75s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shot-page .b,
+  .shot-stages i {
+    transition: none;
+  }
+}
 
 .step-n {
   font-family: var(--ui);

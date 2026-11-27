@@ -41,10 +41,9 @@ describe('como funciona (plano)', () => {
     expect([...c.querySelectorAll('.step-title')].map((n) => n.textContent)).toEqual(STEPS.map((id) => `plano.steps.${id}.title`))
     expect(c.querySelectorAll('.plano-stop').length).toBe(STEPS.length)
     expect(c.querySelector('section#process')?.getAttribute('data-journey')).toBe('plano')
-    // shots 3 and 4 show two different projects, never the same one twice
-    const imgs = [...c.querySelectorAll('.step-shot img')].map((i) => i.getAttribute('src'))
-    expect(imgs).toHaveLength(2)
-    expect(new Set(imgs).size).toBe(2)
+    // only the last shot shows a real project; the build is an illustration
+    expect(c.querySelectorAll('.step-shot img')).toHaveLength(1)
+    expect(c.querySelector('.step:nth-child(3) .shot-build')).not.toBeNull()
   })
 
   it('starts with only the first stop reached, and with reduced motion shows every step reached', () => {

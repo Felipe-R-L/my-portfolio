@@ -15,12 +15,9 @@ import "./Process.css";
 export const STEPS = ["talk", "proposal", "build", "live"] as const;
 type Step = (typeof STEPS)[number];
 
-/** The two shots that show real work, each a different project (Felipe,
-    2026-11-26: Dallas Sync in both read as monotonous). */
-const SHOT_IMAGES: Partial<Record<Step, string>> = {
-  build: "/assets/projects/secret-720.webp",
-  live: "/assets/projects/dallas-720.webp",
-};
+/** The last shot is the only one with a real project in it (Felipe,
+    2026-11-26): the site is live. */
+const LIVE_IMAGE = "/assets/projects/dallas-720.webp";
 
 /** The frame, pulled all the way back: the "you are here" marker. 16:10. */
 const MARKER = { w: 56, h: 35 };
@@ -31,7 +28,7 @@ const MARKER_SRC = FRAME_CONTENTS.find((c) => c.id === "offline")!.image.src;
  * Como funciona: what working together looks like, as four shots on a strip
  * of film ("plano" is also a camera shot). Each frame holds something real:
  * the message the site's WhatsApp button writes, the outline of a written
- * proposal, a store being built and a site that is live.
+ * proposal, a page being built block by block and a site that is live.
  *
  * T4, from the destinations: the camera pulls back. The frame shrinks from the front
  * desk's screen to a small marker that lands on the start of a line with three
@@ -229,12 +226,38 @@ export function Process() {
           <span className="xs" />
         </div>
       );
+    if (id === "build")
+      // a page going up in stages: the blocks already built are solid, the
+      // rest still dashed, and they fill in once the marker reaches the shot
+      return (
+        <div className="shot-build" aria-hidden="true">
+          <span className="shot-bar">
+            <i />
+            <i />
+            <i />
+          </span>
+          <span className="shot-page">
+            <span className="b nav" />
+            <span className="b hero" />
+            <span className="b c1" />
+            <span className="b c2" />
+            <span className="b c3" />
+            <span className="b foot" />
+          </span>
+          <span className="shot-stages">
+            <i />
+            <i />
+            <i />
+            <i />
+          </span>
+        </div>
+      );
     return (
       <>
-        <img src={SHOT_IMAGES[id]} alt="" loading="lazy" decoding="async" width={720} height={450} />
+        <img src={LIVE_IMAGE} alt="" loading="lazy" decoding="async" width={720} height={450} />
         <span className="shot-chip">
-          {id === "live" && <i aria-hidden="true" />}
-          {t(`plano.steps.${id}.chip`)}
+          <i aria-hidden="true" />
+          {t("plano.steps.live.chip")}
         </span>
       </>
     );
