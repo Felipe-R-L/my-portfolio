@@ -19,11 +19,15 @@
   color: var(--paper-ink);
 }
 
-/* The light floor, on its own so it can rise under the picture (T2). */
+/* The light floor, on its own so it can rise under the picture (T2). Not a
+   target for the pointer: a wheel or a trackpad over a fixed box scrolls
+   the page (locked), not the layer, so the margins beside the column did
+   not scroll at all. */
 .case-ground {
   position: fixed;
   inset: 0;
   background: var(--paper);
+  pointer-events: none;
 }
 
 .case-sheet {

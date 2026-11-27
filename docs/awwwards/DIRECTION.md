@@ -20,10 +20,10 @@ o plano de abertura e o nome da película ("DIAMANTE 400"). O vínculo é visual
 fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
 
 - **A cor.** Diamante abre em cor. **O retrato agora é colorido** (Felipe,
-  2026-11-27: o preto e branco não combinou com a onda). O resto do meio da
-  página continua com a regra antiga até ele decidir: preto e branco, com
-  cor só no foco (capítulo ativo, hover, plano alcançado); no Contato a cor
-  volta inteira. Ver "Em aberto".
+  2026-11-27: o preto e branco não combinou com a onda). O meio da página
+  fica em preto e branco revelando o card atual (decidido 2026-11-27): cor
+  só no foco (capítulo ativo, hover, plano alcançado); no Contato a cor
+  volta inteira.
 - **Nunca cor inventada.** Só a cor real da foto ou do vídeo e o azul
   #9fc3d6, acento único. Sem dourado, sem paleta de ilustração. Ajuste de
   tom do mar na edição é permitido (ele pediu).
@@ -36,8 +36,8 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   funciona a mesma onda do hero sobe, cobre a tela e recua deixando o
   convite sobre Diamante, a foto dele já ao lado (`TalkSea.tsx`). A página
   atravessa até o Contato enquanto a tela está coberta (passagem `under`
-  no glide). Só no desktop com rolagem guiada; no celular o Contato segue
-  como estava.
+  no glide). Só no desktop (decidido 2026-11-27); no celular o Contato
+  segue como estava.
 
 ## O hero (awwwards 20 e 21)
 
@@ -104,7 +104,8 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   ele: Amore al Mare (Grand_Project), Bossa Nova Soulful (andriih) e
   Nostalgic Folk No. 3 (Sonican). O motor de um barco ao longe ("Distant
   small boat returning to marina", freesound_community, Pixabay) acompanha o
-  barco do voo de Diamante (volume 0,2, abaixado a pedido). Som ambiente só o vento (o "wind 4" abafado):
+  barco do voo de Diamante (volume 0,2, abaixado a pedido). Todos os sons
+  aprovados por ele de ouvido (2026-11-27). Som ambiente só o vento (o "wind 4" abafado):
   sobre a vista aérea de Diamante e, mais baixo, sob a música no resto da
   página. Sem mar ambiente (Felipe, 2026-11-27: soava como água num
   balde). O canto superior esquerdo é o único botão do
@@ -139,13 +140,6 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
 
 ## Em aberto (decisão do Felipe)
 
-- **A regra de cor depois do retrato colorido:** o meio da página continua
-  em preto e branco com cor no foco, ou a cor fica em tudo? Afeta História,
-  Como funciona e o "plano alcançado".
-- **O mar no celular:** a onda antes do Contato e o voo da nav são só do
-  desktop (o celular rola livre, sem passagens). Levar ou não.
-- **Sons escolhidos pelo construtor sem ouvir** (motor do barco; reservas
-  em `.loop/QUESTIONS.md`): o Felipe confirma de ouvido.
 - **Galeria "Fora do código":** fotos dele, sem tratamento, num álbum
   compartilhado do Google Fotos chamado "Portfolio" (o link fica em
   `.loop/QUESTIONS.md`, fora do git). Ele ainda vai acrescentar fotos e quer

@@ -62,6 +62,11 @@ aqui fica o que foi feito e o que quebrou no caminho.
 - Mar ambiente tirado (soava como balde); só vento (abafado e mais baixo)
   e música. Barco a 0,2. (44, 47, 50)
 
+## Detalhes dos projetos
+- **Laterais não rolavam com o touchpad:** o fundo claro da camada é
+  `position: fixed`, e a roda sobre um elemento fixo rola a página (travada),
+  não a camada. Fundo sem ponteiro. (52)
+
 ## Película e capítulos
 - Marca de borda sob o título em todos os capítulos, com as coordenadas de
   Diamante numa linha própria. (41, 42, 43)
