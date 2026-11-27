@@ -83,6 +83,10 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   desde 2026-11-27, inclui áudio). Pode ser de outro lugar que não a Itália
   quando for só textura (o mar). Nunca para o Felipe ou os projetos.
   Publicar com a assinatura ativa e guardar o comprovante.
+- **Detalhes de Diamante no resto da página** (aprovado em 2026-11-27,
+  inclusive o som): as coordenadas de Diamante na marca de borda; o mar
+  voltando como transição para o Contato; o som do mar baixinho sob a
+  música. Sem pimenta, mural ou ilustração fora do hero.
 - Mídia licenciada nunca entra no git: o repositório `Felipe-R-L/my-portfolio`
   é público. Tudo fica em `public/assets/sb/` (excluído por
   `.git/info/exclude`); os masters ficam em `~/Videos/storyblocks-diamante/`.
@@ -93,17 +97,21 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
 - **A regra de cor depois do retrato colorido:** o meio da página continua
   em preto e branco com cor no foco, ou a cor fica em tudo? Afeta História,
   Como funciona e o "plano alcançado".
-- **Detalhes de Diamante no resto da página** (proposta, não aprovada): as
-  coordenadas de Diamante na marca de borda; o mar voltando como transição
-  para o Contato; o som do mar baixinho sob a música. Sem pimenta, mural ou
-  ilustração fora do hero.
-- **Hospedagem da mídia** antes de qualquer deploy: repo privado, Vercel
-  Blob ou similar. Hoje um deploy sairia sem os vídeos.
+- **Hospedagem da mídia** antes de qualquer deploy: o Felipe aceita R2 ou
+  Vercel Blob se não custar nada. Recomendação: Cloudflare R2 (10 GB grátis,
+  saída sem custo) num subdomínio próprio (`media.feliperl.space`); o Blob do
+  Hobby dá 10 GB de tráfego por mês e corta o acesso por 30 dias se passar,
+  justo na semana da votação. Falta ele escolher e criar a conta/bucket.
 - **Músicas:** o MCP do Storyblocks não lê as pastas nem os favoritos dele;
   ele passa os nomes ou baixa.
-- **Galeria "Fora do código":** fotos dele, sem tratamento. O Google Fotos
-  não é acessível daqui; ele coloca numa pasta `portfolio` no Google Drive ou
-  numa pasta local.
+- **Galeria "Fora do código":** fotos dele, sem tratamento, num álbum
+  compartilhado do Google Fotos chamado "Portfolio" (o link fica em
+  `.loop/QUESTIONS.md`, fora do git). Ele ainda vai acrescentar fotos e quer
+  que o site puxe do álbum sozinho. Proposta: um script de sincronização
+  rodado à mão (`pnpm gallery:sync`) que lê o álbum, gera AVIF/WebP, sobe
+  para a hospedagem da mídia e escreve um manifesto; nada ao vivo no
+  navegador (a API do Google Fotos não lê mais álbuns de terceiros e os
+  links das imagens expiram). Quais fotos entram é decisão dele.
 - **Kit de submissão:** a descrição ainda fala do "quadro que abre no meu
   rosto" e do preto e branco; precisa ser reescrita na voz dele.
 - Conta PRO, contatos para votar, data do envio.

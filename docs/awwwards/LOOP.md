@@ -68,7 +68,13 @@ leva a página para outro lugar).
    (ver "Em aberto" em DIRECTION.md): o quadro que vai para o lado com a
    História e o T1 continuam certos com a foto colorida?
 
-Depois do passo 6, as iterações só corrigem o que o crítico marcar, até a
+7. **Detalhes de Diamante** (aprovados, ver DIRECTION.md): as coordenadas
+   de Diamante (39°40′ N · 15°49′ E, as mesmas do carimbo do hero) na marca de borda de cada capítulo; o mar
+   voltando como transição para o Contato, reaproveitando o `SeaWash` (mesma
+   água, sem clipe novo); o som do mar baixinho sob a música, junto com os
+   cues do passo 5. Movimento reduzido: sem o mar.
+
+Depois do passo 7, as iterações só corrigem o que o crítico marcar, até a
 parada.
 
 ## Uma iteração
@@ -142,7 +148,7 @@ se ajudarem, em `.loop/questions/`) e a sua recomendação; e então escreva
 
 ## Parada normal
 
-Os 7 passos feitos, `clean_streak >= 2` e portões verdes: escreva um resumo
+Os 7 passos do plano feitos, `clean_streak >= 2` e portões verdes: escreva um resumo
 em `.loop/log/FINAL.md` e `<promise>PARADA</promise>`.
 
 A promessa só sai quando uma dessas duas condições for verdadeira.
