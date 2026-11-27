@@ -574,6 +574,47 @@
 
 
 
+/* Reduced motion on a wide screen: the film strip as it is at the end of the
+   ride, the four shots side by side and lit, with no line to travel. Stacked
+   one under the other, each shot would take a screen of its own. */
+@media (min-width: 768px) {
+  .plano[data-mode="list"] .plano-route {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .plano[data-mode="list"] .plano-line,
+  .plano[data-mode="list"] .plano-rider {
+    display: none;
+  }
+
+  .plano[data-mode="list"] .steps {
+    grid-template-columns: repeat(var(--stops), minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.4vw, 1.25rem);
+    padding: 1.6rem clamp(0.75rem, 1.2vw, 1.1rem) 1.4rem;
+    background: #0b0d10;
+  }
+
+  .plano[data-mode="list"] .steps::before,
+  .plano[data-mode="list"] .steps::after {
+    display: block;
+  }
+
+  .plano[data-mode="list"] .step-shot {
+    opacity: 1;
+    filter: none;
+    outline-color: rgb(159 195 214 / 0.5);
+  }
+
+  .plano[data-mode="list"] .step-text {
+    font-size: 0.95rem;
+  }
+
+}
+
+.plano[data-mode="scroll"] .plano-edge-head {
+  display: none;
+}
+
 /* T5: the steps and the line leave as the stage lets go */
 .plano-stage .plano-title,
 .plano-stage .plano-route {

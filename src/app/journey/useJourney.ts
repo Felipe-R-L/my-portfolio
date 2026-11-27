@@ -46,7 +46,27 @@ export function useJourney(): Journey {
         }),
       );
     }
-    return () => triggers.forEach((t) => t.kill());
+    // The page keeps growing after the first layout (lazy pictures, the fonts,
+    // the story's list), which leaves every chapter's range where the page
+    // used to be: the rail then names the chapter before the one in view.
+    // When the page's height settles at a new value, measure again.
+    let height = document.documentElement.scrollHeight;
+    let timer = 0;
+    const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(() => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const h = document.documentElement.scrollHeight;
+        if (h === height) return;
+        height = h;
+        ScrollTrigger.refresh();
+      }, 250);
+    });
+    ro?.observe(document.body);
+    return () => {
+      ro?.disconnect();
+      window.clearTimeout(timer);
+      triggers.forEach((t) => t.kill());
+    };
   }, [progress]);
 
   return { active, progress };

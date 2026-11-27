@@ -287,11 +287,49 @@
   gap: 0.25rem;
 }
 
+/* Desktop: the picture beside its words, as in the moving version, instead of
+   a page-wide screenshot above them; the pictures take turns left and right. */
+@media (min-width: 900px) {
+  .dest-plain {
+    max-width: 76rem;
+    gap: 5rem;
+  }
+
+  .dest-plain .dest-card {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    column-gap: clamp(2rem, 5vw, 4.5rem);
+    align-content: center;
+  }
+
+  .dest-plain .dest-card > :not(.dest-still) {
+    grid-column: 2;
+  }
+
+  .dest-plain .dest-still {
+    grid-column: 1;
+    grid-row: 1 / span 7;
+    align-self: center;
+    margin-bottom: 0;
+  }
+
+  .dest-plain .dest-card:nth-of-type(even) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+  }
+
+  .dest-plain .dest-card:nth-of-type(even) > :not(.dest-still) {
+    grid-column: 1;
+  }
+
+  .dest-plain .dest-card:nth-of-type(even) .dest-still {
+    grid-column: 2;
+  }
+}
+
 .dest-still {
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  object-position: top center;
+  object-position: top left;
   border-radius: 14px;
   border: 1.5px solid rgb(159 195 214 / 0.4);
   margin-bottom: 1.25rem;

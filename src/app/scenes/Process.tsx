@@ -292,6 +292,8 @@ export function Process() {
               {t("plano.title")}
             </h2>
             <p className="plano-lead">{t("plano.lead")}</p>
+            {/* on the strip the print rides the line; without the ride, under the title like every chapter */}
+            <span className="edge-print plano-edge-head" aria-hidden="true">{t("journey.edge", { n: "03" })}</span>
           </header>
           <div className="plano-route">
             {/* the line the marker rides, with one stop per step */}
