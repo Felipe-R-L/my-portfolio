@@ -37,6 +37,12 @@ teclado), performance (~95 celular, 98 desktop), SEO e sitemap, responsivo
 linha do tataravô, o voo de Diamante no hero e no Contato, e o mar levando
 ao retrato colorido.
 
+Passos 1 a 5 feitos (awwwards 25 a 39, parte fora do loop, com o Felipe):
+a onda agora toca sozinha no tempo dela (tween de `sea.w`, disparado pela
+rolagem), então as cenas de meio de onda com `hold` em `scenes.json` não
+servem mais; o som, a música e o canto do som (convite, bolinha, player)
+estão prontos. Continue do passo 6.
+
 Um passo por iteração, na ordem. Um passo só termina quando o que ele pede
 está feito **e** conferido no navegador (a onda, com
 `node .loop/tools/herowave2.mjs 1440 900 d`, que gira a roda uma vez e tira
@@ -129,7 +135,11 @@ parada.
    português, para quem usa o site>`, continuando a numeração do último
    commit `awwwards`. Termine a mensagem com a linha
    `Claude-Session: https://claude.ai/code/session_01VsPyKxGUgvV3cMdzvYPPme`.
-   **Sem `Co-Authored-By`.** Nunca push, nunca deploy, nunca publicar nada.
+   **Sem `Co-Authored-By`.** Depois do commit, `git push origin
+   awwwards-polish` (o Felipe acompanha pela prévia da Vercel, liberado em
+   2026-11-27). Nunca deploy de produção, nunca publicar fora disso. Mídia
+   nova sobe antes do código que a usa (`pnpm media:push`), com nome novo
+   se for substituir um arquivo (o cache é de um ano).
 
 ## Quando parar e chamar o Felipe
 
