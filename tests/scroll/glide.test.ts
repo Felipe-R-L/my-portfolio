@@ -14,6 +14,10 @@ describe("passages", () => {
     expect(mergePassages([{ from: 0, to: 100 }, { from: 50, to: 150 }])).toEqual([{ from: 0, to: 150 }]);
   });
 
+  it("keeps the gentle curve of a passage it merges", () => {
+    expect(mergePassages([{ from: 0, to: 100, duration: 4.6, soft: true }, { from: 50, to: 150 }])).toEqual([{ from: 0, to: 150, duration: 4.6, soft: true }]);
+  });
+
   it("lets the wheel through outside a change", () => {
     expect(playTarget(list, 0, 50)).toBeNull();
     expect(playTarget(list, 250, 30)).toBeNull();

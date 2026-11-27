@@ -41,6 +41,8 @@ const FASTEST_S = 0.35;
     cubic peaks at 3x, and the camera and the cards read as a jolt. */
 const easeInOut = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
 const easeOut = (t: number) => Math.sin((t * Math.PI) / 2);
+/** Half straight, half sine: moving from the first frame, peak at 1.3x. */
+const softInOut = (t: number) => 0.5 * t + 0.5 * easeInOut(t);
 
 type Play = { passage: Passage; to: number; dir: number; start: number; dur: number; speed: number };
 
@@ -130,7 +132,7 @@ export function useSmoothScroll() {
         // speed the page arrives with, within reason
         const joined = Math.min(base, Math.max(0.6 * base, (Math.PI / 2) * (d / v)));
         run(lenis, { ...hit, dir, dur: joined }, easeOut);
-      } else run(lenis, { ...hit, dir, dur: base }, easeInOut);
+      } else run(lenis, { ...hit, dir, dur: base }, hit.passage.soft ? softInOut : easeInOut);
       return true;
     };
 

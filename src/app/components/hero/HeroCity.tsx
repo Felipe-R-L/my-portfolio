@@ -64,8 +64,11 @@ const ASIDE_LEFT = 0.05;
 
 /** The sea, over scene progress: it comes in from OPEN_FROM, covers the
     screen halfway and is gone by OPEN_TO, leaving the portrait. */
-const OPEN_FROM = 0.03;
+const OPEN_FROM = 0.01;
 const OPEN_TO = 0.42;
+/** The sea's own curve, kept soft (the same in SeaWash): the passage's
+    scroll already eases in and out. */
+const softEase = (x: number) => 0.5 * x + 0.25 * (1 - Math.cos(Math.PI * x));
 /** The exit: the photo pulls back into a framed picture in the middle of
     the dark page, and is left behind as the page scrolls on. */
 const EXIT_FROM = 0.8;
@@ -160,8 +163,8 @@ export function HeroCity() {
         wash.set(w);
         // the sea covers the screen at the middle of the wash: Diamante and
         // the name under it before, the portrait after
-        const rise = easeInOut(span(w, 0, 0.46));
-        const fall = easeInOut(span(w, 0.54, 1));
+        const rise = softEase(span(w, 0, 0.46));
+        const fall = softEase(span(w, 0.54, 1));
         const after = w >= 0.5;
 
         // The camera on the portrait: it comes out of the water a little
@@ -295,7 +298,7 @@ export function HeroCity() {
             return [
               // seconds at 1x: the camera moves are given more time than their
               // scroll length would, the eye has a lot to follow in them
-              { from: top, to: top + OPEN_TO * L, duration: 3.4 },
+              { from: top, to: top + OPEN_TO * L, duration: 4.6, soft: true },
               // the portrait holding for the colour (poured by the pointer)
               { from: top + OPEN_TO * L, to: top + EXIT_FROM * L, hold: true },
               { from: top + EXIT_FROM * L, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: 1.6 },

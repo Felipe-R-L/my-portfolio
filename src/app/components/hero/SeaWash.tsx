@@ -51,7 +51,7 @@ vec3 under(vec2 uv){
 void main(){
   vec2 uv = vec2(v.x, 1. - v.y);
   float aspect = res.x / res.y;
-  float front = after < .5 ? mix(1.18, -.30, rise) : mix(-.30, 1.18, fall);
+  float front = after < .5 ? mix(1.08, -.16, rise) : mix(-.16, 1.08, fall);
   float edge = front + (fbm(vec2(uv.x * aspect * 2.2, t * .25)) - .5) * .16
                      + sin(uv.x * aspect * 9. + t * 1.3) * .008;
   float d = uv.y - edge;                    // > 0 under water
@@ -193,7 +193,9 @@ export function SeaWash({
     const ro = new ResizeObserver(resize);
     ro.observe(stage);
 
-    const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+    // Soft: the scroll already eases the whole passage in and out, so a
+    // second steep curve here bunched the crossing into half a second.
+    const ease = (x: number) => 0.5 * x + 0.25 * (1 - Math.cos(Math.PI * x));
     const clamp = (x: number) => Math.max(0, Math.min(1, x));
     const t0 = performance.now();
     let frame = 0;

@@ -31,6 +31,10 @@ export type Passage = {
   /** How much a fast scroll speeds this change up, against the rest (1):
       0.5 takes half the gain, 1.6 takes 60% more. Its time at 1x is the same. */
   sensitivity?: number;
+  /** Played on a gentler curve: it gets moving at once and never rushes
+      the middle (the sea crossing the screen), where a plain ease-in-out
+      sat still for the first second and then swept it past in half a one. */
+  soft?: boolean;
 };
 
 type Builder = () => Passage[];
@@ -112,7 +116,8 @@ export function mergePassages(list: Passage[], gap = 2): Passage[] {
       // time from its whole length
       const duration = Math.max(last.duration ?? 0, p.duration ?? 0) || undefined;
       const sensitivity = last.sensitivity ?? p.sensitivity;
-      out[out.length - 1] = { from: last.from, to: Math.max(last.to, p.to), ...(duration ? { duration } : {}), ...(sensitivity ? { sensitivity } : {}) };
+      const soft = last.soft || p.soft;
+      out[out.length - 1] = { from: last.from, to: Math.max(last.to, p.to), ...(duration ? { duration } : {}), ...(sensitivity ? { sensitivity } : {}), ...(soft ? { soft } : {}) };
     } else out.push({ ...p });
   }
   return out;
