@@ -41,7 +41,8 @@ Passos 1 a 5 feitos (awwwards 25 a 39, parte fora do loop, com o Felipe):
 a onda agora toca sozinha no tempo dela (tween de `sea.w`, disparado pela
 rolagem), então as cenas de meio de onda com `hold` em `scenes.json` não
 servem mais; o som, a música e o canto do som (convite, bolinha, player)
-estão prontos. Continue do passo 6.
+estão prontos. Passos 6 e 7 feitos (awwwards 41 a 44): daqui em diante as
+iterações só corrigem o que o crítico marcar.
 
 Um passo por iteração, na ordem. Um passo só termina quando o que ele pede
 está feito **e** conferido no navegador (a onda, com

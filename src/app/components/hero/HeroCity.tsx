@@ -64,14 +64,14 @@ const ASIDE_CROP_R = 0.24;
 const ASIDE_CROP_B = 0.2;
 const ASIDE_LEFT = 0.05;
 
-/** Where the portrait holds after the sea (scene progress): the scroll up to
-    here is the sea's, though the sea itself plays on its own clock. */
-const OPEN_TO = 0.42;
 /** The sea starts once the page is this far down the scene, and goes back
     below half of it. */
 const SEA_START = 0.012;
 /** The whole wash, rise and fall, on its own clock (s). */
 const SEA_SECONDS = 3.6;
+/** The whole opening on desktop, from the first scroll to the portrait
+    aside as a card (s): the sea, then the framing, in one move. */
+const SEA_PASSAGE = 5.2;
 /** The exit: the photo pulls back into a framed picture in the middle of
     the dark page, and is left behind as the page scrolls on. */
 const EXIT_FROM = 0.8;
@@ -194,6 +194,9 @@ export function HeroCity() {
         if (w >= 1 && was < 1 && was > 0.6) sound.play("frame");
         const above = w < 0.5 ? 1 - seaPhase(w).rise : 0;
         sound.level("wind", above);
+        // the sea under the music comes in with the wave and stays below it
+        // (over the aerial view it was too much: only the wind there)
+        sound.level("sea", w >= 0.3 ? 1 : 0);
         sound.level("boat", boatNear * above);
         wash.set(w);
         // the sea covers the screen at the middle of the wash: Diamante and
@@ -382,10 +385,10 @@ export function HeroCity() {
             return [
               // seconds at 1x: the camera moves are given more time than their
               // scroll length would, the eye has a lot to follow in them
-              { from: top, to: top + OPEN_TO * L, duration: 1.4 },
-              // the portrait holding for the colour (poured by the pointer)
-              { from: top + OPEN_TO * L, to: top + EXIT_FROM * L, hold: true },
-              { from: top + EXIT_FROM * L, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: 1.6 },
+              // the sea and the portrait framed and moved aside: one change,
+              // no stop on the portrait alone (Felipe, 2026-11-27); the sea
+              // plays on its own clock inside it
+              { from: top, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: SEA_PASSAGE, soft: true },
               { from: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), to: at(RAIL_TRAVEL_FROM), hold: true },
               // the cards keep up with a fast scroll more than the camera does
               ...rail.map((r) => ({ ...r, duration: 1.1, sensitivity: 1.6 })),

@@ -1,0 +1,14 @@
+/* The sea before the Contato: over the page and the journey's frame (main
+   is z 10, the chapter rail 40), under the nav (50) and the sound corner. */
+.talk-sea {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+}
+.talk-sea .city-sea {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

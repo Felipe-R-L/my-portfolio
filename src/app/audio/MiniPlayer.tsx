@@ -25,12 +25,6 @@ export function MiniPlayer() {
   const on = sound.on;
   const [folded, setFolded] = useState(false);
 
-  // the sea under the music, the whole way down (only heard with the sound on)
-  useEffect(() => {
-    sound.level("sea", 1);
-    return () => sound.level("sea", 0);
-  }, []);
-
   useEffect(() => {
     if (on || folded) return;
     const check = () => window.scrollY > FOLD_AT && setFolded(true);

@@ -3,7 +3,7 @@ import Lenis from "lenis";
 import type { VirtualScrollData } from "lenis";
 
 import { gsap, ScrollTrigger } from "../scroll/gsap";
-import { durationFor, holdAhead, speedFor, holds, passages, playTarget, settleDuration, settleTarget, type Passage } from "../scroll/glide";
+import { UNDER_EVENT, underCurve, durationFor, holdAhead, speedFor, holds, passages, playTarget, settleDuration, settleTarget, type Passage } from "../scroll/glide";
 
 /** A wheel event this long after the previous one, or clearly stronger than
     it, starts a new gesture; anything else is the same gesture's tail (a
@@ -92,6 +92,7 @@ export function useSmoothScroll() {
 
     const run = (lenis: Lenis, p: Omit<Play, "start" | "speed">, easing: (t: number) => number) => {
       play = { ...p, start: performance.now(), speed: speedFor(p.passage, speed) };
+      if (p.passage.under) window.dispatchEvent(new CustomEvent(UNDER_EVENT, { detail: { dir: p.dir, seconds: p.dur } }));
       if (import.meta.env.DEV) {
         const w = window as unknown as { __glideLog?: unknown[] };
         (w.__glideLog ??= []).push({ from: Math.round(lenis.animatedScroll), to: Math.round(p.to), dur: +p.dur.toFixed(2), speed: +speedFor(p.passage, speed).toFixed(2) });
@@ -127,12 +128,12 @@ export function useSmoothScroll() {
       if (!hit) return across !== null;
       const d = Math.abs(hit.to - lenis.animatedScroll);
       const base = durationFor(hit.passage, hit.to - lenis.animatedScroll, vh()) / speedFor(hit.passage, speed);
-      if (v && v > 0) {
+      if (v && v > 0 && !hit.passage.under) {
         // an ease-out starts at pi/2 times its average speed: match the
         // speed the page arrives with, within reason
         const joined = Math.min(base, Math.max(0.6 * base, (Math.PI / 2) * (d / v)));
         run(lenis, { ...hit, dir, dur: joined }, easeOut);
-      } else run(lenis, { ...hit, dir, dur: base }, hit.passage.soft ? softInOut : easeInOut);
+      } else run(lenis, { ...hit, dir, dur: base }, hit.passage.under ? underCurve : hit.passage.soft ? softInOut : easeInOut);
       return true;
     };
 
@@ -171,6 +172,9 @@ export function useSmoothScroll() {
 
       if (play) {
         const p = play;
+        // under a cover (the sea): it runs its course, the page must not be
+        // seen moving outside it
+        if (p.passage.under) return eat();
         const left = Math.max(0, p.dur - (now - p.start) / 1000);
         // the gear taken before the revs drop: a push the same way in the
         // change's last stretch engages the next one; this one keeps its

@@ -16,13 +16,15 @@ export const CUES: Record<Cue, { src?: string; synth?: Synth; loop?: boolean; vo
   /** the sea going back off the portrait (Pixabay: "Wave on the Shore", DRAGON-STUDIO) */
   shore: { src: media("wave-out.mp3"), volume: 0.4 },
   /** a soft wind over Diamante while the hero is up, a loop (Pixabay:
-      "a gentle breeze, wind 4", mario1298 via Freesound) */
-  wind: { src: media("wind-loop.mp3"), loop: true, volume: 0.35 },
+      "a gentle breeze, wind 4", mario1298 via Freesound; low-passed and
+      quieter, its hiss read as surf over the aerial view) */
+  wind: { src: media("wind-soft.mp3"), loop: true, volume: 0.2 },
   /** a small boat far off, while the one in the flight heads out to sea: a
       loop, its level following the video (Pixabay: "Distant small boat
       returning to marina", freesound_community) */
   boat: { src: media("boat-loop.mp3"), loop: true, volume: 0.32 },
-  /** the sea, very low under the music, all the way down the page: Diamante
+  /** the sea, very low under the music, from the hero's wave on down (never
+      over the aerial view: the wind is Diamante's sound there): Diamante
       is on the coast (Pixabay: "Gentle Ocean Waves", DRAGON-STUDIO; a 40 s
       loop) */
   sea: { src: media("sea-loop.mp3"), loop: true, volume: 0.1 },

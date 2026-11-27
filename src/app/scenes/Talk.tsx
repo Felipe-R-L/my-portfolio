@@ -5,14 +5,13 @@ import { summaries } from "virtual:posts";
 import { AVAILABILITY, EMAIL, PROJECT_KINDS, whatsappHref, type ProjectKind } from "../data/contact";
 import { socialLinks } from "../data/techStack";
 import { pageTop, registerBeats } from "../journey/beats";
-import { lerpBox, type Box } from "../journey/director";
+import type { Box } from "../journey/director";
 import { useJourneyMode } from "../journey/useJourneyMode";
 import { SCROLL } from "../motion/tokens";
 import { registerPassages } from "../scroll/glide";
-import { span } from "../scroll/math";
-import { easeInOut } from "../components/hero/camera";
 import "./Talk.css";
 import { EdgePrint } from "../journey/EdgePrint";
+import { TalkSea } from "./TalkSea";
 
 /**
  * Where the frame comes to rest on a wide screen: a framed photo on the right,
@@ -25,22 +24,13 @@ function restBox(vw: number, vh: number): Box {
   return { x: vw - w - vw * 0.06, y: (vh - h) / 2, w, h };
 }
 
-/** The frame in the middle of the screen, at the size the hero left it. */
-function middleBox(vw: number, vh: number): Box {
-  const w = Math.min(vw * 0.46, vh * 0.62 * 1.6);
-  const h = w / 1.6;
-  return { x: (vw - w) / 2, y: (vh - h) / 2, w, h };
-}
-
 /**
  * Retorno: and now? The journey closes where it opened.
  *
- * T5, from the last stop of Como funciona: the marker grows into a frame in
- * the middle of the screen, already close on the skyline, and the camera
- * pulls back over the city of the opening until the corners open to the
- * whole screen. The invitation then comes in over the city, which stays
- * behind the page to its end. The visitor picks what they need and the
- * WhatsApp message is written for them.
+ * T5, from the last stop of Como funciona: the sea of the opening comes up
+ * over the page and goes back leaving the invitation over Diamante, the
+ * photo of him beside it (TalkSea). The visitor picks what they need and
+ * the WhatsApp message is written for them.
  */
 /** The proof link opens the Dallas Sync case, where the offline front desk
     and the training mode are told: as a layer over the journey, like a click
@@ -65,9 +55,9 @@ export function Talk() {
   const lang = i18n.language?.startsWith("pt") ? "pt" : "en";
 
   // T5 is never left half done (scroll/glide.ts): from the last stop, the
-  // camera pulls back over the city, the photo moves aside to the right and,
-  // in the same move, the invitation rises whole into view (it used to stop
-  // halfway, waiting for another gesture).
+  // sea comes up over the page, and under it the page crosses to the
+  // invitation, the photo already beside it (it used to be the camera
+  // pulling back over the city).
   useLayoutEffect(() => {
     if (mode !== "scroll") return;
     return registerPassages("retorno", () => {
@@ -79,8 +69,9 @@ export function Talk() {
       // to the page's end: the invitation and the footer under it are less
       // than a screen, there is nothing to stop for in between
       const to = document.documentElement.scrollHeight - vh;
-      // the closing move barely hurries: it is the last thing seen
-      return [{ from, to, duration: 2.2, sensitivity: 0.5 }];
+      // played under the sea (TalkSea): the page crosses while the screen
+      // is covered, on the sea's own time, never hurried
+      return [{ from, to, duration: 3.6, sensitivity: 0, under: true }];
     });
   }, [mode]);
 
@@ -99,20 +90,12 @@ export function Talk() {
       const plano = document.querySelector(".plano-track");
       const from = plano ? pageTop(plano) + plano.getBoundingClientRect().height - vh : pageTop(runway) - vh;
       const to = pageTop(runway) + runway.offsetHeight - vh * 0.35;
-      const len = Math.max(1, to - from);
-      const middle = middleBox(vw, vh);
       const rest = restBox(vw, vh);
+      // the frame cuts to its place beside the invitation halfway across,
+      // under the sea
+      const mid = from + (to - from) / 2;
       return [
-        {
-          content: "city",
-          start: from,
-          end: to,
-          // the marker grows into the middle frame over the first quarter
-          arrive: 0.25,
-          gesture: "rack" as const,
-          // then holds while the camera pulls back, and moves aside to rest at the end
-          slot: () => lerpBox(middle, rest, easeInOut(span((window.scrollY - from) / len, 0.72, 1))),
-        },
+        { content: "city", start: mid, end: to, arrive: 0, gesture: "cut" as const, still: true, slot: () => rest },
         // and the photo stays beside the invitation to the page's end
         { content: "city", start: to, end, arrive: 0, gesture: "cut" as const, still: true, slot: () => rest },
       ];
@@ -141,8 +124,11 @@ export function Talk() {
           />
         </div>
       ) : (
-        // where the camera pulls back over the city (T5)
-        <div ref={runwayRef} className="talk-runway" aria-hidden="true" />
+        // the stretch the sea covers (T5)
+        <>
+          <div ref={runwayRef} className="talk-runway" aria-hidden="true" />
+          <TalkSea />
+        </>
       )}
 
       <div className="talk-body">

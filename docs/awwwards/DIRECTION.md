@@ -31,7 +31,13 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   "FRL 2026 · DIAMANTE 400 · 0N" sob o título de cada capítulo; o quadro que
   atravessa a página é a câmera.
 - **Fecho:** o Contato termina em Diamante: o fundo é o último quadro do voo
-  do hero (feito em awwwards 20).
+  do hero (feito em awwwards 20). **O T5 é o mar** (Felipe, 2026-11-27,
+  opção A, no lugar do recuo sobre São Paulo): do último plano do Como
+  funciona a mesma onda do hero sobe, cobre a tela e recua deixando o
+  convite sobre Diamante, a foto dele já ao lado (`TalkSea.tsx`). A página
+  atravessa até o Contato enquanto a tela está coberta (passagem `under`
+  no glide). Só no desktop com rolagem guiada; no celular o Contato segue
+  como estava.
 
 ## O hero (awwwards 20 e 21)
 
@@ -56,8 +62,9 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
    fica molhado e seca. Câmera: Diamante mergulha (escala), o nome sobe num
    plano mais próximo (−14vh) até a água levar, o retrato sai da água 12%
    mais perto e assenta. Tudo reversível pela rolagem.
-3. O retrato para; depois vira o quadro que vai para o lado com a História,
-   como antes.
+3. Sem pausa (Felipe, 2026-11-27): no desktop, o mar recua e o retrato
+   já vira o card que vai para o lado com a História, numa passagem só
+   (`SEA_PASSAGE`, 5,2 s).
 - **Movimento reduzido:** sem mar; o retrato simplesmente aparece.
 - Removidos: a janela no rosto, o pincel de cor no retrato (`LiquidReveal`) e
   o traço automático de cor (awwwards 16), porque o retrato já é colorido.
@@ -94,7 +101,9 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   ele: Amore al Mare (Grand_Project), Bossa Nova Soulful (andriih) e
   Nostalgic Folk No. 3 (Sonican). O motor de um barco ao longe ("Distant
   small boat returning to marina", freesound_community, Pixabay) acompanha o
-  barco do voo de Diamante. O mar baixinho sob a música, a página toda:
+  barco do voo de Diamante. Sobre a vista aérea de Diamante, só um vento bem
+  suave (o "wind 4" abafado, Felipe 2026-11-27); o mar baixinho sob a
+  música entra com a onda e segue até o fim:
   "Gentle Ocean Waves" (DRAGON-STUDIO, Pixabay). O canto superior esquerdo é o único botão do
   som (saiu da nav, Felipe 2026-11-27): ao chegar, um convite ("Ligar o
   som", barras pulsando); se a pessoa rola sem ligar, vira uma bolinha no
@@ -106,7 +115,7 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   Publicar com a assinatura ativa e guardar o comprovante.
 - **Detalhes de Diamante no resto da página** (aprovado em 2026-11-27,
   inclusive o som): as coordenadas de Diamante na marca de borda (feito em awwwards 42); o mar
-  voltando como transição para o Contato; o som do mar baixinho sob a
+  voltando como transição para o Contato (awwwards 44); o som do mar baixinho sob a
   música. Sem pimenta, mural ou ilustração fora do hero.
 - Hospedagem da mídia (2026-11-27): **Cloudflare R2**, num subdomínio
   próprio (`media.feliperl.space`). O Felipe cria o bucket e põe as chaves

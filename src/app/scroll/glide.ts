@@ -35,6 +35,10 @@ export type Passage = {
       the middle (the sea crossing the screen), where a plain ease-in-out
       sat still for the first second and then swept it past in half a one. */
   soft?: boolean;
+  /** Played under something that covers the screen (the sea before the
+      Contato): the page barely moves while the cover comes up, crosses the
+      whole way while the screen is covered, and is still as it goes. */
+  under?: boolean;
 };
 
 type Builder = () => Passage[];
@@ -117,7 +121,8 @@ export function mergePassages(list: Passage[], gap = 2): Passage[] {
       const duration = Math.max(last.duration ?? 0, p.duration ?? 0) || undefined;
       const sensitivity = last.sensitivity ?? p.sensitivity;
       const soft = last.soft || p.soft;
-      out[out.length - 1] = { from: last.from, to: Math.max(last.to, p.to), ...(duration ? { duration } : {}), ...(sensitivity ? { sensitivity } : {}), ...(soft ? { soft } : {}) };
+      const under = last.under || p.under;
+      out[out.length - 1] = { from: last.from, to: Math.max(last.to, p.to), ...(duration ? { duration } : {}), ...(sensitivity !== undefined ? { sensitivity } : {}), ...(soft ? { soft } : {}), ...(under ? { under } : {}) };
     } else out.push({ ...p });
   }
   return out;
@@ -159,3 +164,15 @@ export function settleTarget(list: Passage[], y: number, dir: number, eps = 1): 
 if (import.meta.env?.DEV && typeof window !== "undefined") {
   (window as unknown as { __passages: () => Passage[] }).__passages = passages;
 }
+
+/** The curve of a passage played `under` a cover: still, then across while
+    the cover is whole (45% to 55% of the time: the sea fills the screen
+    from about 0.4 to 0.6 of its wash), then still. */
+export function underCurve(t: number): number {
+  const x = Math.max(0, Math.min(1, (t - 0.45) / 0.1));
+  return x * x * (3 - 2 * x);
+}
+
+/** Fired on window when a passage played `under` a cover starts, so the
+    cover plays with it: detail = { dir, seconds }. */
+export const UNDER_EVENT = "glide:under";

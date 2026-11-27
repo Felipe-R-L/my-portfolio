@@ -232,6 +232,8 @@ export function SeaWash({
 
     const portrait = new Image();
     portrait.decoding = "async";
+    // into WebGL, possibly from the media domain
+    portrait.crossOrigin = "anonymous";
     portrait.onload = () => {
       upload(2, T.portrait, portrait, false);
     };
