@@ -234,6 +234,8 @@ export function HeroCity() {
       };
 
       const sea = { w: 0 };
+      // the scene's progress last frame: which way the visitor is going
+      let lastP = 0;
       let seaTween: gsap.core.Tween | null = null;
       let seaTarget = 0;
       const playSea = (to: number, quick = false) => {
@@ -261,9 +263,16 @@ export function HeroCity() {
           applyWash(sea.w);
         } else {
           // started down from the top (with a little play, so a nudge at
-          // the very top doesn't flip it); back at the top, it goes back
-          if (p > SEA_START) playSea(1);
-          else if (p < SEA_START / 2) playSea(0);
+          // the very top doesn't flip it): the sea comes. Going back up, it
+          // comes for the portrait as soon as the card has opened back into
+          // it, as quick as it left it on the way down (it used to wait for
+          // the very top, the portrait alone on screen for seconds)
+          const dp = p - lastP;
+          if (p < SEA_START / 2) playSea(0);
+          else if (dp > 5e-4 && p > SEA_START) playSea(1);
+          else if (dp < -5e-4 && p < EXIT_FROM - 0.01) playSea(0);
+          else if (!seaTween && sea.w === 0 && p > EXIT_FROM) playSea(1);
+          lastP = p;
           // already on into the exit with the sea still out: finish it now
           if (p >= EXIT_FROM - 0.02 && sea.w < 1) playSea(1, true);
           if (!seaTween) applyWash(sea.w);
