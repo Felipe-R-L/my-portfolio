@@ -1,3 +1,4 @@
+import { SoundToggle } from "../../audio/SoundToggle";
 import { useEffect, useId, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Menu, X } from "lucide-react";
@@ -198,6 +199,7 @@ export function GlassNav({
             </div>
 
             <div className="flex items-center gap-3 pl-6 border-l border-white/10 h-4">
+              <SoundToggle />
               {languages.map((lang) => {
                 const isActive = activeLanguage.startsWith(lang.code);
                 return (
@@ -266,6 +268,7 @@ export function GlassNav({
               <div className="my-2 border-t border-white/10" />
 
               <div className="flex h-11 shrink-0 items-center justify-center gap-3">
+                <SoundToggle className="rounded-full" />
                 {languages.map((lang) => {
                   const isActive = activeLanguage.startsWith(lang.code);
                   return (
