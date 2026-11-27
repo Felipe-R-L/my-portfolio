@@ -39,7 +39,7 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
    ao pôr do sol (Storyblocks 348598577, Francesco Rinaldi), tocado uma vez a
    1,5× (15 s); depois o resto do mesmo voo (aproximação até a ponta, os
    telhados de cima, um barco saindo para o mar; 348598595, 348598575,
-   348598585, 48 s) e de volta ao recuo, em loop com fusões (`placeLoop.ts`). Primeiro quadro = pôster e LCP (um
+   348598585, 48 s; `diamante-rest2-*`, refeito com mais bitrate porque o barco borrava) e de volta ao recuo, em loop com fusões (`placeLoop.ts`). Primeiro quadro = pôster e LCP (um
    arquivo por aparelho); no celular, corte vertical e sombra mais alta sob o
    texto. Nome em duas linhas (Cormorant, "Rodrigues" em itálico) e o
    carimbo de viagem.
@@ -92,9 +92,12 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   **Pixabay** ("Waves Crashing" e "Wave on the Shore", DRAGON-STUDIO; "a
   gentle breeze, wind 4"); a música é uma playlist do Pixabay escolhida por
   ele: Amore al Mare (Grand_Project), Bossa Nova Soulful (andriih) e
-  Nostalgic Folk No. 3 (Sonican). Mini player no canto superior esquerdo,
-  só com o som ligado: silenciar a música e trocar de faixa (lembrados no
-  aparelho). Reserva: Vivaldi, Verão, Allegro non molto (John Harrison,
+  Nostalgic Folk No. 3 (Sonican). O motor de um barco ao longe ("Distant
+  small boat returning to marina", freesound_community, Pixabay) acompanha o
+  barco do voo de Diamante. O canto superior esquerdo é o único botão do
+  som (saiu da nav, Felipe 2026-11-27): ao chegar, um convite ("Ligar o
+  som", barras pulsando); se a pessoa rola sem ligar, vira uma bolinha no
+  mesmo lugar; ligado, é o player (desligar, faixa, próxima). Reserva: Vivaldi, Verão, Allegro non molto (John Harrison,
   CC BY-SA).
 - Mídia de banco: Storyblocks (assinatura do Felipe, plano com acesso total
   desde 2026-11-27, inclui áudio). Pode ser de outro lugar que não a Itália

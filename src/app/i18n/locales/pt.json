@@ -380,9 +380,9 @@
     }
   },
   "player": {
-    "label": "Música",
-    "mute": "Silenciar a música",
-    "unmute": "Tocar a música",
+    "on": "Ligar o som",
+    "off": "Desligar o som",
+    "label": "Som",
     "next": "Próxima música"
   }
 }

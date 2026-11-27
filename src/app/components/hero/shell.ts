@@ -67,10 +67,10 @@ export const placeHtml = () => {
   // the rest of the flight (in, over the roofs, the boat out to sea): loaded
   // while the first plays, then the two take turns (placeLoop.ts)
   `<video class="city-place-video city-place-next" data-off="" muted playsinline preload="none" aria-hidden="true" crossorigin="anonymous">` +
-  `<source media="(max-width: 768px)" src="${SB}/diamante-rest-tall-720.webm" type="video/webm">` +
-  `<source media="(max-width: 768px)" src="${SB}/diamante-rest-tall-720.mp4" type="video/mp4">` +
-  `<source src="${SB}/diamante-rest-1920.webm" type="video/webm">` +
-  `<source src="${SB}/diamante-rest-1920.mp4" type="video/mp4"></video>` +
+  `<source media="(max-width: 768px)" src="${SB}/diamante-rest2-tall-720.webm" type="video/webm">` +
+  `<source media="(max-width: 768px)" src="${SB}/diamante-rest2-tall-720.mp4" type="video/mp4">` +
+  `<source src="${SB}/diamante-rest2-1920.webm" type="video/webm">` +
+  `<source src="${SB}/diamante-rest2-1920.mp4" type="video/mp4"></video>` +
   `<div class="city-place-grain"></div>` +
   `<div class="hero-stamp">${STAMP_SVG}</div>`);
 }

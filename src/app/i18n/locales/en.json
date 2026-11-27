@@ -380,9 +380,9 @@
     }
   },
   "player": {
-    "label": "Music",
-    "mute": "Mute the music",
-    "unmute": "Play the music",
+    "on": "Turn sound on",
+    "off": "Turn sound off",
+    "label": "Sound",
     "next": "Next track"
   }
 }

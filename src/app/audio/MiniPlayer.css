@@ -1,6 +1,8 @@
 /* A small glass pill in the top-left corner, level with the nav: the one
    corner nothing on the page uses (the hero's pitch sits bottom-left, its
-   link bottom-right, the stamp top-right). The nav's material, quieter. */
+   link bottom-right, the stamp top-right). The nav's material, quieter.
+   Three states: the invitation (sound off, on arrival), the dot (sound off,
+   the visitor went on anyway), the player (sound on). */
 .mini-player {
   position: fixed;
   left: 24px;
@@ -15,7 +17,8 @@
   border-radius: 999px;
   font-family: var(--sans, ui-sans-serif, system-ui, sans-serif);
   color: rgb(255 255 255 / 0.72);
-  animation: mini-player-in 0.5s var(--ease-travel, ease) both;
+  animation: mini-player-in 0.6s var(--ease-travel, ease) both;
+  transition: padding 0.5s var(--ease-travel, ease);
 }
 .mini-player-btn {
   display: inline-flex;
@@ -48,12 +51,87 @@
 .mini-player-artist {
   color: rgb(255 255 255 / 0.55);
 }
-.mini-player[data-muted] .mini-player-track {
-  opacity: 0.55;
+
+/* ---------- off: the invitation, and the dot it folds into ---------- */
+
+.mini-player-invite {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: #fff;
+  transition: padding 0.5s var(--ease-travel, ease);
 }
+.mini-player-cta {
+  display: inline-block;
+  max-width: 12em;
+  margin-left: 10px;
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: max-width 0.5s var(--ease-travel, ease), margin 0.5s var(--ease-travel, ease),
+    opacity 0.3s;
+}
+/* a ring breathing out of the pill: there is something here to press */
+.mini-player[data-state="invite"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgb(159 195 214 / 0.55);
+  pointer-events: none;
+  animation: mini-player-ring 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.8s infinite;
+}
+.mini-player[data-state="dot"] {
+  padding: 0;
+  color: rgb(255 255 255 / 0.6);
+}
+.mini-player[data-state="dot"] .mini-player-invite {
+  justify-content: center;
+  width: 36px;
+  padding: 0;
+  color: inherit;
+}
+.mini-player[data-state="dot"] .mini-player-cta {
+  max-width: 0;
+  margin-left: 0;
+  opacity: 0;
+}
+/* the dot opens back into its words under a mouse or the keyboard */
+@media (hover: hover) {
+  .mini-player[data-state="dot"]:hover .mini-player-invite {
+    width: auto;
+    padding: 0 10px;
+    color: #fff;
+  }
+  .mini-player[data-state="dot"]:hover .mini-player-cta {
+    max-width: 12em;
+    margin-left: 10px;
+    opacity: 1;
+  }
+}
+.mini-player[data-state="dot"] .mini-player-invite:focus-visible {
+  width: auto;
+  padding: 0 10px;
+}
+.mini-player[data-state="dot"] .mini-player-invite:focus-visible .mini-player-cta {
+  max-width: 12em;
+  margin-left: 10px;
+  opacity: 1;
+}
+
 @keyframes mini-player-in {
   from { opacity: 0; transform: translateY(-6px); }
 }
+@keyframes mini-player-ring {
+  from { opacity: 1; transform: scale(1); }
+  70%, to { opacity: 0; transform: scale(1.18, 1.5); }
+}
+
 /* the phone: the same corner (its nav is the dock at the bottom), the
    artist left out */
 @media (max-width: 767px) {
@@ -62,12 +140,15 @@
     top: calc(14px + env(safe-area-inset-top, 0px));
     height: 34px;
   }
+  .mini-player[data-state="dot"] .mini-player-invite { width: 34px; }
   .mini-player-artist { display: none; }
 }
 @media (pointer: coarse) {
   .mini-player { height: 44px; }
   .mini-player-btn { width: 40px; height: 40px; }
+  .mini-player[data-state="dot"] .mini-player-invite { width: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mini-player { animation: none; }
+  .mini-player[data-state="invite"]::after { animation: none; opacity: 0; }
 }

@@ -160,6 +160,22 @@ export function HeroCity() {
       const low = front.querySelectorAll<HTMLElement>(".hero-pitch, .hero-link");
       const offLoop = reduce ? null : placeLoop(stage);
 
+      // The boat in the rest of the flight (from ~34 s to its end, 47.6 s):
+      // its engine, far off, comes up as it enters, holds, and fades as the
+      // flight dissolves back to the start. Under the sea, nothing.
+      const rest = stage.querySelector<HTMLVideoElement>(".city-place-next");
+      let boatNear = 0;
+      const onRestTime = () => {
+        const t = rest && !rest.hasAttribute("data-off") ? rest.currentTime : 0;
+        boatNear = span(t, 33.6, 36) * (1 - span(t, 45.2, 47.4));
+        const w = wash.get();
+        sound.level("boat", boatNear * (w < 0.5 ? 1 - seaPhase(w).rise : 0));
+      };
+      if (rest && !reduce) {
+        rest.addEventListener("timeupdate", onRestTime);
+        rest.addEventListener("ended", onRestTime);
+      }
+
       // The sea, by its own clock: once the visitor starts down from the
       // top it plays through on its own (rises, covers, goes back), like the
       // cards of the story and the projects; scrolling back to the top plays
@@ -168,15 +184,17 @@ export function HeroCity() {
       const applyWash = (w: number) => {
         // Sound (only with it on): the wind over Diamante, gone under the
         // sea; the wave as it starts to come in and as it goes back; a
-        // shutter once the portrait has settled.
+        // shutter once the portrait has settled. (The wave going back is
+        // played by playSea, the moment it turns.)
         const was = wash.get();
         if (!reduce) {
           if (was < 0.02 && w >= 0.02) sound.play("wave");
           if (was < 0.54 && w >= 0.54) sound.play("shore");
-          if (was > 0.46 && w <= 0.46) sound.play("wave", { volume: 0.7 });
         }
         if (w >= 1 && was < 1 && was > 0.6) sound.play("frame");
-        sound.level("wind", w < 0.5 ? 1 - seaPhase(w).rise : 0);
+        const above = w < 0.5 ? 1 - seaPhase(w).rise : 0;
+        sound.level("wind", above);
+        sound.level("boat", boatNear * above);
         wash.set(w);
         // the sea covers the screen at the middle of the wash: Diamante and
         // the name under it before, the portrait after
@@ -221,6 +239,9 @@ export function HeroCity() {
         seaTween?.kill();
         const left = Math.abs(to - sea.w);
         if (left < 1e-3) return;
+        // going back over the portrait: the wave is heard as it turns, not
+        // seconds later when the water is already halfway
+        if (to < sea.w && sea.w > 0.46) sound.play("wave", { volume: 0.7 });
         seaTween = gsap.to(sea, {
           w: to,
           duration: quick ? 0.45 * left : SEA_SECONDS * left,
@@ -417,6 +438,9 @@ export function HeroCity() {
       return () => {
         offLoop?.();
         seaTween?.kill();
+        rest?.removeEventListener("timeupdate", onRestTime);
+        rest?.removeEventListener("ended", onRestTime);
+        sound.level("boat", 0);
         ro.disconnect();
         offPassages?.();
       };

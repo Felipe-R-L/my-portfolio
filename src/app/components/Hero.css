@@ -21,6 +21,14 @@
   padding: clamp(6rem, 12vh, 9rem) var(--gutter) clamp(1.75rem, 5vh, 3.25rem);
 }
 
+/* the chapter rail sits in the left margin on desktop: the name, the rule
+   and the sentence start clear of it, like "Como funciona" does */
+@media (min-width: 768px) {
+  .hero-frame {
+    padding-left: calc(var(--gutter) + 1.5rem);
+  }
+}
+
 /* ---------- the name ---------- */
 
 .hero-name {
