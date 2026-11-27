@@ -14,14 +14,14 @@ import "./AmbientLight.css";
  * it as it crosses, and fetched only near it, never with the page (the
  * topographic map behind Como funciona left with the film-strip rewrite):
  *
- * retorno  Diamante, a white town on the Calabrian coast (Eugenio Magurno,
- *          CC BY-SA 3.0, via Wikimedia Commons; credited in the footer),
- *          behind the invitation.
+ * retorno  Diamante again, the last frame of the hero's drone shot (the
+ *          whole coast at sunset; Francesco Rinaldi, Storyblocks), so the
+ *          page ends where it began.
  */
 const SCENERY: Partial<Record<ChapterId, { src: string; srcSet: string; near: ChapterId[] }>> = {
   retorno: {
-    src: "/assets/story/diamante-c-1200.webp",
-    srcSet: "/assets/story/diamante-c-1200.webp 1200w, /assets/story/diamante-c-2400.webp 2400w",
+    src: "/assets/sb/diamante-end-1200.webp",
+    srcSet: "/assets/sb/diamante-end-1200.webp 1200w, /assets/sb/diamante-end-2400.webp 2400w",
     near: ["plano", "retorno"],
   },
 };

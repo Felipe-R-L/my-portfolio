@@ -45,7 +45,16 @@ Files committed to this repository (latin subset, from Google Fonts):
 - `public/assets/fonts/eb-garamond-latin-italic.woff2` — variable weight, used
   for the blog's running text.
 
-## Photographs of Diamante (Wikimedia Commons)
+## Aerial footage of Diamante (Storyblocks)
+
+- `public/assets/sb/diamante-aerial-*` and `public/assets/sb/diamante-end-*`:
+  "Aerial view of Diamante, a small town along the Mediterranean coastline at
+  sunset in Calabria, Italy" (Storyblocks 348598577) by Francesco Rinaldi,
+  licensed through Felipe's Storyblocks subscription (2026-11-27). Re-encoded
+  for the web (1.5x speed, phone crop), first and last frames as stills.
+  These files are kept out of this public repository and hosted separately.
+
+## Photographs of Diamante (Wikimedia Commons, no longer on the page)
 
 - `public/assets/story/torrione-2000.webp`, `public/assets/story/torrione-tall-980.webp`:
   "Diamante - Torrione di Diamante - 2024-09-08 09-00-35 001.jpg" by Lorenzo

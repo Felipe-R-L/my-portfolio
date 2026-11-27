@@ -43,14 +43,22 @@ export function nameFrontHtml(copy: ShellCopy): string {
 }
 
 /**
- * Diamante behind the name, the Torrione under a full moon (Lorenzo Caputo
- * James, CC BY-SA 4.0, chosen 2026-11-26): the photo (one file per device, so the browser
- * fetches only one), the film grain, and the travel stamp. Graded by CSS
- * (HeroCity.css). React mounts this same markup.
+ * Diamante behind the name: a drone pulling back from the old town to the
+ * whole coast at sunset (Francesco Rinaldi, Storyblocks, licensed 2026-11-27),
+ * played once at 1.5x and held on the wide view. Its first frame is the
+ * poster and the LCP image (one file per device); the video swaps in when it
+ * can play. Reduced motion keeps the still. Then the film grain and the travel
+ * stamp. Graded by CSS (HeroCity.css). React mounts this same markup.
  */
+const SB = "/assets/sb";
 export const PLACE_HTML =
-  `<picture><source media="(max-width: 768px)" srcset="/assets/story/torrione-tall-980.webp">` +
-  `<img class="city-place-photo" src="/assets/story/torrione-2000.webp" alt="" width="2000" height="1500" fetchpriority="high" decoding="async"></picture>` +
+  `<picture><source media="(max-width: 768px)" srcset="${SB}/diamante-aerial-first-tall-900.webp">` +
+  `<img class="city-place-photo" src="${SB}/diamante-aerial-first-2000.webp" alt="" width="2000" height="1125" fetchpriority="high" decoding="async"></picture>` +
+  `<video class="city-place-video" muted playsinline autoplay preload="auto" aria-hidden="true">` +
+  `<source media="(max-width: 768px)" src="${SB}/diamante-aerial-tall-720.webm" type="video/webm">` +
+  `<source media="(max-width: 768px)" src="${SB}/diamante-aerial-tall-720.mp4" type="video/mp4">` +
+  `<source src="${SB}/diamante-aerial-1920.webm" type="video/webm">` +
+  `<source src="${SB}/diamante-aerial-1920.mp4" type="video/mp4"></video>` +
   `<div class="city-place-grain"></div>` +
   `<div class="hero-stamp">${STAMP_SVG}</div>`;
 

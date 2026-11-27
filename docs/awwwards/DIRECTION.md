@@ -59,8 +59,11 @@ uma linha discreta no rodapé do Contato.
 
 ## Pendente do Felipe (o loop não decide)
 
-- Escolha dos clipes e músicas do Storyblocks (favoritos dele) e o fundo
-  do Contato a partir do vídeo. Getty descartado (preço).
+- Hospedagem da mídia do Storyblocks: o repositório é público, então os
+  arquivos (`public/assets/sb/`) ficam fora do git; antes do deploy, decidir
+  onde servi-los (repo privado, Vercel Blob ou similar).
+- Músicas do Storyblocks: o MCP não lê as pastas dele; ele passa os nomes ou
+  baixa.
 - Linha sobre o tataravô: no rodapé do Contato, aprovada (awwwards 19).
 - Galeria "Fora do código" com fotos e filmes dele.
 - Conta PRO, contatos para votar, data do envio.
