@@ -155,6 +155,9 @@ export function SeaWash({
   phone: boolean;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  // by value: a parent passing a fresh { width, height } on every render
+  // must not tear the sea down and build it again
+  const { width: portW, height: portH } = portraitSize;
 
   useEffect(() => {
     const canvas = ref.current;
@@ -287,7 +290,7 @@ export function SeaWash({
       const c = camera.get();
       gl.uniform2f(U("res"), W, H);
       gl.uniform2f(U("placeSz"), placeSz[0], placeSz[1]);
-      gl.uniform2f(U("portSz"), portraitSize.width, portraitSize.height);
+      gl.uniform2f(U("portSz"), portW, portH);
       gl.uniform2f(U("vidSz"), water.videoWidth || 1440, water.videoHeight || 2560);
       gl.uniform3f(U("cam"), c.scale * dpr, c.x * dpr, c.y * dpr);
       gl.uniform1f(U("rise"), sea.rise);
@@ -318,9 +321,11 @@ export function SeaWash({
       water.pause();
       water.removeAttribute("src");
       water.load();
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      // only once the canvas has left the page: the same canvas built again
+      // (new props) gets the same context back, and a lost one never draws
+      if (!canvas.isConnected) gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [wash, camera, portraitSrc, portraitSize, phone]);
+  }, [wash, camera, portraitSrc, portW, portH, phone]);
 
   return <canvas ref={ref} className="city-sea" aria-hidden="true" style={{ visibility: "hidden" }} />;
 }
