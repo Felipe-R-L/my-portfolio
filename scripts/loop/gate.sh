@@ -13,7 +13,9 @@ DET=$(ls -d "$HOME"/.claude/plugins/cache/impeccable/impeccable/*/skills/impecca
 FINDINGS=$("$DET" detect --json src 2>/dev/null || true)
 printf '%s' "$FINDINGS" | python3 -c "
 import json,sys
-cur={f\"{f['antipattern']} {f['file'].split('my-portfolio/')[1]}\" for f in json.load(sys.stdin)}
+import os
+root=os.getcwd().rstrip('/')+'/'
+cur={f\"{f['antipattern']} {f['file'].removeprefix(root)}\" for f in json.load(sys.stdin)}
 base=set(open('scripts/loop/detector-baseline.txt').read().split('\n'))-{''}
 new=sorted(cur-base)
 if new:
