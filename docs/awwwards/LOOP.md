@@ -44,8 +44,7 @@ Passos 1 a 5 feitos (awwwards 25 a 39, parte fora do loop, com o Felipe):
 a onda agora toca sozinha no tempo dela (tween de `sea.w`, disparado pela
 rolagem), então as cenas de meio de onda com `hold` em `scenes.json` não
 servem mais; o som, a música e o canto do som (convite, bolinha, player)
-estão prontos. Passos 6 e 7 feitos (awwwards 41 a 44): daqui em diante as
-iterações só corrigem o que o crítico marcar.
+estão prontos. Passos 6 e 7 feitos (awwwards 41 a 44). Continue do passo 8.
 
 Um passo por iteração, na ordem. Um passo só termina quando o que ele pede
 está feito **e** conferido no navegador (a onda, com
@@ -84,7 +83,31 @@ leva a página para outro lugar).
    água, sem clipe novo); o som do mar baixinho sob a música, junto com os
    cues do passo 5. Movimento reduzido: sem o mar.
 
-Depois do passo 7, as iterações só corrigem o que o crítico marcar, até a
+Passos novos (Felipe, 2026-11-27: "não testar a paciência de ninguém",
+subir a nota de Usabilidade, 30% do júri, sem perder o visual):
+
+8. **Pular animação acelerando, nunca cortando.** Um gesto durante uma
+   passagem com relógio próprio (a abertura do hero, o mar antes do
+   Contato, os cards) não é mais ignorado: no mesmo sentido, acelera o que
+   falta (o tween do mar com `timeScale` e o resto da rolagem juntos, até
+   ~0,6 s no total), mantendo cada quadro intermediário; no sentido
+   contrário, volta na hora, do ponto onde está. O mar antes do Contato só
+   acelera depois de cobrir a tela inteira (a página não pode ser vista
+   andando fora da água). Hoje `whole`/`under` em `useSmoothScroll` comem
+   todo gesto (o `return eat()` no começo do `if (play)`); é ali que entra.
+   Conferir com `.loop/tools/heroclock.mjs` e `plano3.mjs` (rolagem forte
+   e contínua) que nada aparece por cima da onda.
+9. **Abertura mais curta:** `SEA_PASSAGE` de 5,2 s para ~4 s e `SEA_SECONDS`
+   ~3 s, sem a onda parecer apressada (comparar prints em tempos fixos).
+10. **Teste às cegas** (pedir ao Felipe): 2 ou 3 pessoas que nunca viram o
+   site, de touchpad, mouse e celular, sem explicação. Onde hesitarem,
+   corrigir.
+11. **Galeria "Fora do código"** quando a coletânea dele chegar (Drive,
+   Pessoal/Mídia): escolher as melhores fotos, vídeo em trechos curtos sem
+   rosto de ninguém de frente, AVIF/WebP no R2; a seção é cena nova, então
+   prévia aprovada antes de construir.
+
+Depois dos passos, as iterações só corrigem o que o crítico marcar, até a
 parada.
 
 ## Uma iteração

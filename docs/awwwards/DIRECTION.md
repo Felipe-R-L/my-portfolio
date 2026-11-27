@@ -148,6 +148,12 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   para a hospedagem da mídia e escreve um manifesto; nada ao vivo no
   navegador (a API do Google Fotos não lê mais álbuns de terceiros e os
   links das imagens expiram). Quais fotos entram é decisão dele.
+- **Usabilidade acima de tudo** (Felipe, 2026-11-27): ele quer as
+  animações diferentes, mas sem testar a paciência de ninguém. Toda
+  animação com tempo próprio deve poder ser acelerada por um gesto e
+  desfeita a qualquer momento, sem corte visual (LOOP.md, passos 8 a 10).
+- **Galeria:** a coletânea está no Drive (Pessoal/Mídia); escolher fotos e
+  trechos de vídeo sem rostos de terceiros de frente.
 - **Kit de submissão:** a descrição ainda fala do "quadro que abre no meu
   rosto" e do preto e branco; precisa ser reescrita na voz dele.
 - Conta PRO, contatos para votar, data do envio.
