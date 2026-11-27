@@ -129,8 +129,10 @@ body.home-text::after {
     margin-block: -0.6rem;
   }
 
+  /* the footer's short links keep their even spacing: the target grows in
+     height only (they are well over 24px apart, WCAG 2.5.8) */
   .talk-foot-links a {
-    justify-content: center;
+    min-width: 0;
   }
 
   nav a,

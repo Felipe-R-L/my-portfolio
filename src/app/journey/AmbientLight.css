@@ -20,12 +20,12 @@
   opacity: 1;
 }
 
-/* Partida: the page's original light, cold from above the hero, a low warm
-   one near the bottom. */
+/* Partida: the page's original light, the site's blue from above the hero,
+   a low pale one near the bottom (no colour the film does not have). */
 .ambient--partida {
   background-image:
-    radial-gradient(80% 55% at 50% -10%, rgb(76 141 255 / 0.13), transparent 70%),
-    radial-gradient(60% 40% at 85% 110%, rgb(240 166 60 / 0.06), transparent 70%),
+    radial-gradient(80% 55% at 50% -10%, rgb(159 195 214 / 0.13), transparent 70%),
+    radial-gradient(60% 40% at 85% 110%, rgb(245 247 255 / 0.06), transparent 70%),
     linear-gradient(180deg, #07090e 0%, #050608 45%, #040406 100%);
 }
 
@@ -81,11 +81,11 @@
   }
 }
 
-/* Retorno: the dusk of the opening, warm and low, over the city. */
+/* Retorno: the dusk of the opening, pale and low, over the city. */
 .ambient--retorno {
   background-image:
-    radial-gradient(75% 50% at 50% 112%, rgb(240 166 60 / 0.1), transparent 72%),
-    radial-gradient(70% 45% at 50% -12%, rgb(76 141 255 / 0.08), transparent 70%),
+    radial-gradient(75% 50% at 50% 112%, rgb(245 247 255 / 0.1), transparent 72%),
+    radial-gradient(70% 45% at 50% -12%, rgb(159 195 214 / 0.08), transparent 70%),
     linear-gradient(180deg, #07080b 0%, #0a0806 100%);
 }
 
