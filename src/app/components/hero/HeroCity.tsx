@@ -8,7 +8,7 @@ import { useScene } from "../../scroll/useScene";
 import { RAIL_ENTER_TO, RAIL_TRAVEL_FROM, RAIL_TRAVEL_TO, Story, railStops } from "../../scenes/Story";
 import { STORY } from "../../data/story";
 import { registerPassages } from "../../scroll/glide";
-import { LiquidReveal } from "./LiquidReveal";
+import { SeaWash } from "./SeaWash";
 import { Credits, Letters, NAME } from "./HeroParts";
 import { PLACE_HTML } from "./shell";
 import { SHOT_TALL, SHOT_WIDE, cameraAt, easeInOut, type Camera } from "./camera";
@@ -22,19 +22,17 @@ import "./HeroCity.css";
  * One pinned scene, played by scrolling:
  *
  * 1. The name, solid, over Diamante (the town in Calabria the family came
- *    from): the photo graded cool and a little drained, film grain over it
- *    and a travel stamp in the corner. Only scenery: no family story.
- * 2. The name rises away and a window opens in the middle of the frame onto
- *    the rooftop portrait. It grows to the whole screen while the camera
- *    eases in, and Diamante loses its colour behind it, so the sea and the
- *    black-and-white city read as one cut.
- * 3. The photo holds and comes alive (see LiquidReveal): the pointer pours
- *    its colour back in like oil on water, and the person shifts in depth
- *    in front of the city.
+ *    from): the drone pulls back from the old town, film grain over it and a
+ *    travel stamp in the corner. Only scenery: no family story.
+ * 2. The sea comes (see SeaWash): it rises from below over the town and the
+ *    name, the camera dipping towards it and the name rising on its nearer
+ *    plane until the water takes it; it fills the screen and goes back
+ *    down, and the portrait, in colour, comes out of it and settles.
+ * 3. The photo holds.
  * 4. The exit: the picture pulls back into a framed photo in the middle of
  *    the dark page, then is left behind as the page scrolls on.
  *
- * Reduced motion: no window and no camera move; Diamante and the name give
+ * Reduced motion: no sea and no camera move; Diamante and the name give
  * way to the portrait at once.
  */
 
@@ -64,19 +62,10 @@ const ASIDE_CROP_R = 0.24;
 const ASIDE_CROP_B = 0.2;
 const ASIDE_LEFT = 0.05;
 
-/** The window onto the portrait, over scene progress: it opens from
-    nothing to WINDOW (the first stretch), then grows to the whole screen. */
+/** The sea, over scene progress: it comes in from OPEN_FROM, covers the
+    screen halfway and is gone by OPEN_TO, leaving the portrait. */
 const OPEN_FROM = 0.03;
 const OPEN_TO = 0.42;
-/** The window's size before it grows, as fractions of the viewport. */
-const WINDOW_DESKTOP = { w: 0.3, h: 0.52 };
-const WINDOW_PHONE = { w: 0.6, h: 0.42 };
-/** How close the camera starts while the window opens; it eases back to
-    the portrait's own framing as the window fills the screen. */
-const ZOOM_IN = 1.35;
-/** The colour reveal runs once the portrait fills the screen. */
-// a hair before the hold: the glide may come to rest a fraction of a pixel short of it
-const REVEAL_FROM = OPEN_TO - 0.01;
 /** The exit: the photo pulls back into a framed picture in the middle of
     the dark page, and is left behind as the page scrolls on. */
 const EXIT_FROM = 0.8;
@@ -136,7 +125,8 @@ export function HeroCity() {
 
   // Written by the scroll timeline every frame, read by the WebGL reveal.
   const camera = useMemo(() => createSignal<Camera>({ x: 0, y: 0, scale: 1 }), []);
-  const revealActive = useMemo(() => createSignal(false), []);
+  // How far the sea has come and gone (0..1), read by SeaWash.
+  const wash = useMemo(() => createSignal(0), []);
   const storyProgress = useMemo(() => createSignal(0), []);
   // On a phone, or with reduced motion, the story is a list after the scene.
   const storyInStage = !isMobile && !reduce;
@@ -153,9 +143,7 @@ export function HeroCity() {
       const frame = q<HTMLDivElement>(".city-frame");
       const place = q<HTMLDivElement>(".city-place");
       const stamp = stage.querySelector<HTMLDivElement>(".hero-stamp");
-      const win = isMobile ? WINDOW_PHONE : WINDOW_DESKTOP;
       const front = q<HTMLDivElement>(".city-front");
-      const reveal = q<HTMLCanvasElement>(".city-reveal");
       const ring = stage.querySelector<HTMLDivElement>(".city-ring");
       const frameTarget = isMobile ? FRAME_PHONE : FRAME_DESKTOP;
 
@@ -166,35 +154,34 @@ export function HeroCity() {
       // The non-linear parts: the window, the camera and the exit.
       const render = (p: number) => {
         progress = p;
-        // Reduced motion: no window. Diamante and the name hold, then the
+        // Reduced motion: no sea. Diamante and the name hold, then the
         // portrait is simply there.
-        const open = reduce ? (p < 0.23 ? 0 : 1) : span(p, OPEN_FROM, OPEN_TO);
-        // `a` opens the window from nothing, `b` grows it to the screen
-        const a = 1 - (1 - span(open, 0, 0.3)) ** 3;
-        const b = easeInOut(span(open, 0.45, 1));
-        const fw = win.w * a + (1 - win.w) * b;
-        const fh = win.h * a + (1 - win.h) * b;
-        const ix = ((1 - fw) / 2) * 100;
-        const iy = ((1 - fh) / 2) * 100;
-        const winRadius = FRAME_RADIUS * (1 - b);
+        const w = reduce ? (p < 0.23 ? 0 : 1) : span(p, OPEN_FROM, OPEN_TO);
+        wash.set(w);
+        // the sea covers the screen at the middle of the wash: Diamante and
+        // the name under it before, the portrait after
+        const rise = easeInOut(span(w, 0, 0.46));
+        const fall = easeInOut(span(w, 0.54, 1));
+        const after = w >= 0.5;
 
-        // The camera starts close on his face, held in the middle of the
-        // window, and eases back to the portrait's own framing as the window
-        // fills the screen (where the face sits higher, in the upper third).
+        // The camera on the portrait: it comes out of the water a little
+        // close and settles back to its own framing as the sea goes.
         const c0 = cameraAt(1, shot, vw, vh);
-        const z = Math.pow(ZOOM_IN, 1 - b);
+        const z = after ? 1 + 0.12 * (1 - fall) : 1.12;
         const scale = c0.scale * z;
-        const faceX = vw / 2 + (c0.x + shot.face.x * c0.scale - vw / 2) * b;
-        const faceY = vh / 2 + (c0.y + shot.face.y * c0.scale - vh / 2) * b;
-        const c = { scale, x: faceX - shot.face.x * scale, y: faceY - shot.face.y * scale };
+        const fx = c0.x + shot.face.x * c0.scale;
+        const fy = c0.y + shot.face.y * c0.scale;
+        const c = { scale, x: fx - shot.face.x * scale, y: fy - shot.face.y * scale };
         camera.set(c);
         gsap.set(photo, { x: c.x, y: c.y, scale: c.scale });
 
-        // Diamante drains behind the window and is gone once it is covered.
-        place.style.setProperty("--drain", String(b));
-        place.style.setProperty("--open", String(open));
-        place.style.visibility = b >= 1 ? "hidden" : "visible";
-        if (stamp) stamp.style.opacity = String(reduce ? (open > 0 ? 0 : 1) : 1 - span(p, 0.008, 0.07));
+        // Diamante: the camera dips towards the sea as it comes.
+        place.style.setProperty("--drain", "0");
+        place.style.setProperty("--open", String(rise));
+        place.style.visibility = after ? "hidden" : "visible";
+        front.style.visibility = after ? "hidden" : "visible";
+        if (stamp) stamp.style.opacity = String(reduce ? (w > 0 ? 0 : 1) : 1 - span(p, 0.008, 0.07));
+        frame.style.visibility = after ? "visible" : "hidden";
 
         // Phone and reduced motion: the portrait stays whole until the page
         // carries it off; shrunk to a frame it only sat alone in the dark,
@@ -203,15 +190,7 @@ export function HeroCity() {
         const sc = 1 - (1 - frameTarget) * k;
         // radius compensated for the scale, so it lands at a fixed size on screen
         const radius = sc >= 0.999 ? 0 : (FRAME_RADIUS * (1 - sc)) / (1 - frameTarget) / sc;
-        const clip = fw >= 0.999 && fh >= 0.999 ? "none" : `inset(${iy}% ${ix}% round ${winRadius}px)`;
-        gsap.set(frame, { scale: sc, borderRadius: radius, x: 0, clipPath: clip, opacity: 1 });
-
-        // The colour drains as the picture becomes a frame, so the frame that
-        // is left behind (and carried into the story) is a clean black and white.
-        reveal.style.opacity = String(1 - k);
-        // the colour can be poured as soon as the photo shows, not only
-        // once the camera has settled
-        revealActive.set(!reduce && p >= REVEAL_FROM && p < EXIT_TO);
+        gsap.set(frame, { scale: sc, borderRadius: radius, x: 0, clipPath: "none", opacity: 1 });
         front.style.pointerEvents = p > 0.04 ? "none" : "auto";
       };
 
@@ -316,7 +295,7 @@ export function HeroCity() {
             return [
               // seconds at 1x: the camera moves are given more time than their
               // scroll length would, the eye has a lot to follow in them
-              { from: top, to: top + OPEN_TO * L, duration: 1.9 },
+              { from: top, to: top + OPEN_TO * L, duration: 3.4 },
               // the portrait holding for the colour (poured by the pointer)
               { from: top + OPEN_TO * L, to: top + EXIT_FROM * L, hold: true },
               { from: top + EXIT_FROM * L, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: 1.6 },
@@ -371,8 +350,9 @@ export function HeroCity() {
         tl.fromTo(el, a, { ...b, duration: to - from, immediateRender: false }, from);
 
       if (reduce) tl.set(front, { opacity: 0 }, 0.23).set(front, { opacity: 1 }, 0);
-      else band(front, 0.006, 0.08, { opacity: 1 }, { opacity: 0 });
-      if (!reduce) band(front, 0, 0.09, { y: "0vh" }, { y: "-8vh" });
+      // the name is on a nearer plane than the town: it rises faster, and the
+      // sea takes it
+      else band(front, OPEN_FROM, OPEN_FROM + (OPEN_TO - OPEN_FROM) * 0.5, { y: "0vh" }, { y: "-14vh" });
       return () => {
         ro.disconnect();
         offPassages?.();
@@ -406,7 +386,7 @@ export function HeroCity() {
           <img
             key={shot.src}
             className="city-photo"
-            src={shot.src}
+            src={shot.color}
             alt=""
             aria-hidden="true"
             width={shot.width}
@@ -415,17 +395,7 @@ export function HeroCity() {
             decoding="async"
           />
 
-          <LiquidReveal
-            bwSrc={shot.src}
-            colorSrc={shot.color}
-            matteSrc={shot.matte}
-            width={shot.width}
-            height={shot.height}
-            camera={camera}
-            active={revealActive}
-            phone={isMobile}
-            face={shot.face}
-          />
+          {/* the portrait in colour; the sea hands it over */}
           {/* T1: the night the camera tilts up into. */}
           {storyInStage && <div className="city-night" aria-hidden="true" />}
         </div>
@@ -437,6 +407,17 @@ export function HeroCity() {
           <h1 className="sr-only">{NAME.full}</h1>
           <NameLayout />
         </div>
+
+        {/* The sea between Diamante and the portrait, over everything. */}
+        {!reduce && (
+          <SeaWash
+            wash={wash}
+            camera={camera}
+            portraitSrc={shot.color}
+            portraitSize={{ width: shot.width, height: shot.height }}
+            phone={isMobile}
+          />
+        )}
 
         {storyInStage && <Story mode="rail" progress={storyProgress} />}
       </div>
