@@ -45,3 +45,45 @@
   font-family: var(--ui);
   font-size-adjust: none;
 }
+
+/* The edge print of the film the whole page is shot on: the same line under
+   every chapter's title, the stock and the chapter's number, like the code
+   printed along a negative. */
+.edge-print {
+  display: block;
+  margin-top: 0.9rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size-adjust: none;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: rgb(159 195 214 / 0.62);
+  white-space: nowrap;
+}
+
+/* One grain over the whole page, so the photos, the product screens and the
+   dark between them read as the same film. It moves on the compositor only. */
+body.home-text::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: page-grain 0.9s steps(4) infinite;
+  will-change: transform;
+}
+
+@keyframes page-grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-2%, -1%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.home-text::after {
+    animation: none;
+  }
+}

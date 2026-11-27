@@ -336,6 +336,7 @@
     "proof_link": "See Dallas Sync working without internet"
   },
   "journey": {
+    "edge": "FRL 2026 · DIAMANTE 400 · {{n}}",
     "chapters": {
       "partida": "About",
       "destinos": "Projects",
@@ -348,7 +349,6 @@
     "title": "How it works",
     "lead": "Four shots, from the first message to the system running live, and in every one of them you talk to me directly and see what is being built.",
     "shot": "Shot {{n}}",
-    "edge": "FRL 2026 · DIAMANTE 400",
     "doc": {
       "title": "Proposal",
       "build": "What I will build",

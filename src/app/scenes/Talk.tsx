@@ -150,6 +150,7 @@ export function Talk() {
             {t("contact.title_part2")}
           </h2>
           <p className="talk-lead">{t("contact.cta_desc")}</p>
+          <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "04" })}</span>
 
           <fieldset className="talk-kinds">
             <legend className="talk-kinds-q">{t("talk.chips.prompt")}</legend>

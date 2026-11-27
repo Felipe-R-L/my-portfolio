@@ -336,6 +336,7 @@
     "proof_link": "Veja o Dallas Sync funcionando sem internet"
   },
   "journey": {
+    "edge": "FRL 2026 · DIAMANTE 400 · {{n}}",
     "chapters": {
       "partida": "Sobre",
       "destinos": "Projetos",
@@ -348,7 +349,6 @@
     "title": "Como funciona",
     "lead": "Quatro planos, do primeiro contato ao sistema no ar, e em todos eles você fala direto comigo e vê o que está sendo feito.",
     "shot": "Plano {{n}}",
-    "edge": "FRL 2026 · DIAMANTE 400",
     "doc": {
       "title": "Proposta",
       "build": "O que vou construir",

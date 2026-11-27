@@ -297,7 +297,7 @@ export function Process() {
             {/* the line the marker rides, with one stop per step */}
             <div ref={lineRef} className="plano-line" aria-hidden="true">
               {/* the thread: solid behind the marker, a soft light where it is */}
-              <span className="plano-edge">{t("plano.edge")}</span>
+              <span className="plano-edge">{t("journey.edge", { n: "03" })}</span>
               <span className="plano-fill" />
               <span className="plano-head" />
               {STEPS.map((id, i) => (

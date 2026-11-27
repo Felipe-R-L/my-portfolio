@@ -121,7 +121,7 @@
 }
 
 .story-glow {
-  fill: rgb(255 196 110 / 0.22);
+  fill: rgb(159 195 214 / 0.22);
   opacity: 0;
   transform-origin: 160px 100px;
   transform: scale(0.6);
@@ -134,28 +134,30 @@
 }
 
 /* The reveal, like the photos going from black and white to colour: the chapter
-   in focus, or under the pointer, takes its colours. */
+   in focus, or under the pointer, lights up. The site has one colour of its own,
+   the Tyrrhenian blue; an illustration lights in it and in ink, never in a
+   palette made up for the drawing. */
 .story-chapter:is([data-focus="true"], :hover) .story-media--orbit ellipse {
   stroke: rgb(159 195 214 / 0.7);
 }
 .story-chapter:is([data-focus="true"], :hover) .story-star {
-  fill: #ffd27a;
+  fill: var(--story-accent);
 }
 .story-chapter:is([data-focus="true"], :hover) .story-glow {
   opacity: 1;
   transform: scale(1);
 }
 .story-chapter:is([data-focus="true"], :hover) .story-planet--a {
-  fill: #6fb6ff;
+  fill: var(--story-accent);
 }
 .story-chapter:is([data-focus="true"], :hover) .story-planet--b {
-  fill: #ff7a59;
+  fill: var(--story-ink);
 }
 .story-chapter:is([data-focus="true"], :hover) .story-planet--c {
-  fill: #e7c36a;
+  fill: rgb(159 195 214 / 0.55);
 }
 .story-chapter:is([data-focus="true"], :hover) .story-planet--d {
-  fill: #b48cff;
+  fill: #c9d3dc;
 }
 
 .story-code {
@@ -174,22 +176,22 @@
   transition: color 0.8s ease;
 }
 
-/* the editor's colours, revealed with the chapter */
+/* the editor lights up with the chapter, in the site's blue and ink */
 .story-chapter:is([data-focus="true"], :hover) .story-code {
   color: #c9d3dc;
 }
 .story-chapter:is([data-focus="true"], :hover) .tk-type,
 .story-chapter:is([data-focus="true"], :hover) .tk-key {
-  color: #ff7ab6;
+  color: var(--story-accent);
 }
 .story-chapter:is([data-focus="true"], :hover) .tk-fn {
-  color: #7cc7ff;
+  color: var(--story-ink);
 }
 .story-chapter:is([data-focus="true"], :hover) .tk-str {
-  color: #a6e3a1;
+  color: #8fa3b3;
 }
 .story-chapter:is([data-focus="true"], :hover) .tk-num {
-  color: #f9b46b;
+  color: var(--story-accent);
 }
 
 .story-caret {
@@ -400,12 +402,12 @@
   stroke-width: 0.6;
 }
 
-.story-bg-figure--orbit .story-star { fill: #ffd27a; }
-.story-bg-figure--orbit .story-glow { fill: rgb(255 196 110 / 0.1); opacity: 1; transform: none; }
-.story-bg-figure--orbit .story-planet--a { fill: #6fb6ff; }
-.story-bg-figure--orbit .story-planet--b { fill: #ff7a59; }
-.story-bg-figure--orbit .story-planet--c { fill: #e7c36a; }
-.story-bg-figure--orbit .story-planet--d { fill: #b48cff; }
+.story-bg-figure--orbit .story-star { fill: var(--story-accent); }
+.story-bg-figure--orbit .story-glow { fill: rgb(159 195 214 / 0.1); opacity: 1; transform: none; }
+.story-bg-figure--orbit .story-planet--a { fill: var(--story-accent); }
+.story-bg-figure--orbit .story-planet--b { fill: var(--story-ink); }
+.story-bg-figure--orbit .story-planet--c { fill: rgb(159 195 214 / 0.55); }
+.story-bg-figure--orbit .story-planet--d { fill: #c9d3dc; }
 
 /* the program, run: a terminal, large, laid back in perspective */
 .story-bg-figure--terminal .story-term {
@@ -425,7 +427,7 @@
   font-weight: inherit;
 }
 
-.story-bg-figure--terminal .tm-prompt { color: #a6e3a1; }
+.story-bg-figure--terminal .tm-prompt { color: var(--story-accent); }
 .story-bg-figure--terminal .tm-out {
   color: #f2f5f8;
   font-size: 2.4em;
@@ -536,8 +538,8 @@
   transform: translateX(-220px);
 }
 
-.story-chapter:is([data-focus="true"], :hover) .story-ribbon--l { fill: #2f6fbf; }
-.story-chapter:is([data-focus="true"], :hover) .story-ribbon--r { fill: #f2c94c; }
+.story-chapter:is([data-focus="true"], :hover) .story-ribbon--l { fill: #5f8aa3; }
+.story-chapter:is([data-focus="true"], :hover) .story-ribbon--r { fill: var(--story-accent); }
 .story-chapter:is([data-focus="true"], :hover) .story-medal { filter: none; }
 .story-chapter:is([data-focus="true"], :hover) .story-shine {
   animation: story-shine 1.6s var(--ease-travel) 0.2s 1 both;

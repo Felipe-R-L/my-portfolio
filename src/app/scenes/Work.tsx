@@ -254,6 +254,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
                 {t("work.title")}
               </h2>
               <p className="dest-lead">{t("work.lead")}</p>
+              <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "02" })}</span>
             </header>
             <ol ref={listRef} className="dest-list">
               {WORK.map((w, i) => (
@@ -298,6 +299,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
               {t("work.title")}
             </h2>
             <p className="dest-lead">{t("work.lead")}</p>
+              <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "02" })}</span>
           </header>
           <div ref={slotRef} className="dest-slot" data-frame-slot="destinos" {...openOnClick}>
             <InlineFrame ids={WORK.map((w) => w.id)} current={WORK[current].id} />
@@ -319,6 +321,7 @@ export function Work({ onOpenCase }: { onOpenCase?: (item: WorkItem, from: Box |
               {t("work.title")}
             </h2>
             <p className="dest-lead">{t("work.lead")}</p>
+              <span className="edge-print" aria-hidden="true">{t("journey.edge", { n: "02" })}</span>
           </header>
           {WORK.map((w, i) => (
             <article key={w.id} className="dest-card" data-dest={w.id}>
