@@ -128,7 +128,7 @@ parada.
    `public/assets/story/`), mensagem `awwwards <N>: <o que muda, em
    português, para quem usa o site>`, continuando a numeração do último
    commit `awwwards`. Termine a mensagem com a linha
-   `Claude-Session: https://claude.ai/code/session_01VsPyKy1ofGWkLSni6T8NaK`.
+   `Claude-Session: https://claude.ai/code/session_01VsPyKxGUgvV3cMdzvYPPme`.
    **Sem `Co-Authored-By`.** Nunca push, nunca deploy, nunca publicar nada.
 
 ## Quando parar e chamar o Felipe

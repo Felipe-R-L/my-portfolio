@@ -87,6 +87,10 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   inclusive o som): as coordenadas de Diamante na marca de borda; o mar
   voltando como transição para o Contato; o som do mar baixinho sob a
   música. Sem pimenta, mural ou ilustração fora do hero.
+- Hospedagem da mídia (2026-11-27): **Cloudflare R2**, num subdomínio
+  próprio (`media.feliperl.space`). O Felipe cria o bucket e põe as chaves
+  no `.env.local` (nunca no chat nem no git). Até lá, o site lê de
+  `public/assets/sb/` no dev.
 - Mídia licenciada nunca entra no git: o repositório `Felipe-R-L/my-portfolio`
   é público. Tudo fica em `public/assets/sb/` (excluído por
   `.git/info/exclude`); os masters ficam em `~/Videos/storyblocks-diamante/`.
@@ -97,11 +101,6 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
 - **A regra de cor depois do retrato colorido:** o meio da página continua
   em preto e branco com cor no foco, ou a cor fica em tudo? Afeta História,
   Como funciona e o "plano alcançado".
-- **Hospedagem da mídia** antes de qualquer deploy: o Felipe aceita R2 ou
-  Vercel Blob se não custar nada. Recomendação: Cloudflare R2 (10 GB grátis,
-  saída sem custo) num subdomínio próprio (`media.feliperl.space`); o Blob do
-  Hobby dá 10 GB de tráfego por mês e corta o acesso por 30 dias se passar,
-  justo na semana da votação. Falta ele escolher e criar a conta/bucket.
 - **Músicas:** o MCP do Storyblocks não lê as pastas nem os favoritos dele;
   ele passa os nomes ou baixa.
 - **Galeria "Fora do código":** fotos dele, sem tratamento, num álbum
