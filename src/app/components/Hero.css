@@ -44,8 +44,11 @@
 .hero-line {
   display: block;
   overflow: hidden;
-  /* room for the rise mask */
-  padding-block: 0.04em 0.02em;
+  /* room for the rise mask, and below the line for the descenders (the g
+     of Rodrigues was cut at 0.88 line-height); the margin gives the room
+     back so the lines keep their spacing */
+  padding-block: 0.04em 0.24em;
+  margin-bottom: -0.22em;
 }
 
 .hero-line--next {

@@ -63,10 +63,14 @@ const ASIDE_CROP_R = 0.24;
 const ASIDE_CROP_B = 0.2;
 const ASIDE_LEFT = 0.05;
 
-/** The sea, over scene progress: it comes in from OPEN_FROM, covers the
-    screen halfway and is gone by OPEN_TO, leaving the portrait. */
-const OPEN_FROM = 0.01;
+/** Where the portrait holds after the sea (scene progress): the scroll up to
+    here is the sea's, though the sea itself plays on its own clock. */
 const OPEN_TO = 0.42;
+/** The sea starts once the page is this far down the scene, and goes back
+    below half of it. */
+const SEA_START = 0.012;
+/** The whole wash, rise and fall, on its own clock (s). */
+const SEA_SECONDS = 3.6;
 /** The exit: the photo pulls back into a framed picture in the middle of
     the dark page, and is left behind as the page scrolls on. */
 const EXIT_FROM = 0.8;
@@ -152,12 +156,14 @@ export function HeroCity() {
       let vh = stage.clientHeight;
       let progress = 0;
 
-      // The non-linear parts: the window, the camera and the exit.
-      const render = (p: number) => {
-        progress = p;
-        // Reduced motion: no sea. Diamante and the name hold, then the
-        // portrait is simply there.
-        const w = reduce ? (p < 0.23 ? 0 : 1) : span(p, OPEN_FROM, OPEN_TO);
+      const low = front.querySelectorAll<HTMLElement>(".hero-pitch, .hero-link");
+
+      // The sea, by its own clock: once the visitor starts down from the
+      // top it plays through on its own (rises, covers, goes back), like the
+      // cards of the story and the projects; scrolling back to the top plays
+      // it back. Everything that belongs to the wash follows `w`, not the
+      // scroll.
+      const applyWash = (w: number) => {
         // Sound (only with it on): the wind over Diamante, gone under the
         // sea; the wave as it starts to come in and as it goes back; a
         // shutter once the portrait has settled.
@@ -190,8 +196,52 @@ export function HeroCity() {
         place.style.setProperty("--open", String(rise));
         place.style.visibility = after ? "hidden" : "visible";
         front.style.visibility = after ? "hidden" : "visible";
-        if (stamp) stamp.style.opacity = String(reduce ? (w > 0 ? 0 : 1) : 1 - span(p, 0.008, 0.07));
         frame.style.visibility = after ? "visible" : "hidden";
+        if (stamp) stamp.style.opacity = String(reduce ? (w > 0 ? 0 : 1) : 1 - span(w, 0, 0.16));
+        if (reduce) {
+          front.style.opacity = w > 0 ? "0" : "1";
+        } else {
+          // the name is on a nearer plane than the town: it rises faster,
+          // and the sea takes it; the pitch and the link, low where the sea
+          // arrives first, go before its rim reaches them
+          gsap.set(front, { y: `${(-14 * easeInOut(span(w, 0, 0.5))).toFixed(3)}vh` });
+          const o = String(1 - span(w, 0, 0.14));
+          low.forEach((el) => (el.style.opacity = o));
+        }
+      };
+
+      const sea = { w: 0 };
+      let seaTween: gsap.core.Tween | null = null;
+      let seaTarget = 0;
+      const playSea = (to: number, quick = false) => {
+        if (to === seaTarget && seaTween) return;
+        seaTarget = to;
+        seaTween?.kill();
+        const left = Math.abs(to - sea.w);
+        if (left < 1e-3) return;
+        seaTween = gsap.to(sea, {
+          w: to,
+          duration: quick ? 0.45 * left : SEA_SECONDS * left,
+          ease: quick ? "power1.out" : "sine.inOut",
+          onUpdate: () => applyWash(sea.w),
+        });
+      };
+
+      // The scroll's part: when the sea starts or goes back, and the exit.
+      const render = (p: number) => {
+        progress = p;
+        if (reduce) {
+          sea.w = p < 0.23 ? 0 : 1;
+          applyWash(sea.w);
+        } else {
+          // started down from the top (with a little play, so a nudge at
+          // the very top doesn't flip it); back at the top, it goes back
+          if (p > SEA_START) playSea(1);
+          else if (p < SEA_START / 2) playSea(0);
+          // already on into the exit with the sea still out: finish it now
+          if (p >= EXIT_FROM - 0.02 && sea.w < 1) playSea(1, true);
+          if (!seaTween) applyWash(sea.w);
+        }
 
         // Phone and reduced motion: the portrait stays whole until the page
         // carries it off; shrunk to a frame it only sat alone in the dark,
@@ -309,7 +359,7 @@ export function HeroCity() {
             return [
               // seconds at 1x: the camera moves are given more time than their
               // scroll length would, the eye has a lot to follow in them
-              { from: top, to: top + OPEN_TO * L, duration: 4.6, soft: true },
+              { from: top, to: top + OPEN_TO * L, duration: 1.4 },
               // the portrait holding for the colour (poured by the pointer)
               { from: top + OPEN_TO * L, to: top + EXIT_FROM * L, hold: true },
               { from: top + EXIT_FROM * L, to: at(Math.max(ASIDE_TO, RAIL_ENTER_TO)), duration: 1.6 },
@@ -360,20 +410,10 @@ export function HeroCity() {
         },
       });
       tl.to({}, { duration: 1 }, 0);
-      const band = (el: Element | NodeListOf<Element>, from: number, to: number, a: gsap.TweenVars, b: gsap.TweenVars) =>
-        tl.fromTo(el, a, { ...b, duration: to - from, immediateRender: false }, from);
 
-      if (reduce) tl.set(front, { opacity: 0 }, 0.23).set(front, { opacity: 1 }, 0);
-      // the name is on a nearer plane than the town: it rises faster, and the
-      // sea takes it
-      else {
-        band(front, OPEN_FROM, OPEN_FROM + (OPEN_TO - OPEN_FROM) * 0.5, { y: "0vh" }, { y: "-14vh" });
-        // the pitch and the link sit low, where the sea arrives first: they
-        // go before its rim reaches them, never seen cut by the foam
-        const low = front.querySelectorAll(".hero-pitch, .hero-link");
-        if (low.length) band(low, OPEN_FROM, OPEN_FROM + (OPEN_TO - OPEN_FROM) * 0.06, { opacity: 1 }, { opacity: 0 });
-      }
+      // (the name, the pitch and the stamp follow the sea: applyWash)
       return () => {
+        seaTween?.kill();
         ro.disconnect();
         offPassages?.();
       };
