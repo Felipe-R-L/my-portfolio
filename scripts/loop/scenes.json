@@ -49,17 +49,17 @@
   },
   {
     "name": "04-destinos-00",
-    "sel": ".dest-track",
+    "sel": ".dest-track, .dest-phone, .dest-plain",
     "p": 0
   },
   {
     "name": "04-destinos-50",
-    "sel": ".dest-track",
+    "sel": ".dest-track, .dest-phone, .dest-plain",
     "p": 0.5
   },
   {
     "name": "04-destinos-100",
-    "sel": ".dest-track",
+    "sel": ".dest-track, .dest-phone, .dest-plain",
     "p": 1
   },
   {
@@ -85,13 +85,13 @@
   },
   {
     "name": "07-t5-cidade",
-    "sel": ".talk-runway",
+    "sel": ".talk-runway, .talk-photo",
     "p": 0,
     "offset": 0.3
   },
   {
     "name": "07-t5-aberto",
-    "sel": ".talk-runway",
+    "sel": ".talk-runway, .talk-photo",
     "p": 1
   },
   {

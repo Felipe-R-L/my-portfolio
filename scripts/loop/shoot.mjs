@@ -47,6 +47,8 @@ for (const run of runs) {
         const max = document.scrollingElement.scrollHeight - window.innerHeight;
         return Math.round(p * max);
       }
+      // a scene can list a selector per mode (scroll, swipe, list); the first
+      // one on the page in document order is the one this mode renders
       const el = document.querySelector(sel);
       if (!el) return null;
       // a sticky track scrolls through its own height less one screen
