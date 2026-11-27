@@ -75,7 +75,8 @@ const WINDOW_PHONE = { w: 0.6, h: 0.42 };
     the portrait's own framing as the window fills the screen. */
 const ZOOM_IN = 1.35;
 /** The colour reveal runs once the portrait fills the screen. */
-const REVEAL_FROM = OPEN_TO;
+// a hair before the hold: the glide may come to rest a fraction of a pixel short of it
+const REVEAL_FROM = OPEN_TO - 0.01;
 /** The exit: the photo pulls back into a framed picture in the middle of
     the dark page, and is left behind as the page scrolls on. */
 const EXIT_FROM = 0.8;

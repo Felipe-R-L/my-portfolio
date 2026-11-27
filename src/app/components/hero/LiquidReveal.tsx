@@ -374,6 +374,7 @@ export function LiquidReveal({
         onLeave();
         return;
       }
+      demoDone = true;
       push(...local(e.clientX, e.clientY));
     };
     const onTouch = (e: TouchEvent) => {
@@ -381,6 +382,7 @@ export function LiquidReveal({
       if (!t || !active.get() || !onPicture(t.clientX, t.clientY, e.target)) return;
       // a finger on a phone is mostly scrolling: it pours colour but does not
       // pull the depth along, or he slides against the city as the page moves
+      demoDone = true;
       push(...local(t.clientX, t.clientY), false);
     };
     function onLeave() {
@@ -407,10 +409,58 @@ export function LiquidReveal({
     const brush = phone ? BRUSH_PHONE : BRUSH_DESKTOP;
     const t0 = performance.now();
 
+    // The demonstration: the first time the portrait settles, a short stroke
+    // of colour crosses his face on its own and evaporates, so whoever has
+    // not moved a cursor yet (a phone, a screenshot) learns that it reacts.
+    // It waits for the camera to stop, since ink lands in screen space and a
+    // moving photo would smear it into a stripe, and it gives up the moment
+    // the camera moves again or a hand starts pouring.
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    const DEMO_WAIT = 0.45;
+    const DEMO_LEN = 1.1;
+    let demoDone = reduced;
+    let demoStart = -1;
+    let stillSince = -1;
+    let lastCam = "";
+    let demoInk = false;
+    const demoStep = (t: number) => {
+      if (demoDone || !hasCol) return;
+      const c = camera.get();
+      // the page moves the picture too (on a phone the camera holds while
+      // the stage scrolls by), so stillness counts both
+      const r = stage.getBoundingClientRect();
+      const key = `${c.scale.toFixed(4)},${c.x.toFixed(1)},${c.y.toFixed(1)},${r.top.toFixed(1)},${r.height.toFixed(1)}`;
+      if (key !== lastCam) {
+        lastCam = key;
+        stillSince = t;
+        if (demoStart >= 0) demoDone = true; // the photo moved mid-stroke
+        return;
+      }
+      if (demoStart < 0) {
+        if (t - stillSince >= DEMO_WAIT) demoStart = t;
+        else return;
+      }
+      const k = Math.min((t - demoStart) / DEMO_LEN, 1);
+      // an eased arc from cheek to cheek across the eyes, in the photo's pixels
+      const e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+      // across the face only: on a narrow screen a height-based span would
+      // run off his head into the sky
+      const span = Math.min(h * 0.16, w * 0.14) / c.scale;
+      const ax = face.x - span + 2 * span * e;
+      const ay = face.y + span * 0.35 - Math.sin(e * Math.PI) * span * 0.45;
+      push(c.x + ax * c.scale, c.y + ay * c.scale, false);
+      demoInk = true;
+      if (k >= 1) {
+        demoDone = true;
+        lastPt = null;
+      }
+    };
+
     const tick = (now: number) => {
       frame = 0;
       if (disposed || !running) return;
       const t = (now - t0) / 1000;
+      demoStep(t);
 
       // 1. ink field
       gl.useProgram(field.p);
@@ -422,11 +472,15 @@ export function LiquidReveal({
       gl.uniform2f(field.u("res"), fw, fh);
       gl.uniform1f(field.u("aspect"), w / h);
       gl.uniform1f(field.u("t"), t);
-      gl.uniform1f(field.u("brush"), brush);
+      // the demonstration draws with a finer brush: it pours every frame, and
+      // a finger-sized brush would flood a phone screen
+      gl.uniform1f(field.u("brush"), demoInk ? brush * (phone ? 0.5 : 0.8) : brush);
       const s = stroke as { a: [number, number]; b: [number, number] } | null;
       gl.uniform2f(field.u("a"), s ? s.a[0] : 0, s ? s.a[1] : 0);
       gl.uniform2f(field.u("b"), s ? s.b[0] : 0, s ? s.b[1] : 0);
-      gl.uniform1f(field.u("ink"), s ? 0.55 : 0);
+      // the demonstration pours every frame, slowly at its ends: a thinner ink
+      gl.uniform1f(field.u("ink"), s ? (demoInk ? 0.3 : 0.55) : 0);
+      demoInk = false;
       stroke = null;
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       read = 1 - read;
@@ -473,9 +527,8 @@ export function LiquidReveal({
       running = on;
       canvas.style.opacity = on ? "1" : "0";
       if (on) {
-        // The colour only ever goes where a cursor or a finger goes. (An
-        // automatic pour lands in screen space while the photo moves under
-        // it, and leaves a stripe across his face.)
+        // Besides the one demonstration stroke (which waits for the photo
+        // to hold still), colour only goes where a cursor or a finger goes.
         if (!frame) frame = requestAnimationFrame(tick);
       } else {
         cancelAnimationFrame(frame);
