@@ -198,7 +198,10 @@ export function renderCase({ template, item, title, description }) {
     html = set(html, new RegExp(`(<meta property="${net}:url" content=")[^"]*(")`), url)
     html = set(html, new RegExp(`(<meta property="${net}:image" content=")[^"]*(")`), image)
   }
-  return html.replace('</head>', () => `  <link rel="canonical" href="${url}" />\n  </head>`)
+  // the home's canonical and language alternates, pointed at the case
+  html = set(html, /(<link rel="canonical" href=")[^"]*(")/, url)
+  html = html.replace(/(<link rel="alternate" hreflang="[^"]+" href=")https:\/\/feliperl\.space\/(\?lng=[a-z]+)?(")/g, (_m, open, q, close) => `${open}${url}${q ?? ''}${close}`)
+  return html
 }
 
 export async function renderCases({ repoRoot, dist }) {
@@ -229,6 +232,22 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   await writeOgImages({ posts, dist, repoRoot })
 
   const cases = await renderCases({ repoRoot, dist })
+
+  // the sitemap: the home, its cases, the blog and its posts
+  const { WORK } = await import(join(repoRoot, 'src', 'app', 'data', 'work.ts'))
+  const urls = [
+    { loc: `${SITE}/` },
+    ...WORK.map((w) => ({ loc: `${SITE}/work/${w.slug}` })),
+    { loc: `${SITE}/blog` },
+    ...posts.map((p) => ({ loc: `${SITE}/blog/${p.slug}`, lastmod: p.updated ?? p.date })),
+  ]
+  writeFileSync(
+    join(dist, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+      urls.map((u) => `  <url><loc>${u.loc}</loc>${u.lastmod ? `<lastmod>${String(u.lastmod).slice(0, 10)}</lastmod>` : ''}</url>`).join('\n') +
+      `\n</urlset>\n`,
+  )
+  console.log(`  emitted sitemap.xml (${urls.length} urls)`)
 
   console.log(`\n✓ emitted ${posts.length + 1} blog routes and ${cases} case routes\n`)
 }

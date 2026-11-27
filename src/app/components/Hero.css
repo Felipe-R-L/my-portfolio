@@ -9,7 +9,9 @@
 .hero-frame {
   /* "Rodrigues Leone" spans the width; on a short screen the two lines take
      the height instead, so the credits never fall off the bottom */
-  --name-size: min(13.4vw, 17.5rem, calc((100svh - 22rem) / 1.85));
+  /* the height term keeps the name and the credits on one screen; the floor
+     keeps a phone on its side from shrinking the name to a caption */
+  --name-size: min(13.4vw, 17.5rem, max(calc((100svh - 22rem) / 1.85), 20svh));
   --ink: #f5f7ff;
   position: absolute;
   inset: 0;

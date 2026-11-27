@@ -111,3 +111,31 @@ body.home-text::after {
   outline: 2px solid var(--diamante);
   outline-offset: 3px;
 }
+
+/* Touch screens: every link and button takes at least a 44px target. The
+   inline links keep their look; the space around them grows (padding with a
+   negative margin, so the layout does not move). */
+@media (pointer: coarse) {
+  .hero-link,
+  .talk-link,
+  .talk-foot-links a,
+  .dest-link,
+  .dest-open {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding-block: 0.6rem;
+    margin-block: -0.6rem;
+  }
+
+  .talk-foot-links a {
+    justify-content: center;
+  }
+
+  nav a,
+  nav button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

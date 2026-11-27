@@ -618,31 +618,36 @@
 .plano-rider {
   position: absolute;
   left: 50%;
-  top: calc(var(--from, 0px) - 17.5px);
-  height: calc(var(--to, 100%) - var(--from, 0px) + 35px);
-  width: 56px;
-  margin-left: -28px;
+  top: calc(var(--from, 0px) - 9px);
+  height: calc(var(--to, 100%) - var(--from, 0px) + 18px);
+  width: 30px;
+  margin-left: -15px;
   pointer-events: none;
 }
 
+/* the "you are here" of the desktop's line, at a phone's size: a lit ring
+   around a dot, no picture (too small to be read) */
 .plano-marker {
   position: sticky;
-  top: calc(50svh - 17.5px);
-  display: block;
-  width: 56px;
-  height: 35px;
-  border-radius: 6px;
-  overflow: hidden;
+  top: calc(50svh - 9px);
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 18px;
+  border-radius: 999px;
   background: #05070a;
-  border: 1.5px solid rgb(159 195 214 / 0.55);
-  box-shadow: 0 8px 30px -8px rgb(159 195 214 / 0.3);
+  border: 1.5px solid rgb(159 195 214 / 0.7);
+  box-shadow: 0 0 1.4rem -0.2rem rgb(159 195 214 / 0.55);
+}
+
+.plano-marker::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--diamante);
 }
 
 .plano-marker img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  /* a marker, not a screenshot to read: no picture, only the lit frame */
-  visibility: hidden;
+  display: none;
 }

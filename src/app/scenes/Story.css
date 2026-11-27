@@ -355,9 +355,10 @@
   opacity: 0.48;
 }
 
-/* the last one, his photograph, a little nearer: it closes the story */
+/* the last one, his photograph, a little nearer: it closes the story (held
+   back enough that the chapter's words read over the buildings) */
 .story-bg-layer[data-bg="hoje"] .story-bg-img {
-  opacity: 0.5;
+  opacity: 0.32;
 }
 
 /* his sketch is line on dark already: a lighter veil, so the notes below the
@@ -625,5 +626,13 @@
   .story-list-items {
     max-width: calc(76rem - 2 * var(--gutter));
     margin-inline: auto;
+  }
+}
+
+/* A short screen (a phone on its side): no room above the portrait for the
+   title; the rail and the nav already name the chapter. */
+@media (max-height: 620px) {
+  .story-head {
+    display: none;
   }
 }

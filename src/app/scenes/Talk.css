@@ -50,7 +50,8 @@
   font-size-adjust: none;
   letter-spacing: var(--serif-track);
   font-weight: var(--serif-weight);
-  font-size: calc(clamp(3.25rem, 6vw, 6rem) * var(--serif-scale));
+  /* the same size as every chapter's title */
+  font-size: calc(clamp(2.5rem, 4.2vw, 4rem) * var(--serif-scale));
   line-height: 0.95;
   text-wrap: balance;
 }
