@@ -21,7 +21,13 @@ import type { Camera } from "./camera";
  * Where there is no sea, the canvas is clear and the page shows through.
  */
 
-const WATER = { phone: "/assets/sb/rise-1080.mp4", desktop: "/assets/sb/rise-1440.mp4" };
+/** The sea: a 7 s seamless loop (its last second dissolves into its first).
+    AV1 where the browser decodes it (about 4 MB on desktop, 2.6 MB on the
+    phone); otherwise H.264 at phone size (6.7 MB). */
+export function waterSource(phone: boolean, canPlay: (type: string) => string): string {
+  if (canPlay('video/mp4; codecs="av01.0.08M.10"')) return phone ? "/assets/sb/sea-1080.av1.mp4" : "/assets/sb/sea-1440.av1.mp4";
+  return "/assets/sb/sea-1080.h264.mp4";
+}
 
 const VERT = `#version 300 es
 in vec2 a; out vec2 v;
@@ -73,13 +79,17 @@ void main(){
   wc = mix(wc, textureLod(water, wu, 2.5).rgb * vec3(.5, .64, .68), beyond * .85);
   // refraction from the water's broad shapes: the gradient of the full
   // detail jumped pixel to pixel and showed as grain under the crest
+  // (central differences on a blurred level: screen derivatives move in 2x2
+  // blocks and broke the portrait under the shallows into squares)
+  vec2 tx = 6. / vidSz;
   float lum = dot(textureLod(water, wu, 2.).rgb, vec3(.33));
-  vec2 g = vec2(dFdx(lum), dFdy(lum));
+  vec2 g = vec2(dot(textureLod(water, wu + vec2(tx.x, 0.), 3.).rgb - textureLod(water, wu - vec2(tx.x, 0.), 3.).rgb, vec3(.33)),
+                dot(textureLod(water, wu + vec2(0., tx.y), 3.).rgb - textureLod(water, wu - vec2(0., tx.y), 3.).rgb, vec3(.33))) * .25;
   float shallow = 1. - smoothstep(0., .18, d);
-  vec3 bent = under(uv + g * 6. * shallow) * .55;
+  vec3 bent = under(uv + g * .05 * shallow) * .72;
   // where the foam hides what is under the water: from its broad shapes,
   // pixel-sharp it switched on and off pixel by pixel (grain in the shallows)
-  float foam = smoothstep(.42, .8, mix(dot(wc, vec3(.33)), lum, .75));
+  float foam = smoothstep(.38, .9, mix(dot(wc, vec3(.33)), lum, .75));
   // the foam line: its thickness and brightness drift along the crest, and
   // it breaks into lace in places instead of running as one even band
   float along = fbm(vec2(uv.x * aspect * 4.5, t * .35));
@@ -200,12 +210,21 @@ export function SeaWash({
     let disposed = false;
     const loadWater = () => {
       if (disposed || water.src) return;
-      water.src = phone ? WATER.phone : WATER.desktop;
+      water.src = waterSource(phone, (t) => water.canPlayType(t));
       water.load();
     };
-    const idle = "requestIdleCallback" in window
-      ? window.requestIdleCallback(loadWater, { timeout: 3000 })
-      : window.setTimeout(loadWater, 1500);
+    // after Diamante's own video has what it needs to play through (it is
+    // the first thing seen), or 3 s at most; a scroll into the sea before
+    // that fetches it at once (draw)
+    const placeVideo = stage.querySelector<HTMLVideoElement>(".city-place-video");
+    let idle: number | undefined;
+    const soon = () => {
+      if (idle !== undefined || disposed) return;
+      idle = "requestIdleCallback" in window ? window.requestIdleCallback(loadWater, { timeout: 2000 }) : window.setTimeout(loadWater, 300);
+    };
+    const wait = window.setTimeout(soon, 3000);
+    if (placeVideo && placeVideo.readyState < 4) placeVideo.addEventListener("canplaythrough", soon, { once: true });
+    else soon();
 
     const portrait = new Image();
     portrait.decoding = "async";
@@ -284,8 +303,12 @@ export function SeaWash({
       off();
       cancelAnimationFrame(frame);
       ro.disconnect();
-      if ("cancelIdleCallback" in window) window.cancelIdleCallback(idle as number);
-      else window.clearTimeout(idle as number);
+      window.clearTimeout(wait);
+      placeVideo?.removeEventListener("canplaythrough", soon);
+      if (idle !== undefined) {
+        if ("cancelIdleCallback" in window) window.cancelIdleCallback(idle);
+        else window.clearTimeout(idle);
+      }
       water.pause();
       water.removeAttribute("src");
       water.load();

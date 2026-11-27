@@ -44,7 +44,7 @@ describe("hero shell", () => {
     expect(html).toContain('<h1 class="sr-only">Felipe Rodrigues Leone</h1>');
     expect(html).toContain("i18nextLng");
     // Diamante and the stamp paint with the name, before any JS
-    expect(html).toContain("diamante-aerial-first-2000.webp");
+    expect(html).toContain("diamante-aerial-first-1920.webp");
     expect(html).toContain("diamante-aerial-1920.webm");
     expect(html).toContain("BENVENUTI A DIAMANTE");
     // nothing in the copy can close the inline script early

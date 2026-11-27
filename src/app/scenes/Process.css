@@ -457,8 +457,10 @@
   transition: opacity 0.5s var(--ease-travel);
 }
 
+/* a shot not reached yet waits a step back, still readable (0.6 put the
+   body text under 4.5:1 on the dark page) */
 .step[data-reached="false"] :is(.step-title, .step-text) {
-  opacity: 0.6;
+  opacity: 0.82;
 }
 
 @media (prefers-reduced-motion: reduce) {

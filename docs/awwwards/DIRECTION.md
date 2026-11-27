@@ -59,8 +59,14 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
 - **Movimento reduzido:** sem mar; o retrato simplesmente aparece.
 - Removidos: a janela no rosto, o pincel de cor no retrato (`LiquidReveal`) e
   o traço automático de cor (awwwards 16), porque o retrato já é colorido.
-- Prévias de laboratório (fora do git): `public/assets/sb/wave-immersive.html`
-  (a aprovada) e `wave-preview.html` (as tentativas anteriores).
+- Arquivos do mar: um loop de 7 s sem emenda (o último segundo funde no
+  primeiro), AV1 (`sea-1440.av1.mp4` 4 MB, `sea-1080.av1.mp4` 2,6 MB) e
+  H.264 de reserva (`sea-1080.h264.mp4` 6,7 MB). Baixado só depois que o
+  voo de Diamante tem o que tocar (ou 3 s). Pôsteres: `-first-1920.webp`
+  (197 KB) e `-first-tall-720.webp` (100 KB).
+- Prévias de laboratório e encodes antigos (fora do site e do git):
+  `~/Videos/storyblocks-diamante/web-lab/` (`wave-immersive.html` foi a
+  aprovada; abre só servida de `public/assets/sb/`).
 
 ## Decisões fechadas
 

@@ -107,7 +107,11 @@
 
 .city-place picture {
   position: absolute;
-  inset: -3%;
+  /* One pixel short of the screen, under the darkest shade: Chrome takes an
+     image that covers the whole viewport for a background and leaves it out
+     of LCP, which then fell on the pitch re-wrapping when its font arrived
+     (3.2 s on a slow phone, with the picture already there). */
+  inset: 0 0 1px 0;
   display: block;
 }
 

@@ -52,8 +52,8 @@ export function nameFrontHtml(copy: ShellCopy): string {
  */
 const SB = "/assets/sb";
 export const PLACE_HTML =
-  `<picture><source media="(max-width: 768px)" srcset="${SB}/diamante-aerial-first-tall-900.webp">` +
-  `<img class="city-place-photo" src="${SB}/diamante-aerial-first-2000.webp" alt="" width="2000" height="1125" fetchpriority="high" decoding="async"></picture>` +
+  `<picture><source media="(max-width: 768px)" srcset="${SB}/diamante-aerial-first-tall-720.webp">` +
+  `<img class="city-place-photo" src="${SB}/diamante-aerial-first-1920.webp" alt="" width="1920" height="1081" fetchpriority="high" decoding="async"></picture>` +
   `<video class="city-place-video" muted playsinline autoplay preload="auto" aria-hidden="true">` +
   `<source media="(max-width: 768px)" src="${SB}/diamante-aerial-tall-720.webm" type="video/webm">` +
   `<source media="(max-width: 768px)" src="${SB}/diamante-aerial-tall-720.mp4" type="video/mp4">` +
