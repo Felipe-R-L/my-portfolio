@@ -63,8 +63,8 @@ export function JourneyFrame() {
       box.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
       // edge and corner hold their size on screen, down to the marker's
       const inv = (1 / Math.max(scale, 0.02)).toFixed(3);
-      // pulled back to a marker, the picture is too small to read: it goes
-      // dark and grey, and the frame reads as a lit "you are here"
+      // pulled back to a marker, the picture is too small to read: it
+      // leaves, and the frame reads as a lit "you are here"
       const small = scale < 0.12 ? "true" : "false";
       if (root.dataset.small !== small) root.dataset.small = small;
       if (box.style.getPropertyValue("--inv") !== inv) box.style.setProperty("--inv", inv);

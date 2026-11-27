@@ -79,6 +79,12 @@ async function mountAppLayout() {
   await act(async () => {
     root!.render(React.createElement(AppLayout))
   })
+  // the nav comes in its own chunk (React.lazy): wait for it to mount
+  for (let i = 0; i < 50 && !container.querySelector('nav'); i++) {
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 10))
+    })
+  }
   return container
 }
 

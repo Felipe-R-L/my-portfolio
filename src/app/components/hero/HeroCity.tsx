@@ -195,7 +195,10 @@ export function HeroCity() {
         place.style.visibility = b >= 1 ? "hidden" : "visible";
         if (stamp) stamp.style.opacity = String(reduce ? (open > 0 ? 0 : 1) : 1 - span(p, 0.008, 0.07));
 
-        const k = reduce ? (p >= EXIT_FROM ? 1 : 0) : easeInOut(span(p, EXIT_FROM, EXIT_TO));
+        // Reduced motion: the portrait stays whole until the page carries it
+        // off; shrunk to a frame it only sat alone in the dark, since the
+        // story after it is a list with no place for it.
+        const k = reduce ? 0 : easeInOut(span(p, EXIT_FROM, EXIT_TO));
         const sc = 1 - (1 - frameTarget) * k;
         // radius compensated for the scale, so it lands at a fixed size on screen
         const radius = sc >= 0.999 ? 0 : (FRAME_RADIUS * (1 - sc)) / (1 - frameTarget) / sc;

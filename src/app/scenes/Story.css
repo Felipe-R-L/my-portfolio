@@ -618,3 +618,12 @@
 .story-list-head {
   margin-bottom: clamp(2.5rem, 6vh, 3.5rem);
 }
+
+/* Reduced motion on a wide screen: the same column as the chapters after it */
+@media (min-width: 768px) {
+  .story-list-head,
+  .story-list-items {
+    max-width: calc(76rem - 2 * var(--gutter));
+    margin-inline: auto;
+  }
+}

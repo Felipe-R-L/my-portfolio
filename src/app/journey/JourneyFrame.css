@@ -103,10 +103,10 @@
   box-shadow: 0 30px 120px -30px rgb(214 218 222 / 0.05);
 }
 
-/* The marker: too small for the picture to be read, so the picture steps
-   back (grey, dark) and the frame's edge carries it. It switches while the
+/* The marker: too small for the picture to be read, so the picture leaves
+   and the frame's edge alone carries it, a lit ring on the line. It switches while the
    frame is already small, so it needs no transition of its own. */
 
 .jf[data-small="true"] .jf-layer {
-  filter: grayscale(1) brightness(0.45);
+  visibility: hidden;
 }

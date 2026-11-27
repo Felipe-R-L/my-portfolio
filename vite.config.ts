@@ -72,8 +72,11 @@ export default defineConfig({
           const pkg = match?.[2] ?? match?.[1] ?? "";
 
           if (pkg === "ogl") return "webgl-libs";
-          if (pkg === "motion" || pkg === "framer-motion" || pkg === "motion-dom" || pkg === "motion-utils")
-            return "motion";
+          // motion (framer) is left to the bundler: only the nav uses it, and
+          // the nav is lazy, so it lands in the nav's own chunk, off the
+          // first paint's path (a manual chunk also pulled in a shared module
+          // that made the entry import it)
+          if (pkg === "motion" || pkg === "framer-motion" || pkg === "motion-dom" || pkg === "motion-utils") return;
           if (pkg === "lucide-react") return "lucide-react";
           if (pkg.startsWith("i18next") || pkg === "react-i18next") return "i18n";
           if (pkg === "react" || pkg === "react-dom" || pkg === "scheduler") return "react";

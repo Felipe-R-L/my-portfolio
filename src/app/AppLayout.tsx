@@ -1,11 +1,11 @@
-import type { MouseEvent } from "react";
+import { lazy, Suspense, type MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Hero } from "./components/Hero";
 import { Work } from "./scenes/Work";
 import { Process } from "./scenes/Process";
 import { Talk } from "./scenes/Talk";
-import { GlassNav, type GlassNavItem } from "./components/shared/GlassNav";
+import type { GlassNavItem } from "./components/shared/GlassNav";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 import { useFocusFollow } from "./hooks/useFocusFollow";
 import { useHashScroll } from "./hooks/useHashScroll";
@@ -17,6 +17,10 @@ import { JourneyFrame } from "./journey/JourneyFrame";
 import { useCaseRoute } from "./journey/caseRoute";
 import { CaseLayer } from "./scenes/CaseLayer";
 import { DURATION } from "./motion/tokens";
+
+// The nav enters 1.5 s after the page; it and its animation library come in
+// their own chunk, off the path of the first paint.
+const GlassNav = lazy(() => import("./components/shared/GlassNav").then((m) => ({ default: m.GlassNav })));
 
 /**
  * The homepage, for business owners: six scenes in one take. The name over
@@ -75,6 +79,7 @@ export default function AppLayout() {
       <ChapterRail variant="desk" active={journey.active} progress={journey.progress} />
 
       {/* Floating frosted navigation pill (desktop) / expanding bottom pill (mobile) */}
+      <Suspense fallback={null}>
       <GlassNav
         items={navItems}
         languages={LANGUAGES}
@@ -86,6 +91,7 @@ export default function AppLayout() {
         activeId={journey.active}
         status={<ChapterRail variant="pill" active={journey.active} progress={journey.progress} />}
       />
+      </Suspense>
 
       <main id="main" tabIndex={-1} className="relative z-10 w-full overflow-x-clip outline-none">
         {/* Each section now owns its own scroll target, so the wrapper divs that

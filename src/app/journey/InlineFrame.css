@@ -39,3 +39,10 @@
     transition: none;
   }
 }
+
+/* On a phone the frame is a few hundred pixels wide and the card under it
+   already says what the clip shows: the clip's captions would cover the
+   very screen they describe. */
+.fi .ms-cap {
+  display: none;
+}
