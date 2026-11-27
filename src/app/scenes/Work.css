@@ -231,7 +231,10 @@
   display: flex;
   gap: calc(var(--gutter) * 2);
   margin-top: 1.5rem;
-  padding: 0 var(--gutter) 0.5rem;
+  /* overflow-x clips vertically too: room below for the buttons' borders
+     and focus ring, given back by the margin */
+  padding: 0 var(--gutter) 1.5rem;
+  margin-bottom: -1rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: var(--gutter);

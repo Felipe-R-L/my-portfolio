@@ -59,18 +59,12 @@
   color: rgb(159 195 214 / 0.62);
   white-space: nowrap;
 }
-/* where the film was shot (Diamante), after the reel; its own line on a phone */
-.edge-coords::before {
-  content: " · ";
-}
-@media (max-width: 767px) {
-  .edge-coords {
-    display: block;
-    margin-top: 0.35em;
-  }
-  .edge-coords::before {
-    content: none;
-  }
+/* where the film was shot (Diamante), on a line of its own under the reel
+   (a chapter's title column can be narrow: the story's is a third of the
+   screen) */
+.edge-coords {
+  display: block;
+  margin-top: 0.35em;
 }
 
 /* One grain over the whole page, so the photos, the product screens and the
