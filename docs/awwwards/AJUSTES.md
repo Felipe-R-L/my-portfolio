@@ -54,8 +54,18 @@ aqui fica o que foi feito e o que quebrou no caminho.
 - No sentido contrário volta na hora: o hero refaz a volta de onde está; o
   mar do Contato toca a própria curva de trás para frente, a página
   atravessando de volta sob a água.
-- O mar do Contato só acelera com a tela coberta: um gesto antes espera
-  esse instante.
+- O mar do Contato acelera também enquanto sobe (antes esperava a tela
+  coberta e parecia travado, Felipe): a página e a água aceleram juntas,
+  então ela continua atravessando só sob a água. (55)
+- **Som da onda atrasado na aceleração** (Felipe): o estrondo de 5 s seguia
+  depois da água sumir. Agora a onda que está tocando acompanha: um pouco
+  mais rápida (até 1,25×, acima disso soa de brinquedo) e some meio
+  segundo depois da água; ao voltar, ela dá lugar à onda da volta. (55)
+- **Quadrados pixelados à frente da espuma** no mar do Contato, às vezes
+  (Felipe): os respingos sorteavam as gotas com um hash de `sin` sobre o
+  relógio do mar, que no Contato já está alto (o mar monta perto do Como
+  funciona); sem precisão, as gotas viravam blocos. Hash sem `sin` e
+  relógio curto para os respingos. (55)
 - Defeito achado no caminho: quando a página já estava no fim do trecho
   (sob a água, antes ou depois de atravessar), o Lenis ignorava o novo
   scroll e o anterior seguia; voltar cedo mostrava a página indo ao

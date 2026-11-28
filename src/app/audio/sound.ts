@@ -32,6 +32,10 @@ const buffers = new Map<Cue, AudioBuffer>();
 const loops = new Map<Cue, { gain: GainNode; src: AudioBufferSourceNode | null }>();
 const levels = new Map<Cue, number>();
 const lastPlayed = new Map<Cue, number>();
+/** The cues sounding now, so a sea hurried along can take its sound along. */
+const voices = new Map<Cue, Set<{ src: AudioBufferSourceNode; gain: GainNode }>>();
+/** Faster than this a wave reads as a toy: past it, the sound fades instead. */
+const MAX_RATE = 1.25;
 let hushUntil = 0;
 
 function read() {
@@ -290,6 +294,34 @@ export const sound = {
     node.connect(master);
     src.connect(gain);
     src.start();
+    const voice = { src, gain };
+    let set = voices.get(name);
+    if (!set) voices.set(name, (set = new Set()));
+    set.add(voice);
+    src.onended = () => set.delete(voice);
+  },
+  /** A cue already sounding keeps up with a sea hurried by `pace`: played a
+      little faster (up to MAX_RATE) and gone within `seconds`, at full
+      level for the first half of them and then faded (a 5 s crash went on
+      long after a hurried wave had gone). With pace 1, just the fade (the
+      sea turned back: the new wave takes over). */
+  hurry(name: Cue, pace: number, seconds: number) {
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const s = Math.max(0.15, seconds);
+    for (const { src, gain } of voices.get(name) ?? []) {
+      src.playbackRate.setTargetAtTime(Math.min(MAX_RATE, Math.max(src.playbackRate.value, pace)), now, 0.08);
+      const g = gain.gain;
+      g.cancelScheduledValues(now);
+      g.setValueAtTime(g.value, now);
+      g.setValueAtTime(g.value, now + s * 0.5);
+      g.linearRampToValueAtTime(0, now + s);
+      try {
+        src.stop(now + s + 0.05);
+      } catch {
+        /* already stopped */
+      }
+    }
   },
 };
 

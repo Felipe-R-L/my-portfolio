@@ -55,9 +55,9 @@ const softInOut = (t: number) => 0.5 * t + 0.5 * easeInOut(t);
     never cut: the same curve plays faster, the water with it. */
 const HURRY_S = 0.6;
 const HURRY_GRACE_S = 0.35;
-/** Under a cover, the page crosses while the screen is covered (from this
-    share of its time on): a gesture before then waits for it. */
-const COVERED_AT = 0.45;
+/* (Under a cover there is no waiting for the screen to be covered: the
+   page and the water speed up together, so the page still crosses only
+   under the water; waiting read as the wave stuck on its way up.) */
 
 /** Where a change on its own clock is on its curve: `ease` from u0 to u1
     over the play's time; `full` is the curve's whole time at 1x. */
@@ -110,10 +110,8 @@ export function useSmoothScroll() {
       lenis.options.lerp = LERP_CALM + ((LERP_FAST - LERP_CALM) * (speed - 1)) / (MAX_SPEED - 1);
     };
 
-    let hurryTimer = 0;
     let stillTimer = 0;
     const run = (lenis: Lenis, p: Omit<Play, "start" | "speed" | "still">, easing: (t: number) => number) => {
-      window.clearTimeout(hurryTimer);
       window.clearTimeout(stillTimer);
       // already where this stretch ends (under the sea, before or after the
       // page crosses): nothing to scroll, only time to wait. Lenis would
@@ -271,14 +269,6 @@ export function useSmoothScroll() {
           if ((now - c.origin) / 1000 < HURRY_GRACE_S) return eat();
           // a hard flick, or insisting after a first hurry: straight to the end
           const hard = speed >= 2 || c.pace > 1;
-          const u = curveAt(p, c, now);
-          // under a cover going on: not until the screen is covered
-          if (p.passage.under && c.u1 === 1 && u < COVERED_AT) {
-            window.clearTimeout(hurryTimer);
-            const wait = ((COVERED_AT - u) / (c.u1 - c.u0)) * p.dur * 1000;
-            hurryTimer = window.setTimeout(() => hurry(lenis, p, hard), wait);
-            return eat();
-          }
           hurry(lenis, p, hard);
           return eat();
         }
@@ -407,7 +397,6 @@ export function useSmoothScroll() {
 
     return () => {
       window.clearTimeout(settleTimer);
-      window.clearTimeout(hurryTimer);
       window.clearTimeout(stillTimer);
       setPace(1);
       window.removeEventListener("pointermove", onMove);

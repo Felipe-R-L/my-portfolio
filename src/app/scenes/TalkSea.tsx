@@ -58,6 +58,7 @@ export function TalkSea() {
       tween?.kill();
       if (back) {
         // turned back: the same water, backwards, from where it is
+        sound.hurry("wave", 1, 0.35);
         if (s.w > 0.3 && s.w < 0.9) sound.play("wave", { volume: 0.7 });
         tween = gsap.to(s, { w: 0, duration: seconds, ease: "none", onUpdate: () => wash.set(s.w), onComplete: () => wash.set(0) });
         return;
@@ -82,7 +83,12 @@ export function TalkSea() {
     };
     // hurried by a gesture once the screen is covered: the page and the
     // water at the same pace
-    const onPace = () => tween?.timeScale(currentPace());
+    const onPace = () => {
+      if (!tween) return;
+      const pace = currentPace();
+      tween.timeScale(pace);
+      if (pace > 1 && tween.isActive()) sound.hurry("wave", pace, (tween.duration() - tween.time()) / pace + 0.4);
+    };
     window.addEventListener(UNDER_EVENT, onUnder);
     window.addEventListener(PACE_EVENT, onPace);
     return () => {

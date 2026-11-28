@@ -260,7 +260,11 @@ export function HeroCity() {
         if (left < 1e-3) return;
         // going back over the portrait: the wave is heard as it turns, not
         // seconds later when the water is already halfway
-        if (to < sea.w && sea.w > 0.46) sound.play("wave", { volume: 0.7 });
+        if (to < sea.w && sea.w > 0.46) {
+          // the crash still sounding (a sea turned back mid-way) gives way
+          sound.hurry("wave", 1, 0.35);
+          sound.play("wave", { volume: 0.7 });
+        }
         seaTween = gsap.to(sea, {
           w: to,
           duration: quick ? 0.45 * left : SEA_SECONDS * left,
@@ -270,7 +274,13 @@ export function HeroCity() {
         // hurried by a gesture with the passage around it: the same pace
         seaTween.timeScale(currentPace());
       };
-      const onPace = () => seaTween?.timeScale(currentPace());
+      const onPace = () => {
+        if (!seaTween) return;
+        const pace = currentPace();
+        seaTween.timeScale(pace);
+        // the crash keeps up: done a breath after the water is
+        if (pace > 1 && seaTween.isActive()) sound.hurry("wave", pace, (seaTween.duration() - seaTween.time()) / pace + 0.4);
+      };
       window.addEventListener(PACE_EVENT, onPace);
 
       // The scroll's part: when the sea starts or goes back, and the exit.

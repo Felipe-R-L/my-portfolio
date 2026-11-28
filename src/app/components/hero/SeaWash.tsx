@@ -43,6 +43,9 @@ uniform vec2 res, placeSz, portSz, vidSz;
 uniform vec3 cam;          // the portrait's camera: scale, x, y (px)
 uniform float rise, fall, after, t, placeZoom;
 float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+// without sin (Hoskins): the spray's cells and the clock grow large, and a
+// sin hash loses its precision there, the drops clumping into square blocks
+float hashSpray(vec2 p){ vec3 q = fract(vec3(p.xyx) * .1031); q += dot(q, q.yzx + 33.33); return fract((q.x + q.y) * q.z); }
 float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
   return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), f.x), f.y); }
 float fbm(vec2 p){ float s = 0., a = .5; for (int i = 0; i < 5; i++){ s += a * noise(p); p *= 2.03; a *= .5; } return s; }
@@ -112,7 +115,7 @@ void main(){
   // loose spray just ahead of the crest, thrown up where the foam is thick
   vec2 cell = uv * res / 9.;
   vec2 id = floor(cell);
-  float h = hash(id + floor(t * 3.) * 17.);
+  float h = hashSpray(id + mod(floor(t * 3.), 61.) * 17.);
   float drop = step(.975, h) * (1. - smoothstep(.12, .38, length(fract(cell) - .5)));
   float spray = drop * (d < 0. ? exp(d * 40.) : 0.) * (.4 + along) * .9 * (1. - inSea);
   vec3 sheen = vec3(.05, .07, .08) * smoothstep(.55, .9, fbm(uv * 30. + t * .2)) * (after > .5 ? exp(min(d, 0.) * 7.) : 0.);
