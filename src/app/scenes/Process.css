@@ -12,8 +12,9 @@
 
 .plano-track {
   position: relative;
-  /* the travel along the line, a short wait at the last stop, and the screen itself */
-  height: calc(var(--travel) + 50svh + 100svh);
+  /* the travel along the line and the screen itself: at the last stop the
+     stage lets go at once and the gallery comes up under it */
+  height: calc(var(--travel) + 100svh);
 }
 
 .plano-stage {

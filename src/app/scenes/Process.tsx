@@ -70,8 +70,10 @@ export function Process() {
       return [
         { from: pullFrom, to: stuck, duration: 1.5 },
         ...Array.from({ length: legs }, (_, j) => ({ from: stuck + (travel * j) / legs, to: stuck + (travel * (j + 1)) / legs })),
-        // the marker waits at the last stop until the stage lets go (T5)
-        { from: stuck + travel, to: stuck + track.getBoundingClientRect().height - vh, hold: true },
+        // from the last stop, one gesture takes the page to the gallery: the
+        // stage scrolls away and the gallery comes up (there used to be a
+        // half-screen wait here, under the sea; without it, it was a limbo)
+        { from: stuck + travel, to: stuck + track.getBoundingClientRect().height },
       ];
     });
   }, [mode]);
@@ -146,17 +148,18 @@ export function Process() {
             return markerAt(k, lineBox);
           },
         },
-        // at the last stop it waits there while the next scene takes over (T5)
+        // as the stage lets go, the marker leaves with it, up off the screen
         {
           content: "offline",
           start: stuck + travel,
-          end: stuck + travel + 0.5 * vh,
+          end: stuck + travel + lineBox.y + MARKER.h,
           arrive: 0,
           gesture: "cut" as const,
           slot: () => {
             mark(1);
             thread(1);
-            return markerAt(1, lineBox);
+            const up = Math.max(0, window.scrollY - (stuck + travel));
+            return markerAt(1, { ...lineBox, y: lineBox.y - up });
           },
         },
       ];
