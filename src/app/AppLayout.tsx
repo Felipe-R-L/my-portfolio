@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Hero } from "./components/Hero";
 import { Work } from "./scenes/Work";
 import { Process } from "./scenes/Process";
+import { Fora } from "./scenes/Fora";
 import { Talk } from "./scenes/Talk";
 import type { GlassNavItem } from "./components/shared/GlassNav";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
@@ -106,6 +107,7 @@ export default function AppLayout() {
         <Hero />
         <Work onOpenCase={caseRoute.open} />
         <Process />
+        <Fora lenisRef={lenisRef} />
         <Talk />
       </main>
 

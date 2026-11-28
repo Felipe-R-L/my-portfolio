@@ -13,15 +13,15 @@ import { DURATION, SCROLL } from "../../src/app/motion/tokens";
 
 describe("chapters", () => {
   it("keeps the anchors the blog already links to", () => {
-    expect(CHAPTERS.map((c) => c.anchor)).toEqual(["about", "projects", "process", "contact"]);
+    expect(CHAPTERS.map((c) => c.anchor)).toEqual(["about", "projects", "process", "gallery", "contact"]);
   });
 
   it("weighs every chapter the same on the rail", () => {
     expect(journeyProgress("partida", 0)).toBe(0);
-    expect(journeyProgress("destinos", 0)).toBeCloseTo(1 / 4);
+    expect(journeyProgress("destinos", 0)).toBeCloseTo(1 / 5);
     expect(journeyProgress("retorno", 1)).toBe(1);
     // clamped inside a chapter, so a pin overshoot never jumps ahead
-    expect(journeyProgress("destinos", 1.4)).toBeCloseTo(2 / 4);
+    expect(journeyProgress("destinos", 1.4)).toBeCloseTo(2 / 5);
   });
 
   it("only moves forward as the scroll moves forward", () => {

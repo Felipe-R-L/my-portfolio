@@ -11,7 +11,7 @@ import { SCROLL } from "../motion/tokens";
 import { registerPassages } from "../scroll/glide";
 import "./Talk.css";
 import { EdgePrint } from "../journey/EdgePrint";
-import { TalkSea } from "./TalkSea";
+import { TalkSea, sceneBefore } from "./TalkSea";
 
 /**
  * Where the frame comes to rest on a wide screen: a framed photo on the right,
@@ -64,8 +64,8 @@ export function Talk() {
       const runway = runwayRef.current;
       if (!runway) return [];
       const vh = window.innerHeight;
-      const plano = document.querySelector(".plano-track");
-      const from = plano ? pageTop(plano) + plano.getBoundingClientRect().height - vh : pageTop(runway) - vh;
+      const before = sceneBefore();
+      const from = before ? pageTop(before) + before.getBoundingClientRect().height - vh : pageTop(runway) - vh;
       // to the page's end: the invitation and the footer under it are less
       // than a screen, there is nothing to stop for in between
       const to = document.documentElement.scrollHeight - vh;
@@ -86,9 +86,9 @@ export function Talk() {
       const vh = window.innerHeight;
       const vw = window.innerWidth;
       const end = document.documentElement.scrollHeight;
-      // T5 starts where Como funciona leaves the marker
-      const plano = document.querySelector(".plano-track");
-      const from = plano ? pageTop(plano) + plano.getBoundingClientRect().height - vh : pageTop(runway) - vh;
+      // T5 starts where the gallery ends
+      const before = sceneBefore();
+      const from = before ? pageTop(before) + before.getBoundingClientRect().height - vh : pageTop(runway) - vh;
       const to = pageTop(runway) + runway.offsetHeight - vh * 0.35;
       const rest = restBox(vw, vh);
       // the frame cuts to its place beside the invitation halfway across,
@@ -136,7 +136,7 @@ export function Talk() {
           <h2 id="talk-title" className="talk-title">
             {t("contact.title_part2")}
           </h2>
-          <EdgePrint n="04" />
+          <EdgePrint n="05" />
           <p className="talk-lead">{t("contact.cta_desc")}</p>
 
           <fieldset className="talk-kinds">

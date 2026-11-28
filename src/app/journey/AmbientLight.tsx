@@ -23,7 +23,7 @@ const SCENERY: Partial<Record<ChapterId, { src: string; srcSet: string; near: Ch
   retorno: {
     src: media("diamante-end-1200.webp"),
     srcSet: `${media("diamante-end-1200.webp")} 1200w, ${media("diamante-end-2400.webp")} 2400w`,
-    near: ["plano", "retorno"],
+    near: ["fora", "retorno"],
   },
 };
 

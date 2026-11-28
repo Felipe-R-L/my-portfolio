@@ -1,0 +1,299 @@
+/*
+ * Fora do código: the photos in a mosaic, at their own proportions, each
+ * with the film's edge print under it (place, day, exposure). Transparent,
+ * like every scene of the journey; the chapter's light is behind it.
+ */
+
+.fora {
+  position: relative;
+  color: var(--ink);
+  padding: clamp(6rem, 16vh, 10rem) var(--gutter) clamp(8rem, 22vh, 14rem);
+  padding-left: calc(var(--gutter) + 1.5rem);
+}
+
+.fora-head {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+  gap: 2rem;
+  align-items: end;
+}
+
+.fora-copy {
+  display: grid;
+  gap: 1rem;
+}
+
+.fora-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size-adjust: none;
+  letter-spacing: var(--serif-track);
+  font-weight: var(--serif-weight);
+  font-size: calc(clamp(2.5rem, 4.2vw, 4rem) * var(--serif-scale));
+  line-height: 1;
+}
+
+.fora-lead {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+.fora-mosaic {
+  max-width: 1200px;
+  margin: clamp(2.5rem, 6vh, 4rem) auto 0;
+  display: flex;
+  gap: clamp(16px, 1.8vw, 24px);
+  align-items: flex-start;
+}
+
+.fora-col {
+  flex: 1 1 0;
+  min-width: 0;
+  display: grid;
+  gap: clamp(22px, 2.4vw, 32px);
+}
+
+.fora-frame {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+/* armed by the scene's script: the frame comes up as it enters */
+.fora-frame[data-armed="true"] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s var(--ease-arrive),
+    transform 1.1s var(--ease-arrive);
+}
+
+.fora-frame[data-armed="true"][data-in="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.fora-shot {
+  all: unset;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--r);
+  overflow: hidden;
+  background: rgb(245 247 255 / 0.04);
+}
+
+button.fora-shot {
+  cursor: zoom-in;
+}
+
+button.fora-shot:focus-visible {
+  outline: 1px solid var(--diamante);
+  outline-offset: 4px;
+}
+
+.fora-shot img,
+.fora-shot video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* a touch dim at rest; the photo's own colour under the pointer */
+  filter: saturate(0.85) brightness(0.9);
+  transition:
+    filter 0.5s var(--ease-arrive),
+    transform 0.9s var(--ease-arrive);
+}
+
+button.fora-shot:hover img,
+button.fora-shot:focus-visible img {
+  filter: none;
+  transform: scale(1.025);
+}
+
+/* touch screens have no pointer to bring the colour: always full colour */
+@media (hover: none) {
+  .fora-shot img,
+  .fora-shot video {
+    filter: none;
+  }
+}
+
+/* the film's edge print, under every frame */
+.fora-cap {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size-adjust: none;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  line-height: 1.45;
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.fora-cap > span {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 0.8rem;
+}
+
+.fora-cap-1 {
+  color: rgb(159 195 214 / 0.8);
+}
+
+.fora-cap-2 {
+  color: var(--ink-faint);
+  font-size: 0.62rem;
+}
+
+/* ---- the photo, big ---- */
+
+.fora-box {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: max(3.5rem, env(safe-area-inset-top, 0px)) var(--gutter) max(1.5rem, env(safe-area-inset-bottom, 0px));
+  border: 0;
+  background: rgb(5 6 8 / 0.95);
+  color: var(--ink);
+  display: none;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  gap: 1rem;
+  overscroll-behavior: contain;
+}
+
+.fora-box[open] {
+  display: grid;
+}
+
+.fora-box::backdrop {
+  background: transparent;
+}
+
+.fora-box-fig {
+  margin: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  gap: 0.9rem;
+}
+
+.fora-box-fig picture {
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.fora-box-fig img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.fora-box-cap {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  text-align: center;
+}
+
+.fora-box-title {
+  font-family: var(--serif);
+  font-size-adjust: none;
+  font-size: 1.4rem;
+  font-style: italic;
+}
+
+.fora-box-meta {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size-adjust: none;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: rgb(159 195 214 / 0.8);
+}
+
+.fora-box-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-family: var(--ui);
+  font-size-adjust: none;
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+.fora-box button {
+  all: unset;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 1.1rem;
+  transition: border-color 0.3s var(--ease-arrive);
+}
+
+.fora-box button:hover,
+.fora-box button:focus-visible {
+  border-color: var(--diamante);
+}
+
+.fora-box .fora-box-close {
+  position: absolute;
+  top: max(1rem, env(safe-area-inset-top, 0px));
+  right: max(var(--gutter), env(safe-area-inset-right, 0px));
+  font-size: 1.5rem;
+}
+
+@media (max-width: 767px) {
+  .fora {
+    padding: 5rem var(--gutter) 6rem;
+  }
+
+  .fora-head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .fora-mosaic {
+    gap: 12px;
+  }
+
+  .fora-col {
+    gap: 18px;
+  }
+
+  /* two narrow columns: the place and the day; the exposure is in the big view */
+  .fora-cap {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+
+  .fora-cap-2 {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fora-shot img,
+  .fora-shot video {
+    transition: none;
+  }
+
+  button.fora-shot:hover img {
+    transform: none;
+  }
+}

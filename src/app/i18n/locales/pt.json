@@ -345,6 +345,7 @@
       "partida": "Sobre",
       "destinos": "Projetos",
       "plano": "Como funciona",
+      "fora": "Fora do código",
       "retorno": "Contato"
     },
     "where": "Capítulo {{n}} de {{total}}: {{name}}"
@@ -377,6 +378,31 @@
         "text": "Depois do lançamento continuo responsável pelo que construí, cuidando de correções, ajustes e do que o negócio passar a pedir, e você segue falando com a mesma pessoa que escreveu o código.",
         "chip": "Dallas Motel, no ar"
       }
+    }
+  },
+  "fora": {
+    "title": "Fora do código",
+    "lead": "Quando a tela desliga: mar, estrada de terra, cidade velha. Fotos que tirei pelo caminho, no celular.",
+    "open": "Abrir a foto: {{title}}",
+    "close": "Fechar",
+    "prev": "Foto anterior",
+    "next": "Próxima foto",
+    "count": "{{n}} de {{total}}",
+    "photos": {
+      "img-1598": "Chapéu de palha e a enseada",
+      "20230201-124655": "Do jet ski",
+      "img-1889": "Rua de pedra ao entardecer",
+      "jetski": "O guidão do jet ski, molhado",
+      "20230603-121738": "Ponte de terra",
+      "img-1591": "A pedra e a ilha",
+      "20231026-133039": "A catedral",
+      "img-3787": "Campo vermelho e a lua",
+      "20230129-134030": "Ilha de coqueiros",
+      "img-4310": "Casa de pau a pique",
+      "20210813-081017": "Garça",
+      "20230127-115249": "Bicicleta no costão",
+      "img-1827": "Casa branca, janelas amarelas",
+      "20230126-174143": "O porto no fim da tarde"
     }
   },
   "player": {

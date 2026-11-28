@@ -154,10 +154,12 @@ fim); o único texto sobre ele é uma linha discreta no rodapé do Contato.
   desfeita a qualquer momento, sem corte visual (LOOP.md, passos 8 a 10).
   Feito para a abertura e o mar do Contato (awwwards 54, ver AJUSTES.md):
   o mesmo filme, mais rápido; nunca um salto.
-- **Galeria:** a coletânea está no Drive (Pessoal/Mídia,
-  `Portfolio-1-001.zip`, 4,2 GB, enviada em 2026-11-27); grande demais para
-  o conector do Drive, precisa estar no disco (Downloads) para escolher
-  fotos e trechos de vídeo sem rostos de terceiros de frente.
+- **Galeria "Fora do código":** feita (awwwards 56). Mosaico (Felipe
+  preferiu ao rolo de filme da prévia), capítulo próprio entre Como funciona
+  e Contato; 13 fotos e o clipe do jet ski, sem rosto de terceiros de frente.
+  Legenda: lugar (GPS do arquivo ou o que o Felipe disse; sem lugar, nada),
+  data e exposição do EXIF. Os arquivos publicados não levam metadados.
+  Quatro vídeos do Drive passam de 10 MB e ficaram de fora.
 - **Kit de submissão:** a descrição ainda fala do "quadro que abre no meu
   rosto" e do preto e branco; precisa ser reescrita na voz dele.
 - Conta PRO, contatos para votar, data do envio.

@@ -9,7 +9,7 @@
  */
 import { clamp01 } from "../scroll/math";
 
-export type ChapterId = "partida" | "destinos" | "plano" | "retorno";
+export type ChapterId = "partida" | "destinos" | "plano" | "fora" | "retorno";
 
 export type Chapter = {
   id: ChapterId;
@@ -23,6 +23,7 @@ export const CHAPTERS: readonly Chapter[] = [
   { id: "partida", anchor: "about", label: "journey.chapters.partida" },
   { id: "destinos", anchor: "projects", label: "journey.chapters.destinos" },
   { id: "plano", anchor: "process", label: "journey.chapters.plano" },
+  { id: "fora", anchor: "gallery", label: "journey.chapters.fora" },
   { id: "retorno", anchor: "contact", label: "journey.chapters.retorno" },
 ];
 

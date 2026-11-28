@@ -9,6 +9,11 @@ import { PACE_EVENT, UNDER_EVENT, currentPace } from "../scroll/glide";
 import { createSignal } from "../scroll/signal";
 import "./TalkSea.css";
 
+/** What T5 follows: the gallery (Fora), or Como funciona's track without it. */
+export function sceneBefore(): Element | null {
+  return document.querySelector(".fora") ?? document.querySelector(".plano-track");
+}
+
 /** The last frame of Diamante's flight: what the sea leaves behind it, the
     Contato's own background (AmbientLight). */
 const END = { src: media("diamante-end-2400.webp"), width: 2400, height: 1350 };
@@ -29,7 +34,7 @@ export function TalkSea() {
   const [near, setNear] = useState(false);
 
   useEffect(() => {
-    const plano = document.querySelector(".plano-track");
+    const plano = sceneBefore();
     if (!plano || !("IntersectionObserver" in window)) {
       setNear(true);
       return;

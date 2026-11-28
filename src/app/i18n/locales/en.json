@@ -345,6 +345,7 @@
       "partida": "About",
       "destinos": "Projects",
       "plano": "How it works",
+      "fora": "Off the code",
       "retorno": "Contact"
     },
     "where": "Chapter {{n}} of {{total}}: {{name}}"
@@ -377,6 +378,31 @@
         "text": "After launch I stay responsible for what I built, taking care of fixes, adjustments and whatever the business asks for next, so you keep talking to the same person who wrote the code.",
         "chip": "Dallas Motel, live"
       }
+    }
+  },
+  "fora": {
+    "title": "Off the code",
+    "lead": "When the screen goes dark: the sea, dirt roads, old towns. Photos I took along the way, on my phone.",
+    "open": "Open the photo: {{title}}",
+    "close": "Close",
+    "prev": "Previous photo",
+    "next": "Next photo",
+    "count": "{{n}} of {{total}}",
+    "photos": {
+      "img-1598": "Straw hat and the cove",
+      "20230201-124655": "From the jet ski",
+      "img-1889": "Cobbled street at dusk",
+      "jetski": "The jet ski's handlebar, wet",
+      "20230603-121738": "Dirt bridge",
+      "img-1591": "The rock and the island",
+      "20231026-133039": "The cathedral",
+      "img-3787": "Red field and the moon",
+      "20230129-134030": "Palm island",
+      "img-4310": "Wattle-and-daub house",
+      "20210813-081017": "Egret",
+      "20230127-115249": "Bike on the cliff",
+      "img-1827": "White house, yellow windows",
+      "20230126-174143": "The harbour at the end of the day"
     }
   },
   "player": {

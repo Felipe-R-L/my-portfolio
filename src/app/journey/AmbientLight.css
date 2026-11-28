@@ -44,6 +44,13 @@
     linear-gradient(180deg, #06070a 0%, #07080b 100%);
 }
 
+/* Fora do código: off the screen, a wide pale daylight from above. */
+.ambient--fora {
+  background-image:
+    radial-gradient(80% 40% at 50% -8%, rgb(245 247 255 / 0.06), transparent 72%),
+    linear-gradient(180deg, #07080b 0%, #060709 100%);
+}
+
 /* the town, dim, panning with the travel; dark at the top and bottom edges */
 .ambient-scenery {
   position: absolute;

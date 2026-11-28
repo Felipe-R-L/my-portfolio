@@ -94,7 +94,7 @@ describe('AppLayout nav pill click handler', () => {
     const el = await mountAppLayout()
     const hrefs = [...el.querySelectorAll<HTMLAnchorElement>('nav a[href^="#"]')].map((a) => a.getAttribute('href'))
     // one item per chapter, landing on the anchors the blog already links to
-    expect([...new Set(hrefs)]).toEqual(['#about', '#projects', '#process', '#contact'])
+    expect([...new Set(hrefs)]).toEqual(['#about', '#projects', '#process', '#gallery', '#contact'])
   })
 
   it('does not call preventDefault when Lenis is unavailable (mobile), letting the anchor jump natively', async () => {

@@ -105,3 +105,18 @@ aqui fica o que foi feito e o que quebrou no caminho.
   cenas `hold`; saíram as cenas do meio do Contato, que só existiam num
   salto para trás. (41)
 - Push para `awwwards-polish` liberado; deploy de produção nunca. (40)
+
+## Galeria "Fora do código" (56)
+
+- Capítulo novo, `fora` (`#gallery`), entre Como funciona e Contato: o
+  rail e a navegação passam a ter cinco capítulos; o Contato vira 05 na marca
+  de borda.
+- Mosaico: cada foto, na ordem, vai para a coluna mais curta (`columnsOf`),
+  3 colunas no desktop, 2 no celular. Proporção de cada foto, sem corte.
+- Embaixo de cada quadro, na marca de borda do filme: lugar, data, exposição
+  (abertura, obturador, ISO, focal 35 mm) e o número. No celular só lugar e
+  data; a ficha completa abre no clique (lightbox com setas, Esc, Lenis parado).
+- O mar do Contato (T5) agora parte do fim da galeria (`sceneBefore`, TalkSea).
+  O gesto na última parada do Como funciona desce para a galeria.
+- Mídia em `fora/` no R2 (AVIF/WebP 800/1600, clipe WebM/MP4 720), sem EXIF.
+
